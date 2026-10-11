@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useSyncExternalStore } from "react";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
@@ -13,6 +13,16 @@ import { leaderDashboardMockData } from "@/data/leader-dashboard";
 import { MembersCompactNav } from "@/components/dashboard/members/MembersCompactNav";
 import { IconCalendar, IconChecklist } from "@/components/dashboard/members/nav-icons";
 import type { IconProps } from "@/components/dashboard/members/nav-icons";
+import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
+import {
+  priorityKeys,
+  priorityStyles,
+  statusKeys,
+  statusStyles,
+  statusTones,
+  toneColors,
+} from "@/components/dashboard/members/task-styles";
+import type { Tone } from "@/components/dashboard/members/task-styles";
 
 import {
   calendarMock,
@@ -26,7 +36,6 @@ import type {
   DashboardTask,
   DashboardUser,
   MyEventTile,
-  TaskPriority,
   TaskStatus,
   UpcomingEvent,
 } from "@/components/dashboard/mock-data";
@@ -168,10 +177,6 @@ function IconChevronRight({ className }: IconProps): ReactElement {
 /* ------------------------------------------------------------------ */
 /* Small presentational primitives                                     */
 /* ------------------------------------------------------------------ */
-
-function TaskBadge({ className, children }: { className: string; children: ReactNode }): ReactElement {
-  return <span className={`inline-flex items-center text-xs font-medium ${className}`}>{children}</span>;
-}
 
 function Checkbox({ checked }: { checked: boolean }): ReactElement {
   return (
@@ -577,65 +582,9 @@ type FilterId = "all" | TaskStatus;
 
 const taskFilters: FilterId[] = ["all", "In Progress", "To Do", "Complete"];
 
-// Status/priority values are data (and will come from the backend), so only their display
-// text is translated: these map each value to its key under dashboard.tasks.
-const statusKeys: Record<TaskStatus, "inProgress" | "toDo" | "complete"> = {
-  "In Progress": "inProgress",
-  "To Do": "toDo",
-  Complete: "complete",
-};
-
 const filterKeys: Record<FilterId, "all" | "inProgress" | "toDo" | "complete"> = {
   all: "all",
   ...statusKeys,
-};
-
-const priorityKeys: Record<TaskPriority, "high" | "medium" | "low"> = {
-  High: "high",
-  Medium: "medium",
-  Low: "low",
-};
-
-// Single source of truth for each semantic tone's light background + text color, so
-// status badges, priority badges, and task filters can never drift out of sync — they
-// all read the exact same class string for a given tone.
-const toneColors = {
-  red: "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]",
-  yellow: "bg-[var(--dashboard-yellow-bg)] text-[var(--dashboard-yellow-text)]",
-  blue: "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
-  green: "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",
-} as const;
-
-type Tone = keyof typeof toneColors;
-
-// Status badges are the visual source of truth for shape (pill/capsule) and sizing.
-const PILL_SHAPE = "rounded-full px-2.5 py-1";
-
-const statusTones: Record<TaskStatus, Tone> = {
-  "In Progress": "yellow",
-  "To Do": "blue",
-  Complete: "green",
-};
-
-const statusStyles: Record<TaskStatus, string> = {
-  "In Progress": `${PILL_SHAPE} ${toneColors[statusTones["In Progress"]]}`,
-  "To Do": `${PILL_SHAPE} ${toneColors[statusTones["To Do"]]}`,
-  Complete: `${PILL_SHAPE} ${toneColors[statusTones.Complete]}`,
-};
-
-// Priority badges reuse the exact same pill shape and tone colors as the status badges
-// (Medium shares In Progress's tone, Low shares Complete's tone) — same design system,
-// only the semantic mapping differs.
-const priorityTones: Record<TaskPriority, Tone> = {
-  High: "red",
-  Medium: statusTones["In Progress"],
-  Low: statusTones.Complete,
-};
-
-const priorityStyles: Record<TaskPriority, string> = {
-  High: `${PILL_SHAPE} ${toneColors[priorityTones.High]}`,
-  Medium: `${PILL_SHAPE} ${toneColors[priorityTones.Medium]}`,
-  Low: `${PILL_SHAPE} ${toneColors[priorityTones.Low]}`,
 };
 
 // Only the SELECTED filter shows its semantic tone; every other filter stays a plain

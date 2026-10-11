@@ -80,6 +80,16 @@
       "high": "High",
       "medium": "Medium",
       "low": "Low"
+    },
+    "board": {
+      "emptyColumn": "No tasks here.",
+      "emptyList": "You don't have any tasks yet.",
+      "loading": "Loading your tasks"
+    },
+    "error": {
+      "title": "We couldn’t load your tasks",
+      "description": "Something went wrong while loading your tasks. Check your connection and try again.",
+      "retry": "Try again"
     }
   },
   "leader": {
