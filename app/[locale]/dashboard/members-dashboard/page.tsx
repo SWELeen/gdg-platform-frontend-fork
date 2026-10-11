@@ -1085,7 +1085,7 @@ export default function DashboardPage(): ReactElement {
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="min-w-0 flex-1 space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
+            className="min-w-0 flex-1 space-y-4 lg:space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
           >
             <UtilityRow user={currentUser} today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
             <WelcomeSection firstName={currentUser.name.split(" ")[0]} />
@@ -1121,7 +1121,7 @@ export default function DashboardPage(): ReactElement {
             <CompactDashboardNav />
             <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
             <MyEventsGrid tiles={myEventTiles} />
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
               <UpcomingEventsCard events={upcomingEvents} />
               <CalendarCard data={calendarMock} />
             </div>
