@@ -4,6 +4,7 @@ import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 import { useTranslations } from "next-intl";
 import { Calendar } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { getEventDateBadge } from "@/lib/dashboard/event-format";
 
 export function UpcomingEventsSection() {
   const { events } = useLeaderDashboard();
@@ -28,17 +29,24 @@ export function UpcomingEventsSection() {
           className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-surface-muted"
         >
           <Calendar className="size-3.5" />
-          <span>{t("upcomingEvents.viewCalendar")}</span>
+          <span>{t("upcomingEvents.viewAllEvents")}</span>
         </Link>
       </div>
 
       <div className="mt-4 space-y-3">
+        {upcomingEvents.length === 0 && (
+          <p className="rounded-xl bg-surface-muted/40 px-4 py-6 text-center text-sm text-muted">
+            {t("upcomingEvents.empty")}
+          </p>
+        )}
         {upcomingEvents.map((evt) => {
-          // Parse month and day from "Oct 14, 2026"
-          const parts = evt.date.split(" ");
-          const month = (parts[0] || "OCT").toUpperCase().slice(0, 3);
-          const day = (parts[1] || "14").replace(",", "");
-          const percent = Math.min(100, Math.round((evt.registered / evt.capacity) * 100));
+          // Seeded events store "Oct 14, 2026"; the shared parser also accepts ISO dates.
+          const badge = getEventDateBadge(evt.date);
+          const month = badge?.month ?? "—";
+          const day = badge?.day ?? "—";
+          const percent = evt.capacity > 0
+            ? Math.min(100, Math.round((evt.registered / evt.capacity) * 100))
+            : 0;
 
           return (
             <div
@@ -58,7 +66,9 @@ export function UpcomingEventsSection() {
 
                 <div>
                   <h3 className="text-xs font-bold text-foreground sm:text-sm">
-                    {evt.title}
+                    <Link href={`/dashboard/data-dashboard/events/${evt.id}`} className="hover:underline">
+                      {evt.title}
+                    </Link>
                   </h3>
                   <p className="text-[11px] text-muted">
                     {evt.time} · {evt.location}

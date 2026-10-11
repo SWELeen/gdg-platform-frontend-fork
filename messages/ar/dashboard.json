@@ -36,6 +36,7 @@
     "viewAll": "عرض الفعاليات القادمة",
     "featured": "مميزة",
     "addToCalendar": "أضف إلى التقويم",
+    "addToCalendarLabel": "أضف {title} إلى تقويم Google",
     "empty": "ليس لديك أي فعاليات."
   },
   "calendar": {
@@ -80,6 +81,51 @@
       "high": "عالية",
       "medium": "متوسطة",
       "low": "منخفضة"
+    }
+  },
+  "memberEvents": {
+    "back": "العودة إلى لوحة التحكم",
+    "title": "فعالياتي",
+    "description": "الفعاليات والرحلات التي سجّلت فيها مع آخر حالة لكل منها.",
+    "manage": "إدارة التسجيلات",
+    "filtersLabel": "تصفية الفعاليات",
+    "timeLabel": "عرض الفعاليات حسب الوقت",
+    "time": {
+      "upcoming": "القادمة",
+      "past": "السابقة",
+      "all": "الكل"
+    },
+    "filterWithCount": "{label} ({count})",
+    "searchLabel": "ابحث في فعالياتك",
+    "searchPlaceholder": "ابحث بالاسم أو الموقع...",
+    "statusLabel": "التصفية حسب الحالة",
+    "allStatuses": "كل الحالات",
+    "kindLabel": "التصفية حسب النوع",
+    "allKinds": "الفعاليات والرحلات",
+    "clearFilters": "مسح عوامل التصفية",
+    "resultCount": "{count, plural, =0 {لا توجد فعاليات} one {فعالية واحدة} two {فعاليتان} few {# فعاليات} many {# فعالية} other {# فعالية}}",
+    "viewDetails": "عرض التفاصيل",
+    "emptyTitle": "لا توجد فعاليات بعد",
+    "emptyDescription": "عندما تسجّل في فعالية أو رحلة، ستظهر هنا.",
+    "noUpcomingTitle": "لا توجد فعاليات قادمة",
+    "noUpcomingDescription": "ليس لديك فعاليات قادمة حاليًا، وما زالت فعالياتك السابقة متاحة.",
+    "noResultsTitle": "لا توجد فعاليات مطابقة",
+    "noResultsDescription": "جرّب بحثًا أو تصفية مختلفة.",
+    "showAll": "عرض كل الفعاليات",
+    "errorTitle": "تعذّر تحميل فعالياتك",
+    "errorDescription": "حدث خطأ أثناء تحميل تسجيلاتك. يرجى المحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "details": {
+      "back": "العودة إلى فعالياتي",
+      "date": "التاريخ",
+      "time": "الوقت",
+      "location": "الموقع",
+      "confirmBy": "تأكيد الحضور قبل",
+      "attendance": "الحضور",
+      "manage": "إدارة التسجيل",
+      "manageHint": "أكّد مكانك أو ألغِه من صفحة تسجيلاتك.",
+      "notFoundTitle": "الفعالية غير موجودة",
+      "notFoundDescription": "لم نعثر على هذه الفعالية ضمن تسجيلاتك."
     }
   },
   "leader": {
@@ -412,6 +458,9 @@
       "talk": "محاضرة",
       "panel": "جلسة حوارية",
       "hackathon": "هاكاثون",
+      "statusLabel": "التصفية حسب الحالة",
+      "dateLabel": "التصفية حسب التاريخ",
+      "typeLabel": "التصفية حسب نوع الفعالية",
       "clear": "مسح"
     },
     "eventManagement": {
@@ -449,7 +498,10 @@
       "deleteMessage": "هل تريد بالتأكيد حذف {name}؟ ستُحذف الفعالية نهائيًا من جدول اللجنة.",
       "pageTitle": "إدارة فعاليات اللجنة",
       "unpublished": "مسودات غير منشورة ({count})",
-      "draftsDescription": "حُفظت هذه الفعاليات محليًا، ولن تظهر على المنصة العامة حتى نشرها."
+      "draftsDescription": "حُفظت هذه الفعاليات محليًا، ولن تظهر على المنصة العامة حتى نشرها.",
+      "pagination": "ترقيم صفحات الفعاليات",
+      "pageLabel": "الصفحة {page}",
+      "openDetails": "فتح صفحة التفاصيل"
     },
     "eventForm": {
       "create": "إنشاء فعالية جديدة",
@@ -480,23 +532,21 @@
         "draft": "مسودة"
       },
       "errors": {
-        "errors": {
-          "eventTitleRequired": "عنوان الفعالية مطلوب.",
-          "titleMin": "يجب ألا يقل العنوان عن 3 أحرف.",
-          "titleMax": "يجب ألا يتجاوز العنوان 150 حرفًا.",
-          "locationRequired": "موقع الفعالية مطلوب.",
-          "locationMin": "يجب ألا يقل الموقع عن 3 أحرف.",
-          "locationMax": "يجب ألا يتجاوز الموقع 120 حرفًا.",
-          "capacityNumber": "أدخل رقمًا صالحًا للسعة.",
-          "capacityInteger": "يجب أن تكون السعة عددًا صحيحًا.",
-          "capacityMin": "يجب ألا تقل السعة عن شخص واحد.",
-          "capacityMax": "يجب ألا تتجاوز السعة 5000 شخص.",
-          "capacityBelowRegistrations": "لا يمكن أن تقل السعة عن عدد التسجيلات الحالية ({count}).",
-          "dateRequired": "تاريخ الفعالية مطلوب.",
-          "dateFormat": "أدخل تاريخًا واضحًا (مثال: 28 أكتوبر 2026).",
-          "timeRequired": "وقت الفعالية مطلوب.",
-          "fixErrors": "يرجى تصحيح الأخطاء المحددة قبل الحفظ."
-        }
+        "eventTitleRequired": "عنوان الفعالية مطلوب.",
+        "titleMin": "يجب ألا يقل العنوان عن 3 أحرف.",
+        "titleMax": "يجب ألا يتجاوز العنوان 150 حرفًا.",
+        "locationRequired": "موقع الفعالية مطلوب.",
+        "locationMin": "يجب ألا يقل الموقع عن 3 أحرف.",
+        "locationMax": "يجب ألا يتجاوز الموقع 120 حرفًا.",
+        "capacityNumber": "أدخل رقمًا صالحًا للسعة.",
+        "capacityInteger": "يجب أن تكون السعة عددًا صحيحًا.",
+        "capacityMin": "يجب ألا تقل السعة عن شخص واحد.",
+        "capacityMax": "يجب ألا تتجاوز السعة 5000 شخص.",
+        "capacityBelowRegistrations": "لا يمكن أن تقل السعة عن عدد التسجيلات الحالية ({count}).",
+        "dateRequired": "تاريخ الفعالية مطلوب.",
+        "dateFormat": "أدخل تاريخًا واضحًا (مثال: 28 أكتوبر 2026).",
+        "timeRequired": "وقت الفعالية مطلوب.",
+        "fixErrors": "يرجى تصحيح الأخطاء المحددة قبل الحفظ."
       }
     },
     "upcomingEvents": {
@@ -504,7 +554,163 @@
       "description": "نظرة سريعة على جاهزية فعاليات الثلاثين يومًا القادمة.",
       "viewCalendar": "عرض التقويم",
       "capacity": "السعة",
-      "registered": "{count} مسجل"
+      "registered": "{count} مسجل",
+      "viewAllEvents": "عرض كل الفعاليات",
+      "empty": "لا توجد فعاليات قادمة بعد. ستظهر الفعاليات المنشورة هنا."
+    },
+    "createEvent": {
+      "title": "إنشاء فعالية",
+      "subtitle": "أنشئ فعالية وانشرها لمجتمع GDG جامعة جدة.",
+      "close": "إغلاق نافذة إنشاء الفعالية",
+      "optional": "(اختياري)",
+      "sections": {
+        "eventInfo": "معلومات الفعالية",
+        "registrationInfo": "معلومات التسجيل"
+      },
+      "fields": {
+        "name": "اسم الفعالية",
+        "description": "الوصف",
+        "speakers": "المتحدثون",
+        "type": "نوع الفعالية",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "location": "الموقع",
+        "mapsLink": "رابط خرائط Google",
+        "capacity": "السعة",
+        "deadline": "آخر موعد للتسجيل",
+        "requirements": "المتطلبات",
+        "image": "صورة الفعالية"
+      },
+      "placeholders": {
+        "name": "أدخل اسم الفعالية",
+        "description": "اكتب وصف الفعالية هنا...",
+        "speakers": "أدخل أسماء المتحدثين",
+        "location": "أدخل الموقع",
+        "mapsLink": "الصق رابط الموقع",
+        "capacity": "أدخل الحد الأقصى لعدد الحضور",
+        "requirements": "أدخل أي متطلبات للحضور..."
+      },
+      "upload": {
+        "title": "ارفع صورة الفعالية",
+        "hint": "اسحب الملفات وأفلتها هنا، أو انقر للاستعراض",
+        "replace": "استبدال الصورة",
+        "remove": "إزالة الصورة",
+        "previewAlt": "صورة الفعالية المختارة"
+      },
+      "registration": {
+        "description": "يعبّئ كل مشارك هذه الحقول عند التسجيل، وهي معروضة هنا للمعاينة فقط.",
+        "fields": {
+          "fullName": "الاسم الكامل",
+          "universityId": "الرقم الجامعي",
+          "college": "الكلية",
+          "major": "التخصص",
+          "phone": "رقم الجوال",
+          "email": "البريد الإلكتروني",
+          "membership": "هل أنت عضو في GDG on Campus؟"
+        },
+        "placeholders": {
+          "fullName": "أدخل اسمك الكامل",
+          "universityId": "مثال: 2286291",
+          "college": "مثال: كلية الحاسبات والهندسة",
+          "major": "مثال: هندسة البرمجيات",
+          "phone": "5xxxxxxxx",
+          "email": "أدخل بريدك الإلكتروني"
+        },
+        "memberYes": "نعم، أنا عضو",
+        "memberNo": "لا، لست عضوًا"
+      },
+      "questions": {
+        "title": "أسئلة إضافية",
+        "help": "يجب على المشاركين الإجابة عن هذه الأسئلة عند التسجيل.",
+        "add": "إضافة المزيد من الأسئلة",
+        "formTitle": "إضافة سؤال تسجيل",
+        "type": "نوع السؤال",
+        "selectType": "اختر نوع السؤال",
+        "text": "السؤال",
+        "textPlaceholder": "أدخل سؤالك",
+        "options": "الخيارات",
+        "optionPlaceholder": "الخيار {number}",
+        "addOption": "إضافة خيار",
+        "removeOption": "إزالة الخيار {number}",
+        "cancel": "إلغاء",
+        "submit": "إضافة السؤال",
+        "remove": "إزالة السؤال {number}",
+        "requiredBadge": "مطلوب",
+        "yes": "نعم",
+        "no": "لا",
+        "types": {
+          "shortAnswer": "إجابة قصيرة",
+          "longAnswer": "إجابة طويلة",
+          "multipleChoice": "اختيار متعدد",
+          "singleChoice": "اختيار واحد",
+          "checkboxes": "مربعات اختيار",
+          "yesNo": "نعم / لا"
+        },
+        "errors": {
+          "type": "اختر نوع السؤال.",
+          "text": "أدخل نص السؤال.",
+          "options": "أضف خيارين على الأقل."
+        }
+      },
+      "actions": {
+        "cancel": "إلغاء",
+        "preview": "معاينة",
+        "publish": "نشر الفعالية"
+      },
+      "errors": {
+        "summary": "{count, plural, one {يحتاج حقل واحد} two {يحتاج حقلان} few {تحتاج # حقول} many {يحتاج # حقلًا} other {يحتاج # حقل}} إلى مراجعتك. صحّح الحقول المحددة للمتابعة.",
+        "descriptionRequired": "وصف الفعالية مطلوب.",
+        "datePast": "لا يمكن أن يكون تاريخ الفعالية في الماضي.",
+        "mapsLinkInvalid": "أدخل رابطًا صالحًا يبدأ بـ http:// أو https://.",
+        "capacityRequired": "السعة مطلوبة.",
+        "deadlineRequired": "آخر موعد للتسجيل مطلوب.",
+        "deadlinePast": "لا يمكن أن يكون آخر موعد للتسجيل في الماضي.",
+        "deadlineAfterEvent": "لا يمكن أن يكون آخر موعد للتسجيل بعد تاريخ الفعالية.",
+        "imageRequired": "صورة الفعالية مطلوبة.",
+        "imageType": "اختر ملف صورة (مثل PNG أو JPG أو WebP)."
+      },
+      "discard": {
+        "title": "تجاهل هذه الفعالية؟",
+        "message": "ستفقد التفاصيل التي أدخلتها.",
+        "confirm": "تجاهل",
+        "keep": "متابعة التعديل"
+      },
+      "preview": {
+        "title": "معاينة الفعالية",
+        "close": "إغلاق المعاينة والعودة للتعديل",
+        "imageAlt": "صورة الفعالية",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "location": "الموقع",
+        "speakers": "المتحدثون",
+        "capacity": "السعة",
+        "capacityValue": "{count, plural, one {مشارك واحد} two {مشاركان} few {# مشاركين} many {# مشاركًا} other {# مشارك}}",
+        "deadline": "آخر موعد للتسجيل",
+        "requirements": "المتطلبات",
+        "noRequirements": "لا توجد متطلبات",
+        "openMap": "فتح في خرائط Google",
+        "registrationInfo": "معلومات التسجيل",
+        "questions": "أسئلة إضافية",
+        "none": "غير محدد",
+        "edit": "تعديل",
+        "publish": "نشر الفعالية"
+      },
+      "success": {
+        "title": "تم نشر الفعالية بنجاح!",
+        "message": "تم نشر «{name}» وأصبحت تظهر في قائمة فعاليات لجنتك.",
+        "demoNote": "بيانات تجريبية: تُحفظ الفعاليات خلال جلسة المتصفح الحالية فقط حتى يتم ربط خدمة الفعاليات.",
+        "viewEvent": "عرض الفعالية",
+        "close": "إغلاق"
+      }
+    },
+    "eventDetails": {
+      "back": "العودة إلى الفعاليات",
+      "notFoundTitle": "الفعالية غير موجودة",
+      "notFoundDescription": "هذه الفعالية غير موجودة أو تم حذفها. تُحفظ الفعاليات المنشأة في هذا العرض التجريبي حتى إعادة تحميل الصفحة فقط.",
+      "createdUpdated": "أُنشئت {created} · حُدّثت {updated}",
+      "draftNotice": "هذه الفعالية مسودة، ولن يراها الأعضاء حتى يتم نشرها.",
+      "capacity": "السعة والحضور",
+      "notProvided": "غير متوفر"
     },
     "recentActivity": {
       "title": "أحدث الأنشطة",

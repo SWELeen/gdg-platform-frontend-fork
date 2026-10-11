@@ -12,6 +12,8 @@ import { getPathname, usePathname, Link } from "@/i18n/navigation";
 import { getElevatedAccess } from "@/components/dashboard/shared/accessStore";
 import { leaderCommitteeConfig } from "@/components/dashboard/shared/committee-config";
 import { leaderDashboardMockData } from "@/data/leader-dashboard";
+import { MEMBER_EVENTS_PATH } from "@/components/dashboard/member/member-events";
+import { buildGoogleCalendarUrl } from "@/lib/dashboard/calendar-link";
 
 import {
   calendarMock,
@@ -279,26 +281,42 @@ function Checkbox({ checked }: { checked: boolean }): ReactElement {
   );
 }
 
+// With `href`, the badge is a real (locale-aware) link; without it, it stays a button.
 function ArrowBadge({
   label,
   toneClassName,
   iconClassName,
   sizeClassName = "h-8 w-8 sm:h-9 sm:w-9",
+  href,
 }: {
   label: string;
   toneClassName: string;
   iconClassName?: string;
   sizeClassName?: string;
+  href?: string;
 }): ReactElement {
+  const className = `inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`;
+  const icon = <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />;
+
+  if (href) {
+    return (
+      <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
+        <Link href={href} aria-label={label} title={label} className={className}>
+          {icon}
+        </Link>
+      </motion.span>
+    );
+  }
+
   return (
     <motion.button
       type="button"
       aria-label={label}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`}
+      className={className}
     >
-      <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />
+      {icon}
     </motion.button>
   );
 }
@@ -576,6 +594,7 @@ function MyEventCard({ tile }: { tile: MyEventTile }): ReactElement {
         <p className="text-sm font-semibold text-gdg-dark">{t("title")}</p>
         <ArrowBadge
           label={t("action")}
+          href={MEMBER_EVENTS_PATH}
           toneClassName="bg-surface"
           iconClassName={`h-3 w-3 sm:h-3.5 sm:w-3.5 ${tile.accent}`}
           sizeClassName="h-6 w-6 sm:h-7 sm:w-7"
@@ -606,6 +625,10 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
   const t = useTranslations("dashboard.upcoming");
   const hasEvents = events.length > 0;
   const event = events[0];
+  const calendarUrl =
+    event?.startsAt && event.endsAt
+      ? buildGoogleCalendarUrl({ title: event.title, startsAt: event.startsAt, endsAt: event.endsAt, location: event.location })
+      : null;
 
   return (
     <motion.div
@@ -616,6 +639,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
         <h2 className="text-base font-semibold text-foreground sm:text-lg">{t("title")}</h2>
         <ArrowBadge
           label={t("viewAll")}
+          href={MEMBER_EVENTS_PATH}
           toneClassName="bg-gdg-yellow-accent"
           iconClassName="h-3.5 w-3.5 text-gdg-dark"
           sizeClassName="h-7 w-7 sm:h-8 sm:w-8"
@@ -664,23 +688,31 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
                       {event.time}
                     </span>
                   </p>
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-foreground sm:text-sm"
-                  >
-                    {t("addToCalendar")}
-                    <IconArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" />
-                  </motion.button>
+                  {calendarUrl && (
+                    <motion.a
+                      href={calendarUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t("addToCalendarLabel", { title: event.title })}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-foreground sm:text-sm"
+                    >
+                      {t("addToCalendar")}
+                      <IconArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" />
+                    </motion.a>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-3 flex justify-center">
-            <PaginationDots count={3} activeIndex={0} />
-          </div>
+          {/* Dots only make sense once there is more than one event to page through. */}
+          {events.length > 1 && (
+            <div className="mt-3 flex justify-center">
+              <PaginationDots count={events.length} activeIndex={0} />
+            </div>
+          )}
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-xl bg-surface-muted/40 px-4 py-10 text-center">

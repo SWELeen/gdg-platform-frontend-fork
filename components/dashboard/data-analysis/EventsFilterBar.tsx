@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 import { useTranslations } from "next-intl";
 import { Search, RotateCcw, Calendar, ChevronDown } from "lucide-react";
@@ -8,6 +9,28 @@ import {
   eventStatusFilterOptions,
   eventTypeFilterOptions,
 } from "./mock-data";
+
+const statusLabelKeys: Record<string, string> = {
+  Upcoming: "upcoming",
+  Completed: "completed",
+  Draft: "draft",
+  "Needs Update": "needsUpdate",
+};
+
+const dateLabelKeys: Record<string, string> = {
+  all: "anyDate",
+  upcoming: "next30Days",
+  october: "october",
+  november: "november",
+};
+
+const typeLabelKeys: Record<string, string> = {
+  Workshop: "workshop",
+  Conference: "conference",
+  Talk: "talk",
+  Panel: "panel",
+  Hackathon: "hackathon",
+};
 
 export function EventsFilterBar() {
   const t = useTranslations("dashboard.leader");
@@ -22,6 +45,20 @@ export function EventsFilterBar() {
     setDateFilter,
     resetFilters,
   } = useLeaderDashboard();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // The search box advertises a ⌘K / Ctrl+K shortcut, so honor it.
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const isFiltered =
     searchQuery !== "" ||
@@ -35,13 +72,16 @@ export function EventsFilterBar() {
       <div className="relative flex-1">
         <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
         <input
-          type="text"
+          ref={searchInputRef}
+          type="search"
+          aria-label={t("eventFilters.search")}
+          aria-keyshortcuts="Meta+K Control+K"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={t("eventFilters.search")}
           className="h-10 w-full rounded-xl border border-border bg-surface-muted/40 ps-9 pe-12 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
-        <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 rounded border border-border bg-surface px-1.5 py-0.5 text-[10px] font-medium text-muted">
+        <span aria-hidden="true" className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 rounded border border-border bg-surface px-1.5 py-0.5 text-[10px] font-medium text-muted">
           ⌘ K
         </span>
       </div>
@@ -52,12 +92,13 @@ export function EventsFilterBar() {
         <div className="relative flex items-center">
           <select
             value={statusFilter}
+            aria-label={t("eventFilters.statusLabel")}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="h-10 appearance-none rounded-xl border border-border bg-surface px-3 pe-8 text-xs font-medium text-foreground outline-none transition hover:bg-surface-muted focus:border-blue-500 cursor-pointer"
           >
             <option value="all">{t("eventFilters.allStatuses")}</option>
             {eventStatusFilterOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.value === "Upcoming" ? t("eventFilters.upcoming") : option.value === "Completed" ? t("eventFilters.completed") : option.value === "Draft" ? t("eventFilters.draft") : t("eventFilters.needsUpdate")}</option>
+              <option key={option.value} value={option.value}>{t(`eventFilters.${statusLabelKeys[option.value]}`)}</option>
             ))}
           </select>
           <ChevronDown className="pointer-events-none absolute end-2.5 size-3.5 text-muted" />
@@ -68,11 +109,12 @@ export function EventsFilterBar() {
           <Calendar className="pointer-events-none absolute start-2.5 size-3.5 text-muted" />
           <select
             value={dateFilter}
+            aria-label={t("eventFilters.dateLabel")}
             onChange={(e) => setDateFilter(e.target.value)}
             className="h-10 appearance-none rounded-xl border border-border bg-surface ps-8 pe-8 text-xs font-medium text-foreground outline-none transition hover:bg-surface-muted focus:border-blue-500 cursor-pointer"
           >
             {eventDateFilterOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.value === "all" ? t("eventFilters.anyDate") : option.value === "upcoming" ? t("eventFilters.next30Days") : option.value === "october" ? t("eventFilters.october") : t("eventFilters.november")}</option>
+              <option key={option.value} value={option.value}>{t(`eventFilters.${dateLabelKeys[option.value]}`)}</option>
             ))}
           </select>
           <ChevronDown className="pointer-events-none absolute end-2.5 size-3.5 text-muted" />
@@ -82,12 +124,13 @@ export function EventsFilterBar() {
         <div className="relative flex items-center">
           <select
             value={typeFilter}
+            aria-label={t("eventFilters.typeLabel")}
             onChange={(e) => setTypeFilter(e.target.value)}
             className="h-10 appearance-none rounded-xl border border-border bg-surface px-3 pe-8 text-xs font-medium text-foreground outline-none transition hover:bg-surface-muted focus:border-blue-500 cursor-pointer"
           >
             <option value="all">{t("eventFilters.allTypes")}</option>
             {eventTypeFilterOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.value === "Workshop" ? t("eventFilters.workshop") : option.value === "Conference" ? t("eventFilters.conference") : option.value === "Talk" ? t("eventFilters.talk") : t("eventFilters.panel")}</option>
+              <option key={option.value} value={option.value}>{t(`eventFilters.${typeLabelKeys[option.value]}`)}</option>
             ))}
           </select>
           <ChevronDown className="pointer-events-none absolute end-2.5 size-3.5 text-muted" />
