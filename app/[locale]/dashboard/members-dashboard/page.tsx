@@ -749,7 +749,7 @@ function CalendarCard({ data }: { data: CalendarMockData }): ReactElement {
   return (
     <motion.div
       variants={itemVariants}
-      className="flex h-fit flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
+      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
     >
       <div className="mb-3 flex items-center justify-between">
         <button
@@ -777,7 +777,7 @@ function CalendarCard({ data }: { data: CalendarMockData }): ReactElement {
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-y-1">
+      <div className="grid grid-cols-7 gap-y-1 mb-3">
         {cells.map((day, index) => {
           if (day === null) {
             return <span key={index} />;
@@ -801,7 +801,7 @@ function CalendarCard({ data }: { data: CalendarMockData }): ReactElement {
         })}
       </div>
 
-      <div className="mt-3 rounded-xl bg-surface-muted/60 p-3">
+      <div className="mt-auto rounded-xl bg-surface-muted/60 p-3">
         <p className="text-xs font-medium uppercase tracking-wide text-muted">{t("today")}</p>
         <p className="mt-0.5 text-sm font-semibold text-foreground">{selectedDateLabel}</p>
         <p className="mt-1 text-xs text-muted">{t("eventsScheduled", { count: hasSelectedEvent ? 1 : 0 })}</p>
