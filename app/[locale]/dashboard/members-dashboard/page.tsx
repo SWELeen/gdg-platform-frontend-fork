@@ -624,7 +624,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
 
       {hasEvents ? (
         <>
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#2b2b2b] via-gdg-dark to-black">
+          <div className="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-gradient-to-br from-[#2b2b2b] via-gdg-dark to-black">
             {event.imageUrl ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- backend-provided URL of unknown origin; next/image would need a remote pattern we don't have yet. */}
@@ -637,7 +637,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
             ) : (
               <IconCalendar className="pointer-events-none absolute end-3 top-3 h-16 w-16 text-[var(--white)]/10" />
             )}
-            <div className="relative flex aspect-[16/7] flex-col justify-between p-3 sm:p-4">
+              <div className="relative flex flex-1 aspect-[16/7] lg:aspect-auto flex-col justify-between p-3 sm:p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex flex-col items-center justify-center rounded-lg bg-surface px-2.5 py-1 leading-none text-foreground shadow-sm">
                   <span className="text-base font-bold">{event.day}</span>
