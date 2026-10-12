@@ -394,6 +394,43 @@
     "otherTopics": "تبديل الموضوع",
     "searchResultsTitle": "نتائج البحث"
   },
+  "directory": {
+    "searchLabel": "البحث عن الأعضاء بالاسم",
+    "subtitle": "تعرّف على أعضاء لجنتنا الرائعين",
+    "searchPlaceholder": "ابحث عن عضو بالاسم",
+    "filterLabel": "تصفية الأعضاء",
+    "filters": {
+      "myTeam": "فريقي",
+      "otherTeams": "الفرق الأخرى",
+      "all": "جميع الأعضاء"
+    },
+    "resultsCount": "{count, plural, one {# عضو} two {# عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}} معروض",
+    "empty": "لا يوجد أعضاء لعرضهم هنا حتى الآن.",
+    "emptySearch": "لا يوجد أعضاء يطابقون بحثك."
+  },
+  "achievements": {
+    "statsLabel": "إحصائياتي",
+    "stats": {
+      "points": "نقاطي",
+      "rank": "ترتيبي في اللجنة"
+    },
+    "podiumTitle": "أفضل ٣ أعضاء",
+    "podiumSubtitle": "أعلى النقاط بين الأعضاء العاديين في لجنتنا",
+    "leaderboardTitle": "لوحة صدارة اللجنة",
+    "leaderboardSubtitle": "الأعضاء العاديون مرتبون حسب مجموع نقاطهم",
+    "sortToggle": "الترتيب الحالي: {current}. انقر للتبديل إلى: {next}.",
+    "sortHighToLow": "من الأعلى إلى الأدنى",
+    "sortLowToHigh": "من الأدنى إلى الأعلى",
+    "columns": {
+      "rank": "#",
+      "member": "العضو",
+      "points": "النقاط"
+    },
+    "pointsValue": "{points, number} نقطة",
+    "rankLabel": "المركز {rank, number}",
+    "you": "أنت",
+    "empty": "لا يوجد أعضاء في اللجنة لترتيبهم حتى الآن."
+  },
   "leader": {
     "nav": {
       "workspace": "مساحة العمل",
@@ -514,26 +551,26 @@
         "member": "عضو"
       }
     },
-  "points": {
-    "previewTitle": "نقاط الأعضاء",
-    "previewDescription": "تابع المساهمات وقدّر الالتزام في إنجاز المهام.",
-    "historyLink": "سجل النقاط",
-    "member": "العضو",
-    "tasks": "المهام",
-    "lastActivity": "آخر نشاط",
-    "updatePoints": "تحديث النقاط",
-    "points": "النقاط",
-    "totalBanner": "إجمالي النقاط: {points}",
-    "description": "قدّر مساهمات الأعضاء والمهام التي أنجزوها.",
-    "standings": "ترتيب الأعضاء",
-    "role": "الدور",
-    "currentPoints": "النقاط الحالية",
-    "tasksCompleted": "المهام المكتملة",
-    "lastUpdated": "آخر نشاط",
-    "actions": "الإجراءات",
-    "emptyMembers": "لا يوجد أعضاء في اللجنة حاليًا.",
-    "emptyHistory": "لم تُسجل أي تغييرات على النقاط حتى الآن.",
-    "history": "سجل النقاط"
+    "points": {
+      "previewTitle": "نقاط الأعضاء",
+      "previewDescription": "تابع المساهمات وقدّر الالتزام في إنجاز المهام.",
+      "historyLink": "سجل النقاط",
+      "member": "العضو",
+      "tasks": "المهام",
+      "lastActivity": "آخر نشاط",
+      "updatePoints": "تحديث النقاط",
+      "points": "النقاط",
+      "totalBanner": "إجمالي النقاط: {points}",
+      "description": "قدّر مساهمات الأعضاء والمهام التي أنجزوها.",
+      "standings": "ترتيب الأعضاء",
+      "role": "الدور",
+      "currentPoints": "النقاط الحالية",
+      "tasksCompleted": "المهام المكتملة",
+      "lastUpdated": "آخر نشاط",
+      "actions": "الإجراءات",
+      "emptyMembers": "لا يوجد أعضاء في اللجنة حاليًا.",
+      "emptyHistory": "لم تُسجل أي تغييرات على النقاط حتى الآن.",
+      "history": "سجل النقاط"
     },
     "registrations": {
       "pendingTitle": "التسجيلات المعلقة",
@@ -664,12 +701,12 @@
       "medium": "متوسطة",
       "low": "منخفضة",
       "all": "الكل",
-    "moveToInProgress": "نقل إلى قيد التنفيذ",
-    "moveToCompleted": "نقل إلى مكتملة",
-    "moveToTodo": "نقل إلى لم تبدأ",
-    "toDo": "لم تبدأ",
-    "inProgress": "قيد التنفيذ",
-    "complete": "مكتملة",
+      "moveToInProgress": "نقل إلى قيد التنفيذ",
+      "moveToCompleted": "نقل إلى مكتملة",
+      "moveToTodo": "نقل إلى لم تبدأ",
+      "toDo": "لم تبدأ",
+      "inProgress": "قيد التنفيذ",
+      "complete": "مكتملة",
       "empty": "لم يتم العثور على مهام.",
       "managementTitle": "إدارة المهام ({count} إجمالًا)",
       "boardView": "عرض اللوحة",

@@ -20,7 +20,7 @@ export interface SidebarItem {
   id: string;
   /**
    * Real route once implemented; "#" is the intentional placeholder for pages that don't
-   * exist yet (Events, Members, Achievements, Setting, Help). Swapping "#" for the
+   * exist yet (Events, Setting, Help). Swapping "#" for the
    * real path is the only change needed to activate route-based highlighting for that item.
    */
   href: string;
@@ -71,8 +71,8 @@ export const sidebarPrimaryItems: SidebarItem[] = [
   { id: "dashboard", href: "/dashboard/members-dashboard" },
   { id: "events", href: MEMBER_EVENTS_PATH, activeFor: [UPCOMING_EVENTS_PATH] },
   { id: "tasks", href: "/dashboard/members-dashboard/tasks" },
-  { id: "members", href: "#" },
-  { id: "achievements", href: "#" },
+  { id: "members", href: "/dashboard/members-dashboard/members" },
+  { id: "achievements", href: "/dashboard/members-dashboard/achievements" },
 ];
 
 export const sidebarSecondaryItems: SidebarItem[] = [

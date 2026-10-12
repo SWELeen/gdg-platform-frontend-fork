@@ -18,9 +18,10 @@ export function MembersLayoutClient({ children }: { children: ReactNode }) {
   const isHome = pathname.replace(/\/+$/, "") === HOME_ROUTE;
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface text-foreground">
+    <div className="flex flex-col bg-surface text-foreground">
       <MotionConfig reducedMotion="user">
-        <div className="flex min-h-full flex-1 flex-col bg-surface text-foreground">
+        {/* Header + sidebar/content fill at least the viewport, so the footer starts below the fold. */}
+        <div className="flex min-h-screen flex-1 flex-col bg-surface text-foreground">
           <TopNav />
           <div className="flex flex-1 flex-col lg:flex-row">
             <MembersSidebar />

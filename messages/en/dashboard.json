@@ -394,6 +394,43 @@
     "otherTopics": "Switch topic",
     "searchResultsTitle": "Search results"
   },
+  "directory": {
+    "searchLabel": "Search members by name",
+    "subtitle": "Meet the amazing members in our committee",
+    "searchPlaceholder": "Search members by name",
+    "filterLabel": "Filter members",
+    "filters": {
+      "myTeam": "My Team",
+      "otherTeams": "Other Teams",
+      "all": "All Members"
+    },
+    "resultsCount": "{count, plural, one {# member} other {# members}} shown",
+    "empty": "There are no members to show here yet.",
+    "emptySearch": "No members match your search."
+  },
+  "achievements": {
+    "statsLabel": "My stats",
+    "stats": {
+      "points": "My Points",
+      "rank": "My Committee Rank"
+    },
+    "podiumTitle": "Top 3 Members",
+    "podiumSubtitle": "Highest points among regular members in our committee",
+    "leaderboardTitle": "Committee Leaderboard",
+    "leaderboardSubtitle": "Regular members ranked by their total points",
+    "sortToggle": "Sorted {current}. Click to sort {next}.",
+    "sortHighToLow": "Highest to Lowest",
+    "sortLowToHigh": "Lowest to Highest",
+    "columns": {
+      "rank": "#",
+      "member": "Member",
+      "points": "Points"
+    },
+    "pointsValue": "{points, number} pts",
+    "rankLabel": "Rank {rank, number}",
+    "you": "You",
+    "empty": "No committee members to rank yet."
+  },
   "leader": {
     "nav": {
       "workspace": "Workspace",
@@ -514,27 +551,27 @@
         "member": "Member"
       }
     },
-  "points": {
-    "previewTitle": "Member points",
-    "previewDescription": "Track contribution and recognize consistent delivery.",
-    "historyLink": "Points history",
-    "member": "Member",
-    "tasks": "Tasks",
-    "lastActivity": "Last Activity",
-    "updatePoints": "Update points",
-    "points": "Points",
-    "totalBanner": "Total points: {points}",
-    "description": "Recognize members for their contributions and completed tasks.",
-    "standings": "Member standings",
-    "role": "Role",
-    "currentPoints": "Current Points",
-    "tasksCompleted": "Tasks Completed",
-    "lastUpdated": "Last Activity",
-    "actions": "Actions",
-    "emptyMembers": "No committee members are available.",
-    "emptyHistory": "No point changes have been recorded yet.",
-    "history": "Point History Log"
-  },
+    "points": {
+      "previewTitle": "Member points",
+      "previewDescription": "Track contribution and recognize consistent delivery.",
+      "historyLink": "Points history",
+      "member": "Member",
+      "tasks": "Tasks",
+      "lastActivity": "Last Activity",
+      "updatePoints": "Update points",
+      "points": "Points",
+      "totalBanner": "Total points: {points}",
+      "description": "Recognize members for their contributions and completed tasks.",
+      "standings": "Member standings",
+      "role": "Role",
+      "currentPoints": "Current Points",
+      "tasksCompleted": "Tasks Completed",
+      "lastUpdated": "Last Activity",
+      "actions": "Actions",
+      "emptyMembers": "No committee members are available.",
+      "emptyHistory": "No point changes have been recorded yet.",
+      "history": "Point History Log"
+    },
     "registrations": {
       "pendingTitle": "Pending registrations",
       "pendingDescription": "Applicants waiting for a PR review.",
@@ -664,12 +701,12 @@
       "medium": "Medium",
       "low": "Low",
       "all": "All",
-    "moveToInProgress": "Move to In Progress",
-    "moveToCompleted": "Move to Completed",
-    "moveToTodo": "Move to To Do",
-    "toDo": "To Do",
-    "inProgress": "In Progress",
-    "complete": "Completed",
+      "moveToInProgress": "Move to In Progress",
+      "moveToCompleted": "Move to Completed",
+      "moveToTodo": "Move to To Do",
+      "toDo": "To Do",
+      "inProgress": "In Progress",
+      "complete": "Completed",
       "empty": "No tasks found.",
       "managementTitle": "Task Management ({count} total)",
       "boardView": "Board View",
