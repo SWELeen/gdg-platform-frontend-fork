@@ -637,7 +637,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
             ) : (
               <IconCalendar className="pointer-events-none absolute end-3 top-3 h-16 w-16 text-[var(--white)]/10" />
             )}
-              <div className="relative flex flex-1 aspect-[16/7] lg:aspect-auto flex-col justify-between p-3 sm:p-4">
+                <div className="relative flex flex-1 aspect-[16/10] sm:aspect-[16/7] lg:aspect-auto flex-col justify-between p-3 sm:p-4">
               <div className="flex items-start justify-between gap-3">
                   <div className="flex flex-col items-center justify-center rounded-lg bg-[var(--white)] px-2.5 py-1 leading-none text-gdg-dark shadow-sm">
                   <span className="text-base font-bold">{event.day}</span>
@@ -668,7 +668,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
                     type="button"
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--white)] px-3 py-1.5 text-xs font-semibold text-gdg-dark sm:text-sm"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--white)] px-2.5 py-1 text-sm font-medium text-gdg-dark sm:px-3 sm:py-1.5"
                   >
                     {t("addToCalendar")}
                     <IconArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" />
