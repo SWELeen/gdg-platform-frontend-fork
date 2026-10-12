@@ -616,8 +616,8 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
         <h2 className="text-base font-semibold text-foreground sm:text-lg">{t("title")}</h2>
         <ArrowBadge
           label={t("viewAll")}
-          toneClassName="bg-gdg-yellow-accent"
-          iconClassName="h-3.5 w-3.5 text-gdg-dark"
+          toneClassName="bg-[var(--dashboard-tile-yellow-bg)]"
+          iconClassName="h-3.5 w-3.5 text-[var(--dashboard-yellow-text)]"
           sizeClassName="h-7 w-7 sm:h-8 sm:w-8"
         />
       </div>
