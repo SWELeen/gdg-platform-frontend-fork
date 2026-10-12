@@ -90,7 +90,13 @@
       "title": "We couldn’t load your tasks",
       "description": "Something went wrong while loading your tasks. Check your connection and try again.",
       "retry": "Try again"
-    }
+    },
+    "priorityFilterLabel": "Filter tasks by priority",
+    "allPriorities": "All priorities",
+    "viewToggleLabel": "Tasks view",
+    "boardView": "Board view",
+    "listView": "List view",
+    "done": "Done"
   },
   "leader": {
     "nav": {

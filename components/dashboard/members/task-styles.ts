@@ -26,6 +26,14 @@ export const toneColors = {
 
 export type Tone = keyof typeof toneColors;
 
+// Text-only counterpart of `toneColors`, for icons that should match a count pill's tone.
+export const toneText: Record<Tone, string> = {
+  red: "text-[var(--dashboard-red-text)]",
+  yellow: "text-[var(--dashboard-yellow-text)]",
+  blue: "text-[var(--dashboard-blue-text)]",
+  green: "text-[var(--dashboard-green-text)]",
+};
+
 // Status badges are the visual source of truth for shape (pill/capsule) and sizing.
 export const PILL_SHAPE = "rounded-full px-2.5 py-1";
 

@@ -7,12 +7,14 @@ import { Calendar, CheckCircle2, Clock, ListTodo } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
+import { TaskDoneMark } from "@/components/dashboard/members/TaskDoneMark";
 import {
   priorityKeys,
   priorityStyles,
   statusKeys,
   statusTones,
   toneColors,
+  toneText,
 } from "@/components/dashboard/members/task-styles";
 import type { DashboardTask, TaskStatus } from "@/components/dashboard/mock-data";
 
@@ -33,11 +35,11 @@ function TaskCard({ task }: { task: DashboardTask }): ReactElement {
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3
+        <h4
           className={`text-sm font-semibold text-foreground ${done ? "line-through decoration-muted" : ""}`}
         >
           {task.title}
-        </h3>
+        </h4>
         <TaskBadge className={`shrink-0 ${priorityStyles[task.priority]}`}>
           {t(`priority.${priorityKeys[task.priority]}`)}
         </TaskBadge>
@@ -49,6 +51,11 @@ function TaskCard({ task }: { task: DashboardTask }): ReactElement {
         <Calendar aria-hidden="true" className="size-3.5 shrink-0" />
         <span>{t("columns.deadline")}</span>
         <span className="font-semibold text-foreground">{task.deadline}</span>
+        {done && (
+          <span className="ms-auto">
+            <TaskDoneMark />
+          </span>
+        )}
       </div>
     </li>
   );
@@ -73,10 +80,10 @@ function BoardColumn({
     >
       <div className="flex items-center justify-between border-b border-border/80 pb-3">
         <div className="flex items-center gap-2">
-          <Icon aria-hidden="true" className="size-4 text-muted" />
-          <h2 id={headingId} className="text-xs font-bold uppercase tracking-wider text-foreground">
+          <Icon aria-hidden="true" className={`size-4 ${toneText[statusTones[status]]}`} />
+          <h3 id={headingId} className="text-xs font-bold uppercase tracking-wider text-foreground">
             {t(`status.${statusKeys[status]}`)}
-          </h2>
+          </h3>
         </div>
         <span
           className={`flex size-5 items-center justify-center rounded-full text-[11px] font-bold ${toneColors[statusTones[status]]}`}
