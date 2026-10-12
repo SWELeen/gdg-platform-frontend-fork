@@ -493,12 +493,10 @@ function SearchField({
   );
 }
 
-// Phone: [account+bell] left, [date] pushed to the far right via `ms-auto` on the date
-// element — search is hidden here and reappears lower in the page, after the internal nav.
-// Tablet: [date][bell][account] one compact group (account rightmost within it), search on
-// the right of the same row. Desktop (unchanged): search left, account group right — achieved
-// by flipping `order` at `lg` rather than duplicating markup. Within the group, only the
-// `order`/`ms-auto` on these three items change per breakpoint; nothing is re-parented.
+// Phone and tablet: [account+bell] at the start, [date] pushed to the far end via `ms-auto`;
+// search is hidden here and reappears lower in the page, after the internal nav.
+// Desktop (lg+): search at the start, account group at the end — achieved by flipping
+// `order` at `lg` rather than duplicating markup.
 function UtilityRow({
   user,
   today,
@@ -514,7 +512,7 @@ function UtilityRow({
 
   return (
     <motion.div variants={itemVariants} className="flex items-center justify-between gap-3">
-      <div className="order-1 flex w-full items-center gap-2 sm:w-auto lg:order-2">
+      <div className="order-1 flex w-full items-center gap-2 lg:w-auto lg:order-2">
         <div className="order-1 flex items-center gap-2.5 lg:order-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-avatar-bg text-sm font-semibold text-foreground"> 
             {user.initials}
@@ -536,7 +534,7 @@ function UtilityRow({
           <span className="absolute end-2 top-2 h-1.5 w-1.5 rounded-full bg-gdg-red" aria-hidden="true" />
         </button>
 
-        <p className="order-3 ms-auto shrink-0 text-xs font-medium text-muted sm:ms-0 sm:text-sm lg:order-1">
+        <p className="order-3 ms-auto shrink-0 text-xs font-medium text-muted lg:ms-0 sm:text-sm lg:order-1">
           {today}
         </p>
       </div>
@@ -544,7 +542,7 @@ function UtilityRow({
       <SearchField
         searchQuery={searchQuery}
         onSearchChange={onSearchChange}
-        className="order-2 hidden sm:block sm:max-w-xs lg:order-1"
+        className="order-2 hidden lg:block lg:max-w-xs lg:order-1"
       />
     </motion.div>
   );
@@ -1119,7 +1117,7 @@ export default function DashboardPage(): ReactElement {
             )}
 
             <CompactDashboardNav />
-            <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
+            <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="lg:hidden" />
             <MyEventsGrid tiles={myEventTiles} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
               <UpcomingEventsCard events={upcomingEvents} />
