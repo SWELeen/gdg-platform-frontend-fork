@@ -58,10 +58,11 @@ export function DashboardUpcomingEvents() {
   return (
     <section
       aria-labelledby="dashboard-upcoming-heading"
-      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
+      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4"
     >
       <div className="mb-3 flex items-center justify-between">
-        <h2 id="dashboard-upcoming-heading" className="text-base font-semibold text-foreground sm:text-lg">
+        <h2 id="dashboard-upcoming-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <Calendar className="h-5 w-5 shrink-0" aria-hidden="true" />
           {t("title")}
         </h2>
         <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
@@ -69,9 +70,9 @@ export function DashboardUpcomingEvents() {
             href={UPCOMING_EVENTS_PATH}
             aria-label={t("viewAll")}
             title={t("viewAll")}
-            className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gdg-yellow-accent transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue sm:h-8 sm:w-8"
+             className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--dashboard-tile-yellow-bg)] transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue sm:h-8 sm:w-8"
           >
-            <ArrowUpRight className="h-3.5 w-3.5 text-gdg-dark rtl:-scale-x-100" />
+          <ArrowUpRight className="h-3.5 w-3.5 text-[var(--dashboard-yellow-text)] rtl:-scale-x-100" />
           </Link>
         </motion.span>
       </div>
@@ -88,7 +89,7 @@ export function DashboardUpcomingEvents() {
         </div>
       ) : (
         <>
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#2b2b2b] via-gdg-dark to-black">
+           <div className="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-gradient-to-br from-[var(--event-card-start)] via-gdg-dark to-black">
             {event.imageUrl ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- event image URL of unknown origin; next/image would need a remote pattern. */}
@@ -98,10 +99,10 @@ export function DashboardUpcomingEvents() {
             ) : (
               <Calendar className="pointer-events-none absolute end-3 top-3 h-16 w-16 text-[var(--white)]/10" aria-hidden="true" />
             )}
-            <div className="relative flex aspect-[16/7] min-h-36 flex-col justify-between p-3 sm:p-4">
+             <div className="relative flex flex-1 aspect-[16/10] sm:aspect-[16/7] lg:aspect-auto min-h-36 flex-col justify-between p-3 sm:p-4">
               <div className="flex items-start justify-between gap-3">
                 {eventDate && (
-                  <div className="flex flex-col items-center justify-center rounded-lg bg-surface px-2.5 py-1 leading-none text-foreground shadow-sm">
+                   <div className="flex flex-col items-center justify-center rounded-lg bg-[var(--white)] px-2.5 py-1 leading-none text-gdg-dark shadow-sm">
                     <span className="text-base font-bold">
                       {format.dateTime(eventDate, { day: "numeric", numberingSystem: "latn" })}
                     </span>
@@ -112,7 +113,7 @@ export function DashboardUpcomingEvents() {
                 )}
               </div>
               <div>
-                <p className="text-base font-semibold text-[var(--white)] sm:text-lg">
+                <p className="text-xl font-semibold text-[var(--white)]">
                   {/* Stretched link: the whole banner opens this event; the calendar link sits above it. */}
                   <Link
                     href={`${UPCOMING_EVENTS_PATH}/${event.id}`}
@@ -141,7 +142,7 @@ export function DashboardUpcomingEvents() {
                       aria-label={t("addToCalendarLabel", { title: event.title })}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
-                      className="relative z-10 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-foreground sm:text-sm"
+                      className="relative z-10 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--white)] px-2.5 py-1 text-sm font-medium text-gdg-dark sm:px-3 sm:py-1.5"
                     >
                       {t("addToCalendar")}
                       <ArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />
@@ -165,7 +166,7 @@ export function DashboardUpcomingEvents() {
                 >
                   <span
                     className={`h-1.5 rounded-full transition-all ${
-                      item.id === event.id ? "w-4 bg-gdg-dark dark:bg-foreground" : "w-1.5 bg-gray-300"
+                      item.id === event.id ? "w-4 bg-foreground" : "w-1.5 bg-gray-300"
                     }`}
                   />
                 </button>

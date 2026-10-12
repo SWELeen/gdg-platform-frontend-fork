@@ -67,7 +67,7 @@ export function MemberCalendarCard() {
   if (now === null) {
     return (
       <div
-        className="h-[25rem] animate-pulse rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light motion-reduce:animate-none sm:p-4"
+        className="h-[25rem] animate-pulse rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border motion-reduce:animate-none sm:p-4"
         aria-busy="true"
         aria-label={t("loading")}
       />
@@ -105,7 +105,7 @@ export function MemberCalendarCard() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex h-fit flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
+      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4"
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <button
@@ -117,7 +117,7 @@ export function MemberCalendarCard() {
           <ChevronLeft className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
         </button>
         <div className="flex min-w-0 flex-col items-center">
-          <h2 id="member-calendar-month" aria-live="polite" className="text-sm font-semibold text-foreground">
+          <h2 id="member-calendar-month" aria-live="polite" className="text-lg font-semibold text-foreground">
             {monthLabel}
           </h2>
           {!isOnToday && (
@@ -127,7 +127,7 @@ export function MemberCalendarCard() {
                 setView(null);
                 setSelectedKey(null);
               }}
-              className="mt-0.5 rounded-full px-2 text-[11px] font-semibold text-gdg-red hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-red/40"
+              className="mt-0.5 rounded-full px-2 text-xs font-semibold text-gdg-red hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-red/40"
             >
               {t("todayButton")}
             </button>
@@ -149,7 +149,7 @@ export function MemberCalendarCard() {
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-y-1">
+      <div className="grid grid-cols-7 gap-y-1 mb-3">
         {getMonthGridDays(shown).map((day, index) => {
           if (day === null) return <span key={index} />;
           const key = keyFor(day);
@@ -190,7 +190,7 @@ export function MemberCalendarCard() {
         })}
       </div>
 
-      <div className="mt-3 rounded-xl bg-surface-muted/60 p-3" aria-live="polite">
+      <div className="mt-auto rounded-xl bg-surface-muted/60 p-3" aria-live="polite">
         <p className="text-xs font-medium uppercase tracking-wide text-muted">
           {selected === todayKey ? t("today") : t("selectedDay")}
         </p>
