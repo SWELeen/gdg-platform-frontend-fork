@@ -487,7 +487,7 @@ function SearchField({
         onChange={(event) => onSearchChange(event.target.value)}
         placeholder={t("searchPlaceholder")}
         maxLength={255}
-        className="w-full rounded-full border border-border bg-surface-muted/60 py-2 ps-9 pe-4 text-sm text-foreground placeholder:text-muted focus:border-gdg-blue focus:bg-surface focus:outline-none focus:ring-2 focus:ring-gdg-blue/30"
+        className="w-full rounded-full border border-border bg-surface-muted/60 py-2 ps-9 pe-4 text-base text-foreground placeholder:text-muted focus:border-gdg-blue focus:bg-surface focus:outline-none focus:ring-2 focus:ring-gdg-blue/30"
       />
     </label>
   );
