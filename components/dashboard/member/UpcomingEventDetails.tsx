@@ -55,14 +55,14 @@ export function UpcomingEventDetails({ event }: { event: PlatformEvent | null })
 
   if (!event) {
     return (
-      <main className="mx-auto w-full max-w-4xl flex-1 space-y-6 px-4 py-6 text-foreground sm:px-6 lg:px-8 lg:py-8">
+      <div className="w-full max-w-4xl space-y-6 text-foreground">
         {backLink}
         <section className="rounded-2xl border border-dashed border-border bg-surface p-8 text-center sm:p-12">
           <CalendarSearch className="mx-auto size-10 text-muted" aria-hidden="true" />
-          <h1 className="mt-3 text-lg font-semibold">{t("details.notFoundTitle")}</h1>
+          <h2 className="mt-3 text-lg font-semibold">{t("details.notFoundTitle")}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">{t("details.notFoundDescription")}</p>
         </section>
-      </main>
+      </div>
     );
   }
 
@@ -74,7 +74,7 @@ export function UpcomingEventDetails({ event }: { event: PlatformEvent | null })
   const hasEnded = now !== null && !isUpcomingEventDate(event.date, now);
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 space-y-6 px-4 py-6 text-foreground sm:px-6 lg:px-8 lg:py-8">
+    <div className="w-full max-w-4xl space-y-6 text-foreground">
       {backLink}
 
       <article className="overflow-hidden rounded-2xl bg-surface shadow-sm ring-1 ring-gdg-gray-light">
@@ -86,7 +86,7 @@ export function UpcomingEventDetails({ event }: { event: PlatformEvent | null })
         )}
         <div className="p-5 sm:p-8">
           <span className="text-xs font-semibold text-muted">{tType(event.type.toLowerCase())}</span>
-          <h1 className="mt-2 text-2xl font-semibold leading-tight sm:text-3xl">{event.title}</h1>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight sm:text-3xl">{event.title}</h2>
           {event.description && (
             <p className="mt-3 whitespace-pre-line text-sm leading-6 text-foreground/80">{event.description}</p>
           )}
@@ -160,6 +160,6 @@ export function UpcomingEventDetails({ event }: { event: PlatformEvent | null })
           </div>
         </div>
       </article>
-    </main>
+    </div>
   );
 }

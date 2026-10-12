@@ -17,9 +17,9 @@ export default function UpcomingEventsError({
   }, [error]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
+    <div className="w-full">
       <section role="alert" className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
-        <h1 className="text-lg font-semibold text-foreground">{t("errorTitle")}</h1>
+        <h2 className="text-lg font-semibold text-foreground">{t("errorTitle")}</h2>
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">{t("errorDescription")}</p>
         <button
           type="button"

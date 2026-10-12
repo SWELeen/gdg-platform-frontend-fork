@@ -2,6 +2,8 @@
 // There is no approved dashboard API contract yet (see docs/api-integration.md),
 // so this module is the single, typed swap point for real backend data later.
 
+import { MEMBER_EVENTS_PATH, UPCOMING_EVENTS_PATH } from "@/components/dashboard/member/member-events";
+
 export type TaskPriority = "High" | "Medium" | "Low";
 export type TaskStatus = "In Progress" | "To Do" | "Complete";
 
@@ -17,10 +19,12 @@ export interface SidebarItem {
   id: string;
   /**
    * Real route once implemented; "#" is the intentional placeholder for pages that don't
-   * exist yet (Events, Tasks, Members, Achievements, Setting, Help). Swapping "#" for the
+   * exist yet (Events, Members, Achievements, Setting, Help). Swapping "#" for the
    * real path is the only change needed to activate route-based highlighting for that item.
    */
   href: string;
+  /** Other routes that also highlight this item (e.g. Upcoming Events under Events). */
+  activeFor?: string[];
 }
 
 export interface MyEventTile {
@@ -74,8 +78,8 @@ export const currentUser: DashboardUser = {
 
 export const sidebarPrimaryItems: SidebarItem[] = [
   { id: "dashboard", href: "/dashboard/members-dashboard" },
-  { id: "events", href: "#" },
-  { id: "tasks", href: "#" },
+  { id: "events", href: MEMBER_EVENTS_PATH, activeFor: [UPCOMING_EVENTS_PATH] },
+  { id: "tasks", href: "/dashboard/members-dashboard/tasks" },
   { id: "members", href: "#" },
   { id: "achievements", href: "#" },
 ];

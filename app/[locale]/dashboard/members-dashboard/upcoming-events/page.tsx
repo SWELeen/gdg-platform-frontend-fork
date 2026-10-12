@@ -1,6 +1,4 @@
 import { setRequestLocale } from "next-intl/server";
-import Footer from "@/components/Footer";
-import { TopNav } from "@/components/dashboard/TopNav";
 import { UpcomingEventsPage } from "@/components/dashboard/member/UpcomingEventsPage";
 import { getPublishedEvents } from "@/lib/events/repository";
 
@@ -11,11 +9,6 @@ export default async function UpcomingEventsRoute({
   setRequestLocale(locale);
   const events = await getPublishedEvents();
 
-  return (
-    <div className="flex min-h-screen flex-col bg-surface text-foreground">
-      <TopNav />
-      <UpcomingEventsPage events={events} />
-      <Footer />
-    </div>
-  );
+  // TopNav, sidebar, <main> and Footer come from the members-dashboard layout.
+  return <UpcomingEventsPage events={events} />;
 }

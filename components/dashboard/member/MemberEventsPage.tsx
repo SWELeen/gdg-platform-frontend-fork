@@ -151,7 +151,7 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="mx-auto w-full max-w-6xl flex-1 space-y-6 px-4 py-6 text-foreground sm:px-6 lg:px-8 lg:py-8">
+      <div className="w-full space-y-6 text-foreground">
         <Link
           href="/dashboard/members-dashboard"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted transition hover:text-foreground"
@@ -162,7 +162,7 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
 
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="min-w-0">
-            <h1 className="text-2xl font-semibold sm:text-3xl">{t("title")}</h1>
+            <h2 className="text-2xl font-semibold sm:text-3xl">{t("title")}</h2>
             <p className="mt-1 max-w-2xl text-sm text-muted sm:text-base">{t("description")}</p>
           </div>
           <Link
@@ -315,7 +315,7 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
             )}
           </>
         )}
-      </main>
+      </div>
     </MotionConfig>
   );
 }

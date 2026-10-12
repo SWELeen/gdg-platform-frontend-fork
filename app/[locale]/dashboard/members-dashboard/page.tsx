@@ -1,19 +1,31 @@
 "use client";
 
 import { useState, useEffect, useSyncExternalStore } from "react";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { MotionConfig, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 
-import { TopNav } from "@/components/dashboard/TopNav";
-import Footer from "@/components/Footer";
-import { getPathname, usePathname, Link } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { getElevatedAccess } from "@/components/dashboard/shared/accessStore";
 import { leaderCommitteeConfig } from "@/components/dashboard/shared/committee-config";
 import { leaderDashboardMockData } from "@/data/leader-dashboard";
+import { MembersCompactNav } from "@/components/dashboard/members/MembersCompactNav";
 import { MemberEventCards } from "@/components/dashboard/member/MemberEventCards";
 import { DashboardUpcomingEvents } from "@/components/dashboard/member/DashboardUpcomingEvents";
+import { IconChecklist } from "@/components/dashboard/members/nav-icons";
+import type { IconProps } from "@/components/dashboard/members/nav-icons";
+import { MembersUserInfo } from "@/components/dashboard/members/MembersUserInfo";
+import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
+import {
+  priorityKeys,
+  priorityStyles,
+  statusKeys,
+  statusStyles,
+  statusTones,
+  toneColors,
+} from "@/components/dashboard/members/task-styles";
+import type { Tone } from "@/components/dashboard/members/task-styles";
 
 import {
   calendarMock,
@@ -21,18 +33,16 @@ import {
   dashboardTasks,
   myEventTiles,
   sidebarPrimaryItems,
-  sidebarSecondaryItems,
 } from "@/components/dashboard/mock-data";
 import type {
   CalendarMockData,
   DashboardTask,
   DashboardUser,
-  TaskPriority,
   TaskStatus,
 } from "@/components/dashboard/mock-data";
 
 // Entrance animation shared by the main dashboard sections. `MotionConfig
-// reducedMotion="user"` (below) automatically strips the transform-based
+// reducedMotion="user"` (in the members-dashboard layout) automatically strips the transform-based
 // part of these animations when the visitor prefers reduced motion.
 const containerVariants: Variants = {
   hidden: {},
@@ -44,13 +54,13 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-type IconProps = { className?: string };
-type IconComponent = (props: IconProps) => ReactElement;
-
 // Dates are formatted with the locale from the URL (never `undefined`, which resolves to
 // the runtime's default and differs between server and browser, causing hydration
 // mismatches). Western digits keep dates consistent with the other numbers on the page.
 const DATE_OPTIONS = { numberingSystem: "latn" } as const;
+
+// "View all tasks" goes wherever the sidebar's Tasks item goes, so the two never drift apart.
+const TASKS_HREF = sidebarPrimaryItems.find((item) => item.id === "tasks")?.href ?? "/dashboard/members-dashboard/tasks";
 
 // The real date is only known once we're running in the browser, so `getServerSnapshot`
 // returns a fixed "Today" fallback for the server-rendered/first-hydration pass (matching
@@ -81,85 +91,6 @@ function useTodayLabel(): string {
 /* ------------------------------------------------------------------ */
 /* Icons (inline SVGs — no icon package is installed in this project)  */
 /* ------------------------------------------------------------------ */
-
-function IconDashboard({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <rect x="3" y="3" width="7" height="7" rx="1.5" />
-      <rect x="14" y="3" width="7" height="7" rx="1.5" />
-      <rect x="3" y="14" width="7" height="7" rx="1.5" />
-      <rect x="14" y="14" width="7" height="7" rx="1.5" />
-    </svg>
-  );
-}
-
-function IconCalendar({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M8 3v4" />
-      <path d="M16 3v4" />
-    </svg>
-  );
-}
-
-function IconChecklist({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="m4 6 1.5 1.5L8 5" />
-      <path d="M11 6h9" />
-      <path d="m4 12 1.5 1.5L8 11" />
-      <path d="M11 12h9" />
-      <path d="m4 18 1.5 1.5L8 17" />
-      <path d="M11 18h9" />
-    </svg>
-  );
-}
-
-function IconUsers({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <circle cx="9" cy="8" r="3" />
-      <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
-      <circle cx="17.5" cy="9.5" r="2.5" />
-      <path d="M15.5 14.2c2.6.4 4.5 2.6 4.5 5.3" />
-    </svg>
-  );
-}
-
-function IconTrophy({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M8 4h8v5a4 4 0 0 1-8 0Z" />
-      <path d="M8 5H5a3 3 0 0 0 3 5" />
-      <path d="M16 5h3a3 3 0 0 1-3 5" />
-      <path d="M12 13v3" />
-      <path d="M9 20h6" />
-      <path d="M10 20v-2.5" />
-      <path d="M14 20v-2.5" />
-    </svg>
-  );
-}
-
-function IconSettings({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
-    </svg>
-  );
-}
-
-function IconHelp({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.5 9.3a2.5 2.5 0 1 1 3.7 2.2c-.8.5-1.2 1-1.2 2" />
-      <path d="M12 17h.01" />
-    </svg>
-  );
-}
 
 function IconSearch({ className }: IconProps): ReactElement {
   return (
@@ -212,23 +143,9 @@ function IconChevronRight({ className }: IconProps): ReactElement {
   );
 }
 
-const sidebarIcons: Record<string, IconComponent> = {
-  dashboard: IconDashboard,
-  events: IconCalendar,
-  tasks: IconChecklist,
-  members: IconUsers,
-  achievements: IconTrophy,
-  setting: IconSettings,
-  help: IconHelp,
-};
-
 /* ------------------------------------------------------------------ */
 /* Small presentational primitives                                     */
 /* ------------------------------------------------------------------ */
-
-function TaskBadge({ className, children }: { className: string; children: ReactNode }): ReactElement {
-  return <span className={`inline-flex items-center text-xs font-medium ${className}`}>{children}</span>;
-}
 
 function Checkbox({ checked }: { checked: boolean }): ReactElement {
   return (
@@ -243,26 +160,42 @@ function Checkbox({ checked }: { checked: boolean }): ReactElement {
   );
 }
 
+// With `href`, the badge is a real (locale-aware) link; without it, it stays a button.
 function ArrowBadge({
   label,
   toneClassName,
   iconClassName,
   sizeClassName = "h-8 w-8 sm:h-9 sm:w-9",
+  href,
 }: {
   label: string;
   toneClassName: string;
   iconClassName?: string;
   sizeClassName?: string;
+  href?: string;
 }): ReactElement {
+  const className = `inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`;
+  const icon = <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />;
+
+  if (href) {
+    return (
+      <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
+        <Link href={href} aria-label={label} title={label} className={className}>
+          {icon}
+        </Link>
+      </motion.span>
+    );
+  }
+
   return (
     <motion.button
       type="button"
       aria-label={label}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`}
+      className={className}
     >
-      <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />
+      {icon}
     </motion.button>
   );
 }
@@ -279,150 +212,6 @@ function PaginationDots({ count, activeIndex = 0 }: { count: number; activeIndex
         />
       ))}
     </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Navigation                                                           */
-/* ------------------------------------------------------------------ */
-
-// Desktop (lg+) only — the vertical text+icon sidebar. Below lg, `CompactDashboardNav`
-// (rendered inside `main`, further down this file) takes over instead.
-// Highlights whichever sidebar item matches the current route. The member dashboard uses an exact
-// match since "/dashboard/members-dashboard" is the named route; every other item matches its
-// own route or any nested route under it (e.g. "/events/123", "/events/create"). This stays
-// correct regardless of whether Events/Tasks/Members/Achievements end up as top-level routes
-// or nested under "/dashboard/members-dashboard" — only their `href` in mock-data.ts needs to change from the
-// current placeholder ("#") to the real path once those pages exist; no logic change needed.
-// `pathname` comes from @/i18n/navigation, so it has no locale prefix.
-function isNavItemActive(pathname: string, href: string): boolean {
-  if (href === "/dashboard/members-dashboard") {
-    return pathname === href;
-  }
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function SidebarLink({
-  href,
-  label,
-  Icon,
-  active,
-  muted = false,
-}: {
-  href: string;
-  label: string;
-  Icon: IconComponent;
-  active?: boolean;
-  muted?: boolean;
-}): ReactElement {
-  return (
-    <a
-      href={href}
-      aria-current={active ? "page" : undefined}
-      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-        active
-          ? "border-s-4 border-gdg-red bg-[var(--dashboard-red-bg)] ps-2.5 font-semibold text-[var(--dashboard-red-text)]"
-          : muted
-          ? "font-normal text-muted hover:bg-surface-muted hover:text-foreground"
-          : "font-semibold text-foreground/70 hover:bg-surface-muted hover:text-foreground"
-      }`}
-    >
-      <Icon className="h-5 w-5 shrink-0" />
-      <span className="whitespace-nowrap">{label}</span>
-    </a>
-  );
-}
-
-// Adds the current locale to real routes; "#" placeholders pass through.
-function useLocalizedHref(): (href: string) => string {
-  const locale = useLocale();
-  return (href) => (href.startsWith("/") ? getPathname({ href, locale }) : href);
-}
-
-function Sidebar(): ReactElement {
-  const pathname = usePathname();
-  const t = useTranslations("dashboard.nav");
-  const localize = useLocalizedHref();
-
-  return (
-    <aside className="hidden shrink-0 border-e border-border bg-surface px-3 py-6 lg:block lg:w-60 xl:w-64">
-      <nav aria-label={t("sectionsLabel")} className="flex flex-col gap-1">
-        {sidebarPrimaryItems.map((item) => (
-          <SidebarLink
-            key={item.id}
-            href={localize(item.href)}
-            label={t(`items.${item.id}`)}
-            Icon={sidebarIcons[item.id]}
-            active={isNavItemActive(pathname, item.href)}
-          />
-        ))}
-      </nav>
-
-      <div className="my-4 border-t border-border" />
-
-      <nav aria-label={t("accountLabel")} className="flex flex-col gap-1">
-        {sidebarSecondaryItems.map((item) => (
-          <SidebarLink key={item.id} href="#" label={t(`items.${item.id}`)} Icon={sidebarIcons[item.id]} muted />
-        ))}
-      </nav>
-    </aside>
-  );
-}
-
-// Below lg: a single-row, icons-only nav (primary items at the start, Setting/Help at the
-// end) rendered inside `main`, after the account/welcome sections. `justify-between` on
-// the row splits the two groups; neither group ever wraps (no `flex-wrap` is used), so all
-// seven icons stay on one line even at narrow phone widths.
-function NavIconButton({
-  href,
-  label,
-  Icon,
-  active,
-}: {
-  href: string;
-  label: string;
-  Icon: IconComponent;
-  active?: boolean;
-}): ReactElement {
-  return (
-    <a
-      href={href}
-      aria-label={label}
-      title={label}
-      aria-current={active ? "page" : undefined}
-      className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
-        active ? "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]" : "text-muted hover:bg-surface-muted hover:text-foreground"
-      }`}
-    >
-      <Icon className="h-5 w-5" />
-    </a>
-  );
-}
-
-function CompactDashboardNav(): ReactElement {
-  const pathname = usePathname();
-  const t = useTranslations("dashboard.nav");
-  const localize = useLocalizedHref();
-
-  return (
-    <nav aria-label={t("compactLabel")} className="flex items-center justify-between gap-2 lg:hidden">
-      <div className="flex items-center gap-1" role="group" aria-label={t("sectionsLabel")}>
-        {sidebarPrimaryItems.map((item) => (
-          <NavIconButton
-            key={item.id}
-            href={localize(item.href)}
-            label={t(`items.${item.id}`)}
-            Icon={sidebarIcons[item.id]}
-            active={isNavItemActive(pathname, item.href)}
-          />
-        ))}
-      </div>
-      <div className="flex shrink-0 items-center gap-1" role="group" aria-label={t("accountLabel")}>
-        {sidebarSecondaryItems.map((item) => (
-          <NavIconButton key={item.id} href="#" label={t(`items.${item.id}`)} Icon={sidebarIcons[item.id]} />
-        ))}
-      </div>
-    </nav>
   );
 }
 
@@ -479,17 +268,7 @@ function UtilityRow({
   return (
     <motion.div variants={itemVariants} className="flex items-center justify-between gap-3">
       <div className="order-1 flex w-full items-center gap-2 sm:w-auto lg:order-2">
-        <div className="order-1 flex items-center gap-2.5 lg:order-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gdg-blue-light text-sm font-semibold text-foreground">
-            {user.initials}
-          </span>
-          <div className="hidden leading-tight sm:block">
-            <p className="text-sm font-semibold text-foreground">{user.name}</p>
-            <p className="text-xs text-muted">
-              {user.role} &middot; {user.membership}
-            </p>
-          </div>
-        </div>
+        <MembersUserInfo user={user} />
 
         <button
           type="button"
@@ -650,65 +429,9 @@ type FilterId = "all" | TaskStatus;
 
 const taskFilters: FilterId[] = ["all", "In Progress", "To Do", "Complete"];
 
-// Status/priority values are data (and will come from the backend), so only their display
-// text is translated: these map each value to its key under dashboard.tasks.
-const statusKeys: Record<TaskStatus, "inProgress" | "toDo" | "complete"> = {
-  "In Progress": "inProgress",
-  "To Do": "toDo",
-  Complete: "complete",
-};
-
 const filterKeys: Record<FilterId, "all" | "inProgress" | "toDo" | "complete"> = {
   all: "all",
   ...statusKeys,
-};
-
-const priorityKeys: Record<TaskPriority, "high" | "medium" | "low"> = {
-  High: "high",
-  Medium: "medium",
-  Low: "low",
-};
-
-// Single source of truth for each semantic tone's light background + text color, so
-// status badges, priority badges, and task filters can never drift out of sync — they
-// all read the exact same class string for a given tone.
-const toneColors = {
-  red: "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]",
-  yellow: "bg-[var(--dashboard-yellow-bg)] text-[var(--dashboard-yellow-text)]",
-  blue: "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
-  green: "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",
-} as const;
-
-type Tone = keyof typeof toneColors;
-
-// Status badges are the visual source of truth for shape (pill/capsule) and sizing.
-const PILL_SHAPE = "rounded-full px-2.5 py-1";
-
-const statusTones: Record<TaskStatus, Tone> = {
-  "In Progress": "yellow",
-  "To Do": "blue",
-  Complete: "green",
-};
-
-const statusStyles: Record<TaskStatus, string> = {
-  "In Progress": `${PILL_SHAPE} ${toneColors[statusTones["In Progress"]]}`,
-  "To Do": `${PILL_SHAPE} ${toneColors[statusTones["To Do"]]}`,
-  Complete: `${PILL_SHAPE} ${toneColors[statusTones.Complete]}`,
-};
-
-// Priority badges reuse the exact same pill shape and tone colors as the status badges
-// (Medium shares In Progress's tone, Low shares Complete's tone) — same design system,
-// only the semantic mapping differs.
-const priorityTones: Record<TaskPriority, Tone> = {
-  High: "red",
-  Medium: statusTones["In Progress"],
-  Low: statusTones.Complete,
-};
-
-const priorityStyles: Record<TaskPriority, string> = {
-  High: `${PILL_SHAPE} ${toneColors[priorityTones.High]}`,
-  Medium: `${PILL_SHAPE} ${toneColors[priorityTones.Medium]}`,
-  Low: `${PILL_SHAPE} ${toneColors[priorityTones.Low]}`,
 };
 
 // Only the SELECTED filter shows its semantic tone; every other filter stays a plain
@@ -773,12 +496,12 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
               end, on whichever line the last filter pill wraps onto. Replaced by the
               separate right-aligned copy below from `sm:` up. */}
           <div className="ms-auto sm:hidden">
-            <ArrowBadge label={t("viewAll")} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+            <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
           </div>
         </div>
 
         <div className="hidden sm:flex sm:justify-end">
-          <ArrowBadge label={t("viewAll")} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+          <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
         </div>
       </div>
 
@@ -911,62 +634,46 @@ export default function DashboardPage(): ReactElement {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface text-foreground">
-      <MotionConfig reducedMotion="user">
-      <div className="flex min-h-full flex-1 flex-col bg-surface text-foreground">
-        <TopNav />
-        <div className="flex flex-1 flex-col lg:flex-row">
-          <Sidebar />
-          <motion.main
-            variants={containerVariants}
-            initial="hidden"
-            animate="show"
-            className="min-w-0 flex-1 space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
-          >
-            <UtilityRow user={currentUser} today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-            <WelcomeSection firstName={currentUser.name.split(" ")[0]} />
+    <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
+      <UtilityRow user={currentUser} today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <WelcomeSection firstName={currentUser.name.split(" ")[0]} />
 
-            {/* Leader Workspace Banner: Only shown when Leader explicitly granted elevated access */}
-            {leaderAccess && accessProfile && accessHref && (
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-col gap-3 rounded-2xl border border-blue-500/30 bg-blue-50/50 p-4 sm:flex-row sm:items-center sm:justify-between dark:bg-blue-950/20"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white font-bold text-xs">
-                    {accessInitials}
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                      Leader Access Granted
-                    </span>
-                    <p className="text-sm font-semibold text-foreground">
-                      {accessProfile.name} Leader Workspace
-                    </p>
-                  </div>
-                </div>
-                <Link
-                  href={accessHref}
-                  className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
-                >
-                  Enter Leader Workspace →
-                </Link>
-              </motion.div>
-            )}
-
-            <CompactDashboardNav />
-            <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
-            <MemberEventCards tiles={myEventTiles} />
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
-              <DashboardUpcomingEvents />
-              <CalendarCard data={calendarMock} />
+      {/* Leader Workspace Banner: Only shown when Leader explicitly granted elevated access */}
+      {leaderAccess && accessProfile && accessHref && (
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-col gap-3 rounded-2xl border border-blue-500/30 bg-blue-50/50 p-4 sm:flex-row sm:items-center sm:justify-between dark:bg-blue-950/20"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white font-bold text-xs">
+              {accessInitials}
             </div>
-            <TasksPanel tasks={dashboardTasks} searchQuery={searchQuery} />
-          </motion.main>
-        </div>
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Leader Access Granted
+              </span>
+              <p className="text-sm font-semibold text-foreground">
+                {accessProfile.name} Leader Workspace
+              </p>
+            </div>
+          </div>
+          <Link
+            href={accessHref}
+            className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
+          >
+            Enter Leader Workspace →
+          </Link>
+        </motion.div>
+      )}
+
+      <MembersCompactNav />
+      <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
+      <MemberEventCards tiles={myEventTiles} />
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
+        <DashboardUpcomingEvents />
+        <CalendarCard data={calendarMock} />
       </div>
-      </MotionConfig>
-      <Footer />
-    </div>
+      <TasksPanel tasks={dashboardTasks} searchQuery={searchQuery} />
+    </motion.div>
   );
 }
