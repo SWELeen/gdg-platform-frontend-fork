@@ -2,6 +2,15 @@ import { useTranslations } from "next-intl";
 import { Select } from "@/components/ui/Select";
 import type { InfoCardData } from "@/data/profile";
 import { SAUDI_UNIVERSITIES } from "@/lib/constants/universities";
+import {
+  UserRound,
+  Mail,
+  Phone,
+  IdCard,
+  GraduationCap,
+  BookOpen,
+  CalendarDays,
+} from "lucide-react";
 
 type InfoCardProps = {
   data: InfoCardData;
@@ -26,10 +35,20 @@ export function InfoCard({
   const tv = useTranslations("validation");
 
   return (
-    <div className="flex-1 rounded-card border border-gray-350 bg-surface p-4 sm:p-6">
-      <h3 className="mb-3 text-base font-semibold text-gray-500 sm:text-lg">
-        {t(`cards.${data.id}`)}
-      </h3>
+     <div className="flex-1 rounded-2xl border border-gray-200 bg-white p-5 text-gray-900 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--navy)]/30 hover:shadow-lg dark:border-[#243b64]/70 dark:bg-surface dark:text-slate-100 sm:p-6">
+      <div className="mb-4 flex items-center gap-3">
+  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--light-blue)]">
+    {data.id === "personal" ? (
+      <UserRound className="h-5 w-5 text-[var(--navy)]" />
+    ) : (
+      <GraduationCap className="h-5 w-5 text-[var(--navy)]" />
+    )}
+  </div>
+
+  <h3 className="text-base font-semibold tracking-wide text-[var(--navy)] dark:text-slate-100 sm:text-lg">
+    {t(`cards.${data.id}`)}
+  </h3>
+</div>
       <dl className="flex flex-col gap-3">
         {data.rows.map((row) => {
           const error = errors[row.key];
@@ -38,16 +57,17 @@ export function InfoCard({
 
           return (
             <div
-              key={row.key}
-              className={`flex gap-3 ${
-                isEditing
-                  ? "flex-col sm:flex-row sm:items-center sm:justify-between"
-                  : "items-baseline justify-between"
-              }`}
-            >
-              <dt className="shrink-0 text-xs text-gray-500 sm:text-sm">
-                {t(`fields.${row.key}`)}
-              </dt>
+            key={row.key}
+            className={`flex gap-3 ${
+            isEditing
+            ? "flex-col sm:flex-row sm:items-center sm:justify-between"
+           : "items-baseline justify-between"
+  }`}
+>
+  <dt className="shrink-0 text-xs text-gray-500 sm:text-sm">
+    {t(`fields.${row.key}`)}
+  </dt>
+              
               {isEditing ? (
                 <div className="flex min-w-0 flex-1 flex-col sm:items-end">
                   {isUniversity ? (
@@ -91,7 +111,7 @@ export function InfoCard({
                   )}
                 </div>
               ) : (
-                <dd className="text-end text-xs font-semibold text-foreground sm:text-sm">
+                <dd className="text-end text-xs font-semibold text-gray-800 dark:text-gray-100 sm:text-sm">
                   {isPhone ? (
                     <span dir="ltr">{`+966 ${formatPhone(row.value)}`}</span>
                   ) : (

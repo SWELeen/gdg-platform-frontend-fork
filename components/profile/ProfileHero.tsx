@@ -51,9 +51,14 @@ export function ProfileHero({
       </Button>
     </div>
   ) : (
-    <Button icon={<SquarePen className="size-4 sm:size-5" />} onClick={onEdit}>
-      {t("edit")}
-    </Button>
+   <button
+  type="button"
+  onClick={onEdit}
+  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#325fa6] bg-white px-5 py-2.5 font-semibold text-[#325fa6] shadow-sm transition-all duration-200 hover:bg-[#eaf2ff] dark:border-[#243b64]/70 dark:bg-surface dark:text-white dark:hover:brightness-110"
+>
+  <SquarePen className="size-4 sm:size-5" />
+  {t("edit")}
+</button>
   );
 
   const avatarWithUpload = (
@@ -77,7 +82,7 @@ export function ProfileHero({
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div
-        className="relative h-16 bg-cream bg-cover bg-center sm:h-20 md:h-24 lg:h-30"
+        className="relative h-28 overflow-hidden rounded-t-3xl bg-gradient-to-r from-[#325fa6] via-[#4285f4] to-[#c9e3ee] bg-cover bg-center sm:h-32 md:h-36 lg:h-40"
         style={headerImageUrl ? { backgroundImage: `url(${headerImageUrl})` } : undefined}
       >
         {isEditing && (
@@ -96,10 +101,10 @@ export function ProfileHero({
           <div className="flex flex-col items-center gap-2 text-center md:hidden">
             {avatarWithUpload}
             <div className="flex flex-col items-center gap-1">
-              <h1 className="text-3xl font-bold leading-tight">
+             <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#243b64]"> 
                 {name}
               </h1>
-              <p className="text-sm text-foreground/80 sm:text-base">
+              <p className="text-sm leading-relaxed text-foreground/75 sm:text-base">
                 {email} · {t("memberSince", { date: memberSince })}
               </p>
             </div>
@@ -113,10 +118,10 @@ export function ProfileHero({
               {editControls}
             </div>
             <div className="flex flex-col items-start gap-1 text-start">
-              <h1 className="text-4xl font-bold leading-tight">
+              <h1 className="text-4xl font-bold leading-tight tracking-tight text-[#243b64]">
                 {name}
               </h1>
-              <p className="text-lg text-foreground/80">
+              <p className="text-lg leading-relaxed text-foreground/75">
                 {email} · {t("memberSince", { date: memberSince })}
               </p>
             </div>

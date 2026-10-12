@@ -225,15 +225,14 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
       />
 
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 md:gap-4 md:px-10 md:py-8 lg:px-16">
-        <div className="flex justify-end">
-          <Link
-            href="/registrations"
-            className="rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-surface-muted"
-          >
-            {t("registrationsLink")}
-          </Link>
-        </div>
-
+       <div className="flex justify-end">
+  <Link
+    href="/registrations"
+   className="inline-flex items-center justify-center rounded-xl border border-[#325fa6]/30 bg-white px-5 py-2.5 text-sm font-semibold text-[#243b64] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#325fa6] hover:bg-[#eaf2ff] hover:shadow-md dark:border-[#243b64]/70 dark:bg-surface dark:text-white dark:hover:brightness-110"
+  >
+    {t("registrationsLink")}
+  </Link>
+</div>
         <ProfileChips chips={chips} />
 
         <ProfileBio
