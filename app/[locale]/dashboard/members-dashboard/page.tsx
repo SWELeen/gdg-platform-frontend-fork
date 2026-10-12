@@ -924,7 +924,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
+                  className={`rounded-full border px-2.5 py-1 text-sm font-medium transition-colors sm:px-3.5 sm:py-1.5 ${
                   isActive ? `border-transparent ${toneColors[filterTones[filter]]}` : "border-border bg-surface text-foreground"
                 }`}
               >
