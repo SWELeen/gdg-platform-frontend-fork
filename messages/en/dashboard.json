@@ -56,7 +56,12 @@
       "thu": "Th",
       "fri": "Fr",
       "sat": "Sa"
-    }
+    },
+    "todayButton": "Today",
+    "selectedDay": "Selected day",
+    "noEvents": "Nothing scheduled for this day.",
+    "loading": "Loading your calendar",
+    "dayLabel": "{date}, {count, plural, =0 {no events} one {# event} other {# events}}"
   },
   "tasks": {
     "title": "My Tasks",
@@ -104,10 +109,8 @@
     "done": "Done"
   },
   "memberEvents": {
-    "back": "Back to dashboard",
     "title": "My Events",
     "description": "Events and trips you've registered for, with their latest status.",
-    "manage": "Manage registrations",
     "filtersLabel": "Event filters",
     "timeLabel": "Show events by time",
     "time": {
@@ -142,10 +145,61 @@
       "location": "Location",
       "confirmBy": "Confirm attendance by",
       "attendance": "Attendance",
-      "manage": "Manage registration",
-      "manageHint": "Confirm or cancel your place from your registrations page.",
       "notFoundTitle": "Event not found",
       "notFoundDescription": "We couldn't find this event in your registrations."
+    },
+    "registration": {
+      "title": "My Registration",
+      "approvalLabel": "Registration",
+      "attendanceLabel": "Attendance confirmation",
+      "approval": {
+        "pending": "Under review",
+        "accepted": "Accepted",
+        "declined": "Not accepted",
+        "cancelled": "Cancelled by you"
+      },
+      "attendanceStep": {
+        "notRequired": "Not required yet",
+        "awaiting": "Awaiting your confirmation",
+        "expired": "Deadline passed",
+        "confirmed": "Confirmed",
+        "attended": "Attendance recorded",
+        "notAttended": "Did not attend"
+      },
+      "explain": {
+        "pending": "Your registration is being reviewed by the organizers. You'll be asked to confirm your attendance if you're accepted.",
+        "needConfirmation": "You've been accepted! Confirm your attendance by {deadline} to keep your place.",
+        "needConfirmationNoDeadline": "You've been accepted! Confirm your attendance to keep your place.",
+        "expired": "The confirmation deadline ({deadline}) has passed, so this place can no longer be confirmed. Contact the organizers if you think this is a mistake.",
+        "approved": "Your registration has been accepted.",
+        "confirmed": "Your place is confirmed. Your attendance ticket is below.",
+        "declined": "This registration wasn't accepted, so there's nothing to confirm.",
+        "attended": "You attended this event. Thanks for joining!",
+        "notAttended": "You were registered but didn't attend this event.",
+        "cancelled": "You cancelled this registration."
+      },
+      "startedNote": "This event has already started, so registration changes are closed.",
+      "confirmAction": "Confirm Attendance",
+      "cancelAction": "Cancel Registration",
+      "saving": "Saving…",
+      "feedback": {
+        "confirmed": "Attendance confirmed — demo only, saved in this browser. Nothing was sent to the organizers.",
+        "cancelled": "Registration cancelled — demo only, saved in this browser. Nothing was sent to the organizers.",
+        "notAllowed": "This action isn't available for this registration anymore. Nothing was changed.",
+        "storageUnavailable": "Couldn't save the change because this browser is blocking site storage. Nothing was changed.",
+        "reset": "Demo change undone. The original registration is shown again."
+      },
+      "demoNote": "Demo mode: confirming or cancelling is saved in this browser only until the registrations service is connected.",
+      "dialogDemoNote": "Demo mode: this is saved in this browser only and isn't sent to the organizers.",
+      "resetDemo": "Undo demo change"
+    },
+    "ticket": {
+      "title": "Attendance ticket",
+      "confirmedBadge": "Attendance confirmed",
+      "qrPlaceholder": "QR coming soon",
+      "showAtEntrance": "Show this QR code at the event entrance.",
+      "enlargeQr": "View QR code at a larger size",
+      "closeQr": "Close QR code"
     }
   },
   "myEventCards": {
@@ -241,24 +295,6 @@
       "savedOn": "“{item}” turned on — saved in this browser.",
       "savedOff": "“{item}” turned off — saved in this browser.",
       "saveFailed": "Couldn't save this change. Your browser may be blocking site storage."
-    },
-    "appearance": {
-      "title": "Appearance",
-      "description": "Choose how the website looks. This is the same setting as the theme button in the top bar.",
-      "options": {
-        "light": {
-          "label": "Light",
-          "description": "Always use the light theme."
-        },
-        "dark": {
-          "label": "Dark",
-          "description": "Always use the dark theme."
-        },
-        "system": {
-          "label": "System",
-          "description": "Match your device's setting."
-        }
-      }
     }
   },
   "memberHelp": {
@@ -272,7 +308,6 @@
     },
     "categoriesTitle": "Browse by topic",
     "categoryAction": "Show {count, plural, one {# question} other {# questions}}",
-    "categoryShowingAll": "Showing this topic — select again to show all",
     "categories": {
       "events": {
         "title": "Events & Registrations"
@@ -287,8 +322,6 @@
         "title": "Notifications & Settings"
       }
     },
-    "faqTitle": "Frequently asked questions",
-    "removeCategory": "Remove the {category} filter",
     "resultCount": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
     "noResultsTitle": "No matching answers",
     "noResultsDescription": "Try different words, or contact the GDG team below.",
@@ -301,7 +334,7 @@
       },
       "registrationStatus": {
         "question": "How can I check my registration status?",
-        "answer": "Open Events from the sidebar. Each registration shows its status — Pending, Need to Confirm, Accepted, Declined, Attended, or Not Attended. Select a registration to see its full details.",
+        "answer": "Open Events from the sidebar. Each registration shows its status — Pending, Need to Confirm, Accepted, Declined, Attended, Not Attended, or Cancelled. Select a registration to see its details, confirm or cancel it when that's available, and view your attendance ticket.",
         "link": "Open My Events"
       },
       "registeredEvents": {
@@ -356,7 +389,10 @@
       "linkedin": "Message us on LinkedIn",
       "x": "Reach us on X",
       "note": "These are the official GDG on Campus UJ accounts. For questions about your committee or tasks, your committee leader is usually the quickest contact."
-    }
+    },
+    "backToTopics": "All topics",
+    "otherTopics": "Switch topic",
+    "searchResultsTitle": "Search results"
   },
   "leader": {
     "nav": {

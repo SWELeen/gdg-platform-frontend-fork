@@ -1,5 +1,4 @@
 import type { MemberProfile } from "@/lib/members/profile";
-import { AppearanceCard } from "./AppearanceCard";
 import { NotificationPreferencesCard } from "./NotificationPreferencesCard";
 import { ProfileCard } from "./ProfileCard";
 
@@ -13,7 +12,6 @@ export function MemberSettingsPage({ profile }: { profile: MemberProfile }) {
     <div className="max-w-3xl space-y-6">
       <ProfileCard profile={profile} />
       <NotificationPreferencesCard />
-      <AppearanceCard />
     </div>
   );
 }

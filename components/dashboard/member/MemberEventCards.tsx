@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { ArrowUpRight, CalendarX2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { MyEventTile } from "@/components/dashboard/mock-data";
+import { useDemoRegistrationChanges } from "@/lib/user-registrations/demo-state";
 import { getCurrentUserRegistrations } from "@/lib/user-registrations/repository";
 import type { UserRegistration } from "@/lib/user-registrations/types";
 import { MEMBER_EVENTS_PATH, selectDashboardRegistrations } from "./member-events";
@@ -26,6 +27,7 @@ export function MemberEventCards({ tiles }: { tiles: MyEventTile[] }) {
   const tr = useTranslations("userRegistrations");
   const format = useFormatter();
   const [state, setState] = useState<CardsState>({ status: "loading" });
+  const demo = useDemoRegistrationChanges();
 
   // Loaded in the browser: which registrations count as "upcoming" depends on the
   // visitor's current time, which a prerendered page cannot know.
@@ -80,7 +82,7 @@ export function MemberEventCards({ tiles }: { tiles: MyEventTile[] }) {
         </div>
       ) : (
         <ul className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
-          {state.registrations.map((registration, index) => {
+          {demo.apply(state.registrations).map((registration, index) => {
             const tile = tiles[index];
             return (
               <motion.li

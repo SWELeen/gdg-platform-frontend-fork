@@ -50,16 +50,6 @@ export interface UpcomingEvent {
   imageUrl?: string;
 }
 
-export interface CalendarMockData {
-  /** 0-based, matches Date#getMonth(). */
-  year: number;
-  month: number;
-  /** Day-of-month highlighted as the current/selected date. */
-  selectedDay: number;
-  /** Days-of-month (within the same year/month above) that have an event. */
-  eventDays: number[];
-}
-
 export interface DashboardTask {
   id: string;
   title: string;
@@ -130,13 +120,6 @@ export const upcomingEvents: UpcomingEvent[] = [
     featured: true,
   },
 ];
-
-export const calendarMock: CalendarMockData = {
-  year: 2026,
-  month: 8, // September
-  selectedDay: 20,
-  eventDays: [20],
-};
 
 export const dashboardTasks: DashboardTask[] = [
   {

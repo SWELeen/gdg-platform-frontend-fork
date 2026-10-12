@@ -40,7 +40,7 @@ function UpcomingEventCard({ event, accent }: { event: PlatformEvent; accent: st
           <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-6 text-foreground sm:text-base">
             <Link
               href={`${UPCOMING_EVENTS_PATH}/${event.id}`}
-              className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
+              className="after:absolute after:inset-0 after:z-10 after:rounded-2xl focus-visible:outline-none"
             >
               {event.title}
             </Link>

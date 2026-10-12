@@ -22,6 +22,16 @@ export const userRegistrationsMock: UserRegistration[] = [
     status: "pending",
   },
   {
+    // Awaiting the member's confirmation with a deadline still ahead (demo of Confirm/Cancel).
+    id: "mock-event-devfest-confirmation",
+    kind: "event",
+    title: "ديف فست جامعة جدة 2026 | DevFest UJ 2026",
+    startsAt: "2026-10-17T16:00:00+03:00",
+    location: "المسرح الرئيسي، جامعة جدة | University of Jeddah - Main Auditorium",
+    status: "need-confirmation",
+    confirmationDeadline: "2026-10-15T23:59:00+03:00",
+  },
+  {
     id: "mock-trip-confirmation",
     kind: "trip",
     title: "زيارة تقنية إلى وادي جدة | Jeddah Valley Tech Visit",

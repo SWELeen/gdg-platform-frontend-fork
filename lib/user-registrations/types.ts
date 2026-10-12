@@ -6,7 +6,9 @@ export type UserRegistrationStatus =
   | "approved"
   | "declined"
   | "attended"
-  | "not-attended";
+  | "not-attended"
+  /** The member withdrew their own registration. */
+  | "cancelled";
 
 export type UserAttendanceConfirmationStatus =
   | "awaiting"

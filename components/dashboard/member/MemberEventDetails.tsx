@@ -2,11 +2,15 @@
 
 import type { ReactNode } from "react";
 import { useFormatter, useTranslations } from "next-intl";
-import { ArrowLeft, ArrowUpRight, Calendar, CalendarSearch, Clock, MapPin, QrCode, TimerReset } from "lucide-react";
+import { ArrowLeft, Calendar, CalendarSearch, Clock, MapPin, QrCode, TimerReset } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { RegistrationStatusBadge } from "@/components/user-registrations/RegistrationStatusBadge";
+import { useClientNow } from "@/lib/dashboard/use-client-now";
+import { useDemoRegistrationChanges } from "@/lib/user-registrations/demo-state";
+import { getRegistrationAvailability } from "@/lib/user-registrations/rules";
 import type { UserRegistration } from "@/lib/user-registrations/types";
 import { MEMBER_EVENTS_PATH } from "./member-events";
+import { MyRegistrationPanel } from "./MyRegistrationPanel";
 
 const dateOptions = { numberingSystem: "latn" } as const;
 
@@ -25,10 +29,14 @@ function DetailRow({ icon, label, children }: { icon: ReactNode; label: string; 
 }
 
 /** Member-facing details for one of the member's event or trip registrations. */
-export function MemberEventDetails({ registration }: { registration: UserRegistration | null }) {
+export function MemberEventDetails({ registration: source }: { registration: UserRegistration | null }) {
   const t = useTranslations("dashboard.memberEvents");
   const tr = useTranslations("userRegistrations");
   const format = useFormatter();
+  const now = useClientNow();
+  const demo = useDemoRegistrationChanges();
+  // The same browser-local demo changes every member view applies (see demo-state.ts).
+  const registration = source ? demo.apply([source])[0] : null;
 
   const backLink = (
     <Link
@@ -107,22 +115,12 @@ export function MemberEventDetails({ registration }: { registration: UserRegistr
             )}
           </dl>
 
-          {registration.status === "need-confirmation" && (
-            <p className="mt-6 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-sm text-foreground/80">
-              {tr("confirmPrompt")}
-            </p>
-          )}
-
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-muted">{t("details.manageHint")}</p>
-            <Link
-              href="/registrations"
-              className="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-gdg-blue px-5 py-2 text-sm font-semibold text-white transition hover:bg-gdg-blue/90"
-            >
-              {t("details.manage")}
-              <ArrowUpRight className="size-4 rtl:-scale-x-100" aria-hidden="true" />
-            </Link>
-          </div>
+          <MyRegistrationPanel
+            registration={registration}
+            availability={now === null ? null : getRegistrationAvailability(registration, now)}
+            ready={demo.ready && now !== null}
+            isDemoChanged={demo.isChanged(registration.id)}
+          />
         </div>
       </article>
     </div>

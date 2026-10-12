@@ -13,6 +13,7 @@ import { leaderDashboardMockData } from "@/data/leader-dashboard";
 import { MembersCompactNav } from "@/components/dashboard/members/MembersCompactNav";
 import { MemberEventCards } from "@/components/dashboard/member/MemberEventCards";
 import { DashboardUpcomingEvents } from "@/components/dashboard/member/DashboardUpcomingEvents";
+import { MemberCalendarCard } from "@/components/dashboard/member/MemberCalendarCard";
 import { IconChecklist } from "@/components/dashboard/members/nav-icons";
 import type { IconProps } from "@/components/dashboard/members/nav-icons";
 import { MembersUserInfo } from "@/components/dashboard/members/MembersUserInfo";
@@ -28,14 +29,12 @@ import {
 import type { Tone } from "@/components/dashboard/members/task-styles";
 
 import {
-  calendarMock,
   currentUser,
   dashboardTasks,
   myEventTiles,
   sidebarPrimaryItems,
 } from "@/components/dashboard/mock-data";
 import type {
-  CalendarMockData,
   DashboardTask,
   DashboardUser,
   TaskStatus,
@@ -126,26 +125,6 @@ function IconCheck({ className }: IconProps): ReactElement {
     </svg>
   );
 }
-
-function IconChevronLeft({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="m15 6-6 6 6 6" />
-    </svg>
-  );
-}
-
-function IconChevronRight({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="m9 6 6 6-6 6" />
-    </svg>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Small presentational primitives                                     */
-/* ------------------------------------------------------------------ */
 
 function Checkbox({ checked }: { checked: boolean }): ReactElement {
   return (
@@ -302,125 +281,6 @@ function WelcomeSection({ firstName }: { firstName: string }): ReactElement {
         {t("title", { name: firstName })} <span aria-hidden="true">👋</span>
       </h1>
       <p className="mt-1 text-sm text-muted sm:text-base">{t("subtitle")}</p>
-    </motion.div>
-  );
-}
-
-// Days-of-month for a calendar month grid, left-padded with `null` so the first
-// real day lands under the correct weekday column, and right-padded to a full week.
-function getMonthGridDays(year: number, month: number): (number | null)[] {
-  const firstWeekday = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells: (number | null)[] = [];
-  for (let i = 0; i < firstWeekday; i += 1) {
-    cells.push(null);
-  }
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    cells.push(day);
-  }
-  while (cells.length % 7 !== 0) {
-    cells.push(null);
-  }
-  return cells;
-}
-
-// Sunday-first, matching getMonthGridDays(); labels live in dashboard.calendar.weekdays.
-const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
-
-function CalendarCard({ data }: { data: CalendarMockData }): ReactElement {
-  const t = useTranslations("dashboard.calendar");
-  const locale = useLocale();
-  const [view, setView] = useState({ year: data.year, month: data.month });
-
-  const goToPreviousMonth = () => {
-    setView((current) =>
-      current.month === 0 ? { year: current.year - 1, month: 11 } : { year: current.year, month: current.month - 1 },
-    );
-  };
-
-  const goToNextMonth = () => {
-    setView((current) =>
-      current.month === 11 ? { year: current.year + 1, month: 0 } : { year: current.year, month: current.month + 1 },
-    );
-  };
-
-  const monthLabel = new Date(view.year, view.month, 1).toLocaleDateString(locale, {
-    ...DATE_OPTIONS,
-    month: "long",
-    year: "numeric",
-  });
-  const cells = getMonthGridDays(view.year, view.month);
-  const isSelectedMonthInView = view.year === data.year && view.month === data.month;
-
-  const selectedDateLabel = new Date(data.year, data.month, data.selectedDay).toLocaleDateString(locale, {
-    ...DATE_OPTIONS,
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-  const hasSelectedEvent = data.eventDays.includes(data.selectedDay);
-
-  return (
-    <motion.div
-      variants={itemVariants}
-      className="flex h-fit flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
-    >
-      <div className="mb-3 flex items-center justify-between">
-        <button
-          type="button"
-          aria-label={t("previousMonth")}
-          onClick={goToPreviousMonth}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-surface-muted hover:text-foreground"
-        >
-          <IconChevronLeft className="h-4 w-4 rtl:-scale-x-100" />
-        </button>
-        <p className="text-sm font-semibold text-foreground">{monthLabel}</p>
-        <button
-          type="button"
-          aria-label={t("nextMonth")}
-          onClick={goToNextMonth}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-surface-muted hover:text-foreground"
-        >
-          <IconChevronRight className="h-4 w-4 rtl:-scale-x-100" />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-7 text-center text-xs font-medium uppercase tracking-wide text-muted">
-        {WEEKDAY_KEYS.map((weekday) => (
-          <span key={weekday}>{t(`weekdays.${weekday}`)}</span>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-7 gap-y-1">
-        {cells.map((day, index) => {
-          if (day === null) {
-            return <span key={index} />;
-          }
-          const isSelected = isSelectedMonthInView && day === data.selectedDay;
-          const hasEvent = isSelectedMonthInView && data.eventDays.includes(day);
-          return (
-            <div key={index} className="flex items-center justify-center py-0.5">
-              <span
-                className={`relative flex h-7 w-7 items-center justify-center rounded-full text-xs ${
-                  isSelected ? "bg-gdg-red font-semibold text-[var(--white)]" : "text-foreground"
-                }`}
-              >
-                {day}
-                {hasEvent && !isSelected && (
-                  <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-gdg-blue-accent" aria-hidden="true" />
-                )}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-3 rounded-xl bg-surface-muted/60 p-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">{t("today")}</p>
-        <p className="mt-0.5 text-sm font-semibold text-foreground">{selectedDateLabel}</p>
-        <p className="mt-1 text-xs text-muted">{t("eventsScheduled", { count: hasSelectedEvent ? 1 : 0 })}</p>
-      </div>
     </motion.div>
   );
 }
@@ -671,7 +531,7 @@ export default function DashboardPage(): ReactElement {
       <MemberEventCards tiles={myEventTiles} />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
         <DashboardUpcomingEvents />
-        <CalendarCard data={calendarMock} />
+        <MemberCalendarCard />
       </div>
       <TasksPanel tasks={dashboardTasks} searchQuery={searchQuery} />
     </motion.div>

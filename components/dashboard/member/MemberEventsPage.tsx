@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { MotionConfig, motion } from "framer-motion";
 import { useFormatter, useTranslations } from "next-intl";
-import { ArrowLeft, ArrowUpRight, CalendarX2, Clock, MapPin, Search, SearchX } from "lucide-react";
+import { ArrowUpRight, CalendarX2, Clock, MapPin, Search, SearchX } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useClientNow } from "@/lib/dashboard/use-client-now";
+import { useDemoRegistrationChanges } from "@/lib/user-registrations/demo-state";
 import { RegistrationStatusBadge } from "@/components/user-registrations/RegistrationStatusBadge";
 import type {
   UserRegistration,
@@ -25,6 +26,7 @@ const statuses: UserRegistrationStatus[] = [
   "declined",
   "attended",
   "not-attended",
+  "cancelled",
 ];
 const kinds: UserRegistrationKind[] = ["event", "trip"];
 
@@ -61,7 +63,7 @@ function EventCard({ registration, accent }: { registration: UserRegistration; a
           </div>
           <h3 className="mt-2 line-clamp-2 text-sm font-semibold leading-6 text-foreground sm:text-base">
             {/* The stretched link makes the whole card clickable while keeping one tab stop. */}
-            <Link href={href} className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none">
+            <Link href={href} className="after:absolute after:inset-0 after:z-10 after:rounded-2xl focus-visible:outline-none">
               {registration.title}
             </Link>
           </h3>
@@ -106,7 +108,9 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
   const [kindFilter, setKindFilter] = useState<"all" | UserRegistrationKind>("all");
   const [query, setQuery] = useState("");
 
-  const registrations = result.state === "ready" ? result.registrations : [];
+  const demo = useDemoRegistrationChanges();
+  // Demo confirm/cancel changes from event details apply here too, so statuses stay consistent.
+  const registrations = demo.apply(result.state === "ready" ? result.registrations : []);
   const isUpcoming = (registration: UserRegistration) => new Date(registration.startsAt).getTime() >= now;
 
   const counts: Record<TimeFilter, number> = {
@@ -152,26 +156,9 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
   return (
     <MotionConfig reducedMotion="user">
       <div className="w-full space-y-6 text-foreground">
-        <Link
-          href="/dashboard/members-dashboard"
-          className="inline-flex items-center gap-2 text-sm font-medium text-muted transition hover:text-foreground"
-        >
-          <ArrowLeft className="size-4 rtl:-scale-x-100" aria-hidden="true" />
-          {t("back")}
-        </Link>
-
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="min-w-0">
-            <h2 className="text-2xl font-semibold sm:text-3xl">{t("title")}</h2>
-            <p className="mt-1 max-w-2xl text-sm text-muted sm:text-base">{t("description")}</p>
-          </div>
-          <Link
-            href="/registrations"
-            className="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-surface-muted"
-          >
-            {t("manage")}
-            <ArrowUpRight className="size-4 rtl:-scale-x-100" aria-hidden="true" />
-          </Link>
+        <header className="min-w-0">
+          <h2 className="text-2xl font-semibold sm:text-3xl">{t("title")}</h2>
+          <p className="mt-1 max-w-2xl text-sm text-muted sm:text-base">{t("description")}</p>
         </header>
 
         {result.state === "not-configured" ? (
