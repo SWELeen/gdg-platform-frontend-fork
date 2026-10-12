@@ -5,6 +5,7 @@ import { MotionConfig, motion } from "framer-motion";
 import { useFormatter, useTranslations } from "next-intl";
 import { ArrowLeft, ArrowUpRight, CalendarX2, Clock, MapPin, Search, SearchX } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useClientNow } from "@/lib/dashboard/use-client-now";
 import { RegistrationStatusBadge } from "@/components/user-registrations/RegistrationStatusBadge";
 import type {
   UserRegistration,
@@ -97,7 +98,9 @@ function EventCard({ registration, accent }: { registration: UserRegistration; a
 export function MemberEventsPage({ result }: { result: UserRegistrationsResult }) {
   const t = useTranslations("dashboard.memberEvents");
   const tr = useTranslations("userRegistrations");
-  const [now] = useState(() => Date.now());
+  // Null until hydrated: the page is prerendered, so upcoming/past must use the browser's clock.
+  const clientNow = useClientNow();
+  const now = clientNow ?? 0;
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("upcoming");
   const [statusFilter, setStatusFilter] = useState<"all" | UserRegistrationStatus>("all");
   const [kindFilter, setKindFilter] = useState<"all" | UserRegistrationKind>("all");
@@ -176,6 +179,12 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
             <h2 className="text-lg font-semibold">{tr("unavailableTitle")}</h2>
             <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">{tr("unavailableDescription")}</p>
           </section>
+        ) : clientNow === null ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="h-44 animate-pulse rounded-2xl bg-surface-muted motion-reduce:animate-none" />
+            ))}
+          </div>
         ) : registrations.length === 0 ? (
           <section className="rounded-2xl border border-dashed border-border bg-surface p-8 text-center sm:p-12">
             <CalendarX2 className="mx-auto size-10 text-muted" aria-hidden="true" />

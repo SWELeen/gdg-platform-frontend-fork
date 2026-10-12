@@ -81,3 +81,48 @@ export function matchesEventDateFilter(value: string, filter: string, now: Date)
   if (filter === "november") return date.getFullYear() === 2026 && date.getMonth() === 10;
   return true;
 }
+
+const DISPLAY_TIME = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
+
+/** Parses "4:00 PM" or "16:00" into 24h hours/minutes, or null. */
+export function parseEventTime(value: string | undefined): { hours: number; minutes: number } | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  const display = DISPLAY_TIME.exec(trimmed);
+  if (display) {
+    const hours12 = Number(display[1]) % 12;
+    return { hours: display[3].toUpperCase() === "PM" ? hours12 + 12 : hours12, minutes: Number(display[2]) };
+  }
+  const iso = ISO_TIME.exec(trimmed);
+  return iso ? { hours: Number(iso[1]), minutes: Number(iso[2]) } : null;
+}
+
+/** Local Date for an event's date and (optional) start time, or null. */
+export function parseEventDateTime(date: string, time?: string): Date | null {
+  const day = parseEventDate(date);
+  if (!day) return null;
+  const parsedTime = parseEventTime(time);
+  if (parsedTime) day.setHours(parsedTime.hours, parsedTime.minutes);
+  return day;
+}
+
+/**
+ * ISO start time with the Saudi offset (+03:00). Event times are entered as local
+ * University of Jeddah times and carry no zone, so this is the stated assumption.
+ */
+export function toSaudiIsoDateTime(date: string, time: string): string | null {
+  const day = parseEventDate(date);
+  const parsedTime = parseEventTime(time);
+  if (!day || !parsedTime) return null;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${toIsoDate(day)}T${pad(parsedTime.hours)}:${pad(parsedTime.minutes)}:00+03:00`;
+}
+
+/** True when an event's calendar date is today or later, relative to `now` (ms). */
+export function isUpcomingEventDate(date: string, now: number): boolean {
+  const day = parseEventDate(date);
+  if (!day) return false;
+  const today = new Date(now);
+  today.setHours(0, 0, 0, 0);
+  return day.getTime() >= today.getTime();
+}

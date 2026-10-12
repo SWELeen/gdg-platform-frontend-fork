@@ -37,7 +37,11 @@
     "featured": "Featured",
     "addToCalendar": "Add to Calendar",
     "addToCalendarLabel": "Add {title} to Google Calendar",
-    "empty": "You don’t have any events."
+    "empty": "No upcoming events right now. Check back soon.",
+    "loading": "Loading upcoming events",
+    "error": "Upcoming events couldn't be loaded.",
+    "pagerLabel": "Choose an upcoming event",
+    "showEvent": "Show event {number}: {title}"
   },
   "calendar": {
     "previousMonth": "Previous month",
@@ -126,6 +130,52 @@
       "manageHint": "Confirm or cancel your place from your registrations page.",
       "notFoundTitle": "Event not found",
       "notFoundDescription": "We couldn't find this event in your registrations."
+    }
+  },
+  "myEventCards": {
+    "title": "My Events",
+    "viewAll": "View all my events",
+    "loading": "Loading your events",
+    "empty": "You haven't registered for any events yet."
+  },
+  "upcomingEventsPage": {
+    "back": "Back to dashboard",
+    "title": "Upcoming Events",
+    "description": "Events published by GDG UJ committees that are coming up.",
+    "myEvents": "My registered events",
+    "loading": "Loading upcoming events",
+    "filtersLabel": "Upcoming event filters",
+    "searchLabel": "Search upcoming events",
+    "searchPlaceholder": "Search by name, location, or topic...",
+    "typeLabel": "Filter by event type",
+    "clearFilters": "Clear filters",
+    "resultCount": "{count, plural, =0 {No events} one {# event} other {# events}}",
+    "emptyTitle": "No upcoming events",
+    "emptyDescription": "There are no upcoming events right now. New events will appear here once committees publish them.",
+    "noResultsTitle": "No matching events",
+    "noResultsDescription": "Try a different search or event type.",
+    "viewDetails": "View details",
+    "seatsLeft": "{count, plural, one {# seat left} other {# seats left}}",
+    "full": "Fully booked",
+    "demoNote": "Demo data: this list shows the committees' sample published events until the events service is connected.",
+    "errorTitle": "We couldn't load upcoming events",
+    "errorDescription": "Something went wrong while loading events. Please try again.",
+    "retry": "Try again",
+    "details": {
+      "back": "Back to upcoming events",
+      "notFoundTitle": "Event not found",
+      "notFoundDescription": "This event doesn't exist or isn't published.",
+      "ended": "This event has already taken place.",
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "openMap": "Open in Google Maps",
+      "speakers": "Speakers",
+      "capacity": "Availability",
+      "deadline": "Registration deadline",
+      "requirements": "Requirements",
+      "registrationNote": "Registering from the dashboard will be available once the registration service is connected.",
+      "addToCalendar": "Add to Google Calendar"
     }
   },
   "leader": {

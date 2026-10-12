@@ -43,9 +43,6 @@ export interface UpcomingEvent {
   featured: boolean;
   /** Backend-provided cover image URL. Falls back to a CSS gradient while unset. */
   imageUrl?: string;
-  /** ISO start/end with offset; enables "Add to Calendar". The button is hidden while unset. */
-  startsAt?: string;
-  endsAt?: string;
 }
 
 export interface CalendarMockData {
@@ -126,8 +123,6 @@ export const upcomingEvents: UpcomingEvent[] = [
     location: "COCON Tree",
     time: "7:00 PM - 9:30 PM",
     featured: true,
-    startsAt: "2026-09-20T19:00:00+03:00",
-    endsAt: "2026-09-20T21:30:00+03:00",
   },
 ];
 

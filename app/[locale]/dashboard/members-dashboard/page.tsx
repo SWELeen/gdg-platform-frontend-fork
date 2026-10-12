@@ -12,8 +12,8 @@ import { getPathname, usePathname, Link } from "@/i18n/navigation";
 import { getElevatedAccess } from "@/components/dashboard/shared/accessStore";
 import { leaderCommitteeConfig } from "@/components/dashboard/shared/committee-config";
 import { leaderDashboardMockData } from "@/data/leader-dashboard";
-import { MEMBER_EVENTS_PATH } from "@/components/dashboard/member/member-events";
-import { buildGoogleCalendarUrl } from "@/lib/dashboard/calendar-link";
+import { MemberEventCards } from "@/components/dashboard/member/MemberEventCards";
+import { DashboardUpcomingEvents } from "@/components/dashboard/member/DashboardUpcomingEvents";
 
 import {
   calendarMock,
@@ -22,16 +22,13 @@ import {
   myEventTiles,
   sidebarPrimaryItems,
   sidebarSecondaryItems,
-  upcomingEvents,
 } from "@/components/dashboard/mock-data";
 import type {
   CalendarMockData,
   DashboardTask,
   DashboardUser,
-  MyEventTile,
   TaskPriority,
   TaskStatus,
-  UpcomingEvent,
 } from "@/components/dashboard/mock-data";
 
 // Entrance animation shared by the main dashboard sections. `MotionConfig
@@ -191,41 +188,6 @@ function IconArrowUpRight({ className }: IconProps): ReactElement {
   );
 }
 
-function IconArrowRight({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M5 12h14" />
-      <path d="m13 6 6 6-6 6" />
-    </svg>
-  );
-}
-
-function IconStar({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M12 2.5 14.8 8.9 21.8 9.6 16.5 14.2 18 21.1 12 17.4 6 21.1 7.5 14.2 2.2 9.6 9.2 8.9Z" />
-    </svg>
-  );
-}
-
-function IconPin({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z" />
-      <circle cx="12" cy="10" r="2.5" />
-    </svg>
-  );
-}
-
-function IconClock({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3.5 2" />
-    </svg>
-  );
-}
-
 function IconCheck({ className }: IconProps): ReactElement {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
@@ -281,42 +243,26 @@ function Checkbox({ checked }: { checked: boolean }): ReactElement {
   );
 }
 
-// With `href`, the badge is a real (locale-aware) link; without it, it stays a button.
 function ArrowBadge({
   label,
   toneClassName,
   iconClassName,
   sizeClassName = "h-8 w-8 sm:h-9 sm:w-9",
-  href,
 }: {
   label: string;
   toneClassName: string;
   iconClassName?: string;
   sizeClassName?: string;
-  href?: string;
 }): ReactElement {
-  const className = `inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`;
-  const icon = <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />;
-
-  if (href) {
-    return (
-      <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
-        <Link href={href} aria-label={label} title={label} className={className}>
-          {icon}
-        </Link>
-      </motion.span>
-    );
-  }
-
   return (
     <motion.button
       type="button"
       aria-label={label}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
-      className={className}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`}
     >
-      {icon}
+      <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />
     </motion.button>
   );
 }
@@ -577,148 +523,6 @@ function WelcomeSection({ firstName }: { firstName: string }): ReactElement {
         {t("title", { name: firstName })} <span aria-hidden="true">👋</span>
       </h1>
       <p className="mt-1 text-sm text-muted sm:text-base">{t("subtitle")}</p>
-    </motion.div>
-  );
-}
-
-function MyEventCard({ tile }: { tile: MyEventTile }): ReactElement {
-  const t = useTranslations(`dashboard.tiles.${tile.key}`);
-
-  return (
-    <motion.div
-      variants={itemVariants}
-      whileHover={{ y: -2 }}
-      className={`relative flex min-w-0 flex-col justify-between gap-1.5 rounded-xl p-2.5 sm:gap-2 sm:p-3 ${tile.background}`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-semibold text-gdg-dark">{t("title")}</p>
-        <ArrowBadge
-          label={t("action")}
-          href={MEMBER_EVENTS_PATH}
-          toneClassName="bg-surface"
-          iconClassName={`h-3 w-3 sm:h-3.5 sm:w-3.5 ${tile.accent}`}
-          sizeClassName="h-6 w-6 sm:h-7 sm:w-7"
-        />
-      </div>
-      <p className="text-xs text-gdg-dark/70">{t("description")}</p>
-    </motion.div>
-  );
-}
-
-// Phone and tablet both show a 2x2 grid; only large/desktop screens go to one row of four.
-function MyEventsGrid({ tiles }: { tiles: MyEventTile[] }): ReactElement {
-  return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4"
-    >
-      {tiles.map((tile) => (
-        <MyEventCard key={tile.id} tile={tile} />
-      ))}
-    </motion.div>
-  );
-}
-
-function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactElement {
-  const t = useTranslations("dashboard.upcoming");
-  const hasEvents = events.length > 0;
-  const event = events[0];
-  const calendarUrl =
-    event?.startsAt && event.endsAt
-      ? buildGoogleCalendarUrl({ title: event.title, startsAt: event.startsAt, endsAt: event.endsAt, location: event.location })
-      : null;
-
-  return (
-    <motion.div
-      variants={itemVariants}
-      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4"
-    >
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-base font-semibold text-foreground sm:text-lg">{t("title")}</h2>
-        <ArrowBadge
-          label={t("viewAll")}
-          href={MEMBER_EVENTS_PATH}
-          toneClassName="bg-gdg-yellow-accent"
-          iconClassName="h-3.5 w-3.5 text-gdg-dark"
-          sizeClassName="h-7 w-7 sm:h-8 sm:w-8"
-        />
-      </div>
-
-      {hasEvents ? (
-        <>
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#2b2b2b] via-gdg-dark to-black">
-            {event.imageUrl ? (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element -- backend-provided URL of unknown origin; next/image would need a remote pattern we don't have yet. */}
-                <img src={event.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"
-                  aria-hidden="true"
-                />
-              </>
-            ) : (
-              <IconCalendar className="pointer-events-none absolute end-3 top-3 h-16 w-16 text-[var(--white)]/10" />
-            )}
-            <div className="relative flex aspect-[16/7] flex-col justify-between p-3 sm:p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex flex-col items-center justify-center rounded-lg bg-surface px-2.5 py-1 leading-none text-foreground shadow-sm">
-                  <span className="text-base font-bold">{event.day}</span>
-                  <span className="text-xs font-medium uppercase tracking-wide">{event.month}</span>
-                </div>
-                {event.featured && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-gdg-yellow-accent px-2.5 py-1 text-xs font-medium text-gdg-dark">
-                    <IconStar className="h-3 w-3" />
-                    {t("featured")}
-                  </span>
-                )}
-              </div>
-              <div>
-                <p className="text-base font-semibold text-[var(--white)] sm:text-lg">{event.title}</p>
-                <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
-                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--white)]/70">
-                    <span className="inline-flex items-center gap-1">
-                      <IconPin className="h-3.5 w-3.5" />
-                      {event.location}
-                    </span>
-                    <span aria-hidden="true">&bull;</span>
-                    <span className="inline-flex items-center gap-1">
-                      <IconClock className="h-3.5 w-3.5" />
-                      {event.time}
-                    </span>
-                  </p>
-                  {calendarUrl && (
-                    <motion.a
-                      href={calendarUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={t("addToCalendarLabel", { title: event.title })}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-foreground sm:text-sm"
-                    >
-                      {t("addToCalendar")}
-                      <IconArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" />
-                    </motion.a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Dots only make sense once there is more than one event to page through. */}
-          {events.length > 1 && (
-            <div className="mt-3 flex justify-center">
-              <PaginationDots count={events.length} activeIndex={0} />
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex flex-1 items-center justify-center rounded-xl bg-surface-muted/40 px-4 py-10 text-center">
-          <p className="text-sm text-muted">{t("empty")}</p>
-        </div>
-      )}
     </motion.div>
   );
 }
@@ -1152,9 +956,9 @@ export default function DashboardPage(): ReactElement {
 
             <CompactDashboardNav />
             <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
-            <MyEventsGrid tiles={myEventTiles} />
+            <MemberEventCards tiles={myEventTiles} />
             <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
-              <UpcomingEventsCard events={upcomingEvents} />
+              <DashboardUpcomingEvents />
               <CalendarCard data={calendarMock} />
             </div>
             <TasksPanel tasks={dashboardTasks} searchQuery={searchQuery} />

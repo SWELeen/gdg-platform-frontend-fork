@@ -7,16 +7,18 @@ const toCalendarStamp = (value: string) =>
 export function buildGoogleCalendarUrl(event: {
   title: string;
   startsAt: string;
-  endsAt: string;
+  /** Optional: events without a known end time are added as a start-time entry. */
+  endsAt?: string;
   location?: string;
 }): string | null {
-  if (Number.isNaN(new Date(event.startsAt).getTime()) || Number.isNaN(new Date(event.endsAt).getTime())) {
+  const endsAt = event.endsAt ?? event.startsAt;
+  if (Number.isNaN(new Date(event.startsAt).getTime()) || Number.isNaN(new Date(endsAt).getTime())) {
     return null;
   }
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: event.title,
-    dates: `${toCalendarStamp(event.startsAt)}/${toCalendarStamp(event.endsAt)}`,
+    dates: `${toCalendarStamp(event.startsAt)}/${toCalendarStamp(endsAt)}`,
   });
   if (event.location) params.set("location", event.location);
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
