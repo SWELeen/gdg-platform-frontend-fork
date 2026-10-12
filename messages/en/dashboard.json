@@ -9,7 +9,7 @@
       "tasks": "Tasks",
       "members": "Members",
       "achievements": "Achievements",
-      "setting": "Setting",
+      "setting": "Settings",
       "help": "Help & Support"
     }
   },
@@ -192,6 +192,170 @@
       "requirements": "Requirements",
       "registrationNote": "Registering from the dashboard will be available once the registration service is connected.",
       "addToCalendar": "Add to Google Calendar"
+    }
+  },
+  "memberSettings": {
+    "profile": {
+      "title": "My Profile & Committee",
+      "description": "View your membership information and assigned committee.",
+      "readOnly": "Read-only",
+      "fullName": "Full name",
+      "email": "Email address",
+      "committee": "Committee",
+      "role": "Role",
+      "notAvailable": "Not available yet",
+      "managedByLeadership": "Committee details are managed by your committee's leadership. Contact your committee leader if something needs to change.",
+      "demoNote": "Shown from demo data until sign-in is connected."
+    },
+    "notifications": {
+      "title": "Notification Preferences",
+      "description": "Choose which updates matter to you.",
+      "deliveryNote": "Notifications aren't being sent yet. Your choices are saved in this browser and will apply once notification delivery is connected.",
+      "storageUnavailable": "This browser is blocking site storage, so your preferences can't be saved. Allow site data for this website and reload the page.",
+      "groups": {
+        "tasks": "Task notifications",
+        "events": "Event notifications"
+      },
+      "items": {
+        "taskAssigned": {
+          "label": "New task assigned",
+          "description": "Notify me when a new task is assigned to me."
+        },
+        "taskDeadline": {
+          "label": "Task deadline reminders",
+          "description": "Notify me when one of my assigned tasks is approaching its deadline."
+        },
+        "taskUpdates": {
+          "label": "Task updates",
+          "description": "Notify me when the status or details of one of my tasks change."
+        },
+        "newEvents": {
+          "label": "New events",
+          "description": "Notify me when a new event is published."
+        },
+        "registrationUpdates": {
+          "label": "Registration updates",
+          "description": "Notify me when the status of my event registration changes, such as pending, accepted, or declined."
+        }
+      },
+      "savedOn": "“{item}” turned on — saved in this browser.",
+      "savedOff": "“{item}” turned off — saved in this browser.",
+      "saveFailed": "Couldn't save this change. Your browser may be blocking site storage."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Choose how the website looks. This is the same setting as the theme button in the top bar.",
+      "options": {
+        "light": {
+          "label": "Light",
+          "description": "Always use the light theme."
+        },
+        "dark": {
+          "label": "Dark",
+          "description": "Always use the dark theme."
+        },
+        "system": {
+          "label": "System",
+          "description": "Match your device's setting."
+        }
+      }
+    }
+  },
+  "memberHelp": {
+    "welcome": {
+      "title": "How can we help you?",
+      "description": "Find answers, learn how to use your dashboard, or get support."
+    },
+    "search": {
+      "label": "Search help articles",
+      "placeholder": "Search for a question or topic..."
+    },
+    "categoriesTitle": "Browse by topic",
+    "categoryAction": "Show {count, plural, one {# question} other {# questions}}",
+    "categoryShowingAll": "Showing this topic — select again to show all",
+    "categories": {
+      "events": {
+        "title": "Events & Registrations"
+      },
+      "tasks": {
+        "title": "Tasks & Responsibilities"
+      },
+      "account": {
+        "title": "Account & Membership"
+      },
+      "notifications": {
+        "title": "Notifications & Settings"
+      }
+    },
+    "faqTitle": "Frequently asked questions",
+    "removeCategory": "Remove the {category} filter",
+    "resultCount": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+    "noResultsTitle": "No matching answers",
+    "noResultsDescription": "Try different words, or contact the GDG team below.",
+    "clearSearch": "Clear search",
+    "faqs": {
+      "viewUpcoming": {
+        "question": "How do I view upcoming events?",
+        "answer": "On your dashboard, the Upcoming Events card shows the next published events. Select the yellow arrow next to its title to see every upcoming event, then select an event to read its details.",
+        "link": "Open Upcoming Events"
+      },
+      "registrationStatus": {
+        "question": "How can I check my registration status?",
+        "answer": "Open Events from the sidebar. Each registration shows its status — Pending, Need to Confirm, Accepted, Declined, Attended, or Not Attended. Select a registration to see its full details.",
+        "link": "Open My Events"
+      },
+      "registeredEvents": {
+        "question": "Where can I find events I've registered for?",
+        "answer": "Events in the sidebar opens My Events, which lists every event and trip you registered for. Use the Upcoming, Past and All tabs, the status and type filters, or search. The colored cards on your dashboard show your next registrations.",
+        "link": "Open My Events"
+      },
+      "findTasks": {
+        "question": "Where can I find my assigned tasks?",
+        "answer": "Select Tasks from the sidebar. You can switch between Board and List views and filter your tasks by priority. The My Tasks section on your dashboard also shows a summary.",
+        "link": "Open Tasks"
+      },
+      "taskStatuses": {
+        "question": "What do the task statuses mean?",
+        "answer": "To Do means the task hasn't been started. In Progress means it's being worked on. Complete means it's finished. The Board view groups your tasks into these three columns."
+      },
+      "taskProblem": {
+        "question": "What should I do if I have a problem with a task?",
+        "answer": "The Tasks page is read-only for members, so task details and statuses are updated by your committee leadership. If a task is unclear, blocked, or assigned by mistake, contact your committee leader directly."
+      },
+      "committeeInfo": {
+        "question": "How do I find my committee information?",
+        "answer": "Open Settings from the sidebar. The My Profile & Committee section shows your name, committee, and role.",
+        "link": "Open Settings"
+      },
+      "editCommittee": {
+        "question": "Why can't I edit my committee details?",
+        "answer": "Committee information and administrative settings are managed by authorized committee leadership. Members can view their committee details but can't change them. If something is wrong, ask your committee leader to update it."
+      },
+      "memberVsLeader": {
+        "question": "What is the difference between Member and Leader access?",
+        "answer": "Members can view their registrations, upcoming events, and assigned tasks, and manage their own preferences. Leaders use a separate leader workspace to manage their committee's events, members, tasks, points, and committee settings."
+      },
+      "changeNotifications": {
+        "question": "How do I change my notification preferences?",
+        "answer": "Open Settings and use the toggles under Notification Preferences. Each change is saved automatically in this browser — there's no Save button.",
+        "link": "Open Settings"
+      },
+      "toggleUpdates": {
+        "question": "How do I enable or disable certain updates?",
+        "answer": "Each toggle controls one type of update: new tasks, task deadline reminders, task updates, new events, and registration updates. Turn a toggle off to opt out of that update, or on to opt back in.",
+        "link": "Open Settings"
+      },
+      "notReceiving": {
+        "question": "Why am I not receiving notifications?",
+        "answer": "Notification delivery isn't connected yet, so no emails or alerts are sent at the moment. Your preferences are saved in this browser and will be used once notifications are available. Until then, check My Events and Tasks for the latest updates."
+      }
+    },
+    "contact": {
+      "title": "Still need help?",
+      "description": "Couldn't find what you're looking for? Contact the GDG team for assistance.",
+      "linkedin": "Message us on LinkedIn",
+      "x": "Reach us on X",
+      "note": "These are the official GDG on Campus UJ accounts. For questions about your committee or tasks, your committee leader is usually the quickest contact."
     }
   },
   "leader": {

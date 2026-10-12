@@ -58,7 +58,13 @@ export function MembersCompactNav(): ReactElement {
       </div>
       <div className="flex shrink-0 items-center gap-1" role="group" aria-label={t("accountLabel")}>
         {sidebarSecondaryItems.map((item) => (
-          <NavIconButton key={item.id} href="#" label={t(`items.${item.id}`)} Icon={sidebarIcons[item.id]} />
+          <NavIconButton
+            key={item.id}
+            href={localize(item.href)}
+            label={t(`items.${item.id}`)}
+            Icon={sidebarIcons[item.id]}
+            active={isSidebarItemActive(pathname, item)}
+          />
         ))}
       </div>
     </nav>

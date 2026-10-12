@@ -65,7 +65,14 @@ export function MembersSidebar(): ReactElement {
 
       <nav aria-label={t("accountLabel")} className="flex flex-col gap-1">
         {sidebarSecondaryItems.map((item) => (
-          <SidebarLink key={item.id} href="#" label={t(`items.${item.id}`)} Icon={sidebarIcons[item.id]} muted />
+          <SidebarLink
+            key={item.id}
+            href={localize(item.href)}
+            label={t(`items.${item.id}`)}
+            Icon={sidebarIcons[item.id]}
+            active={isSidebarItemActive(pathname, item)}
+            muted
+          />
         ))}
       </nav>
     </aside>

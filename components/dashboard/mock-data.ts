@@ -3,6 +3,7 @@
 // so this module is the single, typed swap point for real backend data later.
 
 import { MEMBER_EVENTS_PATH, UPCOMING_EVENTS_PATH } from "@/components/dashboard/member/member-events";
+import { MEMBER_HELP_PATH, MEMBER_SETTINGS_PATH } from "@/components/dashboard/members/member-routes";
 
 export type TaskPriority = "High" | "Medium" | "Low";
 export type TaskStatus = "In Progress" | "To Do" | "Complete";
@@ -85,8 +86,8 @@ export const sidebarPrimaryItems: SidebarItem[] = [
 ];
 
 export const sidebarSecondaryItems: SidebarItem[] = [
-  { id: "setting", href: "#" },
-  { id: "help", href: "#" },
+  { id: "setting", href: MEMBER_SETTINGS_PATH },
+  { id: "help", href: MEMBER_HELP_PATH },
 ];
 
 export const myEventTiles: MyEventTile[] = [
