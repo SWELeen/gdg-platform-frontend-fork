@@ -1034,7 +1034,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
         </>
       )}
 
-      <div className="mt-3 flex justify-center md:justify-start">
+      <div className="mt-3 flex justify-center">
         <PaginationDots count={3} activeIndex={0} />
       </div>
     </motion.section>
