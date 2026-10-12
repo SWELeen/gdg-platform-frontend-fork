@@ -937,12 +937,12 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
               end, on whichever line the last filter pill wraps onto. Replaced by the
               separate right-aligned copy below from `sm:` up. */}
           <div className="ms-auto sm:hidden">
-            <ArrowBadge label={t("viewAll")} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+            <ArrowBadge label={t("viewAll")} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
           </div>
         </div>
 
         <div className="hidden sm:flex sm:justify-end">
-          <ArrowBadge label={t("viewAll")} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+          <ArrowBadge label={t("viewAll")} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
         </div>
       </div>
 
