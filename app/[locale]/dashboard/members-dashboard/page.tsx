@@ -909,13 +909,13 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
       aria-labelledby="my-tasks-heading"
       className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4 lg:p-5"
     >
-      <div className="mb-3 flex flex-col gap-3 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-center">
+      <div className="mb-3 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
         <h2 id="my-tasks-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
           <IconChecklist className="h-5 w-5 shrink-0" />
           {t("title")}
         </h2>
 
-        <div className="flex flex-wrap items-center gap-2 sm:justify-center" role="group" aria-label={t("filterLabel")}>
+        <div className="flex flex-wrap items-center gap-2 lg:justify-center" role="group" aria-label={t("filterLabel")}>
           {taskFilters.map((filter) => {
             const isActive = filter === activeFilter;
             return (
@@ -936,12 +936,12 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
           {/* Mobile only: inline in the wrapping filter row so it lands, pushed to the far
               end, on whichever line the last filter pill wraps onto. Replaced by the
               separate right-aligned copy below from `sm:` up. */}
-          <div className="ms-auto sm:hidden">
+          <div className="ms-auto lg:hidden">
             <ArrowBadge label={t("viewAll")} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
           </div>
         </div>
 
-        <div className="hidden sm:flex sm:justify-end">
+        <div className="hidden lg:flex lg:justify-end">
           <ArrowBadge label={t("viewAll")} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
         </div>
       </div>
