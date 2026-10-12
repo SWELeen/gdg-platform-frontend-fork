@@ -573,7 +573,7 @@ function MyEventCard({ tile }: { tile: MyEventTile }): ReactElement {
       className={`relative flex min-w-0 flex-col justify-between gap-1.5 rounded-xl p-2.5 sm:gap-2 sm:p-3 ${tile.background}`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-semibold text-foreground">{t("title")}</p>
+        <p className="text-sm font-semibold text-foreground sm:text-base lg:text-lg">{t("title")}</p>
         <ArrowBadge
           label={t("action")}
           toneClassName="bg-surface"
@@ -651,7 +651,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
                 )}
               </div>
               <div>
-                <p className="text-base font-semibold text-[var(--white)] sm:text-lg">{event.title}</p>
+                <p className="text-xl font-semibold text-[var(--white)]">{event.title}</p>
                 <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
                   <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--white)]/70">
                     <span className="inline-flex items-center gap-1">
@@ -760,7 +760,7 @@ function CalendarCard({ data }: { data: CalendarMockData }): ReactElement {
         >
           <IconChevronLeft className="h-4 w-4 rtl:-scale-x-100" />
         </button>
-        <p className="text-sm font-semibold text-foreground">{monthLabel}</p>
+        <p className="text-lg font-semibold text-foreground">{monthLabel}</p>
         <button
           type="button"
           aria-label={t("nextMonth")}
