@@ -310,7 +310,7 @@ function PaginationDots({ count, activeIndex = 0 }: { count: number; activeIndex
         <span
           key={index}
           className={`h-1.5 rounded-full transition-all ${
-            index === activeIndex ? "w-4 bg-gdg-dark" : "w-1.5 bg-gray-300"
+            index === activeIndex ? "w-4 bg-foreground" : "w-1.5 bg-gray-300"
           }`}
         />
       ))}
