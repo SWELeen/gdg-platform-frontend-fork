@@ -516,7 +516,7 @@ function UtilityRow({
     <motion.div variants={itemVariants} className="flex items-center justify-between gap-3">
       <div className="order-1 flex w-full items-center gap-2 sm:w-auto lg:order-2">
         <div className="order-1 flex items-center gap-2.5 lg:order-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gdg-blue-light text-sm font-semibold text-foreground">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-avatar-bg text-sm font-semibold text-foreground"> 
             {user.initials}
           </span>
           <div className="hidden leading-tight sm:block">
