@@ -101,9 +101,6 @@
   "directory": {
     "searchLabel": "البحث عن الأعضاء بالاسم",
     "subtitle": "تعرّف على أعضاء لجنتنا الرائعين",
-    "sortNameAsc": "الاسم أ–ي",
-    "sortNameDesc": "الاسم ي–أ",
-    "sortToggle": "الترتيب الحالي: {current}. انقر للتبديل إلى: {next}.",
     "searchPlaceholder": "ابحث عن عضو بالاسم",
     "filterLabel": "تصفية الأعضاء",
     "filters": {

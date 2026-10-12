@@ -14,7 +14,7 @@ type DirectoryFilter = "myTeam" | "otherTeams" | "all";
 const filters: DirectoryFilter[] = ["myTeam", "otherTeams", "all"];
 
 // Soft avatar/badge pairs from the theme-aware dashboard palette, assigned per member by position
-// in the dataset so each member keeps the same color regardless of filter or sort.
+// in the dataset so each member keeps the same color regardless of filter.
 const memberTones = [
   "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
   "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",

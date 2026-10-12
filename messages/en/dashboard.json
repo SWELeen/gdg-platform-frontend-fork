@@ -101,9 +101,6 @@
   "directory": {
     "searchLabel": "Search members by name",
     "subtitle": "Meet the amazing members in our committee",
-    "sortNameAsc": "Name A–Z",
-    "sortNameDesc": "Name Z–A",
-    "sortToggle": "Sorted {current}. Click to sort {next}.",
     "searchPlaceholder": "Search members by name",
     "filterLabel": "Filter members",
     "filters": {
