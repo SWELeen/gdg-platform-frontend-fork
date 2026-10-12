@@ -613,7 +613,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
       className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4"
     >
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-base font-semibold text-foreground sm:text-lg">{t("title")}</h2>
+        <h2 className="text-xl font-bold text-foreground">{t("title")}</h2>
         <ArrowBadge
           label={t("viewAll")}
           toneClassName="bg-[var(--dashboard-tile-yellow-bg)]"
@@ -910,7 +910,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
       className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4 lg:p-5"
     >
       <div className="mb-3 flex flex-col gap-3 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-center">
-        <h2 id="my-tasks-heading" className="flex items-center gap-2 text-lg font-semibold text-foreground">
+        <h2 id="my-tasks-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
           <IconChecklist className="h-5 w-5 shrink-0" />
           {t("title")}
         </h2>
