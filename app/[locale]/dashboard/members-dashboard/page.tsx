@@ -624,7 +624,7 @@ function UpcomingEventsCard({ events }: { events: UpcomingEvent[] }): ReactEleme
 
       {hasEvents ? (
         <>
-          <div className="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-gradient-to-br from-[#2b2b2b] via-gdg-dark to-black">
+          <div className="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-gradient-to-br from-[var(--event-card-start)] via-gdg-dark to-black">
             {event.imageUrl ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- backend-provided URL of unknown origin; next/image would need a remote pattern we don't have yet. */}

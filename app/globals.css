@@ -66,6 +66,9 @@ html[data-theme="dark"] .topnav-logo-dark {
   --gdg-blue: #4285f4;
   --gdg-dark: #1e1e1e;
 
+  /* Dashboard event card: always dark in both modes */
+  --event-card-start: #2b2b2b;
+
   /* ---------------------------------------------------------
      GDG Secondary / Pastel Palette
      --------------------------------------------------------- */
