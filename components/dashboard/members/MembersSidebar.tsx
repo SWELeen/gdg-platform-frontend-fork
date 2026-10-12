@@ -3,11 +3,11 @@
 import type { ReactElement } from "react";
 import { useTranslations } from "next-intl";
 
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { sidebarPrimaryItems, sidebarSecondaryItems } from "@/components/dashboard/mock-data";
 import { sidebarIcons } from "./nav-icons";
 import type { IconComponent } from "./nav-icons";
-import { isNavItemActive, useLocalizedHref } from "./nav-utils";
+import { isNavItemActive } from "./nav-utils";
 
 function SidebarLink({
   href,
@@ -22,20 +22,31 @@ function SidebarLink({
   active?: boolean;
   muted?: boolean;
 }): ReactElement {
-  return (
-    <a
-      href={href}
-      aria-current={active ? "page" : undefined}
-      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-        active
-          ? "border-s-4 border-gdg-red bg-[var(--dashboard-red-bg)] ps-2.5 font-semibold text-[var(--dashboard-red-text)]"
-          : muted
-          ? "font-normal text-muted hover:bg-surface-muted hover:text-foreground"
-          : "font-semibold text-foreground/70 hover:bg-surface-muted hover:text-foreground"
-      }`}
-    >
+  const className = `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+    active
+      ? "border-s-4 border-gdg-red bg-[var(--dashboard-red-bg)] ps-2.5 font-semibold text-[var(--dashboard-red-text)]"
+      : muted
+      ? "font-normal text-muted hover:bg-surface-muted hover:text-foreground"
+      : "font-semibold text-foreground/70 hover:bg-surface-muted hover:text-foreground"
+  }`;
+  const content = (
+    <>
       <Icon className="h-5 w-5 shrink-0" />
       <span className="whitespace-nowrap">{label}</span>
+    </>
+  );
+
+  // Internal routes use the locale-aware Link; "#" placeholders stay native anchors.
+  if (href.startsWith("/")) {
+    return (
+      <Link href={href} aria-current={active ? "page" : undefined} className={className}>
+        {content}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} aria-current={active ? "page" : undefined} className={className}>
+      {content}
     </a>
   );
 }
@@ -45,7 +56,6 @@ function SidebarLink({
 export function MembersSidebar(): ReactElement {
   const pathname = usePathname();
   const t = useTranslations("dashboard.nav");
-  const localize = useLocalizedHref();
 
   return (
     <aside className="hidden shrink-0 border-e border-border bg-surface px-3 py-6 lg:block lg:w-60 xl:w-64">
@@ -53,7 +63,7 @@ export function MembersSidebar(): ReactElement {
         {sidebarPrimaryItems.map((item) => (
           <SidebarLink
             key={item.id}
-            href={localize(item.href)}
+            href={item.href}
             label={t(`items.${item.id}`)}
             Icon={sidebarIcons[item.id]}
             active={isNavItemActive(pathname, item.href)}
