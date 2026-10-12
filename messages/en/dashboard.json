@@ -98,6 +98,19 @@
     "listView": "List view",
     "done": "Done"
   },
+  "directory": {
+    "searchLabel": "Search members by name",
+    "searchPlaceholder": "Search members by name",
+    "filterLabel": "Filter members",
+    "filters": {
+      "myTeam": "My Team",
+      "otherTeams": "Other Teams",
+      "all": "All Members"
+    },
+    "resultsCount": "{count, plural, one {# member} other {# members}} shown",
+    "empty": "There are no members to show here yet.",
+    "emptySearch": "No members match your search."
+  },
   "leader": {
     "nav": {
       "workspace": "Workspace",

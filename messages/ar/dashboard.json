@@ -98,6 +98,19 @@
     "listView": "عرض القائمة",
     "done": "تم"
   },
+  "directory": {
+    "searchLabel": "البحث عن الأعضاء بالاسم",
+    "searchPlaceholder": "ابحث عن عضو بالاسم",
+    "filterLabel": "تصفية الأعضاء",
+    "filters": {
+      "myTeam": "فريقي",
+      "otherTeams": "الفرق الأخرى",
+      "all": "جميع الأعضاء"
+    },
+    "resultsCount": "{count, plural, one {# عضو} two {# عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}} معروض",
+    "empty": "لا يوجد أعضاء لعرضهم هنا حتى الآن.",
+    "emptySearch": "لا يوجد أعضاء يطابقون بحثك."
+  },
   "leader": {
     "nav": {
       "workspace": "مساحة العمل",
