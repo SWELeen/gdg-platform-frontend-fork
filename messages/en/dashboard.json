@@ -398,11 +398,18 @@
     "searchLabel": "Search members by name",
     "subtitle": "Meet the amazing members in our committee",
     "searchPlaceholder": "Search members by name",
-    "filterLabel": "Filter members",
-    "filters": {
-      "myTeam": "My Team",
-      "otherTeams": "Other Teams",
-      "all": "All Members"
+    "myTeam": "My Team",
+    "teamLead": "Team Lead",
+    "openProfile": "View {name}'s profile",
+    "callMember": "Call {name}",
+    "socialLink": "Open {name}'s {platform} profile",
+    "profileTitle": "Member Profile",
+    "closeProfile": "Close member profile",
+    "profile": {
+      "about": "About",
+      "academicInfo": "Academic Information",
+      "university": "University",
+      "major": "Major"
     },
     "resultsCount": "{count, plural, one {# member} other {# members}} shown",
     "empty": "There are no members to show here yet.",
