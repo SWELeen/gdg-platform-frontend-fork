@@ -100,6 +100,10 @@
   },
   "directory": {
     "searchLabel": "البحث عن الأعضاء بالاسم",
+    "subtitle": "تعرّف على أعضاء لجنتنا الرائعين",
+    "sortNameAsc": "الاسم أ–ي",
+    "sortNameDesc": "الاسم ي–أ",
+    "sortToggle": "الترتيب الحالي: {current}. انقر للتبديل إلى: {next}.",
     "searchPlaceholder": "ابحث عن عضو بالاسم",
     "filterLabel": "تصفية الأعضاء",
     "filters": {
@@ -110,6 +114,29 @@
     "resultsCount": "{count, plural, one {# عضو} two {# عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}} معروض",
     "empty": "لا يوجد أعضاء لعرضهم هنا حتى الآن.",
     "emptySearch": "لا يوجد أعضاء يطابقون بحثك."
+  },
+  "achievements": {
+    "statsLabel": "إحصائياتي",
+    "stats": {
+      "points": "نقاطي",
+      "rank": "ترتيبي في اللجنة"
+    },
+    "podiumTitle": "أفضل ٣ أعضاء",
+    "podiumSubtitle": "أعلى النقاط بين الأعضاء العاديين في لجنتنا",
+    "leaderboardTitle": "لوحة صدارة اللجنة",
+    "leaderboardSubtitle": "الأعضاء العاديون مرتبون حسب مجموع نقاطهم",
+    "sortToggle": "الترتيب الحالي: {current}. انقر للتبديل إلى: {next}.",
+    "sortHighToLow": "من الأعلى إلى الأدنى",
+    "sortLowToHigh": "من الأدنى إلى الأعلى",
+    "columns": {
+      "rank": "#",
+      "member": "العضو",
+      "points": "النقاط"
+    },
+    "pointsValue": "{points, number} نقطة",
+    "rankLabel": "المركز {rank, number}",
+    "you": "أنت",
+    "empty": "لا يوجد أعضاء في اللجنة لترتيبهم حتى الآن."
   },
   "leader": {
     "nav": {

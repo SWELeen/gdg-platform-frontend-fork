@@ -100,6 +100,10 @@
   },
   "directory": {
     "searchLabel": "Search members by name",
+    "subtitle": "Meet the amazing members in our committee",
+    "sortNameAsc": "Name A–Z",
+    "sortNameDesc": "Name Z–A",
+    "sortToggle": "Sorted {current}. Click to sort {next}.",
     "searchPlaceholder": "Search members by name",
     "filterLabel": "Filter members",
     "filters": {
@@ -110,6 +114,29 @@
     "resultsCount": "{count, plural, one {# member} other {# members}} shown",
     "empty": "There are no members to show here yet.",
     "emptySearch": "No members match your search."
+  },
+  "achievements": {
+    "statsLabel": "My stats",
+    "stats": {
+      "points": "My Points",
+      "rank": "My Committee Rank"
+    },
+    "podiumTitle": "Top 3 Members",
+    "podiumSubtitle": "Highest points among regular members in our committee",
+    "leaderboardTitle": "Committee Leaderboard",
+    "leaderboardSubtitle": "Regular members ranked by their total points",
+    "sortToggle": "Sorted {current}. Click to sort {next}.",
+    "sortHighToLow": "Highest to Lowest",
+    "sortLowToHigh": "Lowest to Highest",
+    "columns": {
+      "rank": "#",
+      "member": "Member",
+      "points": "Points"
+    },
+    "pointsValue": "{points, number} pts",
+    "rankLabel": "Rank {rank, number}",
+    "you": "You",
+    "empty": "No committee members to rank yet."
   },
   "leader": {
     "nav": {
