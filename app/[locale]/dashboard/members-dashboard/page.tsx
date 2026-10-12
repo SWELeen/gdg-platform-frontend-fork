@@ -186,7 +186,7 @@ function PaginationDots({ count, activeIndex = 0 }: { count: number; activeIndex
         <span
           key={index}
           className={`h-1.5 rounded-full transition-all ${
-            index === activeIndex ? "w-4 bg-gdg-dark" : "w-1.5 bg-gray-300"
+            index === activeIndex ? "w-4 bg-foreground" : "w-1.5 bg-gray-300"
           }`}
         />
       ))}
@@ -219,18 +219,16 @@ function SearchField({
         onChange={(event) => onSearchChange(event.target.value)}
         placeholder={t("searchPlaceholder")}
         maxLength={255}
-        className="w-full rounded-full border border-border bg-surface-muted/60 py-2 ps-9 pe-4 text-sm text-foreground placeholder:text-muted focus:border-gdg-blue focus:bg-surface focus:outline-none focus:ring-2 focus:ring-gdg-blue/30"
+        className="w-full rounded-full border border-border bg-surface-muted/60 py-2 ps-9 pe-4 text-base text-foreground placeholder:text-muted focus:border-gdg-blue focus:bg-surface focus:outline-none focus:ring-2 focus:ring-gdg-blue/30"
       />
     </label>
   );
 }
 
-// Phone: [account+bell] left, [date] pushed to the far right via `ms-auto` on the date
-// element — search is hidden here and reappears lower in the page, after the internal nav.
-// Tablet: [date][bell][account] one compact group (account rightmost within it), search on
-// the right of the same row. Desktop (unchanged): search left, account group right — achieved
-// by flipping `order` at `lg` rather than duplicating markup. Within the group, only the
-// `order`/`ms-auto` on these three items change per breakpoint; nothing is re-parented.
+// Phone and tablet: [account+bell] at the start, [date] pushed to the far end via `ms-auto`;
+// search is hidden here and reappears lower in the page, after the internal nav.
+// Desktop (lg+): search at the start, account group at the end — achieved by flipping
+// `order` at `lg` rather than duplicating markup.
 function UtilityRow({
   user,
   today,
@@ -246,7 +244,7 @@ function UtilityRow({
 
   return (
     <motion.div variants={itemVariants} className="flex items-center justify-between gap-3">
-      <div className="order-1 flex w-full items-center gap-2 sm:w-auto lg:order-2">
+      <div className="order-1 flex w-full items-center gap-2 lg:w-auto lg:order-2">
         <MembersUserInfo user={user} />
 
         <button
@@ -258,7 +256,7 @@ function UtilityRow({
           <span className="absolute end-2 top-2 h-1.5 w-1.5 rounded-full bg-gdg-red" aria-hidden="true" />
         </button>
 
-        <p className="order-3 ms-auto shrink-0 text-xs font-medium text-muted sm:ms-0 sm:text-sm lg:order-1">
+        <p className="order-3 ms-auto shrink-0 text-xs font-medium text-muted lg:ms-0 sm:text-sm lg:order-1">
           {today}
         </p>
       </div>
@@ -266,7 +264,7 @@ function UtilityRow({
       <SearchField
         searchQuery={searchQuery}
         onSearchChange={onSearchChange}
-        className="order-2 hidden sm:block sm:max-w-xs lg:order-1"
+        className="order-2 hidden lg:block lg:max-w-xs lg:order-1"
       />
     </motion.div>
   );
@@ -326,15 +324,15 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
     <motion.section
       variants={itemVariants}
       aria-labelledby="my-tasks-heading"
-      className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4 lg:p-5"
+      className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4 lg:p-5"
     >
-      <div className="mb-3 flex flex-col gap-3 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-center">
-        <h2 id="my-tasks-heading" className="flex items-center gap-2 text-lg font-semibold text-foreground">
+      <div className="mb-3 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
+        <h2 id="my-tasks-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
           <IconChecklist className="h-5 w-5 shrink-0" />
           {t("title")}
         </h2>
 
-        <div className="flex flex-wrap items-center gap-2 sm:justify-center" role="group" aria-label={t("filterLabel")}>
+        <div className="flex flex-wrap items-center gap-2 lg:justify-center" role="group" aria-label={t("filterLabel")}>
           {taskFilters.map((filter) => {
             const isActive = filter === activeFilter;
             return (
@@ -343,7 +341,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
+                className={`rounded-full border px-2.5 py-1 text-sm font-medium transition-colors ${
                   isActive ? `border-transparent ${toneColors[filterTones[filter]]}` : "border-border bg-surface text-foreground"
                 }`}
               >
@@ -355,13 +353,13 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
           {/* Mobile only: inline in the wrapping filter row so it lands, pushed to the far
               end, on whichever line the last filter pill wraps onto. Replaced by the
               separate right-aligned copy below from `sm:` up. */}
-          <div className="ms-auto sm:hidden">
-            <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+          <div className="ms-auto lg:hidden">
+            <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
           </div>
         </div>
 
-        <div className="hidden sm:flex sm:justify-end">
-          <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-gdg-blue-light" iconClassName="h-4 w-4 text-gdg-blue" />
+        <div className="hidden lg:flex lg:justify-end">
+          <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
         </div>
       </div>
 
@@ -453,7 +451,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
         </>
       )}
 
-      <div className="mt-3 flex justify-center md:justify-start">
+      <div className="mt-3 flex justify-center">
         <PaginationDots count={3} activeIndex={0} />
       </div>
     </motion.section>
@@ -494,7 +492,7 @@ export default function DashboardPage(): ReactElement {
   }, []);
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-4 lg:space-y-6">
       <UtilityRow user={currentUser} today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
       <WelcomeSection firstName={currentUser.name.split(" ")[0]} />
 
@@ -527,9 +525,9 @@ export default function DashboardPage(): ReactElement {
       )}
 
       <MembersCompactNav />
-      <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="sm:hidden" />
+      <SearchField searchQuery={searchQuery} onSearchChange={setSearchQuery} className="lg:hidden" />
       <MemberEventCards tiles={myEventTiles} />
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
         <DashboardUpcomingEvents />
         <MemberCalendarCard />
       </div>

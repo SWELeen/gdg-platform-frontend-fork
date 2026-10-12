@@ -84,25 +84,25 @@ export const myEventTiles: MyEventTile[] = [
   {
     id: "events-blue",
     key: "myEvents",
-    background: "bg-gdg-blue-light",
+    background: "bg-[var(--dashboard-blue-bg)]",
     accent: "text-gdg-blue-accent",
   },
   {
     id: "events-green",
     key: "myEvents",
-    background: "bg-gdg-green-light",
+    background: "bg-[var(--dashboard-green-bg)]",
     accent: "text-gdg-green-accent",
   },
   {
     id: "events-pink",
     key: "myEvents",
-    background: "bg-gdg-pink-light",
+    background: "bg-[var(--dashboard-red-bg)]",
     accent: "text-gdg-pink-accent",
   },
   {
     id: "events-yellow",
     key: "myEvents",
-    background: "bg-gdg-yellow-light",
+    background: "bg-[var(--dashboard-tile-yellow-bg)]",
     accent: "text-gdg-yellow-accent",
   },
 ];
