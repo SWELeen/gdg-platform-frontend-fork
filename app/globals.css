@@ -287,6 +287,7 @@ html[data-theme="dark"] .topnav-logo-dark {
   /* Dashboard - Light */
   --dashboard-yellow-bg: #fff3cd;
   --dashboard-yellow-text: #9a6700;
+  --dashboard-tile-yellow-bg: #ffe7a5;
 
   --dashboard-blue-bg: #c3ecf6;
   --dashboard-blue-text: #2563eb;
@@ -344,6 +345,7 @@ html[data-theme="dark"] .topnav-logo-dark {
 
     --dashboard-yellow-bg: #3a321d;
     --dashboard-yellow-text: #ffd166;
+    --dashboard-tile-yellow-bg: #3a321d;
 
     --dashboard-blue-bg: #1d2f45;
     --dashboard-blue-text: #8ab4ff;
@@ -401,6 +403,7 @@ html[data-theme="light"] {
 
   --dashboard-yellow-bg: #fff3cd;
   --dashboard-yellow-text: #9a6700;
+  --dashboard-tile-yellow-bg: #ffe7a5;
 
   --dashboard-blue-bg: #c3ecf6;
   --dashboard-blue-text: #2563eb;
@@ -563,6 +566,7 @@ html[data-theme="dark"] {
 
   --dashboard-yellow-bg: #3a321d;
   --dashboard-yellow-text: #ffd166;
+  --dashboard-tile-yellow-bg: #3a321d;
 
   --dashboard-blue-bg: #1d2f45;
   --dashboard-blue-text: #8ab4ff;

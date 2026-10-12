@@ -573,7 +573,7 @@ function MyEventCard({ tile }: { tile: MyEventTile }): ReactElement {
       className={`relative flex min-w-0 flex-col justify-between gap-1.5 rounded-xl p-2.5 sm:gap-2 sm:p-3 ${tile.background}`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-semibold text-gdg-dark">{t("title")}</p>
+        <p className="text-sm font-semibold text-foreground">{t("title")}</p>
         <ArrowBadge
           label={t("action")}
           toneClassName="bg-surface"
@@ -581,7 +581,7 @@ function MyEventCard({ tile }: { tile: MyEventTile }): ReactElement {
           sizeClassName="h-6 w-6 sm:h-7 sm:w-7"
         />
       </div>
-      <p className="text-xs text-gdg-dark/70">{t("description")}</p>
+      <p className="text-xs text-foreground/70">{t("description")}</p>
     </motion.div>
   );
 }
