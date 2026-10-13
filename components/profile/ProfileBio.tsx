@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-type ProfileBioProps = {
+      type ProfileBioProps = {
   bio: string;
   placeholder: string;
   isEditing: boolean;
@@ -16,8 +16,7 @@ export function ProfileBio({
   const t = useTranslations("profile.bio");
 
   return (
-    <div className="w-full rounded-card border border-[#243b64]/70 bg-surface px-4 py-4 transition-colors duration-200 focus-within:border-[#243b64] focus-within:ring-2 focus-within:ring-[#243b64]/15 sm:px-6">
-      <p className="mb-1 text-base font-semibold text-[#243b64]">
+<div className="w-full rounded-2xl border border-gray-200 bg-white p-5 text-gray-900 shadow-sm transition-colors duration-200 focus-within:border-[#243b64] focus-within:ring-2 focus-within:ring-[#243b64]/15 dark:border-[#243b64]/70 dark:bg-surface dark:text-slate-100 sm:p-6">      <p className="mb-1 text-base font-semibold text-[#243b64]">
         {t("title")}
       </p>
       {isEditing ? (

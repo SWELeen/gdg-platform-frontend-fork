@@ -1,14 +1,14 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { Link } from "@/i18n/navigation";
 import { ProfileBio } from "@/components/profile/ProfileBio";
-import { ProfileChips } from "@/components/profile/ProfileChips";
 import { ProfileHero } from "@/components/profile/ProfileHero";
 import { ProfileTabs } from "@/components/profile/ProfileTabs";
+import { CalendarDays, ChevronRight } from "lucide-react";
 import {
   academicInfo,
   initialProfileAvatarUrl,
@@ -42,17 +42,18 @@ function findRowValue(card: InfoCardData, key: string): string {
   return card.rows.find((row) => row.key === key)?.value ?? "";
 }
 
-export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
+export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
   const t = useTranslations("profile");
+  const locale = useLocale();
   const format = useFormatter();
   const memberSinceIso = useMemberSince();
   // Western digits keep dates consistent with the other numbers on the page.
   const memberSince = memberSinceIso
     ? format.dateTime(new Date(memberSinceIso), {
-        month: "long",
-        year: "numeric",
-        numberingSystem: "latn",
-      })
+      month: "long",
+      year: "numeric",
+      numberingSystem: "latn",
+    })
     : "";
   const [isEditing, setIsEditing] = useState(false);
 
@@ -199,11 +200,21 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
   };
 
   const major = findRowValue(academicData, "major");
+  const displayedMajor =
+    major === "Software Engineering"
+      ? t("academicValues.softwareEngineering")
+      : major;
+
+  const displayedName =
+    sampleProfile.name === "Jana Alshaikh"
+      ? t("academicValues.janaAlshaikh")
+      : sampleProfile.name;
+
   const studentId = findRowValue(personalData, "studentId");
-  const chips = [
-    major,
-    studentId && t("chips.studentId", { id: studentId }),
-  ].filter(Boolean) as string[];
+ const chips = [
+  displayedMajor,
+  studentId && t("chips.studentId", { id: studentId }),
+].filter(Boolean) as string[];
 
   return (
     <div className="flex flex-1 flex-col bg-background text-foreground">
@@ -211,8 +222,10 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
 
       <ProfileHero
         initials={sampleProfile.initials}
-        name={sampleProfile.name}
+        name={displayedName}
         email={sampleProfile.email}
+        chips={chips}
+
         memberSince={memberSince}
         avatarUrl={isEditing ? avatarDraft : avatarUrl}
         headerImageUrl={isEditing ? headerImageDraft : headerImageUrl}
@@ -224,16 +237,26 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
         onHeaderImageSelect={handleHeaderImageSelect}
       />
 
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 md:gap-4 md:px-10 md:py-8 lg:px-16">
-       <div className="flex justify-end">
-  <Link
-    href="/registrations"
-   className="inline-flex items-center justify-center rounded-xl border border-[#325fa6]/30 bg-white px-5 py-2.5 text-sm font-semibold text-[#243b64] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#325fa6] hover:bg-[#eaf2ff] hover:shadow-md dark:border-[#243b64]/70 dark:bg-surface dark:text-white dark:hover:brightness-110"
-  >
-    {t("registrationsLink")}
-  </Link>
-</div>
-        <ProfileChips chips={chips} />
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 md:gap-4 md:px-10 md:pt-3 md:pb-8 lg:px-16">   <div className="flex justify-end">
+
+        <Link
+          href="/registrations"
+          className="group flex w-full items-center gap-4 rounded-2xl border border-[#e5e7eb] bg-white px-5 py-4 shadow-sm transition-all duration-200 hover:border-[#4285f4]/50 hover:shadow-md dark:border-[#243b64]/70 dark:bg-surface sm:px-6"
+        >
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#eaf2ff] text-[#325fa6] dark:bg-[#243b64] dark:text-[#8ab4f8]">    <CalendarDays className="size-6" aria-hidden="true" />
+          </span>
+
+          <span className="min-w-0 flex-1 text-start text-base font-semibold text-[#243b64] dark:text-white">
+            {t("registrationsLink")}
+          </span>
+
+          <ChevronRight
+            className="size-5 shrink-0 text-[#325fa6] transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 dark:text-[#8ab4f8]"
+            aria-hidden="true"
+          />
+        </Link>
+      </div>
+
 
         <ProfileBio
           bio={isEditing ? bioDraft : bio}

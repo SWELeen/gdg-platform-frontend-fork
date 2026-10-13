@@ -42,15 +42,17 @@ export function SocialLinkRow({
     iconBadgeByPlatform[link.platform];
 
   return (
-    <motion.li
-      variants={{
-        hidden: { opacity: 0, y: 8 },
-        visible: { opacity: 1, y: 0 },
-      }}
-      className={`flex items-center gap-3 rounded-card border bg-surface px-4 py-3 sm:px-5 ${
-        error ? "border-gdg-red" : "border-gray-350"
-      }`}
-    >
+   <motion.li
+  variants={{
+    hidden: { opacity: 0, y: 8 },
+    visible: { opacity: 1, y: 0 },
+  }}
+  className={`flex min-w-0 items-center gap-3 border-b py-4 first:pt-0 last:border-b-0 last:pb-0 ${
+    error
+      ? "border-gdg-red"
+      : "border-gray-200 dark:border-[#243b64]/50"
+  }`}
+>
       <span
         className={`flex size-8 shrink-0 items-center justify-center rounded-lg sm:size-9 ${badgeClassName}`}
       >
@@ -95,8 +97,16 @@ export function SocialLinkRow({
       </div>
 
       {!isEditing && link.value && (
-        <ExternalLink className="size-4 shrink-0 text-gray-500 sm:size-5" />
-      )}
+  <a
+    href={link.value}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={`Open ${link.platform} in a new tab`}
+    className="inline-flex shrink-0 items-center justify-center rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue"
+  >
+    <ExternalLink className="size-4 text-gray-500 sm:size-5" />
+  </a>
+)}
     </motion.li>
   );
 }

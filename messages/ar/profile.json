@@ -31,6 +31,14 @@
     "major": "التخصص",
     "academicYear": "السنة الدراسية"
   },
+  
+  "academicValues": {
+  "universityOfJeddah": "جامعة جدة",
+  "softwareEngineering": "هندسة البرمجيات",
+  "thirdYear": "السنة الثالثة",
+  "janaAlshaikh": "جنى الشيخ"
+},
+
   "universityPlaceholder": "اختر الجامعة",
   "registrationsLink": "تسجيلاتي",
   "social": {
