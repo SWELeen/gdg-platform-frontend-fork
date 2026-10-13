@@ -418,6 +418,7 @@
   "achievements": {
     "pageSubtitle": "تابع تقدمك الشخصي ومساهماتك في اللجنة.",
     "statsLabel": "إحصائياتي",
+    "showMore": "عرض المزيد",
     "stats": {
       "totalPoints": "إجمالي النقاط",
       "tasksCompleted": "المهام المكتملة",

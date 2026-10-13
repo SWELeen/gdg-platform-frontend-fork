@@ -418,6 +418,7 @@
   "achievements": {
     "pageSubtitle": "Track your personal progress and contributions in the committee.",
     "statsLabel": "My stats",
+    "showMore": "Show More",
     "stats": {
       "totalPoints": "Total Points",
       "tasksCompleted": "Tasks Completed",

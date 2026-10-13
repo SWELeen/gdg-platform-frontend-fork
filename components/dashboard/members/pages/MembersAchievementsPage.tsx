@@ -18,6 +18,8 @@ type LoadState = "loading" | "error" | "loaded";
 
 const rangeOptions: RangeFilter[] = ["allTime", "thisMonth", "last30Days", "thisYear"];
 const UTC_DAY_MS = 24 * 60 * 60 * 1000;
+const INITIAL_VISIBLE_COUNT = 4;
+const VISIBLE_COUNT_INCREMENT = 4;
 
 function getUtcMonthKey(date: Date): string {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -100,6 +102,8 @@ export function MembersAchievementsPage(): ReactElement {
   const taskFilterId = useId();
   const [pointRange, setPointRange] = useState<RangeFilter>("allTime");
   const [taskRange, setTaskRange] = useState<RangeFilter>("allTime");
+  const [visiblePointCount, setVisiblePointCount] = useState(INITIAL_VISIBLE_COUNT);
+  const [visibleTaskCount, setVisibleTaskCount] = useState(INITIAL_VISIBLE_COUNT);
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [retryCount, setRetryCount] = useState(0);
 
@@ -161,8 +165,8 @@ export function MembersAchievementsPage(): ReactElement {
       key: "pointsThisMonth",
       value: signedAmount(monthPoints, format.number),
       Icon: TrendingUp,
-      card: "bg-[var(--navy)]/10",
-      tile: "bg-[var(--navy)]/10 text-[var(--navy)]",
+      card: "bg-[var(--dashboard-red-bg)]/40",
+      tile: "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]",
     },
   ];
 
@@ -172,6 +176,8 @@ export function MembersAchievementsPage(): ReactElement {
   const visibleTasks = memberCompletedTasks.filter((task) =>
     matchesRange(task.date, taskRange, now),
   );
+  const displayedPointEntries = visiblePointEntries.slice(0, visiblePointCount);
+  const displayedTasks = visibleTasks.slice(0, visibleTaskCount);
   const pointListLabel = t("history.title");
   const taskListLabel = t("tasks.title");
 
@@ -232,7 +238,10 @@ export function MembersAchievementsPage(): ReactElement {
               <select
                 id={pointFilterId}
                 value={pointRange}
-                onChange={(event) => setPointRange(event.target.value as RangeFilter)}
+                onChange={(event) => {
+                  setPointRange(event.target.value as RangeFilter);
+                  setVisiblePointCount(INITIAL_VISIBLE_COUNT);
+                }}
                 className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
               >
                 {rangeOptions.map((range) => (
@@ -253,9 +262,9 @@ export function MembersAchievementsPage(): ReactElement {
             ) : (
               <ul
                 aria-label={pointListLabel}
-                className="mt-3 max-h-80 divide-y divide-border overflow-y-auto"
+                className="mt-3 divide-y divide-border"
               >
-                {visiblePointEntries.map((entry) => {
+                {displayedPointEntries.map((entry) => {
                   const earned = entry.amount >= 0;
                   const tone = earned
                     ? "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]"
@@ -287,6 +296,19 @@ export function MembersAchievementsPage(): ReactElement {
                 })}
               </ul>
             )}
+            {visiblePointEntries.length > displayedPointEntries.length && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setVisiblePointCount((count) => count + VISIBLE_COUNT_INCREMENT)
+                  }
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-gdg-blue transition-colors hover:bg-[var(--dashboard-blue-bg)]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
+                >
+                  {t("showMore")}
+                </button>
+              </div>
+            )}
           </section>
 
           <section
@@ -306,7 +328,10 @@ export function MembersAchievementsPage(): ReactElement {
               <select
                 id={taskFilterId}
                 value={taskRange}
-                onChange={(event) => setTaskRange(event.target.value as RangeFilter)}
+                onChange={(event) => {
+                  setTaskRange(event.target.value as RangeFilter);
+                  setVisibleTaskCount(INITIAL_VISIBLE_COUNT);
+                }}
                 className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
               >
                 {rangeOptions.map((range) => (
@@ -325,8 +350,8 @@ export function MembersAchievementsPage(): ReactElement {
                 {t("tasks.empty")}
               </div>
             ) : (
-              <ul aria-label={taskListLabel} className="mt-3 max-h-80 divide-y divide-border overflow-y-auto">
-                {visibleTasks.map((task) => (
+              <ul aria-label={taskListLabel} className="mt-3 divide-y divide-border">
+                {displayedTasks.map((task) => (
                   <li key={task.id} className="flex min-w-0 items-center gap-3 py-2.5">
                     <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]">
                       <Check aria-hidden="true" className="size-4" />
@@ -343,6 +368,19 @@ export function MembersAchievementsPage(): ReactElement {
                   </li>
                 ))}
               </ul>
+            )}
+            {visibleTasks.length > displayedTasks.length && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setVisibleTaskCount((count) => count + VISIBLE_COUNT_INCREMENT)
+                  }
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-gdg-blue transition-colors hover:bg-[var(--dashboard-blue-bg)]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
+                >
+                  {t("showMore")}
+                </button>
+              </div>
             )}
           </section>
         </>
