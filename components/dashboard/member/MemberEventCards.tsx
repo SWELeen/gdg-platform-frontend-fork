@@ -98,7 +98,7 @@ export function MemberEventCards({ tiles }: { tiles: MyEventTile[] }) {
                   className={`group flex h-full min-w-0 flex-col justify-between gap-2 rounded-xl p-2.5 text-foreground transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface sm:p-3 ${tile.background}`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                      <p className="line-clamp-2 min-w-0 text-sm font-semibold leading-snug sm:text-base lg:text-lg">{registration.title}</p>
+                    <p className="line-clamp-2 min-w-0 text-sm font-medium leading-snug sm:text-base lg:text-lg">{registration.title}</p>
                     <span
                       aria-hidden="true"
                       className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface transition-transform group-hover:scale-110 sm:h-7 sm:w-7"
