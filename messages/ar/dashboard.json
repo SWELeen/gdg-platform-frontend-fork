@@ -416,27 +416,61 @@
     "emptySearch": "لا يوجد أعضاء يطابقون بحثك."
   },
   "achievements": {
+    "pageSubtitle": "تابع تقدمك الشخصي ومساهماتك في اللجنة.",
     "statsLabel": "إحصائياتي",
     "stats": {
-      "points": "نقاطي",
-      "rank": "ترتيبي في اللجنة"
+      "totalPoints": "إجمالي النقاط",
+      "tasksCompleted": "المهام المكتملة",
+      "tasksThisMonth": "مهام هذا الشهر",
+      "pointsThisMonth": "نقاط هذا الشهر"
     },
-    "podiumTitle": "أفضل ٣ أعضاء",
-    "podiumSubtitle": "أعلى النقاط بين الأعضاء العاديين في لجنتنا",
-    "leaderboardTitle": "لوحة صدارة اللجنة",
-    "leaderboardSubtitle": "الأعضاء العاديون مرتبون حسب مجموع نقاطهم",
-    "sortToggle": "الترتيب الحالي: {current}. انقر للتبديل إلى: {next}.",
-    "sortHighToLow": "من الأعلى إلى الأدنى",
-    "sortLowToHigh": "من الأدنى إلى الأعلى",
-    "columns": {
-      "rank": "#",
-      "member": "العضو",
-      "points": "النقاط"
+    "ranges": {
+      "allTime": "كل الوقت",
+      "thisMonth": "هذا الشهر",
+      "last30Days": "آخر ٣٠ يومًا",
+      "thisYear": "هذا العام"
     },
-    "pointsValue": "{points, number} نقطة",
-    "rankLabel": "المركز {rank, number}",
-    "you": "أنت",
-    "empty": "لا يوجد أعضاء في اللجنة لترتيبهم حتى الآن."
+    "history": {
+      "title": "سجل النقاط",
+      "subtitle": "سجل لجميع النقاط التي كسبتها أو فقدتها.",
+      "filterLabel": "تصفية سجل النقاط حسب الفترة الزمنية",
+      "empty": "لا توجد نقاط مسجلة خلال هذه الفترة.",
+      "unit": "نقطة",
+      "earned": "تم كسب {amount} {unit}",
+      "lost": "تم فقد {amount} {unit}",
+      "entries": {
+        "eventOrganization": "تنظيم فعالية",
+        "communityContribution": "مساهمة مجتمعية",
+        "lateSubmissionPenalty": "خصم للتأخر في التسليم",
+        "workshopAttendance": "حضور ورشة عمل",
+        "projectShowcase": "عرض مشروع",
+        "mentoringSession": "جلسة إرشاد",
+        "documentationUpdates": "تحديثات التوثيق",
+        "accessibilityReview": "مراجعة سهولة الوصول"
+      }
+    },
+    "tasks": {
+      "title": "المهام المكتملة",
+      "subtitle": "سجل بجميع المهام التي أكملتها.",
+      "filterLabel": "تصفية المهام المكتملة حسب الفترة الزمنية",
+      "empty": "لا توجد مهام مكتملة خلال هذه الفترة.",
+      "completed": "مكتملة",
+      "entries": {
+        "websiteRedesign": "إعادة تصميم الموقع",
+        "eventRegistrationPage": "صفحة التسجيل للفعالية",
+        "teamDocumentation": "توثيق الفريق",
+        "dashboardComponents": "مكونات لوحة التحكم",
+        "uiImprovements": "تحسينات واجهة المستخدم",
+        "accessibilityReview": "مراجعة سهولة الوصول",
+        "onboardingGuide": "دليل بدء الاستخدام",
+        "componentDocumentation": "توثيق المكونات"
+      }
+    },
+    "loading": "جارٍ تحميل إنجازاتك...",
+    "error": {
+      "title": "تعذر تحميل إنجازاتك",
+      "description": "حدث خطأ أثناء تحميل تقدمك الشخصي. يرجى المحاولة مرة أخرى."
+    }
   },
   "leader": {
     "nav": {

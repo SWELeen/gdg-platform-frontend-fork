@@ -1,272 +1,349 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import type { ReactElement } from "react";
 import { useFormatter, useTranslations } from "next-intl";
-import { ArrowDownUp, Crown, Medal, Star, Users } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { CalendarDays, Check, Star, TrendingUp, TriangleAlert } from "lucide-react";
 
+import { PillAction } from "@/components/announcements/PillAction";
+import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
+import { statusStyles } from "@/components/dashboard/members/task-styles";
 import {
-  achievementMembers,
-  mockCurrentCommitteeId,
-  mockCurrentUserId,
+  memberCompletedTasks,
+  memberPointHistory,
 } from "@/components/dashboard/members/achievements-mock-data";
-import type { AchievementMember } from "@/components/dashboard/members/achievements-mock-data";
 
-interface RankedMember extends AchievementMember {
-  rank: number;
+type RangeFilter = "allTime" | "thisMonth" | "last30Days" | "thisYear";
+type LoadState = "loading" | "error" | "loaded";
+
+const rangeOptions: RangeFilter[] = ["allTime", "thisMonth", "last30Days", "thisYear"];
+const UTC_DAY_MS = 24 * 60 * 60 * 1000;
+
+function getUtcMonthKey(date: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(date);
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  return `${year}-${month}`;
 }
 
-// Mock scoping for demonstration only — not access control. Ties share a rank (1, 2, 2, 4).
-function buildLeaderboard(): RankedMember[] {
-  const sorted = achievementMembers
-    .filter((member) => member.committeeId === mockCurrentCommitteeId && !member.isLeader)
-    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
-  const ranked: RankedMember[] = [];
-  sorted.forEach((member, index) => {
-    const prev = ranked[index - 1];
-    ranked.push({ ...member, rank: prev && prev.points === member.points ? prev.rank : index + 1 });
-  });
-  return ranked;
+function matchesRange(date: string, range: RangeFilter, now: Date): boolean {
+  const entryTime = Date.parse(`${date}T00:00:00.000Z`);
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+
+  if (entryTime > today) return false;
+  if (range === "allTime") return true;
+  if (range === "thisMonth") return date.startsWith(getUtcMonthKey(now));
+  if (range === "thisYear") return date.startsWith(String(now.getUTCFullYear()));
+
+  const firstIncludedDay = today - 29 * UTC_DAY_MS;
+  return entryTime >= firstIncludedDay;
 }
 
-const leaderboard = buildLeaderboard();
-
-type SortOrder = "desc" | "asc";
-
-interface PodiumTone {
-  card: string;
-  base: string;
-  icon: string;
-  Icon: LucideIcon;
+function signedAmount(amount: number, formatNumber: (value: number) => string): string {
+  return `${amount >= 0 ? "+" : "−"}${formatNumber(Math.abs(amount))}`;
 }
 
-// Gold / silver / bronze mapped onto the theme-aware dashboard palette (yellow / neutral / red).
-const goldTone: PodiumTone = {
-  card: "bg-[var(--dashboard-yellow-bg)]/50 border-[var(--dashboard-yellow-text)]/30",
-  base: "bg-[var(--dashboard-yellow-bg)] text-[var(--dashboard-yellow-text)]",
-  icon: "text-[var(--dashboard-yellow-text)]",
-  Icon: Crown,
-};
-const silverTone: PodiumTone = {
-  card: "bg-surface-muted/60 border-border",
-  base: "bg-surface-muted text-foreground",
-  icon: "text-muted",
-  Icon: Medal,
-};
-const bronzeTone: PodiumTone = {
-  card: "bg-[var(--dashboard-red-bg)]/50 border-[var(--dashboard-red-text)]/30",
-  base: "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]",
-  icon: "text-[var(--dashboard-red-text)]",
-  Icon: Medal,
-};
+function LoadingState(): ReactElement {
+  const t = useTranslations("dashboard.achievements");
 
-// Visual order (start → end): 2nd, 1st, 3rd. `index` is the position in the leaderboard.
-const podiumSlots = [
-  { index: 1, tone: silverTone, base: "h-16 sm:h-24", card: "pt-6", iconPos: "start-2" },
-  { index: 0, tone: goldTone, base: "h-24 sm:h-32", card: "pt-9", iconPos: "start-1/2 -translate-x-1/2 rtl:translate-x-1/2" },
-  { index: 2, tone: bronzeTone, base: "h-10 sm:h-14", card: "pt-6", iconPos: "start-2" },
-];
-
-const rowIcons: Record<number, { Icon: LucideIcon; className: string }> = {
-  1: { Icon: Crown, className: "text-[var(--dashboard-yellow-text)]" },
-  2: { Icon: Medal, className: "text-muted" },
-  3: { Icon: Medal, className: "text-[var(--dashboard-red-text)]" },
-};
-
-function Avatar({ initials, className }: { initials: string; className: string }): ReactElement {
   return (
-    <span
-      aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-full bg-[var(--dashboard-blue-bg)] font-semibold text-[var(--dashboard-blue-text)] ${className}`}
-    >
-      {initials}
-    </span>
+    <div role="status" aria-busy="true" className="space-y-6">
+      <span className="sr-only">{t("loading")}</span>
+      <div aria-hidden="true" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index} className="h-24 animate-pulse rounded-2xl border border-border bg-surface-muted/50" />
+        ))}
+      </div>
+      {Array.from({ length: 2 }, (_, index) => (
+        <div
+          key={index}
+          aria-hidden="true"
+          className="space-y-5 rounded-2xl border border-border bg-surface p-5"
+        >
+          <div className="h-5 w-40 animate-pulse rounded bg-surface-muted" />
+          {Array.from({ length: 4 }, (_, row) => (
+            <div key={row} className="h-10 animate-pulse rounded-lg bg-surface-muted/60" />
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 
-// Read-only: nothing here edits points or ranks.
+function ErrorState({ onRetry }: { onRetry: () => void }): ReactElement {
+  const t = useTranslations("dashboard.achievements.error");
+  const taskErrorT = useTranslations("dashboard.tasks.error");
+
+  return (
+    <div
+      role="alert"
+      className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-surface-muted/50 px-5 py-12 text-center sm:px-10 sm:py-16"
+    >
+      <TriangleAlert aria-hidden="true" className="size-8 text-gdg-red" strokeWidth={1.75} />
+      <h2 className="mt-4 text-lg font-semibold text-foreground sm:text-xl">{t("title")}</h2>
+      <p className="mt-2 max-w-[440px] text-sm text-muted">{t("description")}</p>
+      <div className="mt-6">
+        <PillAction onClick={onRetry}>{taskErrorT("retry")}</PillAction>
+      </div>
+    </div>
+  );
+}
+
 export function MembersAchievementsPage(): ReactElement {
   const t = useTranslations("dashboard.achievements");
   const format = useFormatter();
-  const me = leaderboard.find((member) => member.id === mockCurrentUserId);
-  const dash = "—";
-  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
-  const sortLabels = { desc: t("sortHighToLow"), asc: t("sortLowToHigh") };
-  const sortToggleLabel = t("sortToggle", {
-    current: sortLabels[sortOrder],
-    next: sortLabels[sortOrder === "desc" ? "asc" : "desc"],
-  });
-  // Ranks stay descending-based; ascending only reverses the display order (ties by name, stable).
-  const displayedLeaderboard =
-    sortOrder === "desc"
-      ? leaderboard
-      : [...leaderboard].sort((a, b) => a.points - b.points || a.name.localeCompare(b.name));
+  const pointFilterId = useId();
+  const taskFilterId = useId();
+  const [pointRange, setPointRange] = useState<RangeFilter>("allTime");
+  const [taskRange, setTaskRange] = useState<RangeFilter>("allTime");
+  const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    Promise.resolve({ memberPointHistory, memberCompletedTasks })
+      .then(() => {
+        if (isCurrent) setLoadState("loaded");
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to load personal achievements mock data.", error);
+        if (isCurrent) setLoadState("error");
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [retryCount]);
+
+  const retry = (): void => {
+    setLoadState("loading");
+    setRetryCount((count) => count + 1);
+  };
+
+  const now = new Date();
+  const monthKey = getUtcMonthKey(now);
+  const totalPoints = memberPointHistory.reduce((total, entry) => total + entry.amount, 0);
+  const monthPoints = memberPointHistory
+    .filter((entry) => entry.date.startsWith(monthKey) && matchesRange(entry.date, "thisMonth", now))
+    .reduce((total, entry) => total + entry.amount, 0);
+  const monthTasks = memberCompletedTasks.filter((task) =>
+    matchesRange(task.date, "thisMonth", now),
+  ).length;
 
   const stats = [
     {
-      key: "points",
-      value: me ? format.number(me.points) : dash,
+      key: "totalPoints",
+      value: format.number(totalPoints),
       Icon: Star,
-      card: "bg-[var(--dashboard-blue-bg)]/60",
+      card: "bg-[var(--dashboard-blue-bg)]/40",
       tile: "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
     },
     {
-      key: "rank",
-      value: me ? `#${format.number(me.rank)}` : dash,
-      Icon: Medal,
-      card: "bg-[var(--dashboard-green-bg)]/60",
+      key: "tasksCompleted",
+      value: format.number(memberCompletedTasks.length),
+      Icon: Check,
+      card: "bg-[var(--dashboard-green-bg)]/40",
       tile: "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",
+    },
+    {
+      key: "tasksThisMonth",
+      value: format.number(monthTasks),
+      Icon: CalendarDays,
+      card: "bg-[var(--dashboard-yellow-bg)]/45",
+      tile: "bg-[var(--dashboard-yellow-bg)] text-[var(--dashboard-yellow-text)]",
+    },
+    {
+      key: "pointsThisMonth",
+      value: signedAmount(monthPoints, format.number),
+      Icon: TrendingUp,
+      card: "bg-[var(--navy)]/10",
+      tile: "bg-[var(--navy)]/10 text-[var(--navy)]",
     },
   ];
 
-  return (
-    <div className="space-y-6">
-      <section aria-label={t("statsLabel")}>
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {stats.map(({ key, value, Icon, card, tile }) => (
-            <li key={key} className={`flex items-center gap-4 rounded-2xl border border-border p-4 sm:p-5 ${card}`}>
-              <span className={`flex size-14 shrink-0 items-center justify-center rounded-xl ${tile}`}>
-                <Icon aria-hidden="true" className="size-7" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm text-muted">{t(`stats.${key}`)}</p>
-                <p className="text-3xl font-bold text-foreground">{value}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+  const visiblePointEntries = memberPointHistory.filter((entry) =>
+    matchesRange(entry.date, pointRange, now),
+  );
+  const visibleTasks = memberCompletedTasks.filter((task) =>
+    matchesRange(task.date, taskRange, now),
+  );
+  const pointListLabel = t("history.title");
+  const taskListLabel = t("tasks.title");
 
-      {leaderboard.length === 0 ? (
-        <div
-          role="status"
-          className="rounded-2xl border border-dashed border-border bg-surface-muted/50 px-5 py-12 text-center text-sm text-muted"
-        >
-          {t("empty")}
-        </div>
+  function formatDate(date: string): string {
+    return format.dateTime(new Date(`${date}T12:00:00.000Z`), {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+  }
+
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <p className="text-sm text-muted">{t("pageSubtitle")}</p>
+
+      {loadState === "loading" ? (
+        <LoadingState />
+      ) : loadState === "error" ? (
+        <ErrorState onRetry={retry} />
       ) : (
         <>
-          <section aria-labelledby="podium-heading" className="rounded-2xl border border-border bg-surface p-4 sm:p-6">
-            <h2 id="podium-heading" className="text-base font-bold text-foreground">
-              {t("podiumTitle")}
-            </h2>
-            <p className="text-xs text-muted">{t("podiumSubtitle")}</p>
-            <ol className="mt-5 grid grid-cols-3 items-end gap-2 sm:gap-4">
-              {podiumSlots.map((slot) => {
-                const member = leaderboard[slot.index];
-                if (!member) return <li key={slot.index} aria-hidden="true" />;
-                const { tone } = slot;
-                return (
-                  <li
-                    key={slot.index}
-                    className={`relative flex min-w-0 flex-col items-center overflow-hidden rounded-2xl border text-center ${tone.card} ${slot.card}`}
-                  >
-                    <tone.Icon
-                      aria-hidden="true"
-                      className={`absolute top-2 size-5 sm:size-6 ${slot.iconPos} ${tone.icon}`}
-                    />
-                    <Avatar
-                      initials={member.initials}
-                      className={slot.index === 0 ? "size-12 text-base sm:size-14 sm:text-lg" : "size-10 text-sm sm:size-12 sm:text-base"}
-                    />
-                    <p className="mt-2 w-full truncate px-1 text-xs font-semibold text-foreground sm:text-sm">
-                      {member.name}
+          <section aria-label={t("statsLabel")}>
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {stats.map(({ key, value, Icon, card, tile }) => (
+                <li
+                  key={key}
+                  className={`flex min-w-0 items-center gap-4 rounded-2xl border border-border p-4 sm:p-5 ${card}`}
+                >
+                  <span className={`flex size-12 shrink-0 items-center justify-center rounded-xl sm:size-14 ${tile}`}>
+                    <Icon aria-hidden="true" className="size-6 sm:size-7" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm text-muted">{t(`stats.${key}`)}</p>
+                    <p className="text-2xl font-bold text-foreground sm:text-3xl">
+                      {key === "pointsThisMonth" ? <bdi dir="ltr">{value}</bdi> : value}
                     </p>
-                    <p className="mb-3 text-xs text-muted">{t("pointsValue", { points: member.points })}</p>
-                    <div
-                      className={`flex w-full items-center justify-center rounded-t-2xl text-lg font-bold sm:text-2xl ${tone.base} ${slot.base}`}
-                    >
-                      <span aria-label={t("rankLabel", { rank: member.rank })}>#{format.number(member.rank)}</span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </section>
 
-          <section aria-labelledby="leaderboard-heading" className="rounded-2xl border border-border bg-surface p-4 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]">
-                  <Users aria-hidden="true" className="size-5" />
-                </span>
-                <div className="min-w-0">
-                  <h2 id="leaderboard-heading" className="text-base font-bold text-foreground">
-                    {t("leaderboardTitle")}
-                  </h2>
-                  <p className="text-xs text-muted">{t("leaderboardSubtitle")}</p>
-                </div>
+          <section
+            aria-labelledby="points-history-heading"
+            className="rounded-2xl border border-border bg-surface p-4 sm:p-6"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 id="points-history-heading" className="text-base font-bold text-foreground">
+                  {t("history.title")}
+                </h2>
+                <p className="text-xs text-muted">{t("history.subtitle")}</p>
               </div>
-
-              <button
-                type="button"
-                onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
-                aria-label={sortToggleLabel}
-                title={sortToggleLabel}
-                className="ms-auto flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-muted hover:bg-surface-muted hover:text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
+              <label htmlFor={pointFilterId} className="sr-only">
+                {t("history.filterLabel")}
+              </label>
+              <select
+                id={pointFilterId}
+                value={pointRange}
+                onChange={(event) => setPointRange(event.target.value as RangeFilter)}
+                className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
               >
-                <ArrowDownUp aria-hidden="true" className="size-4" />
-              </button>
+                {rangeOptions.map((range) => (
+                  <option key={range} value={range}>
+                    {t(`ranges.${range}`)}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className="mt-4 overflow-hidden rounded-xl border border-border">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border text-xs text-muted">
-                    <th scope="col" className="w-16 py-2 ps-3 text-start font-medium sm:w-20">
-                      {t("columns.rank")}
-                    </th>
-                    <th scope="col" className="py-2 text-start font-medium">
-                      {t("columns.member")}
-                    </th>
-                    <th scope="col" className="py-2 pe-3 text-end font-medium">
-                      {t("columns.points")}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {displayedLeaderboard.map((member) => {
-                    const isMe = member.id === mockCurrentUserId;
-                    const rowIcon = rowIcons[member.rank];
-                    return (
-                      <tr
-                        key={member.id}
-                        aria-current={isMe ? "true" : undefined}
-                        className={
-                          isMe
-                            ? "bg-[var(--dashboard-red-bg)] font-semibold text-[var(--dashboard-red-text)]"
-                            : "text-foreground"
-                        }
+            {visiblePointEntries.length === 0 ? (
+              <div
+                role="status"
+                className="mt-5 rounded-xl border border-dashed border-border bg-surface-muted/50 px-4 py-8 text-center text-sm text-muted"
+              >
+                {t("history.empty")}
+              </div>
+            ) : (
+              <ul
+                aria-label={pointListLabel}
+                className="mt-3 max-h-80 divide-y divide-border overflow-y-auto"
+              >
+                {visiblePointEntries.map((entry) => {
+                  const earned = entry.amount >= 0;
+                  const tone = earned
+                    ? "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]"
+                    : "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]";
+
+                  return (
+                    <li key={entry.id} className="flex min-w-0 items-center gap-3 py-2.5">
+                      <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${tone}`}>
+                        <Star aria-hidden="true" className="size-4" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-foreground">
+                          {t(`history.entries.${entry.title}`)}
+                        </p>
+                        <p className="text-xs text-muted">{formatDate(entry.date)}</p>
+                      </div>
+                      <span
+                        aria-label={t(earned ? "history.earned" : "history.lost", {
+                          amount: format.number(Math.abs(entry.amount)),
+                          unit: t("history.unit"),
+                        })}
+                        className={`shrink-0 text-end text-sm font-semibold ${earned ? "text-[var(--dashboard-green-text)]" : "text-[var(--dashboard-red-text)]"}`}
                       >
-                        <td className="py-2.5 ps-3">
-                          <span className="flex items-center gap-1.5 font-semibold">
-                            {rowIcon ? (
-                              <rowIcon.Icon aria-hidden="true" className={`size-4 shrink-0 ${rowIcon.className}`} />
-                            ) : (
-                              <span aria-hidden="true" className="size-4 shrink-0" />
-                            )}
-                            #{format.number(member.rank)}
-                          </span>
-                        </td>
-                        <td className="py-2.5">
-                          <span className="flex min-w-0 items-center gap-3">
-                            <Avatar initials={member.initials} className="size-8 text-xs" />
-                            <span className="min-w-0 truncate">
-                              {member.name}
-                              {isMe && <span className="ms-1.5">({t("you")})</span>}
-                            </span>
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap py-2.5 pe-3 text-end font-semibold">
-                          {t("pointsValue", { points: member.points })}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                        <bdi dir="ltr">{signedAmount(entry.amount, format.number)}</bdi>{" "}
+                        {t("history.unit")}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+
+          <section
+            aria-labelledby="completed-tasks-heading"
+            className="rounded-2xl border border-border bg-surface p-4 sm:p-6"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 id="completed-tasks-heading" className="text-base font-bold text-foreground">
+                  {t("tasks.title")}
+                </h2>
+                <p className="text-xs text-muted">{t("tasks.subtitle")}</p>
+              </div>
+              <label htmlFor={taskFilterId} className="sr-only">
+                {t("tasks.filterLabel")}
+              </label>
+              <select
+                id={taskFilterId}
+                value={taskRange}
+                onChange={(event) => setTaskRange(event.target.value as RangeFilter)}
+                className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
+              >
+                {rangeOptions.map((range) => (
+                  <option key={range} value={range}>
+                    {t(`ranges.${range}`)}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            {visibleTasks.length === 0 ? (
+              <div
+                role="status"
+                className="mt-5 rounded-xl border border-dashed border-border bg-surface-muted/50 px-4 py-8 text-center text-sm text-muted"
+              >
+                {t("tasks.empty")}
+              </div>
+            ) : (
+              <ul aria-label={taskListLabel} className="mt-3 max-h-80 divide-y divide-border overflow-y-auto">
+                {visibleTasks.map((task) => (
+                  <li key={task.id} className="flex min-w-0 items-center gap-3 py-2.5">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]">
+                      <Check aria-hidden="true" className="size-4" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-foreground">
+                        {t(`tasks.entries.${task.title}`)}
+                      </p>
+                      <p className="text-xs text-muted">{formatDate(task.date)}</p>
+                    </div>
+                    <TaskBadge className={`${statusStyles.Complete} shrink-0`}>
+                      {t("tasks.completed")}
+                    </TaskBadge>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         </>
       )}

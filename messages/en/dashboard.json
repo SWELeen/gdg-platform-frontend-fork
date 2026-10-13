@@ -416,27 +416,61 @@
     "emptySearch": "No members match your search."
   },
   "achievements": {
+    "pageSubtitle": "Track your personal progress and contributions in the committee.",
     "statsLabel": "My stats",
     "stats": {
-      "points": "My Points",
-      "rank": "My Committee Rank"
+      "totalPoints": "Total Points",
+      "tasksCompleted": "Tasks Completed",
+      "tasksThisMonth": "Tasks This Month",
+      "pointsThisMonth": "Points This Month"
     },
-    "podiumTitle": "Top 3 Members",
-    "podiumSubtitle": "Highest points among regular members in our committee",
-    "leaderboardTitle": "Committee Leaderboard",
-    "leaderboardSubtitle": "Regular members ranked by their total points",
-    "sortToggle": "Sorted {current}. Click to sort {next}.",
-    "sortHighToLow": "Highest to Lowest",
-    "sortLowToHigh": "Lowest to Highest",
-    "columns": {
-      "rank": "#",
-      "member": "Member",
-      "points": "Points"
+    "ranges": {
+      "allTime": "All Time",
+      "thisMonth": "This Month",
+      "last30Days": "Last 30 Days",
+      "thisYear": "This Year"
     },
-    "pointsValue": "{points, number} pts",
-    "rankLabel": "Rank {rank, number}",
-    "you": "You",
-    "empty": "No committee members to rank yet."
+    "history": {
+      "title": "Points History",
+      "subtitle": "A record of all points you have earned or lost.",
+      "filterLabel": "Filter points history by time range",
+      "empty": "No point entries found for this time range.",
+      "unit": "pts",
+      "earned": "Earned {amount} {unit}",
+      "lost": "Lost {amount} {unit}",
+      "entries": {
+        "eventOrganization": "Event organization",
+        "communityContribution": "Community contribution",
+        "lateSubmissionPenalty": "Late submission penalty",
+        "workshopAttendance": "Workshop attendance",
+        "projectShowcase": "Project showcase",
+        "mentoringSession": "Mentoring session",
+        "documentationUpdates": "Documentation updates",
+        "accessibilityReview": "Accessibility review"
+      }
+    },
+    "tasks": {
+      "title": "Completed Tasks",
+      "subtitle": "A record of all the tasks you have completed.",
+      "filterLabel": "Filter completed tasks by time range",
+      "empty": "No completed tasks found for this time range.",
+      "completed": "Completed",
+      "entries": {
+        "websiteRedesign": "Website redesign",
+        "eventRegistrationPage": "Event registration page",
+        "teamDocumentation": "Team documentation",
+        "dashboardComponents": "Dashboard components",
+        "uiImprovements": "UI improvements",
+        "accessibilityReview": "Accessibility review",
+        "onboardingGuide": "Onboarding guide",
+        "componentDocumentation": "Component documentation"
+      }
+    },
+    "loading": "Loading your achievements...",
+    "error": {
+      "title": "Couldn't load your achievements",
+      "description": "Something went wrong while loading your personal progress. Please try again."
+    }
   },
   "leader": {
     "nav": {

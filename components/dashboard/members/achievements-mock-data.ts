@@ -1,29 +1,38 @@
-// MOCK DATA — demonstration only. There is no approved achievements/leaderboard API contract yet
-// (see docs/api-integration.md). Scoping to the user's committee and excluding leaders is done
-// client-side here for display and is NOT access control; the backend must own that.
+// MOCK DATA — demonstration only. There is no approved achievements API contract yet
+// (see docs/api-integration.md). Showing only the member's own data is a display choice,
+// not access control; the backend must return only the signed-in member's own data.
 
-export interface AchievementMember {
+export interface MemberPointEntry {
   id: string;
-  name: string;
-  initials: string;
-  committeeId: string;
-  /** Leaders are excluded from the member leaderboard. */
-  isLeader: boolean;
-  points: number;
+  title: string;
+  date: string;
+  amount: number;
 }
 
-/** Mock reference for the logged-in user; matches `currentUser` in ../mock-data.ts. */
-export const mockCurrentUserId = "m-1";
-export const mockCurrentCommitteeId = "web";
+export interface MemberCompletedTask {
+  id: string;
+  title: string;
+  date: string;
+}
 
-export const achievementMembers: AchievementMember[] = [
-  { id: "m-1", name: "Leen Kharraz", initials: "LK", committeeId: "web", isLeader: false,   points: 420 },
-    { id: "m-2", name: "Leen Alghamdi", initials: "WI", committeeId: "web", isLeader: true, points: 900 },
-    { id: "m-3", name: "Sara Nasser", initials: "SN", committeeId: "web", isLeader: false, points: 510 },
-    { id: "m-4", name: "Yazan Khalil", initials: "YK", committeeId: "web", isLeader: false, points: 40 },
-    { id: "m-13", name: "Lina Barakat", initials: "LB", committeeId: "web", isLeader: false, points: 365 },
-    { id: "m-14", name: "Fadi Qasem", initials: "FQ", committeeId: "web", isLeader: false, points: 280 },
-    { id: "m-15", name: "Aya Mustafa", initials: "AM", committeeId: "web", isLeader: false, points: 150 },
-    { id: "m-5", name: "Dana Mansour", initials: "DM", committeeId: "mobile", isLeader: false, points: 610 },
-    { id: "m-6", name: "Khaled Abbas", initials: "KA", committeeId: "mobile", isLeader: true, points: 840 },
+export const memberPointHistory: MemberPointEntry[] = [
+  { id: "point-1", title: "eventOrganization", date: "2026-10-12", amount: 30 },
+  { id: "point-2", title: "communityContribution", date: "2026-10-01", amount: 25 },
+  { id: "point-3", title: "lateSubmissionPenalty", date: "2026-09-20", amount: -10 },
+  { id: "point-4", title: "workshopAttendance", date: "2026-09-12", amount: 15 },
+  { id: "point-5", title: "projectShowcase", date: "2026-08-26", amount: 20 },
+  { id: "point-6", title: "mentoringSession", date: "2026-07-14", amount: 40 },
+  { id: "point-7", title: "documentationUpdates", date: "2026-06-03", amount: 10 },
+  { id: "point-8", title: "accessibilityReview", date: "2026-05-22", amount: 15 },
+];
+
+export const memberCompletedTasks: MemberCompletedTask[] = [
+  { id: "task-1", title: "websiteRedesign", date: "2026-10-11" },
+  { id: "task-2", title: "eventRegistrationPage", date: "2026-10-07" },
+  { id: "task-3", title: "teamDocumentation", date: "2026-09-28" },
+  { id: "task-4", title: "dashboardComponents", date: "2026-09-15" },
+  { id: "task-5", title: "uiImprovements", date: "2026-09-03" },
+  { id: "task-6", title: "accessibilityReview", date: "2026-08-20" },
+  { id: "task-7", title: "onboardingGuide", date: "2026-07-14" },
+  { id: "task-8", title: "componentDocumentation", date: "2026-06-03" },
 ];
