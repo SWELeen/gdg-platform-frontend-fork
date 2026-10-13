@@ -2,19 +2,15 @@
 
 import { useId, useState } from "react";
 import type { ReactElement } from "react";
-import { useTranslations } from "next-intl";
-import { Search, UsersRound } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { ChevronRight, Phone, Search, UsersRound } from "lucide-react";
+import { FaGithub, FaGlobe, FaLinkedinIn } from "react-icons/fa6";
 
-import { directoryMembers, mockCurrentTeamId } from "@/components/dashboard/members/members-directory-mock-data";
+import { directoryMembers } from "@/components/dashboard/members/members-directory-mock-data";
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { PILL_SHAPE } from "@/components/dashboard/members/task-styles";
+import { MemberProfileDialog } from "@/components/dashboard/members/MemberProfileDialog";
 
-type DirectoryFilter = "myTeam" | "otherTeams" | "all";
-
-const filters: DirectoryFilter[] = ["myTeam", "otherTeams", "all"];
-
-// Soft avatar/badge pairs from the theme-aware dashboard palette, assigned per member by position
-// in the dataset so each member keeps the same color regardless of filter.
 const memberTones = [
   "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
   "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",
@@ -22,41 +18,24 @@ const memberTones = [
   "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]",
 ];
 
-// Each filter keeps its own dashboard palette pair (theme-aware bg/text tokens) in light and dark.
-const filterStyles: Record<DirectoryFilter, { active: string; idle: string }> = {
-  myTeam: {
-    active: "border-[var(--dashboard-blue-text)] bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
-    idle: "border-border bg-surface text-[var(--dashboard-blue-text)] hover:bg-[var(--dashboard-blue-bg)]",
-  },
-  otherTeams: {
-    active: "border-[var(--dashboard-green-text)] bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]",
-    idle: "border-border bg-surface text-[var(--dashboard-green-text)] hover:bg-[var(--dashboard-green-bg)]",
-  },
-  all: {
-    active: "border-[var(--dashboard-yellow-text)] bg-[var(--dashboard-yellow-bg)] text-[var(--dashboard-yellow-text)]",
-    idle: "border-border bg-surface text-[var(--dashboard-yellow-text)] hover:bg-[var(--dashboard-yellow-bg)]",
-  },
-};
+const socialPlatforms = [
+  { key: "github", name: "GitHub", icon: FaGithub },
+  { key: "linkedin", name: "LinkedIn", icon: FaLinkedinIn },
+  { key: "website", name: "Website", icon: FaGlobe },
+] as const;
 
-// Mock filtering for demonstration only — not access control.
-function matchesFilter(teamId: string, filter: DirectoryFilter): boolean {
-  if (filter === "myTeam") return teamId === mockCurrentTeamId;
-  if (filter === "otherTeams") return teamId !== mockCurrentTeamId;
-  return true;
-}
-
-// Read-only directory: no profiles, clickable cards, or member actions.
 export function MembersDirectoryPage(): ReactElement {
   const t = useTranslations("dashboard.directory");
+  const locale = useLocale() === "ar" ? "ar" : "en";
   const searchId = useId();
-  const [filter, setFilter] = useState<DirectoryFilter>("myTeam");
   const [query, setQuery] = useState("");
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
-  const normalizedQuery = query.trim().toLocaleLowerCase();
-  const visibleMembers = directoryMembers.filter(
-    (member) =>
-      matchesFilter(member.teamId, filter) && member.name.toLocaleLowerCase().includes(normalizedQuery),
-  );
+  const normalizedQuery = query.trim().toLocaleLowerCase(locale);
+  const visibleMembers = directoryMembers
+    .filter((member) => member.name.toLocaleLowerCase(locale).includes(normalizedQuery))
+    .sort((first, second) => Number(second.isTeamLead) - Number(first.isTeamLead));
+  const selectedMember = directoryMembers.find((member) => member.id === selectedMemberId) ?? null;
 
   return (
     <div className="space-y-6">
@@ -85,23 +64,10 @@ export function MembersDirectoryPage(): ReactElement {
         />
       </div>
 
-      <div role="group" aria-label={t("filterLabel")} className="flex flex-wrap gap-2">
-        {filters.map((option) => {
-          const active = filter === option;
-          return (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={active}
-              onClick={() => setFilter(option)}
-              className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30 ${
-                active ? `${filterStyles[option].active} font-semibold` : filterStyles[option].idle
-              }`}
-            >
-              {t(`filters.${option}`)}
-            </button>
-          );
-        })}
+      <div className="flex">
+        <span className="inline-flex items-center rounded-full bg-[var(--dashboard-blue-bg)] px-4 py-1.5 text-sm font-medium text-[var(--dashboard-blue-text)]">
+          {t("myTeam")}
+        </span>
       </div>
 
       <p role="status" className="sr-only">
@@ -116,28 +82,85 @@ export function MembersDirectoryPage(): ReactElement {
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {visibleMembers.map((member) => {
             const tone = memberTones[directoryMembers.indexOf(member) % memberTones.length];
+            const role = member.isTeamLead ? t("teamLead") : member.role[locale];
+            const cardTone = member.isTeamLead
+              ? "border-gdg-blue/60 bg-[var(--dashboard-blue-bg)]/20"
+              : "border-border bg-surface";
+
             return (
-              <li
-                key={member.id}
-                className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-4"
-              >
-                <span
-                  aria-hidden="true"
-                  className={`flex size-16 shrink-0 items-center justify-center rounded-full text-xl font-semibold ${tone}`}
+              <li key={member.id} className="h-full">
+                <article
+                  className={`relative flex h-full min-h-[250px] flex-col rounded-2xl border p-5 transition-colors hover:border-gdg-blue/50 hover:bg-[var(--dashboard-blue-bg)]/20 ${cardTone}`}
                 >
-                  {member.initials}
-                </span>
-                <div className="flex min-w-0 flex-col items-start gap-1.5">
-                  <h2 className="w-full truncate text-base font-semibold text-foreground">{member.name}</h2>
-                  <TaskBadge className={`${PILL_SHAPE} max-w-full py-0.5 ${tone}`}>
-                    <span className="truncate">{member.role}</span>
-                  </TaskBadge>
-                  <p className="w-full truncate text-xs text-muted">{member.team}</p>
-                </div>
+                  <button
+                    type="button"
+                    aria-label={t("openProfile", { name: member.name })}
+                    onClick={() => setSelectedMemberId(member.id)}
+                    className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gdg-blue"
+                  />
+
+                  <div className="pointer-events-none relative z-10 flex items-start gap-3 pe-7">
+                    <span
+                      aria-hidden="true"
+                      className={`flex size-14 shrink-0 items-center justify-center rounded-full text-lg font-semibold ${tone}`}
+                    >
+                      {member.initials}
+                    </span>
+                    <div className="flex min-w-0 flex-col items-start gap-1.5">
+                      <h2 className="w-full truncate text-sm font-semibold text-foreground">{member.name}</h2>
+                      <TaskBadge
+                        className={`${PILL_SHAPE} max-w-full py-0.5 ${
+                          member.isTeamLead
+                            ? "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]"
+                            : tone
+                        }`}
+                      >
+                        <span className="truncate">{role}</span>
+                      </TaskBadge>
+                    </div>
+                  </div>
+
+                  <ChevronRight
+                    aria-hidden="true"
+                    className="pointer-events-none absolute end-4 top-5 z-10 size-4 text-gdg-blue rtl:rotate-180"
+                  />
+
+                  <p className="pointer-events-none relative z-10 mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-muted">
+                    {member.bio[locale]}
+                  </p>
+
+                  <a
+                    href={`tel:${member.phone.replace(/[^\d+]/g, "")}`}
+                    aria-label={t("callMember", { name: member.name })}
+                    className="relative z-20 mt-3 inline-flex w-fit items-center gap-2 rounded-sm text-sm text-muted transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"
+                  >
+                    <Phone aria-hidden="true" className="size-4 shrink-0" />
+                    <span dir="ltr">{member.phone}</span>
+                  </a>
+
+                  <div className="relative z-20 mt-auto flex items-center gap-2.5 pt-4">
+                    {socialPlatforms.map(({ key, name, icon: Icon }) => (
+                      <a
+                        key={key}
+                        href={member.socialLinks[key]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={t("socialLink", { platform: name, name: member.name })}
+                        className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-surface text-foreground transition-colors hover:border-gdg-blue/50 hover:text-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"
+                      >
+                        <Icon aria-hidden="true" className="size-4" />
+                      </a>
+                    ))}
+                  </div>
+                </article>
               </li>
             );
           })}
         </ul>
+      )}
+
+      {selectedMember && (
+        <MemberProfileDialog member={selectedMember} onClose={() => setSelectedMemberId(null)} />
       )}
     </div>
   );
