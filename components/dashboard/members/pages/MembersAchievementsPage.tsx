@@ -277,7 +277,7 @@ export function MembersAchievementsPage(): ReactElement {
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-foreground">
-                          {t(`history.entries.${entry.title}`)}
+                          {entry.title}
                         </p>
                         <p className="text-xs text-muted">{formatDate(entry.date)}</p>
                       </div>
@@ -358,7 +358,7 @@ export function MembersAchievementsPage(): ReactElement {
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-foreground">
-                        {t(`tasks.entries.${task.title}`)}
+                        {task.title}
                       </p>
                       <p className="text-xs text-muted">{formatDate(task.date)}</p>
                     </div>

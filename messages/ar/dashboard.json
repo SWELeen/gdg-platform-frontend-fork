@@ -438,34 +438,14 @@
       "empty": "لا توجد نقاط مسجلة خلال هذه الفترة.",
       "unit": "نقطة",
       "earned": "تم كسب {amount} {unit}",
-      "lost": "تم فقد {amount} {unit}",
-      "entries": {
-        "eventOrganization": "تنظيم فعالية",
-        "communityContribution": "مساهمة مجتمعية",
-        "lateSubmissionPenalty": "خصم للتأخر في التسليم",
-        "workshopAttendance": "حضور ورشة عمل",
-        "projectShowcase": "عرض مشروع",
-        "mentoringSession": "جلسة إرشاد",
-        "documentationUpdates": "تحديثات التوثيق",
-        "accessibilityReview": "مراجعة سهولة الوصول"
-      }
+      "lost": "تم فقد {amount} {unit}"
     },
     "tasks": {
       "title": "المهام المكتملة",
       "subtitle": "سجل بجميع المهام التي أكملتها.",
       "filterLabel": "تصفية المهام المكتملة حسب الفترة الزمنية",
       "empty": "لا توجد مهام مكتملة خلال هذه الفترة.",
-      "completed": "مكتملة",
-      "entries": {
-        "websiteRedesign": "إعادة تصميم الموقع",
-        "eventRegistrationPage": "صفحة التسجيل للفعالية",
-        "teamDocumentation": "توثيق الفريق",
-        "dashboardComponents": "مكونات لوحة التحكم",
-        "uiImprovements": "تحسينات واجهة المستخدم",
-        "accessibilityReview": "مراجعة سهولة الوصول",
-        "onboardingGuide": "دليل بدء الاستخدام",
-        "componentDocumentation": "توثيق المكونات"
-      }
+      "completed": "مكتملة"
     },
     "loading": "جارٍ تحميل إنجازاتك...",
     "error": {
