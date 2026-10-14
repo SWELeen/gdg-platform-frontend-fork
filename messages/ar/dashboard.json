@@ -106,7 +106,9 @@
     "viewToggleLabel": "عرض المهام",
     "boardView": "عرض اللوحة",
     "listView": "عرض القائمة",
-    "done": "تم"
+    "done": "تم",
+    "progress": "{done} من {total} مكتملة",
+    "progressLabel": "نسبة إنجاز المهام"
   },
   "memberEvents": {
     "title": "فعالياتي",

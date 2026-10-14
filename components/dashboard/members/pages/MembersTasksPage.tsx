@@ -7,6 +7,8 @@ import { LayoutGrid, List } from "lucide-react";
 
 import { MembersTasksBoard } from "@/components/dashboard/members/MembersTasksBoard";
 import { MembersTasksList } from "@/components/dashboard/members/MembersTasksList";
+import { TaskProgress } from "@/components/dashboard/members/TaskProgress";
+import { DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import { priorityKeys } from "@/components/dashboard/members/task-styles";
 import { dashboardTasks } from "@/components/dashboard/mock-data";
 import type { TaskPriority } from "@/components/dashboard/mock-data";
@@ -87,6 +89,12 @@ export function MembersTasksPage(): ReactElement {
           </div>
         )}
       </div>
+
+      {dashboardTasks.length > 0 && (
+        <div className={DASHBOARD_CARD}>
+          <TaskProgress tasks={dashboardTasks} />
+        </div>
+      )}
 
       {dashboardTasks.length > 0 && visibleTasks.length === 0 ? (
         <div

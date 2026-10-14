@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { TaskDoneMark } from "@/components/dashboard/members/TaskDoneMark";
+import { DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import {
   priorityKeys,
   priorityStyles,
@@ -18,7 +19,7 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
   const t = useTranslations("dashboard.tasks");
 
   return (
-    <div className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-gdg-gray-light sm:p-4 lg:p-5">
+    <div className={DASHBOARD_CARD}>
       <div className="hidden overflow-x-hidden md:block">
         <table className="w-full table-fixed border-collapse text-start text-sm">
           <colgroup>
@@ -29,7 +30,7 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
           </colgroup>
           <thead>
             <tr className="bg-surface-muted/60 text-start text-xs font-medium uppercase tracking-wide text-muted">
-              <th scope="col" className="rounded-s-lg py-2 ps-3 text-start">
+              <th scope="col" className="rounded-s-lg py-2.5 ps-3 text-start">
                 {t("columns.task")}
               </th>
               <th scope="col" className="py-2 text-start">
@@ -49,9 +50,9 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
               return (
                 <tr
                   key={task.id}
-                  className={`border-b border-border last:border-0 ${done ? "opacity-80" : ""}`}
+                  className={`border-b border-border transition-colors last:border-0 hover:bg-surface-muted/40 ${done ? "opacity-80" : ""}`}
                 >
-                  <td className="py-2.5 ps-3 pe-4">
+                  <td className="py-3 ps-3 pe-4">
                     <div className="flex items-center gap-2">
                       <p
                         className={`min-w-0 truncate text-sm font-medium text-foreground ${
@@ -62,15 +63,15 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
                       </p>
                       {done && <TaskDoneMark />}
                     </div>
-                    <p className="truncate text-xs text-muted">{task.description}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted">{task.description}</p>
                   </td>
-                  <td className="py-2.5 pe-4 text-foreground/70">{task.deadline}</td>
-                  <td className="py-2.5 pe-4">
+                  <td className="py-3 pe-4 text-foreground/70">{task.deadline}</td>
+                  <td className="py-3 pe-4">
                     <TaskBadge className={priorityStyles[task.priority]}>
                       {t(`priority.${priorityKeys[task.priority]}`)}
                     </TaskBadge>
                   </td>
-                  <td className="py-2.5 pe-3">
+                  <td className="py-3 pe-3">
                     <TaskBadge className={statusStyles[task.status]}>
                       {t(`status.${statusKeys[task.status]}`)}
                     </TaskBadge>
@@ -88,7 +89,7 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
           return (
             <li
               key={task.id}
-              className={`rounded-xl border border-border p-2.5 ${done ? "opacity-80" : ""}`}
+              className={`rounded-xl border border-border p-3 ${done ? "opacity-80" : ""}`}
             >
               <div className="flex items-start justify-between gap-2">
                 <p

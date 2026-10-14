@@ -106,7 +106,9 @@
     "viewToggleLabel": "Tasks view",
     "boardView": "Board view",
     "listView": "List view",
-    "done": "Done"
+    "done": "Done",
+    "progress": "{done} of {total} completed",
+    "progressLabel": "Task completion"
   },
   "memberEvents": {
     "title": "My Events",

@@ -16,7 +16,14 @@ import {
   toneColors,
   toneText,
 } from "@/components/dashboard/members/task-styles";
-import type { DashboardTask, TaskStatus } from "@/components/dashboard/mock-data";
+import type { DashboardTask, TaskPriority, TaskStatus } from "@/components/dashboard/mock-data";
+
+// Start-edge accent in the priority's tone, so urgency is visible before reading the badge.
+const priorityAccents: Record<TaskPriority, string> = {
+  High: "border-s-[var(--dashboard-red-text)]",
+  Medium: "border-s-[var(--dashboard-yellow-text)]",
+  Low: "border-s-[var(--dashboard-green-text)]",
+};
 
 const columns: { status: TaskStatus; Icon: LucideIcon }[] = [
   { status: "To Do", Icon: ListTodo },
@@ -30,13 +37,13 @@ function TaskCard({ task }: { task: DashboardTask }): ReactElement {
 
   return (
     <li
-      className={`rounded-xl border border-border bg-surface p-4 shadow-2xs transition-shadow hover:shadow-sm ${
-        done ? "opacity-80" : ""
-      }`}
+      className={`rounded-xl border border-s-4 border-border bg-surface p-4 shadow-2xs transition hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
+        priorityAccents[task.priority]
+      } ${done ? "opacity-80" : ""}`}
     >
       <div className="flex items-start justify-between gap-2">
         <h4
-          className={`text-sm font-semibold text-foreground ${done ? "line-through decoration-muted" : ""}`}
+          className={`min-w-0 text-sm font-semibold leading-snug text-foreground ${done ? "line-through decoration-muted" : ""}`}
         >
           {task.title}
         </h4>
@@ -47,7 +54,7 @@ function TaskCard({ task }: { task: DashboardTask }): ReactElement {
 
       <p className="mt-2 line-clamp-2 text-xs text-muted">{task.description}</p>
 
-      <div className="mt-3 flex items-center gap-1.5 border-t border-border/60 pt-2.5 text-[11px] text-muted">
+      <div className="mt-3 flex items-center gap-1.5 border-t border-border/60 pt-3 text-xs text-muted">
         <Calendar aria-hidden="true" className="size-3.5 shrink-0" />
         <span>{t("columns.deadline")}</span>
         <span className="font-semibold text-foreground">{task.deadline}</span>
@@ -76,7 +83,7 @@ function BoardColumn({
   return (
     <section
       aria-labelledby={headingId}
-      className="flex min-w-0 flex-col rounded-2xl border border-border bg-surface-muted/30 p-4"
+      className="flex min-w-0 flex-col rounded-2xl bg-surface-muted/40 p-4 ring-1 ring-border"
     >
       <div className="flex items-center justify-between border-b border-border/80 pb-3">
         <div className="flex items-center gap-2">
@@ -86,7 +93,7 @@ function BoardColumn({
           </h3>
         </div>
         <span
-          className={`flex size-5 items-center justify-center rounded-full text-[11px] font-bold ${toneColors[statusTones[status]]}`}
+          className={`flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-xs font-bold ${toneColors[statusTones[status]]}`}
         >
           {tasks.length}
         </span>

@@ -18,6 +18,9 @@ import { IconChecklist } from "@/components/dashboard/members/nav-icons";
 import type { IconProps } from "@/components/dashboard/members/nav-icons";
 import { MembersUserInfo } from "@/components/dashboard/members/MembersUserInfo";
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
+import { TaskProgress } from "@/components/dashboard/members/TaskProgress";
+import { ViewAllBadge } from "@/components/dashboard/members/ViewAllBadge";
+import { CARD_TITLE, DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import {
   priorityKeys,
   priorityStyles,
@@ -109,15 +112,6 @@ function IconBell({ className }: IconProps): ReactElement {
   );
 }
 
-function IconArrowUpRight({ className }: IconProps): ReactElement {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M7 17 17 7" />
-      <path d="M9 7h8v8" />
-    </svg>
-  );
-}
-
 function IconCheck({ className }: IconProps): ReactElement {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
@@ -136,46 +130,6 @@ function Checkbox({ checked }: { checked: boolean }): ReactElement {
     >
       {checked && <IconCheck className="h-3.5 w-3.5" />}
     </span>
-  );
-}
-
-// With `href`, the badge is a real (locale-aware) link; without it, it stays a button.
-function ArrowBadge({
-  label,
-  toneClassName,
-  iconClassName,
-  sizeClassName = "h-8 w-8 sm:h-9 sm:w-9",
-  href,
-}: {
-  label: string;
-  toneClassName: string;
-  iconClassName?: string;
-  sizeClassName?: string;
-  href?: string;
-}): ReactElement {
-  const className = `inline-flex shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-md ${sizeClassName} ${toneClassName}`;
-  const icon = <IconArrowUpRight className={`rtl:-scale-x-100 ${iconClassName ?? "h-4 w-4"}`} />;
-
-  if (href) {
-    return (
-      <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
-        <Link href={href} aria-label={label} title={label} className={className}>
-          {icon}
-        </Link>
-      </motion.span>
-    );
-  }
-
-  return (
-    <motion.button
-      type="button"
-      aria-label={label}
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.92 }}
-      className={className}
-    >
-      {icon}
-    </motion.button>
   );
 }
 
@@ -324,10 +278,10 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
     <motion.section
       variants={itemVariants}
       aria-labelledby="my-tasks-heading"
-      className="rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4 lg:p-5"
+      className={DASHBOARD_CARD}
     >
-      <div className="mb-3 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
-        <h2 id="my-tasks-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
+      <div className="mb-4 flex flex-col gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
+        <h2 id="my-tasks-heading" className={CARD_TITLE}>
           <IconChecklist className="h-5 w-5 shrink-0" />
           {t("title")}
         </h2>
@@ -341,8 +295,8 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-2.5 py-1 text-sm font-medium transition-colors ${
-                  isActive ? `border-transparent ${toneColors[filterTones[filter]]}` : "border-border bg-surface text-foreground"
+                className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/40 ${
+                  isActive ? `border-transparent ${toneColors[filterTones[filter]]}` : "border-border bg-surface text-foreground hover:bg-surface-muted"
                 }`}
               >
                 {t("filterWithCount", { label: t(`filters.${filterKeys[filter]}`), count: counts[filter] })}
@@ -354,17 +308,19 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
               end, on whichever line the last filter pill wraps onto. Replaced by the
               separate right-aligned copy below from `sm:` up. */}
           <div className="ms-auto lg:hidden">
-            <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
+            <ViewAllBadge href={TASKS_HREF} label={t("viewAll")} tone="blue" />
           </div>
         </div>
 
         <div className="hidden lg:flex lg:justify-end">
-          <ArrowBadge label={t("viewAll")} href={TASKS_HREF} toneClassName="bg-[var(--dashboard-blue-bg)]" iconClassName="h-4 w-4 text-gdg-blue" />
+          <ViewAllBadge href={TASKS_HREF} label={t("viewAll")} tone="blue" />
         </div>
       </div>
 
+      <TaskProgress tasks={tasks} className="mb-4" />
+
       {filteredTasks.length === 0 ? (
-        <p className="rounded-xl bg-surface-muted/60 px-4 py-5 text-center text-sm text-muted">
+        <p className="rounded-xl border border-dashed border-border bg-surface-muted/40 px-4 py-6 text-center text-sm text-muted">
           {t("empty")}
         </p>
       ) : (
@@ -372,15 +328,15 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
           <div className="hidden overflow-x-hidden md:block">
             <table className="w-full table-fixed border-collapse text-start text-sm">
               <colgroup>
-                <col className="w-10" />
-                <col className="w-[40%]" />
+                <col className="w-12" />
+                <col />
                 <col className="w-[18%]" />
-                <col className="w-[16%]" />
-                <col className="w-[16%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
               </colgroup>
               <thead>
                 <tr className="bg-surface-muted/60 text-start text-xs font-medium uppercase tracking-wide text-muted">
-                  <th scope="col" className="rounded-s-lg py-2 ps-3" />
+                  <th scope="col" className="rounded-s-lg py-2.5 ps-3" />
                   <th scope="col" className="py-2 text-start">
                     {t("columns.task")}
                   </th>
@@ -402,20 +358,22 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.05, duration: 0.3 }}
-                    className="border-b border-border last:border-0"
+                    className="border-b border-border transition-colors last:border-0 hover:bg-surface-muted/40"
                   >
-                    <td className="py-2.5 ps-1">
+                    <td className="py-3 ps-3">
                       <Checkbox checked={task.status === "Complete"} />
                     </td>
-                    <td className="py-2.5 pe-4">
-                      <p className="truncate text-sm font-medium text-foreground">{task.title}</p>
-                      <p className="truncate text-xs text-muted">{task.description}</p>
+                    <td className="py-3 pe-4">
+                      <p className={`truncate text-sm font-medium text-foreground ${task.status === "Complete" ? "text-muted line-through decoration-muted" : ""}`}>
+                        {task.title}
+                      </p>
+                      <p className="mt-0.5 truncate text-xs text-muted">{task.description}</p>
                     </td>
-                    <td className="py-2.5 pe-4 text-foreground/70">{task.deadline}</td>
-                    <td className="py-2.5 pe-4">
+                    <td className="py-3 pe-4 text-foreground/70">{task.deadline}</td>
+                    <td className="py-3 pe-4">
                       <TaskBadge className={priorityStyles[task.priority]}>{t(`priority.${priorityKeys[task.priority]}`)}</TaskBadge>
                     </td>
-                    <td className="py-2.5">
+                    <td className="py-3">
                       <TaskBadge className={statusStyles[task.status]}>{t(`status.${statusKeys[task.status]}`)}</TaskBadge>
                     </td>
                   </motion.tr>
@@ -431,12 +389,14 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.3 }}
-                className="rounded-xl border border-border p-2.5"
+                className="rounded-xl border border-border p-3"
               >
                 <div className="flex items-start gap-3">
                   <Checkbox checked={task.status === "Complete"} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-foreground">{task.title}</p>
+                    <p className={`truncate text-sm font-medium text-foreground ${task.status === "Complete" ? "text-muted line-through decoration-muted" : ""}`}>
+                      {task.title}
+                    </p>
                     <p className="mt-0.5 text-xs text-muted">{task.description}</p>
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <span className="text-xs text-muted">{task.deadline}</span>
@@ -451,7 +411,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
         </>
       )}
 
-      <div className="mt-3 flex justify-center">
+      <div className="mt-4 flex justify-center">
         <PaginationDots count={3} activeIndex={0} />
       </div>
     </motion.section>

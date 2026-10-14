@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useFormatter, useTranslations } from "next-intl";
-import { ArrowRight, ArrowUpRight, Calendar, Clock, MapPin } from "lucide-react";
+import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { CARD_HEADER, CARD_TITLE, DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
+import { ViewAllBadge } from "@/components/dashboard/members/ViewAllBadge";
 import { buildGoogleCalendarUrl } from "@/lib/dashboard/calendar-link";
 import { isUpcomingEventDate, parseEventDate, parseEventDateTime, toSaudiIsoDateTime } from "@/lib/dashboard/event-format";
 import { getPublishedEvents } from "@/lib/events/repository";
@@ -58,42 +60,34 @@ export function DashboardUpcomingEvents() {
   return (
     <section
       aria-labelledby="dashboard-upcoming-heading"
-      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4"
+      className={`flex flex-col ${DASHBOARD_CARD}`}
     >
-      <div className="mb-3 flex items-center justify-between">
-        <h2 id="dashboard-upcoming-heading" className="flex items-center gap-2 text-xl font-bold text-foreground">
+      <div className={CARD_HEADER}>
+        <h2 id="dashboard-upcoming-heading" className={CARD_TITLE}>
           <Calendar className="h-5 w-5 shrink-0" aria-hidden="true" />
           {t("title")}
         </h2>
-        <motion.span whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} className="inline-flex shrink-0 rounded-full">
-          <Link
-            href={UPCOMING_EVENTS_PATH}
-            aria-label={t("viewAll")}
-            title={t("viewAll")}
-             className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--dashboard-tile-yellow-bg)] transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue sm:h-8 sm:w-8"
-          >
-          <ArrowUpRight className="h-3.5 w-3.5 text-[var(--dashboard-yellow-text)] rtl:-scale-x-100" />
-          </Link>
-        </motion.span>
+        <ViewAllBadge href={UPCOMING_EVENTS_PATH} label={t("viewAll")} tone="yellow" />
       </div>
 
       {state.status === "loading" ? (
         <div
-          className="aspect-[16/7] animate-pulse rounded-xl bg-surface-muted motion-reduce:animate-none"
+          className="aspect-[16/7] animate-pulse rounded-2xl bg-surface-muted motion-reduce:animate-none lg:aspect-auto lg:flex-1"
           aria-busy="true"
           aria-label={t("loading")}
         />
       ) : !event ? (
-        <div className="flex flex-1 items-center justify-center rounded-xl bg-surface-muted/40 px-4 py-10 text-center">
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-surface-muted/40 px-4 py-10 text-center">
+          <Calendar className="size-6 text-muted" aria-hidden="true" />
           <p className="text-sm text-muted">{state.status === "error" ? t("error") : t("empty")}</p>
         </div>
       ) : (
         <>
-           <div className="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-gradient-to-br from-[var(--event-card-start)] via-gdg-dark to-black">
+           <div className="group relative flex flex-1 flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--event-card-start)] via-gdg-dark to-black">
             {event.imageUrl ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- event image URL of unknown origin; next/image would need a remote pattern. */}
-                <img src={event.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={event.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" aria-hidden="true" />
               </>
             ) : (
@@ -117,7 +111,7 @@ export function DashboardUpcomingEvents() {
                   {/* Stretched link: the whole banner opens this event; the calendar link sits above it. */}
                   <Link
                     href={`${UPCOMING_EVENTS_PATH}/${event.id}`}
-                    className="after:absolute after:inset-0 after:rounded-xl hover:underline focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-gdg-yellow-accent"
+                    className="after:absolute after:inset-0 after:rounded-2xl hover:underline focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-gdg-yellow-accent"
                   >
                     {event.title}
                   </Link>

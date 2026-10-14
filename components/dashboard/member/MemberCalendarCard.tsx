@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useFormatter, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import { toIsoDate } from "@/lib/dashboard/event-format";
 import { useClientNow } from "@/lib/dashboard/use-client-now";
 import { useDemoRegistrationChanges } from "@/lib/user-registrations/demo-state";
@@ -67,7 +68,7 @@ export function MemberCalendarCard() {
   if (now === null) {
     return (
       <div
-        className="h-[25rem] animate-pulse rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border motion-reduce:animate-none sm:p-4"
+        className={`h-[25rem] animate-pulse motion-reduce:animate-none ${DASHBOARD_CARD}`}
         aria-busy="true"
         aria-label={t("loading")}
       />
@@ -105,9 +106,9 @@ export function MemberCalendarCard() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex flex-col rounded-2xl bg-surface p-3 shadow-sm ring-1 ring-border sm:p-4"
+      className={`flex flex-col ${DASHBOARD_CARD}`}
     >
-      <div className="mb-3 flex items-center justify-between gap-2">
+      <div className="mb-4 flex items-center justify-between gap-2">
         <button
           type="button"
           aria-label={t("previousMonth")}
