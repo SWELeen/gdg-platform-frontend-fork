@@ -8,6 +8,7 @@ const statusClasses: Record<UserRegistrationStatus, string> = {
   declined: "border-rose-500/20 bg-rose-500/10 text-rose-800 dark:text-rose-300",
   attended: "border-emerald-500/20 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
   "not-attended": "border-slate-500/20 bg-slate-500/10 text-slate-700 dark:text-slate-300",
+  cancelled: "border-slate-500/20 bg-slate-500/10 text-slate-700 dark:text-slate-300",
 };
 
 export function RegistrationStatusBadge({

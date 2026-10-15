@@ -1,1305 +1,983 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
+import {
+  BookOpen,
+  Building2,
+  Hash,
+  ImagePlus,
+  Link2,
+  Mail,
+  MapPin,
+  Plus,
+  Trash2,
+  UserRound,
+  X,
+} from "lucide-react";
 import type { CommitteeEvent, EventType } from "../shared/types";
+import { ConfirmModal } from "../shared/ConfirmModal";
+import { useDialog } from "../shared/useDialog";
+import { formatEventDate, formatEventTime, toIsoDate } from "@/lib/dashboard/event-format";
+import { EventPreviewModal } from "./EventPreviewModal";
+import { EventPublishedModal } from "./EventPublishedModal";
+import {
+  choiceQuestionTypes,
+  questionTypeKeys,
+  questionTypes,
+  requiredRegistrantFields,
+  type DraftQuestion,
+} from "./event-form-config";
 
 const styles = {
-  page: "min-h-screen w-full bg-[#f5f7fb] px-3 py-5 text-[#1f2937] md:px-6 md:py-10",
-  modalOverlay: "fixed inset-0 z-[1000] flex items-center justify-center overflow-y-auto bg-slate-900/65 p-4 backdrop-blur-sm",
-  modalCard: "relative max-h-[calc(100vh-2rem)] overflow-y-auto",
-  modalClose: "absolute end-5 top-5 z-[1] grid size-9 place-items-center rounded-[10px] border border-gray-300 bg-white text-gray-700",
-  requiredBadge: "ms-2 inline-block rounded-full bg-red-100 px-2 py-[3px] text-[11px] font-bold text-red-700",
-  card: "mx-auto w-full max-w-[900px] overflow-hidden rounded-[14px] bg-white px-[22px] py-[22px] shadow-[0_4px_20px_rgba(0,0,0,0.08)] sm:px-12 sm:py-10",
-  header: "bg-gradient-to-br from-[#4285f4] via-[#ea4335] to-[#fbbc04] px-6 py-5 text-white sm:px-[30px]",
-  title: "m-0 text-[26px] font-bold text-[#202124] sm:text-[32px]",
-  subtitle: "mt-2 text-[15px] text-[#00050f]",
-  form: "flex flex-col gap-5",
-  sectionTitle: "mb-[5px] mt-[25px] text-[21px] font-bold text-[#202124]",
-  colorGroup: "mb-7 rounded-sm border-s-4 ps-[14px] max-sm:p-[18px]",
-  orangeGroup: "border-s-[#f5a623]",
-  redGroup: "border-s-[#a71b09]",
-  greenGroup: "border-s-[#45a85b]",
-  blueGroup: "border-s-[#4285f4]",
-  row: "mb-1 grid grid-cols-1 gap-6 md:grid-cols-2",
-  field: "mb-[22px] flex flex-col gap-2",
-  label: "mb-0.5 text-sm font-semibold text-gray-700",
-  input: "box-border min-h-[46px] w-full rounded-[10px] border border-gray-300 bg-white px-3.5 py-3 text-sm text-gray-800 transition placeholder:text-gray-400 focus:border-[#4285f4] focus:outline-none focus:ring-[3px] focus:ring-blue-500/10",
-  textarea: "box-border min-h-[110px] w-full resize-y rounded-[10px] border border-gray-300 bg-white px-3.5 py-3 font-[inherit] text-sm text-gray-800 transition placeholder:text-gray-400 focus:border-[#4285f4] focus:outline-none focus:ring-[3px] focus:ring-blue-500/10",
-  uploadBox: "relative flex min-h-[180px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-blue-300 bg-white p-[30px] text-center transition hover:border-[#4285f4] hover:bg-blue-50",
-  UploadIcon: "size-[34px] text-[#4285f4]",
-  questionsSection: "flex flex-col gap-[15px]",
-  questionForm: "rounded-2xl border border-gray-200 bg-neutral-50 p-6",
-  questionTitle: "m-0 mb-5 text-lg font-bold text-[#202124]",
-  questionHelp: "-mt-1.5 mb-1 text-[13px] leading-[1.5] text-gray-600",
-  questionItem: "rounded-[14px] border border-gray-200 bg-white p-[18px]",
-  questionOptions: "mt-2 flex flex-col gap-6",
-  questionOption: "mt-2 flex items-center gap-2 text-sm text-gray-700",
-  optionRow: "mb-2.5 flex items-center gap-2.5 max-sm:flex-col max-sm:items-stretch",
-  addQuestion: "w-fit border-0 bg-transparent py-2 text-sm font-semibold text-[#4285f4] hover:underline",
-  addOption: "w-fit rounded-lg border border-[#4285f4] bg-white px-3.5 py-[9px] text-[13px] font-semibold text-[#4285f4] hover:bg-blue-50",
-  removeOption: "rounded-lg border border-red-300 bg-white px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50",
-  questionActions: "mt-5 flex justify-end gap-2.5 max-sm:flex-col",
-  cancelQuestion: "rounded-[9px] border border-gray-300 bg-white px-[18px] py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50",
-  addQuestionButton: "rounded-[9px] bg-[#4285f4] px-[18px] py-2.5 text-sm font-semibold text-white hover:bg-[#3367d6]",
-  actions: "mt-[30px] flex items-center justify-end gap-3 border-t border-gray-200 pt-[25px] max-sm:flex-col-reverse max-sm:items-stretch",
-  cancelButton: "min-w-[120px] rounded-[10px] border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 max-sm:w-full",
-  previewButton: "min-w-[120px] rounded-[10px] border border-[#4285f4] bg-white px-5 py-3 text-sm font-semibold text-[#4285f4] hover:bg-blue-50 max-sm:w-full",
-  publishButton: "min-w-[120px] rounded-[10px] bg-[#4285f4] px-5 py-3 text-sm font-semibold text-white hover:bg-[#3367d6] max-sm:w-full",
-  errorMessage: "mt-2.5 rounded-xl border border-red-200 bg-red-50 px-[18px] py-4 text-sm leading-[1.6] text-red-800 [&_strong]:mb-2 [&_strong]:block [&_strong]:text-[15px] [&_ul]:m-0 [&_ul]:ps-5 [&_li]:mb-1 [&_li:last-child]:mb-0",
-  successMessage: "mt-2.5 rounded-xl border border-green-200 bg-green-50 px-[18px] py-4 text-sm leading-[1.6] text-green-700",
-  previewOverlay: "fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-slate-900/60 p-3 backdrop-blur-sm sm:p-[25px]",
-  previewModal: "flex max-h-[95vh] w-full max-w-[800px] flex-col overflow-hidden rounded-2xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:max-h-[90vh] sm:rounded-[20px]",
-  previewHeader: "flex items-center justify-between border-b border-gray-200 px-4 py-4 sm:px-6 sm:py-5 [&_h2]:m-0 [&_h2]:text-[22px] [&_h2]:text-[#202124]",
-  closePreview: "flex size-9 items-center justify-center rounded-full bg-gray-100 text-2xl leading-none text-gray-700 hover:bg-gray-200",
-  previewContent: "overflow-y-auto p-[18px] sm:p-[25px] [&_h3]:mb-4 [&_h3]:mt-0 [&_h3]:text-lg [&_h3]:text-[#202124] [&_h3:not(:first-child)]:mt-7 [&_img]:mb-[25px] [&_img]:block [&_img]:max-h-[300px] [&_img]:w-full [&_img]:rounded-xl [&_img]:object-cover",
-  previewInfo: "mb-5 flex flex-col gap-2 [&_p]:m-0 [&_p]:rounded-lg [&_p]:bg-[#f8f9fa] [&_p]:px-[13px] [&_p]:py-[11px] [&_p]:text-sm [&_p]:leading-[1.5] [&_p]:text-gray-700 [&_strong]:font-semibold [&_strong]:text-[#202124] [&_a]:font-semibold [&_a]:text-[#4285f4] [&_a]:no-underline [&_a:hover]:underline",
-  previewQuestions: "mt-[25px]",
-  previewQuestion: "mb-3.5 rounded-xl border border-gray-200 bg-white p-4 [&_strong]:mb-2.5 [&_strong]:block [&_strong]:text-sm [&_strong]:text-[#202124]",
-  previewOptions: "mt-2 flex flex-col gap-1.5 text-sm text-gray-600",
-  previewActions: "flex justify-end gap-3 border-t border-gray-200 bg-white p-4 sm:px-6 sm:py-[18px] max-sm:flex-col",
+  overlay: "fixed inset-0 z-[1000] flex items-start justify-center overflow-y-auto bg-slate-900/65 p-3 backdrop-blur-sm sm:items-center sm:p-6",
+  page: "min-h-screen w-full bg-surface-muted px-3 py-5 md:px-6 md:py-10",
+  card: "relative mx-auto w-full max-w-[900px] overflow-hidden rounded-[14px] bg-surface text-foreground shadow-[0_4px_20px_rgba(0,0,0,0.08)] outline-none",
+  modalCard: "max-h-[calc(100vh-1.5rem)] overflow-y-auto sm:max-h-[calc(100vh-3rem)]",
+  header: "relative bg-gradient-to-br from-[#4285f4] via-[#ea4335] to-[#fbbc04] px-6 py-5 pe-16 text-white sm:px-10",
+  close: "absolute end-4 top-4 z-[1] grid size-9 place-items-center rounded-[10px] bg-white/90 text-gray-700 transition hover:bg-white",
+  body: "px-5 py-6 sm:px-10 sm:py-8",
+  sectionTitle: "mb-4 text-lg font-bold text-foreground sm:text-xl",
+  colorGroup: "mb-7 border-s-4 ps-4",
+  row: "grid grid-cols-1 gap-x-6 md:grid-cols-2",
+  field: "mb-5 flex min-w-0 flex-col gap-1.5",
+  label: "text-sm font-semibold text-foreground/85",
+  input: "box-border min-h-[44px] w-full rounded-[10px] border bg-surface px-3.5 py-2.5 text-sm text-foreground transition placeholder:text-muted focus:outline-none focus:ring-[3px] disabled:cursor-not-allowed disabled:bg-surface-muted/60",
+  inputOk: "border-border focus:border-gdg-blue focus:ring-gdg-blue/15",
+  inputError: "border-red-500 focus:border-red-500 focus:ring-red-500/15",
+  error: "text-xs font-medium text-red-600 dark:text-red-400",
+  iconInput: "pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted",
+  outlineButton: "min-w-[120px] rounded-[10px] border px-5 py-2.5 text-sm font-semibold transition max-sm:w-full",
+  primaryButton: "min-w-[120px] rounded-[10px] bg-gdg-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gdg-blue/90 max-sm:w-full",
 } as const;
 
-type Question = {
-  type: string;
-  text: string;
-  options?: string[];
-  required: true;
-};
+type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated">;
 
-const requiredRegistrantFields = [
-  "Full name",
-  "University ID",
-  "College",
-  "Major",
-  "Phone number",
-  "Email address",
-  "GDG on Campus membership",
+type FieldName =
+  | "title"
+  | "description"
+  | "date"
+  | "time"
+  | "location"
+  | "mapsLink"
+  | "capacity"
+  | "registrationDeadline"
+  | "image";
+
+// Validation order = visual order, so the first error is also the first field focused.
+const fieldOrder: FieldName[] = [
+  "title",
+  "description",
+  "date",
+  "time",
+  "location",
+  "mapsLink",
+  "capacity",
+  "registrationDeadline",
+  "image",
 ];
 
-type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated">;
+const eventTypes: EventType[] = ["Workshop", "Conference", "Talk", "Panel", "Hackathon"];
+
+interface FormValues {
+  title: string;
+  type: EventType;
+  description: string;
+  speakers: string;
+  date: string;
+  time: string;
+  location: string;
+  mapsLink: string;
+  capacity: string;
+  registrationDeadline: string;
+  requirements: string;
+}
+
+const emptyValues: FormValues = {
+  title: "",
+  type: "Workshop",
+  description: "",
+  speakers: "",
+  date: "",
+  time: "",
+  location: "",
+  mapsLink: "",
+  capacity: "",
+  registrationDeadline: "",
+  requirements: "",
+};
+
+const fieldId = (name: string) => `create-event-${name}`;
 
 interface CreateEventFormProps {
   isModal?: boolean;
   onClose?: () => void;
-  onCreate?: (event: CreateEventInput) => void;
+  /** Adds the event; returning its id enables the "View Event" action. */
+  onCreate?: (event: CreateEventInput) => string | void;
+  onViewEvent?: (eventId: string) => void;
 }
 
 export function CreateEventModal({
   isOpen,
   onClose,
   onCreate,
+  onViewEvent,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (event: CreateEventInput) => void;
+  onCreate: (event: CreateEventInput) => string | void;
+  onViewEvent?: (eventId: string) => void;
 }) {
   if (!isOpen) return null;
-  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} />;
+  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} onViewEvent={onViewEvent} />;
 }
 
-function CreateEventForm({ isModal = false, onClose, onCreate }: CreateEventFormProps) {
+function Field({
+  name,
+  label,
+  required,
+  optional,
+  error,
+  children,
+}: {
+  name: string;
+  label: string;
+  required?: boolean;
+  optional?: string;
+  error?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className={styles.field}>
+      <label htmlFor={fieldId(name)} className={styles.label}>
+        {label}
+        {required && (
+          <span className="text-red-600" aria-hidden="true">
+            {" "}*
+          </span>
+        )}
+        {optional && <span className="ms-1 text-xs font-normal text-muted">{optional}</span>}
+      </label>
+      {children}
+      {error && (
+        <p id={`${fieldId(name)}-error`} className={styles.error}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventType, setEventType] = useState<EventType>("Workshop");
-  const [eventDescription, setEventDescription] = useState("");
-  const [eventSpeakers, setEventSpeakers] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [eventTime, setEventTime] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventMapsLink, setEventMapsLink] = useState("");
-  const [eventCapacity, setEventCapacity] = useState("");
-  const [registrationDeadline, setRegistrationDeadline] = useState("");
-  const [eventRequirements, setEventRequirements] = useState("");
-  const [eventImage, setEventImage] = useState<File | null>(null);
+function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: CreateEventFormProps) {
+  const t = useTranslations("dashboard.leader.createEvent");
+  const tf = useTranslations("dashboard.leader.eventForm");
 
-  
+  const [values, setValues] = useState<FormValues>(emptyValues);
+  const [image, setImage] = useState<{ file: File; url: string } | null>(null);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [questions, setQuestions] = useState<DraftQuestion[]>([]);
 
   const [showQuestionForm, setShowQuestionForm] = useState(false);
   const [questionType, setQuestionType] = useState("");
   const [questionText, setQuestionText] = useState("");
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [options, setOptions] = useState<string[]>([""]);
+  const [questionOptions, setQuestionOptions] = useState<string[]>(["", ""]);
+  const [questionError, setQuestionError] = useState("");
 
-
+  const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const [publishedEvent, setPublishedEvent] = useState<{ id: string | null; title: string } | null>(null);
+  const [today] = useState(() => toIsoDate(new Date()));
 
+  // The selected image's blob URL is revoked when replaced or when the form unmounts,
+  // except after publishing, when the stored event keeps using it for this session.
+  const imageUrlRef = useRef<string | null>(null);
+  const handedOffImageUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    return () => {
+      const url = imageUrlRef.current;
+      if (url && url !== handedOffImageUrlRef.current) URL.revokeObjectURL(url);
+    };
+  }, []);
 
-  const choiceQuestionTypes = [
-    "single-choice",
-    "multiple-choice",
-    "checkboxes",
-  ];
+  const isDirty =
+    questions.length > 0 ||
+    image !== null ||
+    (Object.keys(emptyValues) as (keyof FormValues)[]).some((key) => values[key] !== emptyValues[key]);
+
+  const requestClose = () => {
+    if (publishedEvent) {
+      onClose?.();
+    } else if (isDirty) {
+      setConfirmDiscard(true);
+    } else {
+      onClose?.();
+    }
+  };
+
+  // Escape on the form: close the discard prompt if it is open, otherwise ask before
+  // discarding. Nested preview/success dialogs register above this one and win.
+  const dialogRef = useDialog<HTMLElement>(() => {
+    if (confirmDiscard) setConfirmDiscard(false);
+    else requestClose();
+  }, isModal);
+
+  const validate = (current: FormValues, currentImage: typeof image) => {
+    const next: Partial<Record<FieldName, string>> = {};
+    const title = current.title.trim();
+    if (!title) next.title = tf("errors.eventTitleRequired");
+    else if (title.length < 3) next.title = tf("errors.titleMin");
+    else if (title.length > 150) next.title = tf("errors.titleMax");
+
+    if (!current.description.trim()) next.description = t("errors.descriptionRequired");
+
+    if (!current.date) next.date = tf("errors.dateRequired");
+    else if (current.date < today) next.date = t("errors.datePast");
+
+    if (!current.time) next.time = tf("errors.timeRequired");
+
+    const location = current.location.trim();
+    if (!location) next.location = tf("errors.locationRequired");
+    else if (location.length < 3) next.location = tf("errors.locationMin");
+    else if (location.length > 120) next.location = tf("errors.locationMax");
+
+    const mapsLink = current.mapsLink.trim();
+    if (mapsLink) {
+      let valid = false;
+      try {
+        const url = new URL(mapsLink);
+        valid = url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        valid = false;
+      }
+      if (!valid) next.mapsLink = t("errors.mapsLinkInvalid");
+    }
+
+    if (!current.capacity.trim()) next.capacity = t("errors.capacityRequired");
+    else {
+      const capacity = Number(current.capacity);
+      if (!Number.isFinite(capacity)) next.capacity = tf("errors.capacityNumber");
+      else if (!Number.isInteger(capacity)) next.capacity = tf("errors.capacityInteger");
+      else if (capacity < 1) next.capacity = tf("errors.capacityMin");
+      else if (capacity > 5000) next.capacity = tf("errors.capacityMax");
+    }
+
+    if (!current.registrationDeadline) next.registrationDeadline = t("errors.deadlineRequired");
+    else if (current.registrationDeadline < today) next.registrationDeadline = t("errors.deadlinePast");
+    else if (current.date && current.registrationDeadline > current.date) {
+      next.registrationDeadline = t("errors.deadlineAfterEvent");
+    }
+
+    if (!currentImage) next.image = t("errors.imageRequired");
+    return next;
+  };
+
+  const setValue = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
+    const nextValues = { ...values, [key]: value };
+    setValues(nextValues);
+    // After the first submit attempt, errors update live as fields are corrected.
+    if (submitAttempted) setErrors(validate(nextValues, image));
+  };
+
+  const selectImage = (file: File | undefined | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setErrors((current) => ({ ...current, image: t("errors.imageType") }));
+      return;
+    }
+    if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    const url = URL.createObjectURL(file);
+    imageUrlRef.current = url;
+    const nextImage = { file, url };
+    setImage(nextImage);
+    setErrors((current) => (submitAttempted ? validate(values, nextImage) : { ...current, image: undefined }));
+  };
+
+  const removeImage = () => {
+    if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    imageUrlRef.current = null;
+    setImage(null);
+    if (submitAttempted) setErrors(validate(values, null));
+  };
+
+  const validateAndFocus = () => {
+    setSubmitAttempted(true);
+    const nextErrors = validate(values, image);
+    setErrors(nextErrors);
+    const firstInvalid = fieldOrder.find((name) => nextErrors[name]);
+    if (firstInvalid) {
+      document.getElementById(fieldId(firstInvalid))?.focus();
+      return false;
+    }
+    return true;
+  };
 
   const resetQuestionForm = () => {
     setQuestionType("");
     setQuestionText("");
-    setOptions([""]);
+    setQuestionOptions(["", ""]);
+    setQuestionError("");
     setShowQuestionForm(false);
   };
 
-  
-
   const handleAddQuestion = () => {
-    setErrors([]);
-
     if (!questionType) {
-      alert("Please select a question type.");
+      setQuestionError(t("questions.errors.type"));
       return;
     }
-
     if (!questionText.trim()) {
-      alert("Please enter your question.");
+      setQuestionError(t("questions.errors.text"));
       return;
     }
 
-    let questionOptions: string[] | undefined;
-
+    let options: string[] | undefined;
     if (questionType === "yes-no") {
-      questionOptions = ["Yes", "No"];
+      options = ["Yes", "No"];
     } else if (choiceQuestionTypes.includes(questionType)) {
-      questionOptions = options
-        .map((option) => option.trim())
-        .filter((option) => option !== "");
-
-      if (questionOptions.length < 2) {
-        alert("Please add at least two options.");
+      options = questionOptions.map((option) => option.trim()).filter(Boolean);
+      if (options.length < 2) {
+        setQuestionError(t("questions.errors.options"));
         return;
       }
     }
 
-    const newQuestion: Question = {
-      type: questionType,
-      text: questionText.trim(),
-      required: true,
-      ...(questionOptions ? { options: questionOptions } : {}),
-    };
-
-    setQuestions((prev) => [...prev, newQuestion]);
-
+    setQuestions((current) => [
+      ...current,
+      {
+        id: `registration-question-${Date.now()}`,
+        type: questionType,
+        text: questionText.trim(),
+        required: true,
+        ...(options ? { options } : {}),
+      },
+    ]);
     resetQuestionForm();
   };
 
-
-  const handleRemoveQuestion = (indexToRemove: number) => {
-    setQuestions((prev) =>
-      prev.filter((_, index) => index !== indexToRemove)
-    );
-  };
-
-
-  const validateForm = () => {
-    const newErrors: string[] = [];
-
-    if (!eventTitle.trim()) {
-      newErrors.push("Event name is required.");
-    }
-
-    if (!eventDescription.trim()) {
-      newErrors.push("Event description is required.");
-    }
-
-    if (!eventDate) {
-      newErrors.push("Event date is required.");
-    }
-
-    if (!eventTime) {
-      newErrors.push("Event time is required.");
-    }
-
-    if (!eventLocation.trim()) {
-      newErrors.push("Event location is required.");
-    }
-
-    if (!eventCapacity) {
-      newErrors.push("Event capacity is required.");
-    } else if (Number(eventCapacity) <= 0) {
-      newErrors.push("Event capacity must be greater than 0.");
-    }
-
-    if (!registrationDeadline) {
-      newErrors.push("Registration deadline is required.");
-    }
-
-    if (!eventImage) {
-      newErrors.push("Event image is required.");
-    }
-
-    if (
-      eventMapsLink.trim() &&
-      !eventMapsLink.startsWith("http://") &&
-      !eventMapsLink.startsWith("https://")
-    ) {
-      newErrors.push("Google Maps link must be a valid URL.");
-    }
-
-    if (
-      registrationDeadline &&
-      eventDate &&
-      registrationDeadline > eventDate
-    ) {
-      newErrors.push(
-        "Registration deadline cannot be after the event date."
-      );
-    }
-
-    setErrors(newErrors);
-
-    return newErrors.length === 0;
-  };
-
-
   const handlePreview = () => {
-    setSuccessMessage("");
-
-    const isValid = validateForm();
-
-    if (!isValid) {
-      return;
-    }
-
-    setShowPreview(true);
+    if (validateAndFocus()) setShowPreview(true);
   };
-
- 
 
   const handlePublish = () => {
-    setSuccessMessage("");
-
-    const isValid = validateForm();
-
-    if (!isValid) {
+    if (publishedEvent) return;
+    if (!validateAndFocus()) {
+      setShowPreview(false);
       return;
     }
 
     const eventData: CreateEventInput = {
-      title: eventTitle.trim(),
-      description: eventDescription.trim(),
-      type: eventType,
-      date: eventDate,
-      time: eventTime,
-      location: eventLocation.trim(),
-      speakers: eventSpeakers.trim(),
-      mapsLink: eventMapsLink.trim(),
-      capacity: Number(eventCapacity),
-      registrationDeadline,
-      requirements: eventRequirements.trim(),
-      imageUrl: eventImage ? URL.createObjectURL(eventImage) : undefined,
+      title: values.title.trim(),
+      description: values.description.trim(),
+      type: values.type,
+      date: formatEventDate(values.date),
+      time: formatEventTime(values.time),
+      location: values.location.trim(),
+      speakers: values.speakers.trim(),
+      mapsLink: values.mapsLink.trim(),
+      capacity: Number(values.capacity),
+      registrationDeadline: formatEventDate(values.registrationDeadline),
+      requirements: values.requirements.trim(),
+      imageUrl: image?.url,
       registered: 0,
       status: "Upcoming",
       isDraft: false,
       requiredRegistrantFields,
-      registrationQuestions: questions.map((question, index) => ({
-        ...question,
-        id: `registration-question-${Date.now()}-${index}`,
-      })),
+      registrationQuestions: questions,
     };
 
-    onCreate?.(eventData);
-
-    setSuccessMessage(
-      "Event information is valid and ready to be published."
-    );
+    const createdId = onCreate?.(eventData);
+    handedOffImageUrlRef.current = image?.url ?? null;
     setShowPreview(false);
-    if (onCreate) onClose?.();
+    setPublishedEvent({ id: typeof createdId === "string" ? createdId : null, title: eventData.title });
   };
 
+  const inputClass = (name: FieldName) =>
+    `${styles.input} ${errors[name] ? styles.inputError : styles.inputOk}`;
 
-  const handleCancel = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to cancel? All entered information will be lost."
-    );
+  const describedBy = (name: FieldName) => (errors[name] ? `${fieldId(name)}-error` : undefined);
 
-    if (!confirmed) return;
-
-    setEventTitle("");
-    setEventDescription("");
-    setEventSpeakers("");
-    setEventDate("");
-    setEventTime("");
-    setEventLocation("");
-    setEventMapsLink("");
-    setEventCapacity("");
-    setRegistrationDeadline("");
-    setEventRequirements("");
-    setEventImage(null);
-
-    setEventType("Workshop");
-
-    setQuestions([]);
-    resetQuestionForm();
-
-    setErrors([]);
-    setSuccessMessage("");
-    setShowPreview(false);
-    if (isModal) onClose?.();
-  };
-
-  useEffect(() => {
-    if (!isModal || !onClose) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isModal, onClose]);
+  const errorCount = fieldOrder.filter((name) => errors[name]).length;
 
   return (
-    <main
-      className={isModal ? styles.modalOverlay : styles.page}
+    <div
+      className={isModal ? styles.overlay : styles.page}
       onMouseDown={(event) => {
-        if (isModal && event.target === event.currentTarget) onClose?.();
+        if (isModal && event.target === event.currentTarget) requestClose();
       }}
     >
-      <section className={`${styles.card} ${isModal ? styles.modalCard : ""}`}>
-        {}
-
+      <section
+        ref={dialogRef}
+        role={isModal ? "dialog" : undefined}
+        aria-modal={isModal ? true : undefined}
+        aria-labelledby="create-event-dialog-title"
+        tabIndex={isModal ? -1 : undefined}
+        className={`${styles.card} ${isModal ? styles.modalCard : ""}`}
+      >
         <header className={styles.header}>
-          <h1 className={styles.title}>Create Event</h1>
-
-          <p className={styles.subtitle}>
-            Create and publish an event for the GDG community.
-          </p>
+          <h1 id="create-event-dialog-title" className="text-2xl font-bold sm:text-3xl">
+            {t("title")}
+          </h1>
+          <p className="mt-1 text-sm text-white/90">{t("subtitle")}</p>
+          {isModal && (
+            <button type="button" className={styles.close} onClick={requestClose} aria-label={t("close")}>
+              <X size={20} />
+            </button>
+          )}
         </header>
 
-        {isModal && (
-          <button
-            type="button"
-            className={styles.modalClose}
-            onClick={onClose}
-            aria-label="Close event creation dialog"
-          >
-            <X size={20} />
-          </button>
-        )}
-
-        { }
-
         <form
-          className={styles.form}
-          onSubmit={(e) => {
-            e.preventDefault();
+          className={styles.body}
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
             handlePublish();
           }}
         >
-          { }
+          <h2 className={styles.sectionTitle}>{t("sections.eventInfo")}</h2>
 
-          <h2 className={styles.sectionTitle}>
-            Event Information
-          </h2>
-
-          {}
-
-          <div
-            className={`${styles.colorGroup} ${styles.orangeGroup}`}
-          >
-            {}
-
-            <div className={styles.field}>
-              <label className={styles.label}>
-                Event Name *
-              </label>
-
+          <div className={`${styles.colorGroup} border-s-gdg-yellow`}>
+            <Field name="title" label={t("fields.name")} required error={errors.title}>
               <input
-                className={styles.input}
+                id={fieldId("title")}
+                className={inputClass("title")}
                 type="text"
-                placeholder="Enter event name"
-                value={eventTitle}
-                onChange={(e) => setEventTitle(e.target.value)}
+                placeholder={t("placeholders.name")}
+                value={values.title}
+                maxLength={150}
+                aria-required="true"
+                aria-invalid={Boolean(errors.title)}
+                aria-describedby={describedBy("title")}
+                onChange={(event) => setValue("title", event.target.value)}
               />
-            </div>
+            </Field>
 
-            
-
-            <div className={styles.field}>
-              <label className={styles.label}>
-                Description *
-              </label>
-
+            <Field name="description" label={t("fields.description")} required error={errors.description}>
               <textarea
-                className={styles.textarea}
-                placeholder="Write event description here..."
-                value={eventDescription}
-                onChange={(e) =>
-                  setEventDescription(e.target.value)
-                }
+                id={fieldId("description")}
+                className={`${inputClass("description")} min-h-[110px] resize-y`}
+                placeholder={t("placeholders.description")}
+                value={values.description}
+                aria-required="true"
+                aria-invalid={Boolean(errors.description)}
+                aria-describedby={describedBy("description")}
+                onChange={(event) => setValue("description", event.target.value)}
               />
-            </div>
-
-            
-
-            <div className={styles.field}>
-              <label className={styles.label}>
-                Speakers (Optional)
-              </label>
-
-              <input
-                className={styles.input}
-                type="text"
-                placeholder="Enter speaker names"
-                value={eventSpeakers}
-                onChange={(e) =>
-                  setEventSpeakers(e.target.value)
-                }
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.label}>Event Type *</label>
-              <select
-                className={styles.input}
-                value={eventType}
-                onChange={(e) => setEventType(e.target.value as EventType)}
-              >
-                <option value="Workshop">Workshop</option>
-                <option value="Conference">Conference</option>
-                <option value="Talk">Talk</option>
-                <option value="Panel">Panel</option>
-                <option value="Hackathon">Hackathon</option>
-              </select>
-            </div>
-          </div>
-
-          
-
-          <div
-            className={`${styles.colorGroup} ${styles.redGroup}`}
-          >
-            <div className={styles.row}>
-              
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Date *
-                </label>
-
-                <input
-                  className={styles.input}
-                  type="date"
-                  value={eventDate}
-                  onChange={(e) =>
-                    setEventDate(e.target.value)
-                  }
-                />
-              </div>
-
-              
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Time *
-                </label>
-
-                <input
-                  className={styles.input}
-                  type="time"
-                  value={eventTime}
-                  onChange={(e) =>
-                    setEventTime(e.target.value)
-                  }
-                />
-              </div>
-            </div>
+            </Field>
 
             <div className={styles.row}>
-              
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Location *
-                </label>
-
+              <Field name="speakers" label={t("fields.speakers")} optional={t("optional")}>
                 <input
-                  className={styles.input}
+                  id={fieldId("speakers")}
+                  className={`${styles.input} ${styles.inputOk}`}
                   type="text"
-                  placeholder="Enter a location"
-                  value={eventLocation}
-                  onChange={(e) =>
-                    setEventLocation(e.target.value)
-                  }
+                  placeholder={t("placeholders.speakers")}
+                  value={values.speakers}
+                  onChange={(event) => setValue("speakers", event.target.value)}
                 />
-              </div>
+              </Field>
 
-              
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Google Maps Link (Optional)
-                </label>
-
-                <input
-                  className={styles.input}
-                  type="url"
-                  placeholder="Paste location link"
-                  value={eventMapsLink}
-                  onChange={(e) =>
-                    setEventMapsLink(e.target.value)
-                  }
-                />
-              </div>
+              <Field name="type" label={t("fields.type")} required>
+                <select
+                  id={fieldId("type")}
+                  className={`${styles.input} ${styles.inputOk}`}
+                  value={values.type}
+                  onChange={(event) => setValue("type", event.target.value as EventType)}
+                >
+                  {eventTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {tf(`types.${type.toLowerCase()}`)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
             </div>
           </div>
 
-          {/* Green Group */}
-
-          <div
-            className={`${styles.colorGroup} ${styles.greenGroup}`}
-          >
+          <div className={`${styles.colorGroup} border-s-gdg-red`}>
             <div className={styles.row}>
-              {/* Capacity */}
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Capacity *
-                </label>
-
+              <Field name="date" label={t("fields.date")} required error={errors.date}>
                 <input
-                  className={styles.input}
-                  type="number"
-                  min="1"
-                  placeholder="Enter maximum number of attendees"
-                  value={eventCapacity}
-                  onChange={(e) =>
-                    setEventCapacity(e.target.value)
-                  }
+                  id={fieldId("date")}
+                  className={inputClass("date")}
+                  type="date"
+                  min={today}
+                  value={values.date}
+                  aria-required="true"
+                  aria-invalid={Boolean(errors.date)}
+                  aria-describedby={describedBy("date")}
+                  onChange={(event) => setValue("date", event.target.value)}
                 />
-              </div>
+              </Field>
+
+              <Field name="time" label={t("fields.time")} required error={errors.time}>
+                <input
+                  id={fieldId("time")}
+                  className={inputClass("time")}
+                  type="time"
+                  value={values.time}
+                  aria-required="true"
+                  aria-invalid={Boolean(errors.time)}
+                  aria-describedby={describedBy("time")}
+                  onChange={(event) => setValue("time", event.target.value)}
+                />
+              </Field>
             </div>
 
-            
+            <div className={styles.row}>
+              <Field name="location" label={t("fields.location")} required error={errors.location}>
+                <div className="relative">
+                  <MapPin className={styles.iconInput} aria-hidden="true" />
+                  <input
+                    id={fieldId("location")}
+                    className={`${inputClass("location")} ps-9`}
+                    type="text"
+                    placeholder={t("placeholders.location")}
+                    value={values.location}
+                    maxLength={120}
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.location)}
+                    aria-describedby={describedBy("location")}
+                    onChange={(event) => setValue("location", event.target.value)}
+                  />
+                </div>
+              </Field>
 
+              <Field name="mapsLink" label={t("fields.mapsLink")} optional={t("optional")} error={errors.mapsLink}>
+                <div className="relative">
+                  <Link2 className={styles.iconInput} aria-hidden="true" />
+                  <input
+                    id={fieldId("mapsLink")}
+                    className={`${inputClass("mapsLink")} ps-9`}
+                    type="url"
+                    inputMode="url"
+                    dir="ltr"
+                    placeholder={t("placeholders.mapsLink")}
+                    value={values.mapsLink}
+                    aria-invalid={Boolean(errors.mapsLink)}
+                    aria-describedby={describedBy("mapsLink")}
+                    onChange={(event) => setValue("mapsLink", event.target.value)}
+                  />
+                </div>
+              </Field>
+            </div>
+          </div>
+
+          <div className={`${styles.colorGroup} border-s-gdg-green`}>
+            <div className={styles.row}>
+              <Field name="capacity" label={t("fields.capacity")} required error={errors.capacity}>
+                <input
+                  id={fieldId("capacity")}
+                  className={inputClass("capacity")}
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={5000}
+                  step={1}
+                  placeholder={t("placeholders.capacity")}
+                  value={values.capacity}
+                  aria-required="true"
+                  aria-invalid={Boolean(errors.capacity)}
+                  aria-describedby={describedBy("capacity")}
+                  onChange={(event) => setValue("capacity", event.target.value)}
+                />
+              </Field>
+
+              <Field
+                name="registrationDeadline"
+                label={t("fields.deadline")}
+                required
+                error={errors.registrationDeadline}
+              >
+                <input
+                  id={fieldId("registrationDeadline")}
+                  className={inputClass("registrationDeadline")}
+                  type="date"
+                  min={today}
+                  max={values.date || undefined}
+                  value={values.registrationDeadline}
+                  aria-required="true"
+                  aria-invalid={Boolean(errors.registrationDeadline)}
+                  aria-describedby={describedBy("registrationDeadline")}
+                  onChange={(event) => setValue("registrationDeadline", event.target.value)}
+                />
+              </Field>
+            </div>
+
+            <Field name="requirements" label={t("fields.requirements")} optional={t("optional")}>
+              <textarea
+                id={fieldId("requirements")}
+                className={`${styles.input} ${styles.inputOk} min-h-[90px] resize-y`}
+                placeholder={t("placeholders.requirements")}
+                value={values.requirements}
+                onChange={(event) => setValue("requirements", event.target.value)}
+              />
+            </Field>
+          </div>
+
+          <div className={`${styles.colorGroup} border-s-gdg-blue`}>
             <div className={styles.field}>
-              <label className={styles.label}>
-                Registration Deadline *
-              </label>
+              <span id={`${fieldId("image")}-label`} className={styles.label}>
+                {t("fields.image")}
+                <span className="text-red-600" aria-hidden="true">
+                  {" "}*
+                </span>
+              </span>
+
+              {image ? (
+                <div className="flex flex-col gap-3 rounded-2xl border border-border p-3 sm:flex-row sm:items-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- local blob: URL of the selected file; next/image cannot optimize it. */}
+                  <img
+                    src={image.url}
+                    alt={t("upload.previewAlt")}
+                    className="h-32 w-full rounded-xl object-cover sm:h-24 sm:w-40"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-foreground">{image.file.name}</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <label
+                        htmlFor={fieldId("image")}
+                        className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-1.5 text-xs font-semibold text-gdg-blue transition hover:bg-gdg-blue/5 focus-within:ring-[3px] focus-within:ring-gdg-blue/20"
+                      >
+                        {t("upload.replace")}
+                      </label>
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30"
+                      >
+                        {t("upload.remove")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <label
+                  htmlFor={fieldId("image")}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    setIsDraggingImage(true);
+                  }}
+                  onDragLeave={() => setIsDraggingImage(false)}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    setIsDraggingImage(false);
+                    selectImage(event.dataTransfer.files?.[0]);
+                  }}
+                  className={`flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-6 text-center transition focus-within:ring-[3px] focus-within:ring-gdg-blue/20 ${
+                    errors.image
+                      ? "border-red-400 bg-red-50/40 dark:bg-red-950/10"
+                      : isDraggingImage
+                        ? "border-gdg-blue bg-gdg-blue/5"
+                        : "border-gdg-blue/40 hover:border-gdg-blue hover:bg-gdg-blue/5"
+                  }`}
+                >
+                  <ImagePlus className="size-8 text-gdg-blue" aria-hidden="true" />
+                  <span className="text-sm font-semibold text-foreground">{t("upload.title")}</span>
+                  <small className="text-xs text-muted">{t("upload.hint")}</small>
+                </label>
+              )}
 
               <input
-                className={styles.input}
-                type="date"
-                value={registrationDeadline}
-                onChange={(e) =>
-                  setRegistrationDeadline(e.target.value)
-                }
+                id={fieldId("image")}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                aria-labelledby={`${fieldId("image")}-label`}
+                aria-required="true"
+                aria-invalid={Boolean(errors.image)}
+                aria-describedby={describedBy("image")}
+                onChange={(event) => {
+                  selectImage(event.target.files?.[0]);
+                  event.target.value = "";
+                }}
               />
-            </div>
-
-            {/* Requirements */}
-
-            <div className={styles.field}>
-              <label className={styles.label}>
-                Requirements (Optional)
-              </label>
-
-              <textarea
-                className={styles.textarea}
-                placeholder="Enter any requirements for attendees..."
-                value={eventRequirements}
-                onChange={(e) =>
-                  setEventRequirements(e.target.value)
-                }
-              />
+              {errors.image && (
+                <p id={`${fieldId("image")}-error`} className={styles.error}>
+                  {errors.image}
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Blue Group */}
+          <h2 className={styles.sectionTitle}>{t("sections.registrationInfo")}</h2>
+          <p className="-mt-2 mb-4 text-sm text-muted">{t("registration.description")}</p>
 
-          <div
-            className={`${styles.colorGroup} ${styles.blueGroup}`}
-          >
+          <fieldset disabled className="mb-6 rounded-2xl border border-border bg-surface-muted/30 p-4 sm:p-6">
+            <legend className="sr-only">{t("sections.registrationInfo")}</legend>
             <div className={styles.field}>
-              <label className={styles.label}>
-                Event Image *
-              </label>
+              <span className={styles.label}>{t("registration.fields.fullName")} *</span>
+              <div className="relative">
+                <UserRound className={styles.iconInput} aria-hidden="true" />
+                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.fullName")} aria-label={t("registration.fields.fullName")} />
+              </div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <span className={styles.label}>{t("registration.fields.universityId")} *</span>
+                <div className="relative">
+                  <Hash className={styles.iconInput} aria-hidden="true" />
+                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.universityId")} aria-label={t("registration.fields.universityId")} />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.label}>{t("registration.fields.college")} *</span>
+                <div className="relative">
+                  <Building2 className={styles.iconInput} aria-hidden="true" />
+                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.college")} aria-label={t("registration.fields.college")} />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.label}>{t("registration.fields.major")} *</span>
+                <div className="relative">
+                  <BookOpen className={styles.iconInput} aria-hidden="true" />
+                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.major")} aria-label={t("registration.fields.major")} />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.label}>{t("registration.fields.phone")} *</span>
+                <div className="flex gap-2" dir="ltr">
+                  <span className="flex min-h-[44px] items-center rounded-[10px] border border-border bg-surface px-3 text-sm font-semibold text-foreground">
+                    +966
+                  </span>
+                  <input className={`${styles.input} ${styles.inputOk}`} placeholder={t("registration.placeholders.phone")} aria-label={t("registration.fields.phone")} />
+                </div>
+              </div>
+            </div>
+            <div className={styles.field}>
+              <span className={styles.label}>{t("registration.fields.email")} *</span>
+              <div className="relative">
+                <Mail className={styles.iconInput} aria-hidden="true" />
+                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.email")} aria-label={t("registration.fields.email")} />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className={styles.label}>{t("registration.fields.membership")} *</span>
+              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-foreground/80">
+                <label className="flex items-center gap-2">
+                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberYes")}
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberNo")}
+                </label>
+              </div>
+            </div>
+          </fieldset>
 
-              <div className={styles.uploadBox}>
-                <ImagePlus className={styles.UploadIcon} />
+          {questions.length > 0 && (
+            <section aria-labelledby="create-event-questions" className="mb-4 flex flex-col gap-3">
+              <h3 id="create-event-questions" className="text-base font-bold text-foreground">
+                {t("questions.title")}
+              </h3>
+              <p className="-mt-2 text-sm text-muted">{t("questions.help")}</p>
+              {questions.map((question, index) => (
+                <div key={question.id} className="rounded-xl border border-border bg-surface p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="text-sm font-semibold text-foreground">
+                      {index + 1}. {question.text}
+                      <span className="ms-2 inline-block rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-700 dark:bg-red-950/50 dark:text-red-300">
+                        {t("questions.requiredBadge")}
+                      </span>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setQuestions((current) => current.filter((item) => item.id !== question.id))}
+                      aria-label={t("questions.remove", { number: index + 1 })}
+                      className="shrink-0 rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                  <p className="mt-1 text-xs text-muted">
+                    {t(`questions.types.${questionTypeKeys[question.type]}`)}
+                  </p>
+                  {question.options && (
+                    <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-foreground/80">
+                      {question.options.map((option) => (
+                        <li key={option}>
+                          {question.type === "yes-no"
+                            ? t(option === "Yes" ? "questions.yes" : "questions.no")
+                            : option}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </section>
+          )}
 
-                <span>
-                  {eventImage
-                    ? eventImage.name
-                    : "Upload event image"}
-                </span>
-
-                <small>
-                  Drag and drop files here, or click to browse
-                </small>
-
+          {showQuestionForm ? (
+            <div className="mb-4 rounded-2xl border border-border bg-surface-muted/40 p-4 sm:p-6">
+              <h3 className="mb-4 text-base font-bold text-foreground">{t("questions.formTitle")}</h3>
+              <div className={styles.field}>
+                <label htmlFor={fieldId("question-type")} className={styles.label}>
+                  {t("questions.type")}
+                </label>
+                <select
+                  id={fieldId("question-type")}
+                  className={`${styles.input} ${styles.inputOk}`}
+                  value={questionType}
+                  onChange={(event) => {
+                    setQuestionType(event.target.value);
+                    setQuestionError("");
+                  }}
+                >
+                  <option value="">{t("questions.selectType")}</option>
+                  {questionTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {t(`questions.types.${questionTypeKeys[type]}`)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor={fieldId("question-text")} className={styles.label}>
+                  {t("questions.text")}
+                </label>
                 <input
-                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0] ?? null;
-                    setEventImage(file);
+                  id={fieldId("question-text")}
+                  className={`${styles.input} ${styles.inputOk}`}
+                  placeholder={t("questions.textPlaceholder")}
+                  value={questionText}
+                  onChange={(event) => {
+                    setQuestionText(event.target.value);
+                    setQuestionError("");
                   }}
                 />
               </div>
-            </div>
-          </div>
 
-          
-
-          {questions.length > 0 && (
-            <div className={styles.questionsSection}>
-              <h3>Registration Questions</h3>
-              <p className={styles.questionHelp}>
-                Attendees answer these required questions when they register.
-                The preview below is read-only for the event creator.
-              </p>
-
-              {questions.map((question, index) => (
-                <div
-                  key={index}
-                  className={styles.questionItem}
-                >
-                  <div>
-                    <span>{index + 1}. </span>
-
-                    <strong>{question.text}</strong>
-                    <span className={styles.requiredBadge}>Required for attendees</span>
-                  </div>
-
-                  {/* Yes / No */}
-
-                  {question.type === "yes-no" && (
-                    <div className={styles.questionOptions}>
-                      <label>
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          disabled
-                        />
-                        Yes
-                      </label>
-
-                      <label>
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          disabled
-                        />
-                        No
-                      </label>
-                    </div>
-                  )}
-
-                  {/* Single Choice */}
-
-                  {question.type === "single-choice" &&
-                    question.options?.map(
-                      (option, optionIndex) => (
-                        <label
-                          key={optionIndex}
-                          className={
-                            styles.questionOption
-                          }
-                        >
-                          <input
-                            type="radio"
-                            name={`question-${index}`}
-                            disabled
-                          />
-
-                          {option}
-                        </label>
-                      )
-                    )}
-
-                  {/* Multiple Choice */}
-
-                  {question.type === "multiple-choice" &&
-                    question.options?.map(
-                      (option, optionIndex) => (
-                        <label
-                          key={optionIndex}
-                          className={
-                            styles.questionOption
-                          }
-                        >
-                          <input type="checkbox" disabled />
-
-                          {option}
-                        </label>
-                      )
-                    )}
-
-                  {/* Checkboxes */}
-
-                  {question.type === "checkboxes" &&
-                    question.options?.map(
-                      (option, optionIndex) => (
-                        <label
-                          key={optionIndex}
-                          className={
-                            styles.questionOption
-                          }
-                        >
-                          <input type="checkbox" disabled />
-
-                          {option}
-                        </label>
-                      )
-                    )}
-
-                  {/* Short Answer */}
-
-                  {question.type === "short-answer" && (
-                    <input
-                      className={styles.input}
-                      type="text"
-                      placeholder="Enter your answer"
-                      disabled
-                    />
-                  )}
-
-                  {/* Long Answer */}
-
-                  {question.type === "long-answer" && (
-                    <textarea
-                      className={styles.textarea}
-                      placeholder="Enter your answer"
-                      disabled
-                    />
-                  )}
-
-                  <button
-                    type="button"
-                    className={styles.removeOption}
-                    onClick={() =>
-                      handleRemoveQuestion(index)
-                    }
-                  >
-                    Remove Question
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-         
-
-          <div className={styles.questionsSection}>
-            <button
-              type="button"
-              className={styles.addQuestion}
-              onClick={() => {
-                setSuccessMessage("");
-                setShowQuestionForm(true);
-              }}
-            >
-              + Add more questions
-            </button>
-          </div>
-
-          {/* Question Form */}
-
-          {showQuestionForm && (
-            <div className={styles.questionForm}>
-              <h3 className={styles.questionTitle}>
-                Add Registration Question
-              </h3>
-
-              {/* Question Type */}
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Question Type
-                </label>
-
-                <select
-                  className={styles.input}
-                  value={questionType}
-                  onChange={(e) =>
-                    setQuestionType(e.target.value)
-                  }
-                >
-                  <option value="">
-                    Select question type
-                  </option>
-
-                  <option value="short-answer">
-                    Short Answer / Text
-                  </option>
-
-                  <option value="long-answer">
-                    Long Answer
-                  </option>
-
-                  <option value="multiple-choice">
-                    Multiple Choice
-                  </option>
-
-                  <option value="single-choice">
-                    Single Choice
-                  </option>
-
-                  <option value="checkboxes">
-                    Checkboxes
-                  </option>
-
-                  <option value="yes-no">
-                    Yes / No
-                  </option>
-                </select>
-              </div>
-
-              {/* Question */}
-
-              <div className={styles.field}>
-                <label className={styles.label}>
-                  Question
-                </label>
-
-                <input
-                  className={styles.input}
-                  type="text"
-                  placeholder="Enter your question"
-                  value={questionText}
-                  onChange={(e) =>
-                    setQuestionText(e.target.value)
-                  }
-                />
-              </div>
-
-              {/* Options */}
-
-              {choiceQuestionTypes.includes(
-                questionType
-              ) && (
-                <div className={styles.field}>
-                  <label className={styles.label}>
-                    Options
-                  </label>
-
-                  {options.map((option, index) => (
-                    <div
-                      key={index}
-                      className={styles.optionRow}
-                    >
+              {choiceQuestionTypes.includes(questionType) && (
+                <fieldset className="mb-4 flex flex-col gap-2">
+                  <legend className={`${styles.label} mb-2`}>{t("questions.options")}</legend>
+                  {questionOptions.map((option, index) => (
+                    <div key={index} className="flex items-center gap-2">
                       <input
-                        className={styles.input}
-                        type="text"
+                        className={`${styles.input} ${styles.inputOk}`}
+                        placeholder={t("questions.optionPlaceholder", { number: index + 1 })}
+                        aria-label={t("questions.optionPlaceholder", { number: index + 1 })}
                         value={option}
-                        placeholder={`Option ${
-                          index + 1
-                        }`}
-                        onChange={(e) => {
-                          const updatedOptions = [
-                            ...options,
-                          ];
-
-                          updatedOptions[index] =
-                            e.target.value;
-
-                          setOptions(updatedOptions);
+                        onChange={(event) => {
+                          const next = [...questionOptions];
+                          next[index] = event.target.value;
+                          setQuestionOptions(next);
+                          setQuestionError("");
                         }}
                       />
-
-                      {options.length > 1 && (
+                      {questionOptions.length > 2 && (
                         <button
                           type="button"
-                          className={
-                            styles.removeOption
-                          }
-                          onClick={() => {
-                            setOptions(
-                              options.filter(
-                                (_, optionIndex) =>
-                                  optionIndex !==
-                                  index
-                              )
-                            );
-                          }}
+                          onClick={() => setQuestionOptions(questionOptions.filter((_, i) => i !== index))}
+                          aria-label={t("questions.removeOption", { number: index + 1 })}
+                          className="shrink-0 rounded-lg border border-red-300 p-2.5 text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30"
                         >
-                          Remove
+                          <X className="size-4" />
                         </button>
                       )}
                     </div>
                   ))}
-
                   <button
                     type="button"
-                    className={styles.addOption}
-                    onClick={() =>
-                      setOptions([
-                        ...options,
-                        "",
-                      ])
-                    }
+                    onClick={() => setQuestionOptions([...questionOptions, ""])}
+                    className="w-fit rounded-lg border border-gdg-blue px-3.5 py-2 text-xs font-semibold text-gdg-blue transition hover:bg-gdg-blue/5"
                   >
-                    + Add option
+                    {t("questions.addOption")}
                   </button>
-                </div>
+                </fieldset>
               )}
 
-              {/* Question Actions */}
+              {questionError && (
+                <p role="alert" className={`${styles.error} mb-3`}>
+                  {questionError}
+                </p>
+              )}
 
-              <div className={styles.questionActions}>
+              <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                 <button
                   type="button"
-                  className={styles.cancelQuestion}
                   onClick={resetQuestionForm}
+                  className={`${styles.outlineButton} border-border text-foreground hover:bg-surface-muted`}
                 >
-                  Cancel
+                  {t("questions.cancel")}
                 </button>
-
-                <button
-                  type="button"
-                  className={styles.addQuestionButton}
-                  onClick={handleAddQuestion}
-                >
-                  Add Question
+                <button type="button" onClick={handleAddQuestion} className={styles.primaryButton}>
+                  {t("questions.submit")}
                 </button>
               </div>
             </div>
-          )}
-
-          
-
-          {errors.length > 0 && (
-            <div
-              className={styles.errorMessage}
-              role="alert"
-            >
-              <strong>
-                Please fix the following:
-              </strong>
-
-              <ul>
-                {errors.map((error, index) => (
-                  <li key={index}>{error}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Success */}
-
-          {successMessage && (
-            <div
-              className={styles.successMessage}
-              role="status"
-            >
-              {successMessage}
-            </div>
-          )}
-
-          
-
-          <div className={styles.actions}>
+          ) : (
             <button
               type="button"
-              className={styles.cancelButton}
-              onClick={handleCancel}
+              onClick={() => setShowQuestionForm(true)}
+              className="mb-2 inline-flex w-fit items-center gap-1 py-2 text-sm font-semibold text-gdg-red hover:underline"
             >
-              Cancel
+              {t("questions.add")}
+              <Plus className="size-4" aria-hidden="true" />
             </button>
+          )}
 
+          {errorCount > 0 && (
+            <p role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200">
+              {t("errors.summary", { count: errorCount })}
+            </p>
+          )}
+
+          <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-end">
             <button
               type="button"
-              className={styles.previewButton}
+              onClick={requestClose}
+              className={`${styles.outlineButton} border-gdg-blue/60 text-gdg-blue hover:bg-gdg-blue/5`}
+            >
+              {t("actions.cancel")}
+            </button>
+            <button
+              type="button"
               onClick={handlePreview}
+              className={`${styles.outlineButton} border-gdg-blue text-gdg-blue hover:bg-gdg-blue/5`}
             >
-              Preview
+              {t("actions.preview")}
             </button>
-
-            <button
-              type="submit"
-              className={styles.publishButton}
-            >
-              Publish Event
+            <button type="submit" className={styles.primaryButton}>
+              {t("actions.publish")}
             </button>
           </div>
         </form>
-
-       
-        {showPreview && (
-          <div className={styles.previewOverlay}>
-            <div className={styles.previewModal}>
-              {/* Preview Header */}
-
-              <div className={styles.previewHeader}>
-                <h2>Event Preview</h2>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowPreview(false)
-                  }
-                  className={styles.closePreview}
-                  aria-label="Close preview"
-                >
-                  ×
-                </button>
-              </div>
-
-              {/* Preview Content */}
-
-              <div className={styles.previewContent}>
-                {/* Image */}
-
-                {eventImage && (
-                  <div>
-                    <img
-                      src={URL.createObjectURL(
-                        eventImage
-                      )}
-                      alt="Event preview"
-                    />
-                  </div>
-                )}
-
-                <h3>Event Information</h3>
-
-                <div className={styles.previewInfo}>
-                  <p>
-                    <strong>Title:</strong>{" "}
-                    {eventTitle || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Event Type:</strong> {eventType}
-                  </p>
-
-                  <p>
-                    <strong>Description:</strong>{" "}
-                    {eventDescription || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Speakers:</strong>{" "}
-                    {eventSpeakers || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Date:</strong>{" "}
-                    {eventDate || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Time:</strong>{" "}
-                    {eventTime || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Location:</strong>{" "}
-                    {eventLocation || "—"}
-                  </p>
-
-                  {eventMapsLink && (
-                    <p>
-                      <strong>Google Maps:</strong>{" "}
-                      <a
-                        href={eventMapsLink}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        View Location
-                      </a>
-                    </p>
-                  )}
-
-                  <p>
-                    <strong>Capacity:</strong>{" "}
-                    {eventCapacity || "—"}
-                  </p>
-
-                  <p>
-                    <strong>
-                      Registration Deadline:
-                    </strong>{" "}
-                    {registrationDeadline || "—"}
-                  </p>
-
-                  <p>
-                    <strong>Requirements:</strong>{" "}
-                    {eventRequirements || "—"}
-                  </p>
-                </div>
-
-                {/* Registration Information */}
-
-                <h3>Registration Information</h3>
-
-                <div className={styles.previewInfo}>
-                  {requiredRegistrantFields.map((field) => (
-                    <p key={field}>
-                      <strong>{field} *</strong>{" "}
-                      <span>Answered by the attendee during registration</span>
-                    </p>
-                  ))}
-                </div>
-
-                {/* Questions */}
-
-                {questions.length > 0 && (
-                  <div
-                    className={
-                      styles.previewQuestions
-                    }
-                  >
-                    <h3>Registration Questions</h3>
-
-                    {questions.map(
-                      (question, index) => (
-                        <div
-                          key={index}
-                          className={
-                            styles.previewQuestion
-                          }
-                        >
-                          <strong>
-                            {index + 1}.{" "}
-                            {question.text}
-                          </strong>
-                          <span className={styles.requiredBadge}>
-                            Required
-                          </span>
-
-                          {question.type ===
-                            "yes-no" && (
-                            <div
-                              className={
-                                styles.previewOptions
-                              }
-                            >
-                              <span>
-                                ○ Yes
-                              </span>
-
-                              <span>
-                                ○ No
-                              </span>
-                            </div>
-                          )}
-
-                          {question.type ===
-                            "single-choice" &&
-                            question.options?.map(
-                              (
-                                option,
-                                optionIndex
-                              ) => (
-                                <div
-                                  key={
-                                    optionIndex
-                                  }
-                                  className={
-                                    styles.previewOptions
-                                  }
-                                >
-                                  ○ {option}
-                                </div>
-                              )
-                            )}
-
-                          {question.type ===
-                            "multiple-choice" &&
-                            question.options?.map(
-                              (
-                                option,
-                                optionIndex
-                              ) => (
-                                <div
-                                  key={
-                                    optionIndex
-                                  }
-                                  className={
-                                    styles.previewOptions
-                                  }
-                                >
-                                  □ {option}
-                                </div>
-                              )
-                            )}
-
-                          {question.type ===
-                            "checkboxes" &&
-                            question.options?.map(
-                              (
-                                option,
-                                optionIndex
-                              ) => (
-                                <div
-                                  key={
-                                    optionIndex
-                                  }
-                                  className={
-                                    styles.previewOptions
-                                  }
-                                >
-                                  □ {option}
-                                </div>
-                              )
-                            )}
-
-                          {question.type ===
-                            "short-answer" && (
-                            <div
-                              className={
-                                styles.previewOptions
-                              }
-                            >
-                              <span>
-                                Short answer
-                              </span>
-                            </div>
-                          )}
-
-                          {question.type ===
-                            "long-answer" && (
-                            <div
-                              className={
-                                styles.previewOptions
-                              }
-                            >
-                              <span>
-                                Long answer
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Preview Actions */}
-
-              <div
-                className={
-                  styles.previewActions
-                }
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowPreview(false)
-                  }
-                  className={
-                    styles.cancelButton
-                  }
-                >
-                  Back to Edit
-                </button>
-
-                <button
-                  type="button"
-                  className={
-                    styles.publishButton
-                  }
-                  onClick={handlePublish}
-                >
-                  Publish Event
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
-    </main>
+
+      {showPreview && (
+        <EventPreviewModal
+          data={{
+            ...values,
+            title: values.title.trim(),
+            imageUrl: image?.url ?? null,
+            questions,
+          }}
+          onEdit={() => setShowPreview(false)}
+          onPublish={handlePublish}
+        />
+      )}
+
+      {publishedEvent && (
+        <EventPublishedModal
+          eventTitle={publishedEvent.title}
+          onClose={() => onClose?.()}
+          onViewEvent={() => {
+            if (publishedEvent.id && onViewEvent) onViewEvent(publishedEvent.id);
+            else onClose?.();
+          }}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={confirmDiscard}
+        onClose={() => setConfirmDiscard(false)}
+        onConfirm={() => onClose?.()}
+        title={t("discard.title")}
+        message={t("discard.message")}
+        confirmText={t("discard.confirm")}
+        cancelText={t("discard.keep")}
+        danger
+      />
+    </div>
   );
 }

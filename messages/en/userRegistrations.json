@@ -12,7 +12,8 @@
     "approved": "Accepted",
     "declined": "Declined",
     "attended": "Attended",
-    "not-attended": "Not Attended"
+    "not-attended": "Not Attended",
+    "cancelled": "Cancelled"
   },
   "confirmPrompt": "Your place is ready. Confirm your participation to keep it, or cancel if you cannot attend.",
   "confirmBefore": "Please confirm by {date}.",

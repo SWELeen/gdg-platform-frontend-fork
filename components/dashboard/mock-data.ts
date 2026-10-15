@@ -2,6 +2,9 @@
 // There is no approved dashboard API contract yet (see docs/api-integration.md),
 // so this module is the single, typed swap point for real backend data later.
 
+import { MEMBER_EVENTS_PATH, UPCOMING_EVENTS_PATH } from "@/components/dashboard/member/member-events";
+import { MEMBER_HELP_PATH, MEMBER_SETTINGS_PATH } from "@/components/dashboard/members/member-routes";
+
 export type TaskPriority = "High" | "Medium" | "Low";
 export type TaskStatus = "In Progress" | "To Do" | "Complete";
 
@@ -17,10 +20,12 @@ export interface SidebarItem {
   id: string;
   /**
    * Real route once implemented; "#" is the intentional placeholder for pages that don't
-   * exist yet (Events, Tasks, Members, Achievements, Setting, Help). Swapping "#" for the
+   * exist yet (Events, Setting, Help). Swapping "#" for the
    * real path is the only change needed to activate route-based highlighting for that item.
    */
   href: string;
+  /** Other routes that also highlight this item (e.g. Upcoming Events under Events). */
+  activeFor?: string[];
 }
 
 export interface MyEventTile {
@@ -45,16 +50,6 @@ export interface UpcomingEvent {
   imageUrl?: string;
 }
 
-export interface CalendarMockData {
-  /** 0-based, matches Date#getMonth(). */
-  year: number;
-  month: number;
-  /** Day-of-month highlighted as the current/selected date. */
-  selectedDay: number;
-  /** Days-of-month (within the same year/month above) that have an event. */
-  eventDays: number[];
-}
-
 export interface DashboardTask {
   id: string;
   title: string;
@@ -74,40 +69,40 @@ export const currentUser: DashboardUser = {
 
 export const sidebarPrimaryItems: SidebarItem[] = [
   { id: "dashboard", href: "/dashboard/members-dashboard" },
-  { id: "events", href: "#" },
-  { id: "tasks", href: "#" },
-  { id: "members", href: "#" },
-  { id: "achievements", href: "#" },
+  { id: "events", href: MEMBER_EVENTS_PATH, activeFor: [UPCOMING_EVENTS_PATH] },
+  { id: "tasks", href: "/dashboard/members-dashboard/tasks" },
+  { id: "members", href: "/dashboard/members-dashboard/members" },
+  { id: "achievements", href: "/dashboard/members-dashboard/achievements" },
 ];
 
 export const sidebarSecondaryItems: SidebarItem[] = [
-  { id: "setting", href: "#" },
-  { id: "help", href: "#" },
+  { id: "setting", href: MEMBER_SETTINGS_PATH },
+  { id: "help", href: MEMBER_HELP_PATH },
 ];
 
 export const myEventTiles: MyEventTile[] = [
   {
     id: "events-blue",
     key: "myEvents",
-    background: "bg-gdg-blue-light",
+    background: "bg-[var(--dashboard-blue-bg)]",
     accent: "text-gdg-blue-accent",
   },
   {
     id: "events-green",
     key: "myEvents",
-    background: "bg-gdg-green-light",
+    background: "bg-[var(--dashboard-green-bg)]",
     accent: "text-gdg-green-accent",
   },
   {
     id: "events-pink",
     key: "myEvents",
-    background: "bg-gdg-pink-light",
+    background: "bg-[var(--dashboard-red-bg)]",
     accent: "text-gdg-pink-accent",
   },
   {
     id: "events-yellow",
     key: "myEvents",
-    background: "bg-gdg-yellow-light",
+    background: "bg-[var(--dashboard-tile-yellow-bg)]",
     accent: "text-gdg-yellow-accent",
   },
 ];
@@ -125,13 +120,6 @@ export const upcomingEvents: UpcomingEvent[] = [
     featured: true,
   },
 ];
-
-export const calendarMock: CalendarMockData = {
-  year: 2026,
-  month: 8, // September
-  selectedDay: 20,
-  eventDays: [20],
-};
 
 export const dashboardTasks: DashboardTask[] = [
   {

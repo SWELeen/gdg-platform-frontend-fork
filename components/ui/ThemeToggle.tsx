@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { applyThemeChoice, readThemeChoice, resolveTheme, subscribeToTheme } from "@/lib/theme";
 
 type Theme = "light" | "dark";
 
@@ -16,7 +17,8 @@ export default function ThemeToggle({ onDark = false }: ThemeToggleProps = {}) {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
+    // Guarded read: browsers that block site storage would otherwise throw here.
+    const savedTheme = readThemeChoice();
 
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.dataset.theme = savedTheme;
@@ -37,11 +39,13 @@ export default function ThemeToggle({ onDark = false }: ThemeToggleProps = {}) {
     });
   }, []);
 
+  // Stay in sync when the theme changes elsewhere (e.g. Member Settings → Appearance).
+  useEffect(() => subscribeToTheme(() => setTheme(resolveTheme(readThemeChoice()))), []);
+
   const toggleTheme = () => {
     const nextTheme: Theme = theme === "light" ? "dark" : "light";
 
-    document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem("theme", nextTheme);
+    applyThemeChoice(nextTheme);
     setTheme(nextTheme);
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 
 import { useLeaderDashboard } from "@/components/dashboard/shared/LeaderDashboardContext";
 import { useTranslations } from "next-intl";
@@ -13,6 +14,7 @@ export default function LeaderEventsPage() {
   const [createEventOpen, setCreateEventOpen] = useState(false);
   const t = useTranslations("dashboard.leader");
   const { events, publishDraft, canManageEvents, addEvent } = useLeaderDashboard();
+  const router = useRouter();
 
   const draftEvents = events.filter((e) => e.isDraft);
 
@@ -63,7 +65,7 @@ export default function LeaderEventsPage() {
                     {draft.title}
                   </span>
                   <span className="text-[11px] text-muted">
-                    {draft.date} آ· {draft.location}
+                    {draft.date} · {draft.location}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -94,6 +96,10 @@ export default function LeaderEventsPage() {
       isOpen={createEventOpen}
       onClose={() => setCreateEventOpen(false)}
       onCreate={addEvent}
+      onViewEvent={(eventId) => {
+        setCreateEventOpen(false);
+        router.push(`/dashboard/data-dashboard/events/${eventId}`);
+      }}
     />
     </>
   );

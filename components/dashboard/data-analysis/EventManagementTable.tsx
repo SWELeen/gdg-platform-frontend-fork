@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { matchesEventDateFilter } from "@/lib/dashboard/event-format";
 import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
+import { leaderCommitteeConfig } from "../shared/committee-config";
+import { useDialog } from "../shared/useDialog";
 import type { CommitteeEvent } from "../shared/types";
 import { EditEventModal } from "./EditEventModal";
 import { ConfirmModal } from "../shared/ConfirmModal";
@@ -25,6 +29,8 @@ interface EventManagementTableProps {
   isCompact?: boolean;
 }
 
+const PAGE_SIZE = 10;
+
 export function EventManagementTable({
   onEditEvent: externalOnEdit,
   isCompact = false,
@@ -38,12 +44,18 @@ export function EventManagementTable({
     searchQuery,
     statusFilter,
     typeFilter,
+    dateFilter,
+    committee,
   } = useLeaderDashboard();
+  const eventsPath = `${leaderCommitteeConfig[committee].routeBase}/events`;
 
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [viewingEvent, setViewingEvent] = useState<CommitteeEvent | null>(null);
   const [editingEvent, setEditingEvent] = useState<CommitteeEvent | null>(null);
   const [eventToDelete, setEventToDelete] = useState<CommitteeEvent | null>(null);
+  const [page, setPage] = useState(1);
+  const [now] = useState(() => new Date());
+  const viewDialogRef = useDialog<HTMLDivElement>(() => setViewingEvent(null), Boolean(viewingEvent));
 
   const handleEditClick = (event: CommitteeEvent) => {
     if (externalOnEdit) {
@@ -67,10 +79,20 @@ export function EventManagementTable({
     if (typeFilter !== "all" && e.type !== typeFilter) {
       return false;
     }
+    if (!matchesEventDateFilter(e.date, dateFilter, now)) {
+      return false;
+    }
     return true;
   });
 
-  const displayEvents = isCompact ? filteredEvents.slice(0, 5) : filteredEvents;
+  const pageCount = Math.max(1, Math.ceil(filteredEvents.length / PAGE_SIZE));
+  // Filters can shrink the result set below the current page; clamp instead of
+  // resetting in an effect so the table never shows an empty out-of-range page.
+  const currentPage = Math.min(page, pageCount);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const displayEvents = isCompact
+    ? filteredEvents.slice(0, 5)
+    : filteredEvents.slice(pageStart, pageStart + PAGE_SIZE);
 
   const getStatusBadge = (status: CommitteeEvent["status"]) => {
     switch (status) {
@@ -201,9 +223,12 @@ export function EventManagementTable({
                     >
                       {/* EVENT */}
                       <td className="px-5 py-3.5">
-                        <div className="font-semibold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                        <Link
+                          href={`${eventsPath}/${event.id}`}
+                          className="font-semibold text-foreground hover:underline group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                        >
                           {event.title}
-                        </div>
+                        </Link>
                         <div className="text-[11px] text-muted">{event.type}</div>
                       </td>
 
@@ -256,6 +281,7 @@ export function EventManagementTable({
                             <button
                               type="button"
                               title={t("eventManagement.publishDraft")}
+                              aria-label={t("eventManagement.publishDraft")}
                               onClick={() => publishDraft(event.id)}
                               className="rounded-lg p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50"
                             >
@@ -267,6 +293,7 @@ export function EventManagementTable({
                           <button
                             type="button"
                             title={t("eventManagement.viewDetails")}
+                            aria-label={t("eventManagement.viewDetails")}
                             onClick={() => setViewingEvent(event)}
                             className="rounded-lg p-1 text-muted hover:bg-surface-muted hover:text-foreground"
                           >
@@ -278,6 +305,7 @@ export function EventManagementTable({
                             <button
                               type="button"
                               title={t("eventManagement.edit")}
+                              aria-label={t("eventManagement.edit")}
                               onClick={() => handleEditClick(event)}
                               className="rounded-lg p-1 text-muted hover:bg-surface-muted hover:text-foreground"
                             >
@@ -290,6 +318,7 @@ export function EventManagementTable({
                             <button
                               type="button"
                               title={t("eventManagement.delete")}
+                              aria-label={t("eventManagement.delete")}
                               onClick={() => setEventToDelete(event)}
                               className="rounded-lg p-1 text-muted hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/50"
                             >
@@ -309,7 +338,7 @@ export function EventManagementTable({
           <div className="p-5">
             {displayEvents.length === 0 ? (
               <div className="py-8 text-center text-sm text-muted">
-                No events found matching your search and filters.
+                {t("eventManagement.empty")}
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -327,7 +356,9 @@ export function EventManagementTable({
                       </div>
 
                       <h3 className="mt-2 text-sm font-bold text-foreground line-clamp-2">
-                        {event.title}
+                        <Link href={`${eventsPath}/${event.id}`} className="hover:underline">
+                          {event.title}
+                        </Link>
                       </h3>
 
                       <div className="mt-3 space-y-1.5 text-xs text-muted">
@@ -357,7 +388,8 @@ export function EventManagementTable({
                         {event.isDraft && canManageEvents && (
                           <button
                             type="button"
-                            title="Publish Draft"
+                            title={t("eventManagement.publishDraft")}
+                            aria-label={t("eventManagement.publishDraft")}
                             onClick={() => publishDraft(event.id)}
                             className="rounded-lg p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50"
                           >
@@ -368,6 +400,7 @@ export function EventManagementTable({
                         <button
                           type="button"
                           title={t("eventManagement.viewDetails")}
+                          aria-label={t("eventManagement.viewDetails")}
                           onClick={() => setViewingEvent(event)}
                           className="rounded-lg p-1 text-muted hover:bg-surface-muted hover:text-foreground"
                         >
@@ -377,7 +410,8 @@ export function EventManagementTable({
                         {canManageEvents && (
                           <button
                             type="button"
-                            title="Edit Event"
+                            title={t("eventManagement.edit")}
+                            aria-label={t("eventManagement.edit")}
                             onClick={() => handleEditClick(event)}
                             className="rounded-lg p-1 text-muted hover:bg-surface-muted hover:text-foreground"
                           >
@@ -389,6 +423,7 @@ export function EventManagementTable({
                           <button
                             type="button"
                             title={t("eventManagement.delete")}
+                            aria-label={t("eventManagement.delete")}
                             onClick={() => setEventToDelete(event)}
                             className="rounded-lg p-1 text-muted hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/50"
                           >
@@ -405,29 +440,50 @@ export function EventManagementTable({
         )}
 
         {/* Table Footer / Pagination */}
-        <div className="flex items-center justify-between border-t border-border px-5 py-3 text-xs text-muted">
-          <span>
-            {t("eventManagement.showing", { start: displayEvents.length > 0 ? "1" : "0", end: displayEvents.length, total: events.length })}
+        <div className="flex flex-col gap-2 border-t border-border px-5 py-3 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+          <span aria-live="polite">
+            {t("eventManagement.showing", {
+              start: displayEvents.length > 0 ? (isCompact ? 1 : pageStart + 1) : 0,
+              end: isCompact ? displayEvents.length : pageStart + displayEvents.length,
+              total: filteredEvents.length,
+            })}
           </span>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              disabled
-              className="rounded-lg border border-border px-2.5 py-1 text-xs opacity-50 cursor-not-allowed"
-            >
-              Previous
-            </button>
-            <span className="flex size-7 items-center justify-center rounded-lg bg-blue-600 text-xs font-bold text-white">
-              1
-            </span>
-            <button
-              type="button"
-              disabled
-              className="rounded-lg border border-border px-2.5 py-1 text-xs opacity-50 cursor-not-allowed"
-            >
-              Next
-            </button>
-          </div>
+          {!isCompact && pageCount > 1 && (
+            <nav aria-label={t("eventManagement.pagination")} className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="rounded-lg border border-border px-2.5 py-1 text-xs text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {t("eventManagement.previous")}
+              </button>
+              {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => setPage(pageNumber)}
+                  aria-current={pageNumber === currentPage ? "page" : undefined}
+                  aria-label={t("eventManagement.pageLabel", { page: pageNumber })}
+                  className={`flex size-7 items-center justify-center rounded-lg text-xs font-bold transition ${
+                    pageNumber === currentPage
+                      ? "bg-blue-600 text-white"
+                      : "text-foreground hover:bg-surface-muted"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setPage(currentPage + 1)}
+                disabled={currentPage === pageCount}
+                className="rounded-lg border border-border px-2.5 py-1 text-xs text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {t("eventManagement.next")}
+              </button>
+            </nav>
+          )}
         </div>
       </div>
 
@@ -437,8 +493,16 @@ export function EventManagementTable({
           <div
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={() => setViewingEvent(null)}
+            aria-hidden="true"
           />
-          <div className="relative z-10 w-full max-w-lg rounded-2xl border border-border bg-surface p-6 shadow-2xl">
+          <div
+            ref={viewDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="event-details-dialog-title"
+            tabIndex={-1}
+            className="relative z-10 w-full max-w-lg rounded-2xl border border-border bg-surface p-6 shadow-2xl outline-none"
+          >
             <div className="flex items-start justify-between border-b border-border pb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -447,13 +511,14 @@ export function EventManagementTable({
                   </span>
                   {getStatusBadge(viewingEvent.status)}
                 </div>
-                <h3 className="mt-1 text-lg font-bold text-foreground">
+                <h3 id="event-details-dialog-title" className="mt-1 text-lg font-bold text-foreground">
                   {viewingEvent.title}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setViewingEvent(null)}
+                aria-label={t("eventManagement.close")}
                 className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-foreground"
               >
                 <X className="size-5" />
@@ -494,6 +559,12 @@ export function EventManagementTable({
               >
                 {t("eventManagement.close")}
               </button>
+              <Link
+                href={`${eventsPath}/${viewingEvent.id}`}
+                className="rounded-xl border border-border px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-muted"
+              >
+                {t("eventManagement.openDetails")}
+              </Link>
               {canManageEvents && (
                 <button
                   type="button"
@@ -528,14 +599,8 @@ export function EventManagementTable({
             deleteEvent(eventToDelete.id);
           }
         }}
-        title="Delete Event"
-        message={
-          <>
-            Are you sure you want to delete{" "}
-            <strong className="text-foreground">{eventToDelete?.title}</strong>? This
-            will permanently remove it from the committee schedule.
-          </>
-        }
+        title={t("eventManagement.delete")}
+        message={t("eventManagement.deleteMessage", { name: eventToDelete?.title ?? "" })}
         confirmText={t("eventManagement.delete")}
         cancelText={t("eventForm.cancel")}
         danger

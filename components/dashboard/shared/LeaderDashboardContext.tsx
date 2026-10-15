@@ -40,7 +40,8 @@ interface LeaderDashboardContextValue {
   canManageSettings: boolean;
   canManageRegistrations: boolean;
   // Event Actions
-  addEvent: (event: Omit<CommitteeEvent, "id" | "created" | "updated">) => void;
+  /** Adds an event to the in-memory dashboard state and returns its new id. */
+  addEvent: (event: Omit<CommitteeEvent, "id" | "created" | "updated">) => string;
   updateEvent: (id: string, updates: Partial<CommitteeEvent>) => void;
   deleteEvent: (id: string) => void;
   publishDraft: (id: string) => void;
@@ -186,6 +187,7 @@ export function LeaderDashboardProvider({
       timeAgo: "Just now",
     };
     setRecentActivities((prev) => [newAct, ...prev]);
+    return newEvent.id;
   };
 
   const updateEvent = (id: string, updates: Partial<CommitteeEvent>) => {

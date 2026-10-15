@@ -9,7 +9,7 @@
       "tasks": "Tasks",
       "members": "Members",
       "achievements": "Achievements",
-      "setting": "Setting",
+      "setting": "Settings",
       "help": "Help & Support"
     }
   },
@@ -36,7 +36,12 @@
     "viewAll": "View upcoming events",
     "featured": "Featured",
     "addToCalendar": "Add to Calendar",
-    "empty": "You don’t have any events."
+    "addToCalendarLabel": "Add {title} to Google Calendar",
+    "empty": "No upcoming events right now. Check back soon.",
+    "loading": "Loading upcoming events",
+    "error": "Upcoming events couldn't be loaded.",
+    "pagerLabel": "Choose an upcoming event",
+    "showEvent": "Show event {number}: {title}"
   },
   "calendar": {
     "previousMonth": "Previous month",
@@ -51,7 +56,12 @@
       "thu": "Th",
       "fri": "Fr",
       "sat": "Sa"
-    }
+    },
+    "todayButton": "Today",
+    "selectedDay": "Selected day",
+    "noEvents": "Nothing scheduled for this day.",
+    "loading": "Loading your calendar",
+    "dayLabel": "{date}, {count, plural, =0 {no events} one {# event} other {# events}}"
   },
   "tasks": {
     "title": "My Tasks",
@@ -80,6 +90,369 @@
       "high": "High",
       "medium": "Medium",
       "low": "Low"
+    },
+    "board": {
+      "emptyColumn": "No tasks here.",
+      "emptyList": "You don't have any tasks yet.",
+      "loading": "Loading your tasks"
+    },
+    "error": {
+      "title": "We couldn’t load your tasks",
+      "description": "Something went wrong while loading your tasks. Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "priorityFilterLabel": "Filter tasks by priority",
+    "allPriorities": "All priorities",
+    "viewToggleLabel": "Tasks view",
+    "boardView": "Board view",
+    "listView": "List view",
+    "done": "Done",
+    "progress": "{done} of {total} completed",
+    "progressLabel": "Task completion"
+  },
+  "memberEvents": {
+    "title": "My Events",
+    "description": "Events and trips you've registered for, with their latest status.",
+    "filtersLabel": "Event filters",
+    "timeLabel": "Show events by time",
+    "time": {
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "all": "All"
+    },
+    "filterWithCount": "{label} ({count})",
+    "searchLabel": "Search your events",
+    "searchPlaceholder": "Search by name or location...",
+    "statusLabel": "Filter by status",
+    "allStatuses": "All statuses",
+    "kindLabel": "Filter by type",
+    "allKinds": "Events & trips",
+    "clearFilters": "Clear filters",
+    "resultCount": "{count, plural, =0 {No events} one {# event} other {# events}}",
+    "viewDetails": "View details",
+    "emptyTitle": "No events yet",
+    "emptyDescription": "When you register for an event or trip, it will appear here.",
+    "noUpcomingTitle": "No upcoming events",
+    "noUpcomingDescription": "You have no upcoming events right now. Your past events are still available.",
+    "noResultsTitle": "No matching events",
+    "noResultsDescription": "Try a different search or filter.",
+    "showAll": "Show all events",
+    "errorTitle": "We couldn't load your events",
+    "errorDescription": "Something went wrong while loading your registrations. Please try again.",
+    "retry": "Try again",
+    "details": {
+      "back": "Back to my events",
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "confirmBy": "Confirm attendance by",
+      "attendance": "Attendance",
+      "notFoundTitle": "Event not found",
+      "notFoundDescription": "We couldn't find this event in your registrations."
+    },
+    "registration": {
+      "title": "My Registration",
+      "approvalLabel": "Registration",
+      "attendanceLabel": "Attendance confirmation",
+      "approval": {
+        "pending": "Under review",
+        "accepted": "Accepted",
+        "declined": "Not accepted",
+        "cancelled": "Cancelled by you"
+      },
+      "attendanceStep": {
+        "notRequired": "Not required yet",
+        "awaiting": "Awaiting your confirmation",
+        "expired": "Deadline passed",
+        "confirmed": "Confirmed",
+        "attended": "Attendance recorded",
+        "notAttended": "Did not attend"
+      },
+      "explain": {
+        "pending": "Your registration is being reviewed by the organizers. You'll be asked to confirm your attendance if you're accepted.",
+        "needConfirmation": "You've been accepted! Confirm your attendance by {deadline} to keep your place.",
+        "needConfirmationNoDeadline": "You've been accepted! Confirm your attendance to keep your place.",
+        "expired": "The confirmation deadline ({deadline}) has passed, so this place can no longer be confirmed. Contact the organizers if you think this is a mistake.",
+        "approved": "Your registration has been accepted.",
+        "confirmed": "Your place is confirmed. Your attendance ticket is below.",
+        "declined": "This registration wasn't accepted, so there's nothing to confirm.",
+        "attended": "You attended this event. Thanks for joining!",
+        "notAttended": "You were registered but didn't attend this event.",
+        "cancelled": "You cancelled this registration."
+      },
+      "startedNote": "This event has already started, so registration changes are closed.",
+      "confirmAction": "Confirm Attendance",
+      "cancelAction": "Cancel Registration",
+      "saving": "Saving…",
+      "feedback": {
+        "confirmed": "Attendance confirmed — demo only, saved in this browser. Nothing was sent to the organizers.",
+        "cancelled": "Registration cancelled — demo only, saved in this browser. Nothing was sent to the organizers.",
+        "notAllowed": "This action isn't available for this registration anymore. Nothing was changed.",
+        "storageUnavailable": "Couldn't save the change because this browser is blocking site storage. Nothing was changed.",
+        "reset": "Demo change undone. The original registration is shown again."
+      },
+      "demoNote": "Demo mode: confirming or cancelling is saved in this browser only until the registrations service is connected.",
+      "dialogDemoNote": "Demo mode: this is saved in this browser only and isn't sent to the organizers.",
+      "resetDemo": "Undo demo change"
+    },
+    "ticket": {
+      "title": "Attendance ticket",
+      "confirmedBadge": "Attendance confirmed",
+      "qrPlaceholder": "QR coming soon",
+      "showAtEntrance": "Show this QR code at the event entrance.",
+      "enlargeQr": "View QR code at a larger size",
+      "closeQr": "Close QR code"
+    }
+  },
+  "myEventCards": {
+    "title": "My Events",
+    "viewAll": "View all my events",
+    "loading": "Loading your events",
+    "empty": "You haven't registered for any events yet."
+  },
+  "upcomingEventsPage": {
+    "back": "Back to dashboard",
+    "title": "Upcoming Events",
+    "description": "Events published by GDG UJ committees that are coming up.",
+    "myEvents": "My registered events",
+    "loading": "Loading upcoming events",
+    "filtersLabel": "Upcoming event filters",
+    "searchLabel": "Search upcoming events",
+    "searchPlaceholder": "Search by name, location, or topic...",
+    "typeLabel": "Filter by event type",
+    "clearFilters": "Clear filters",
+    "resultCount": "{count, plural, =0 {No events} one {# event} other {# events}}",
+    "emptyTitle": "No upcoming events",
+    "emptyDescription": "There are no upcoming events right now. New events will appear here once committees publish them.",
+    "noResultsTitle": "No matching events",
+    "noResultsDescription": "Try a different search or event type.",
+    "viewDetails": "View details",
+    "seatsLeft": "{count, plural, one {# seat left} other {# seats left}}",
+    "full": "Fully booked",
+    "demoNote": "Demo data: this list shows the committees' sample published events until the events service is connected.",
+    "errorTitle": "We couldn't load upcoming events",
+    "errorDescription": "Something went wrong while loading events. Please try again.",
+    "retry": "Try again",
+    "details": {
+      "back": "Back to upcoming events",
+      "notFoundTitle": "Event not found",
+      "notFoundDescription": "This event doesn't exist or isn't published.",
+      "ended": "This event has already taken place.",
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "openMap": "Open in Google Maps",
+      "speakers": "Speakers",
+      "capacity": "Availability",
+      "deadline": "Registration deadline",
+      "requirements": "Requirements",
+      "registrationNote": "Registering from the dashboard will be available once the registration service is connected.",
+      "addToCalendar": "Add to Google Calendar"
+    }
+  },
+  "memberSettings": {
+    "profile": {
+      "title": "My Profile & Committee",
+      "description": "View your membership information and assigned committee.",
+      "readOnly": "Read-only",
+      "fullName": "Full name",
+      "email": "Email address",
+      "committee": "Committee",
+      "role": "Role",
+      "notAvailable": "Not available yet",
+      "managedByLeadership": "Committee details are managed by your committee's leadership. Contact your committee leader if something needs to change.",
+      "demoNote": "Shown from demo data until sign-in is connected."
+    },
+    "notifications": {
+      "title": "Notification Preferences",
+      "description": "Choose which updates matter to you.",
+      "deliveryNote": "Notifications aren't being sent yet. Your choices are saved in this browser and will apply once notification delivery is connected.",
+      "storageUnavailable": "This browser is blocking site storage, so your preferences can't be saved. Allow site data for this website and reload the page.",
+      "groups": {
+        "tasks": "Task notifications",
+        "events": "Event notifications"
+      },
+      "items": {
+        "taskAssigned": {
+          "label": "New task assigned",
+          "description": "Notify me when a new task is assigned to me."
+        },
+        "taskDeadline": {
+          "label": "Task deadline reminders",
+          "description": "Notify me when one of my assigned tasks is approaching its deadline."
+        },
+        "taskUpdates": {
+          "label": "Task updates",
+          "description": "Notify me when the status or details of one of my tasks change."
+        },
+        "newEvents": {
+          "label": "New events",
+          "description": "Notify me when a new event is published."
+        },
+        "registrationUpdates": {
+          "label": "Registration updates",
+          "description": "Notify me when the status of my event registration changes, such as pending, accepted, or declined."
+        }
+      },
+      "savedOn": "“{item}” turned on — saved in this browser.",
+      "savedOff": "“{item}” turned off — saved in this browser.",
+      "saveFailed": "Couldn't save this change. Your browser may be blocking site storage."
+    }
+  },
+  "memberHelp": {
+    "welcome": {
+      "title": "How can we help you?",
+      "description": "Find answers, learn how to use your dashboard, or get support."
+    },
+    "search": {
+      "label": "Search help articles",
+      "placeholder": "Search for a question or topic..."
+    },
+    "categoriesTitle": "Browse by topic",
+    "categoryAction": "Show {count, plural, one {# question} other {# questions}}",
+    "categories": {
+      "events": {
+        "title": "Events & Registrations"
+      },
+      "tasks": {
+        "title": "Tasks & Responsibilities"
+      },
+      "account": {
+        "title": "Account & Membership"
+      },
+      "notifications": {
+        "title": "Notifications & Settings"
+      }
+    },
+    "resultCount": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+    "noResultsTitle": "No matching answers",
+    "noResultsDescription": "Try different words, or contact the GDG team below.",
+    "clearSearch": "Clear search",
+    "faqs": {
+      "viewUpcoming": {
+        "question": "How do I view upcoming events?",
+        "answer": "On your dashboard, the Upcoming Events card shows the next published events. Select the yellow arrow next to its title to see every upcoming event, then select an event to read its details.",
+        "link": "Open Upcoming Events"
+      },
+      "registrationStatus": {
+        "question": "How can I check my registration status?",
+        "answer": "Open Events from the sidebar. Each registration shows its status — Pending, Need to Confirm, Accepted, Declined, Attended, Not Attended, or Cancelled. Select a registration to see its details, confirm or cancel it when that's available, and view your attendance ticket.",
+        "link": "Open My Events"
+      },
+      "registeredEvents": {
+        "question": "Where can I find events I've registered for?",
+        "answer": "Events in the sidebar opens My Events, which lists every event and trip you registered for. Use the Upcoming, Past and All tabs, the status and type filters, or search. The colored cards on your dashboard show your next registrations.",
+        "link": "Open My Events"
+      },
+      "findTasks": {
+        "question": "Where can I find my assigned tasks?",
+        "answer": "Select Tasks from the sidebar. You can switch between Board and List views and filter your tasks by priority. The My Tasks section on your dashboard also shows a summary.",
+        "link": "Open Tasks"
+      },
+      "taskStatuses": {
+        "question": "What do the task statuses mean?",
+        "answer": "To Do means the task hasn't been started. In Progress means it's being worked on. Complete means it's finished. The Board view groups your tasks into these three columns."
+      },
+      "taskProblem": {
+        "question": "What should I do if I have a problem with a task?",
+        "answer": "The Tasks page is read-only for members, so task details and statuses are updated by your committee leadership. If a task is unclear, blocked, or assigned by mistake, contact your committee leader directly."
+      },
+      "committeeInfo": {
+        "question": "How do I find my committee information?",
+        "answer": "Open Settings from the sidebar. The My Profile & Committee section shows your name, committee, and role.",
+        "link": "Open Settings"
+      },
+      "editCommittee": {
+        "question": "Why can't I edit my committee details?",
+        "answer": "Committee information and administrative settings are managed by authorized committee leadership. Members can view their committee details but can't change them. If something is wrong, ask your committee leader to update it."
+      },
+      "memberVsLeader": {
+        "question": "What is the difference between Member and Leader access?",
+        "answer": "Members can view their registrations, upcoming events, and assigned tasks, and manage their own preferences. Leaders use a separate leader workspace to manage their committee's events, members, tasks, points, and committee settings."
+      },
+      "changeNotifications": {
+        "question": "How do I change my notification preferences?",
+        "answer": "Open Settings and use the toggles under Notification Preferences. Each change is saved automatically in this browser — there's no Save button.",
+        "link": "Open Settings"
+      },
+      "toggleUpdates": {
+        "question": "How do I enable or disable certain updates?",
+        "answer": "Each toggle controls one type of update: new tasks, task deadline reminders, task updates, new events, and registration updates. Turn a toggle off to opt out of that update, or on to opt back in.",
+        "link": "Open Settings"
+      },
+      "notReceiving": {
+        "question": "Why am I not receiving notifications?",
+        "answer": "Notification delivery isn't connected yet, so no emails or alerts are sent at the moment. Your preferences are saved in this browser and will be used once notifications are available. Until then, check My Events and Tasks for the latest updates."
+      }
+    },
+    "contact": {
+      "title": "Still need help?",
+      "description": "Couldn't find what you're looking for? Contact the GDG team for assistance.",
+      "linkedin": "Message us on LinkedIn",
+      "x": "Reach us on X",
+      "note": "These are the official GDG on Campus UJ accounts. For questions about your committee or tasks, your committee leader is usually the quickest contact."
+    },
+    "backToTopics": "All topics",
+    "otherTopics": "Switch topic",
+    "searchResultsTitle": "Search results"
+  },
+  "directory": {
+    "searchLabel": "Search members by name",
+    "subtitle": "Meet the amazing members in our committee",
+    "searchPlaceholder": "Search members by name",
+    "myTeam": "My Team",
+    "teamLead": "Team Lead",
+    "openProfile": "View {name}'s profile",
+    "callMember": "Call {name}",
+    "socialLink": "Open {name}'s {platform} profile",
+    "profileTitle": "Member Profile",
+    "closeProfile": "Close member profile",
+    "profile": {
+      "about": "About",
+      "academicInfo": "Academic Information",
+      "university": "University",
+      "major": "Major"
+    },
+    "resultsCount": "{count, plural, one {# member} other {# members}} shown",
+    "empty": "There are no members to show here yet.",
+    "emptySearch": "No members match your search."
+  },
+  "achievements": {
+    "pageSubtitle": "Track your personal progress and contributions in the committee.",
+    "statsLabel": "My stats",
+    "showMore": "Show More",
+    "stats": {
+      "totalPoints": "Total Points",
+      "tasksCompleted": "Tasks Completed",
+      "tasksThisMonth": "Tasks This Month",
+      "pointsThisMonth": "Points This Month"
+    },
+    "ranges": {
+      "allTime": "All Time",
+      "thisMonth": "This Month",
+      "last30Days": "Last 30 Days",
+      "thisYear": "This Year"
+    },
+    "history": {
+      "title": "Points History",
+      "subtitle": "A record of all points you have earned or lost.",
+      "filterLabel": "Filter points history by time range",
+      "empty": "No point entries found for this time range.",
+      "unit": "pts",
+      "earned": "Earned {amount} {unit}",
+      "lost": "Lost {amount} {unit}"
+    },
+    "tasks": {
+      "title": "Completed Tasks",
+      "subtitle": "A record of all the tasks you have completed.",
+      "filterLabel": "Filter completed tasks by time range",
+      "empty": "No completed tasks found for this time range.",
+      "completed": "Completed"
+    },
+    "loading": "Loading your achievements...",
+    "error": {
+      "title": "Couldn't load your achievements",
+      "description": "Something went wrong while loading your personal progress. Please try again."
     }
   },
   "leader": {
@@ -202,27 +575,27 @@
         "member": "Member"
       }
     },
-  "points": {
-    "previewTitle": "Member points",
-    "previewDescription": "Track contribution and recognize consistent delivery.",
-    "historyLink": "Points history",
-    "member": "Member",
-    "tasks": "Tasks",
-    "lastActivity": "Last Activity",
-    "updatePoints": "Update points",
-    "points": "Points",
-    "totalBanner": "Total points: {points}",
-    "description": "Recognize members for their contributions and completed tasks.",
-    "standings": "Member standings",
-    "role": "Role",
-    "currentPoints": "Current Points",
-    "tasksCompleted": "Tasks Completed",
-    "lastUpdated": "Last Activity",
-    "actions": "Actions",
-    "emptyMembers": "No committee members are available.",
-    "emptyHistory": "No point changes have been recorded yet.",
-    "history": "Point History Log"
-  },
+    "points": {
+      "previewTitle": "Member points",
+      "previewDescription": "Track contribution and recognize consistent delivery.",
+      "historyLink": "Points history",
+      "member": "Member",
+      "tasks": "Tasks",
+      "lastActivity": "Last Activity",
+      "updatePoints": "Update points",
+      "points": "Points",
+      "totalBanner": "Total points: {points}",
+      "description": "Recognize members for their contributions and completed tasks.",
+      "standings": "Member standings",
+      "role": "Role",
+      "currentPoints": "Current Points",
+      "tasksCompleted": "Tasks Completed",
+      "lastUpdated": "Last Activity",
+      "actions": "Actions",
+      "emptyMembers": "No committee members are available.",
+      "emptyHistory": "No point changes have been recorded yet.",
+      "history": "Point History Log"
+    },
     "registrations": {
       "pendingTitle": "Pending registrations",
       "pendingDescription": "Applicants waiting for a PR review.",
@@ -352,12 +725,12 @@
       "medium": "Medium",
       "low": "Low",
       "all": "All",
-    "moveToInProgress": "Move to In Progress",
-    "moveToCompleted": "Move to Completed",
-    "moveToTodo": "Move to To Do",
-    "toDo": "To Do",
-    "inProgress": "In Progress",
-    "complete": "Completed",
+      "moveToInProgress": "Move to In Progress",
+      "moveToCompleted": "Move to Completed",
+      "moveToTodo": "Move to To Do",
+      "toDo": "To Do",
+      "inProgress": "In Progress",
+      "complete": "Completed",
       "empty": "No tasks found.",
       "managementTitle": "Task Management ({count} total)",
       "boardView": "Board View",
@@ -412,6 +785,9 @@
       "talk": "Talk",
       "panel": "Panel",
       "hackathon": "Hackathon",
+      "statusLabel": "Filter by status",
+      "dateLabel": "Filter by date",
+      "typeLabel": "Filter by event type",
       "clear": "Clear"
     },
     "eventManagement": {
@@ -437,7 +813,7 @@
       "seatsFilled": "{registered} of {capacity} seats filled ({percent}%)",
       "descriptionLabel": "Description:",
       "close": "Close",
-      "showing": "Showing {start}?{end} of {total} events",
+      "showing": "Showing {start}–{end} of {total} events",
       "previous": "Previous",
       "next": "Next",
       "listView": "List / Table View",
@@ -449,7 +825,10 @@
       "deleteMessage": "Are you sure you want to delete {name}? This will permanently remove it from the committee schedule.",
       "pageTitle": "Committee Events Management",
       "unpublished": "Unpublished Drafts ({count})",
-      "draftsDescription": "These events are saved locally and are NOT visible on the public platform until published."
+      "draftsDescription": "These events are saved locally and are NOT visible on the public platform until published.",
+      "pagination": "Events pagination",
+      "pageLabel": "Page {page}",
+      "openDetails": "Open details page"
     },
     "eventForm": {
       "create": "Create New Event",
@@ -480,23 +859,21 @@
         "draft": "Draft"
       },
       "errors": {
-        "errors": {
-          "eventTitleRequired": "Event title is required.",
-          "titleMin": "Title must be at least 3 characters.",
-          "titleMax": "Title cannot exceed 150 characters.",
-          "locationRequired": "Event location is required.",
-          "locationMin": "Location must be at least 3 characters.",
-          "locationMax": "Location cannot exceed 120 characters.",
-          "capacityNumber": "Capacity must be a valid number.",
-          "capacityInteger": "Capacity must be a whole integer.",
-          "capacityMin": "Capacity must be at least 1 attendee.",
-          "capacityMax": "Capacity cannot exceed 5,000 attendees.",
-          "capacityBelowRegistrations": "Capacity cannot be lower than existing registrations ({count}).",
-          "dateRequired": "Date is required.",
-          "dateFormat": "Please enter a descriptive date (e.g. Oct 28, 2026).",
-          "timeRequired": "Time is required.",
-          "fixErrors": "Please correct all highlighted errors before saving."
-        }
+        "eventTitleRequired": "Event title is required.",
+        "titleMin": "Title must be at least 3 characters.",
+        "titleMax": "Title cannot exceed 150 characters.",
+        "locationRequired": "Event location is required.",
+        "locationMin": "Location must be at least 3 characters.",
+        "locationMax": "Location cannot exceed 120 characters.",
+        "capacityNumber": "Capacity must be a valid number.",
+        "capacityInteger": "Capacity must be a whole integer.",
+        "capacityMin": "Capacity must be at least 1 attendee.",
+        "capacityMax": "Capacity cannot exceed 5,000 attendees.",
+        "capacityBelowRegistrations": "Capacity cannot be lower than existing registrations ({count}).",
+        "dateRequired": "Date is required.",
+        "dateFormat": "Please enter a descriptive date (e.g. Oct 28, 2026).",
+        "timeRequired": "Time is required.",
+        "fixErrors": "Please correct all highlighted errors before saving."
       }
     },
     "upcomingEvents": {
@@ -504,7 +881,163 @@
       "description": "At-a-glance readiness for the next 30 days.",
       "viewCalendar": "View calendar",
       "capacity": "Capacity",
-      "registered": "{count} registered"
+      "registered": "{count} registered",
+      "viewAllEvents": "View all events",
+      "empty": "No upcoming events yet. Published events will appear here."
+    },
+    "createEvent": {
+      "title": "Create Event",
+      "subtitle": "Create and publish an event for the GDG UJ community.",
+      "close": "Close event creation dialog",
+      "optional": "(Optional)",
+      "sections": {
+        "eventInfo": "Event information",
+        "registrationInfo": "Registration information"
+      },
+      "fields": {
+        "name": "Event name",
+        "description": "Description",
+        "speakers": "Speakers",
+        "type": "Event type",
+        "date": "Date",
+        "time": "Time",
+        "location": "Location",
+        "mapsLink": "Google Maps link",
+        "capacity": "Capacity",
+        "deadline": "Registration deadline",
+        "requirements": "Requirements",
+        "image": "Event image"
+      },
+      "placeholders": {
+        "name": "Enter event name",
+        "description": "Write event description here...",
+        "speakers": "Enter speaker names",
+        "location": "Enter a location",
+        "mapsLink": "Paste location link",
+        "capacity": "Enter maximum number of attendees",
+        "requirements": "Enter any requirements for attendees..."
+      },
+      "upload": {
+        "title": "Upload event image",
+        "hint": "Drag and drop files here, or click to browse",
+        "replace": "Replace image",
+        "remove": "Remove image",
+        "previewAlt": "Selected event image"
+      },
+      "registration": {
+        "description": "Every attendee fills in these fields when registering. They are shown here as a read-only preview.",
+        "fields": {
+          "fullName": "Full name",
+          "universityId": "University ID",
+          "college": "College",
+          "major": "Major",
+          "phone": "Phone number",
+          "email": "Email address",
+          "membership": "Are you a GDG on Campus member?"
+        },
+        "placeholders": {
+          "fullName": "Enter your full name",
+          "universityId": "e.g. 2286291",
+          "college": "e.g. Computer Science and Engineering",
+          "major": "e.g. Software Engineering",
+          "phone": "5xxxxxxxx",
+          "email": "Enter your email address"
+        },
+        "memberYes": "Yes, I am a member",
+        "memberNo": "No, I am not a member"
+      },
+      "questions": {
+        "title": "Custom questions",
+        "help": "Attendees must answer these questions when they register.",
+        "add": "Add more questions",
+        "formTitle": "Add a registration question",
+        "type": "Question type",
+        "selectType": "Select a question type",
+        "text": "Question",
+        "textPlaceholder": "Enter your question",
+        "options": "Options",
+        "optionPlaceholder": "Option {number}",
+        "addOption": "Add option",
+        "removeOption": "Remove option {number}",
+        "cancel": "Cancel",
+        "submit": "Add question",
+        "remove": "Remove question {number}",
+        "requiredBadge": "Required",
+        "yes": "Yes",
+        "no": "No",
+        "types": {
+          "shortAnswer": "Short answer",
+          "longAnswer": "Long answer",
+          "multipleChoice": "Multiple choice",
+          "singleChoice": "Single choice",
+          "checkboxes": "Checkboxes",
+          "yesNo": "Yes / No"
+        },
+        "errors": {
+          "type": "Select a question type.",
+          "text": "Enter the question text.",
+          "options": "Add at least two options."
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "preview": "Preview",
+        "publish": "Publish Event"
+      },
+      "errors": {
+        "summary": "{count, plural, one {# field needs} other {# fields need}} your attention. Fix the highlighted fields to continue.",
+        "descriptionRequired": "Event description is required.",
+        "datePast": "Event date cannot be in the past.",
+        "mapsLinkInvalid": "Enter a valid link starting with http:// or https://.",
+        "capacityRequired": "Capacity is required.",
+        "deadlineRequired": "Registration deadline is required.",
+        "deadlinePast": "Registration deadline cannot be in the past.",
+        "deadlineAfterEvent": "Registration deadline cannot be after the event date.",
+        "imageRequired": "Event image is required.",
+        "imageType": "Choose an image file (for example PNG, JPG, or WebP)."
+      },
+      "discard": {
+        "title": "Discard this event?",
+        "message": "The details you entered will be lost.",
+        "confirm": "Discard",
+        "keep": "Keep editing"
+      },
+      "preview": {
+        "title": "Event Preview",
+        "close": "Close preview and return to editing",
+        "imageAlt": "Event image",
+        "date": "Date",
+        "time": "Time",
+        "location": "Location",
+        "speakers": "Speakers",
+        "capacity": "Capacity",
+        "capacityValue": "{count, plural, one {# attendee} other {# attendees}}",
+        "deadline": "Registration deadline",
+        "requirements": "Requirements",
+        "noRequirements": "No requirements",
+        "openMap": "Open in Google Maps",
+        "registrationInfo": "Registration information",
+        "questions": "Custom questions",
+        "none": "Not specified",
+        "edit": "Edit",
+        "publish": "Publish Event"
+      },
+      "success": {
+        "title": "Event Published Successfully!",
+        "message": "“{name}” has been published and now appears in your committee's events list.",
+        "demoNote": "Demo data: events are kept for this browser session until the events service is connected.",
+        "viewEvent": "View Event",
+        "close": "Close"
+      }
+    },
+    "eventDetails": {
+      "back": "Back to events",
+      "notFoundTitle": "Event not found",
+      "notFoundDescription": "This event doesn't exist or was deleted. Events created in this demo are kept only until the page is reloaded.",
+      "createdUpdated": "Created {created} · Updated {updated}",
+      "draftNotice": "This event is a draft. Members can't see it until it is published.",
+      "capacity": "Capacity & attendance",
+      "notProvided": "Not provided"
     },
     "recentActivity": {
       "title": "Recent activity",

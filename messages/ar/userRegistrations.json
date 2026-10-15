@@ -12,7 +12,8 @@
     "approved": "مقبول",
     "declined": "مرفوض",
     "attended": "حضر",
-    "not-attended": "لم يحضر"
+    "not-attended": "لم يحضر",
+    "cancelled": "ملغى"
   },
   "confirmPrompt": "مقعدك متاح. أكّد حضورك للاحتفاظ به، أو ألغِ التسجيل إذا لم تتمكن من الحضور.",
   "confirmBefore": "يرجى تأكيد الحضور قبل {date}.",

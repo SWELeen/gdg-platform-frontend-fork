@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { Link } from "@/i18n/navigation";
 import { useHomeSectionHref } from "@/components/layout/useHomeSectionHref";
+import { GDG_LINKEDIN_URL, GDG_X_URL } from "@/lib/constants/social-links";
 
 export default function Footer() {
   const t = useTranslations("common");
@@ -95,7 +96,7 @@ export default function Footer() {
           <div className="mt-2 h-1 w-10 rounded-full bg-[var(--gdg-green)]" />
           <div className="mt-4 flex items-center gap-3">
             <a
-              href="https://www.linkedin.com/company/google-developer-student-club-uj/"
+              href={GDG_LINKEDIN_URL}
               aria-label="LinkedIn"
               target="_blank"
               rel="noreferrer"
@@ -105,7 +106,7 @@ export default function Footer() {
             </a>
 
             <a
-              href="https://x.com/gdguoj?s=11"
+              href={GDG_X_URL}
               aria-label="X"
               target="_blank"
               rel="noreferrer"
