@@ -31,6 +31,13 @@
     "major": "Major",
     "academicYear": "Academic year"
   },
+  "academicValues": {
+  "universityOfJeddah": "University of Jeddah",
+  "softwareEngineering": "Software Engineering",
+  "thirdYear": "Third Year",
+  "janaAlshaikh": "Jana Alshaikh"
+},
+
   "universityPlaceholder": "Select a university",
   "registrationsLink": "My registrations",
   "social": {
@@ -42,3 +49,4 @@
     "notAdded": "Not added yet"
   }
 }
+
