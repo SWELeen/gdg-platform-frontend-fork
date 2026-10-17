@@ -21,9 +21,10 @@ export default function SignupCredentials({
 }: SignupCredentialsProps) {
   const t = useTranslations("auth.signup")
   const fullNameError = errors.fullName ?? ""
-  const emailError = errors.email ?? ""
-  const passwordError = errors.password ?? ""
+  const emailError = errors.personalEmail ?? ""
   const confirmEmailError = errors.confirmEmail ?? ""
+  const universityEmailError = errors.universityEmail ?? ""
+  const passwordError = errors.password ?? ""
   const confirmPasswordError = errors.confirmPassword ?? ""
   const phoneError = errors.phone ?? ""
 
@@ -76,22 +77,22 @@ export default function SignupCredentials({
       />
 
       <label
-        htmlFor="email"
+        htmlFor="personal-email"
         className="relative order-3 block text-sm font-medium"
       >
-        {t("fields.email.label")} <span className="text-gdg-red">*</span>
+        {t("fields.personalEmail.label")} <span className="text-gdg-red">*</span>
         <input
-          id="email"
-          name="email"
+          id="personal-email"
+          name="personalEmail"
           type="email"
-          value={values.email}
-          onChange={(event) => onChange("email", event.target.value)}
-          onBlur={() => onBlur("email")}
-          placeholder={t("fields.email.placeholder")}
+          value={values.personalEmail}
+          onChange={(event) => onChange("personalEmail", event.target.value)}
+          onBlur={() => onBlur("personalEmail")}
+          placeholder={t("fields.personalEmail.placeholder")}
           autoComplete="email"
           maxLength={254}
           aria-invalid={Boolean(emailError)}
-          aria-describedby={emailError ? "email-error" : undefined}
+          aria-describedby={emailError ? "personal-email-error" : undefined}
           className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-base font-normal outline-none placeholder:text-foreground/40 ${
             emailError
               ? "border-gdg-red"
@@ -100,7 +101,7 @@ export default function SignupCredentials({
         />
 
         <AuthErrorMessage
-          id="email-error"
+          id="personal-email-error"
           message={emailError}
           className="absolute start-0 top-full mt-0.5"
         />

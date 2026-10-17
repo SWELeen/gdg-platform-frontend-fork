@@ -1,4 +1,11 @@
 {
+  "phoneRequired": "يرجى إدخال رقم الجوال.",
+  "universityChoiceRequired": "يرجى اختيار الجامعة.",
+  "branchRequired": "يرجى اختيار الفرع.",
+  "levelRequired": "يرجى اختيار المستوى.",
+  "roleRequired": "يرجى اختيار الدور.",
+  "committeeRequired": "يرجى اختيار لجنة واحدة على الأقل.",
+  "committeeRoleRequired": "يرجى اختيار دور لكل لجنة اخترتها.",
   "emailRequired": "يرجى إدخال بريدك الإلكتروني.",
   "emailTooLong": "يجب ألا يتجاوز البريد الإلكتروني 254 حرفًا.",
   "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",

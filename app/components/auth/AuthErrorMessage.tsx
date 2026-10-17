@@ -2,9 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
-
-const AUTO_HIDE_DELAY = 3000;
 
 type AuthErrorMessageProps = {
   // A key from messages/*/validation.json, or "" for no error.
@@ -21,29 +18,14 @@ export default function AuthErrorMessage({
 }: AuthErrorMessageProps) {
   const t = useTranslations("validation")
   const text = message ? t(message) : ""
-  const [prevMessage, setPrevMessage] = useState(message)
-  const [visible, setVisible] = useState(Boolean(message))
-
-  if (message !== prevMessage) {
-    setPrevMessage(message);
-    setVisible(Boolean(message));
-  }
-
-  useEffect(() => {
-    if (!message) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => setVisible(false), AUTO_HIDE_DELAY);
-
-    return () => window.clearTimeout(timer);
-  }, [message]);
 
   return (
     <AnimatePresence>
-      {message && visible ? (
+      {message ? (
         <motion.p
+          key={`${id ?? "auth-error"}-${message}`}
           id={id}
+          role="alert"
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}

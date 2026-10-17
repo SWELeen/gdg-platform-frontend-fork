@@ -7,9 +7,13 @@ import useDesktopMediaQuery from "@/app/lib/useDesktopMediaQuery";
 
 type AuthFormPanelProps = {
   children: ReactNode;
+  scrollableOnDesktop?: boolean;
 };
 
-export default function AuthFormPanel({ children }: AuthFormPanelProps) {
+export default function AuthFormPanel({
+  children,
+  scrollableOnDesktop = false,
+}: AuthFormPanelProps) {
   const isDesktop = useDesktopMediaQuery();
 
   return (
@@ -18,10 +22,11 @@ export default function AuthFormPanel({ children }: AuthFormPanelProps) {
       transition={
         isDesktop ? { duration: 0.6, ease: "easeInOut" } : undefined
       }
-      // On desktop the signup card is sized to fit its content, so the panel
-      // hides overflow. Small screens keep scrolling, since the form cannot
-      // realistically fit there.
-      className="relative z-10 flex h-full min-h-0 flex-1 items-center justify-center overflow-y-auto bg-background lg:overflow-hidden"
+      className={`relative z-10 flex h-full min-h-0 flex-1 items-center justify-center overflow-y-auto bg-background ${
+        scrollableOnDesktop
+          ? "lg:items-start lg:overflow-y-auto"
+          : "lg:overflow-hidden"
+      }`}
     >
       {children}
     </motion.section>

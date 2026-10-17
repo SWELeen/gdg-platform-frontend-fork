@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation"
 import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel"
 import AuthFormPanel from "@/app/components/auth/AuthFormPanel"
 import AuthCard from "@/app/components/auth/AuthCard"
-import SignupFlow from "./components/SignupFlow"
+import SignupFlow from "./components/SignupForm"
 
 export async function generateMetadata({
   params
@@ -23,20 +23,18 @@ export default function SignUp({ params }: PageProps<"/[locale]/signup">) {
   const t = useTranslations("auth.signup")
 
   return (
-    // Desktop is a fixed one-screen layout: `h-dvh` + `overflow-hidden` keeps the
-    // signup card inside the viewport instead of letting the page grow a scrollbar.
-    // Small screens keep the natural page scroll, the form cannot fit there.
+    // Keep the split auth layout on desktop while letting the long signup form scroll.
     <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-dvh lg:min-h-0 lg:flex-row lg:overflow-hidden">
-      <AuthFormPanel>
+      <AuthFormPanel scrollableOnDesktop>
         <AuthCard
           size="lg"
           title={t("title")}
           description=""
-          className="lg:-translate-y-8"
+          className="my-8 shrink-0 lg:mt-4"
         >
           <SignupFlow />
 
-          <p className="mt-2 pb-4 text-center text-sm text-foreground/55 lg:mt-0 lg:pb-1">
+          <p className="mt-4 pb-4 text-center text-sm text-foreground/55 lg:mt-4 lg:pb-3">
             {t("haveAccount")}
             <Link
               href="/login"

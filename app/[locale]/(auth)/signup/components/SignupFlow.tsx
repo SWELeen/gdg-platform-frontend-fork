@@ -3,10 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import { defaultPhoneCountryCode } from "@/data/signup"
-import {
-  validateEmail,
-  validateEmailConfirmation
-} from "@/app/lib/validation/email"
+import { validateEmail } from "@/app/lib/validation/email"
 import {
   validateConfirmPassword,
   validatePassword
@@ -19,18 +16,19 @@ import SignupProgress from "./SignupProgress"
 type FieldName =
   | "fullName"
   | "gender"
-  | "email"
+  | "personalEmail"
+  | "universityEmail"
   | "password"
-  | "confirmEmail"
   | "confirmPassword"
   | "phone"
   | "countryCode"
   | "university"
-  | "universityId"
+  | "branch"
   | "college"
-  | "collegeOther"
   | "major"
-  | "majorOther"
+  | "level"
+  | "committees"
+  | "role"
 
 type FormValues = Record<FieldName, string>
 type FieldErrors = Partial<Record<FieldName, string>>
@@ -40,18 +38,19 @@ const FIELD_ERROR_TIMEOUT = 3000
 const defaultValues: FormValues = {
   fullName: "",
   gender: "",
-  email: "",
+  personalEmail: "",
+  universityEmail: "",
   password: "",
-  confirmEmail: "",
   confirmPassword: "",
   phone: "",
   countryCode: defaultPhoneCountryCode,
   university: "",
-  universityId: "",
+  branch: "",
   college: "",
-  collegeOther: "",
   major: "",
-  majorOther: ""
+  level: "",
+  committees: "",
+  role: ""
 }
 
 function normalizeText(value: unknown) {
@@ -76,9 +75,7 @@ function validateName(value: string) {
 function validatePhone(value: string) {
   const trimmed = normalizeText(value)
 
-  if (!trimmed) {
-    return ""
-  }
+  if (!trimmed) return "phoneRequired"
 
   if (!/^[\d\s().+-]+$/.test(trimmed)) {
     return "phoneInvalid"
@@ -92,21 +89,9 @@ function validatePhone(value: string) {
 }
 
 // Returns a validation.json key such as "genderRequired".
-function validateSelect(value: string, field: "gender" | "college" | "major") {
+function validateSelect(value: string, field: "gender" | "university" | "branch" | "college" | "major" | "level" | "role") {
   if (!normalizeText(value)) {
     return `${field}Required`
-  }
-
-  return ""
-}
-
-function validateOtherAcademicText(value: string) {
-  const trimmed = normalizeText(value)
-
-  if (!trimmed) return "fieldRequired"
-  if (trimmed.length > 255) return "fieldTooLong"
-  if (!/^[\p{L}\p{M}\p{N}\s.'’&()/+\-]+$/u.test(trimmed)) {
-    return "fieldInvalid"
   }
 
   return ""
@@ -121,17 +106,14 @@ function validateCredentials(values: FormValues) {
   const genderError = validateSelect(values.gender, "gender")
   if (genderError) nextErrors.gender = genderError
 
-  const emailError = validateEmail(values.email)
-  if (emailError) nextErrors.email = emailError
+  const personalEmailError = validateEmail(values.personalEmail)
+  if (personalEmailError) nextErrors.personalEmail = personalEmailError
+
+  const universityEmailError = validateEmail(values.universityEmail)
+  if (universityEmailError) nextErrors.universityEmail = universityEmailError
 
   const passwordError = validatePassword(values.password)
   if (passwordError) nextErrors.password = passwordError
-
-  const confirmEmailError = validateEmailConfirmation(
-    values.confirmEmail,
-    values.email
-  )
-  if (confirmEmailError) nextErrors.confirmEmail = confirmEmailError
 
   const confirmPasswordError = validateConfirmPassword(
     values.confirmPassword,
@@ -148,28 +130,11 @@ function validateCredentials(values: FormValues) {
 function validateAcademicDetails(values: FormValues) {
   const nextErrors: FieldErrors = {}
 
-  const universityError = validateRequiredText(values.university, "university")
-  if (universityError) nextErrors.university = universityError
-
-  const universityIdError = validateRequiredText(
-    values.universityId,
-    "universityId"
-  )
-  if (universityIdError) nextErrors.universityId = universityIdError
-
-  const collegeError = validateSelect(values.college, "college")
-  if (collegeError) nextErrors.college = collegeError
-  if (values.college === "Other") {
-    const collegeOtherError = validateOtherAcademicText(values.collegeOther ?? "")
-    if (collegeOtherError) nextErrors.collegeOther = collegeOtherError
+  for (const field of ["university", "branch", "college", "major", "level", "role"] as const) {
+    const fieldError = validateSelect(values[field], field)
+    if (fieldError) nextErrors[field] = fieldError
   }
-
-  const majorError = validateSelect(values.major, "major")
-  if (majorError) nextErrors.major = majorError
-  if (values.major === "Other") {
-    const majorOtherError = validateOtherAcademicText(values.majorOther ?? "")
-    if (majorOtherError) nextErrors.majorOther = majorOtherError
-  }
+  if (!values.committees) nextErrors.committees = "committeeRequired"
 
   return nextErrors
 }
@@ -270,8 +235,7 @@ export default function SignupFlow() {
     const nextValue = [
       "password",
       "confirmPassword",
-      "collegeOther",
-      "majorOther"
+      "committees"
     ].includes(normalizedField)
       ? value
       : value.trim()
@@ -280,20 +244,8 @@ export default function SignupFlow() {
       ...defaultValues,
       ...current,
       [normalizedField]: nextValue,
-      ...(normalizedField === "college" && nextValue !== "Other"
-        ? { collegeOther: "" }
-        : {}),
-      ...(normalizedField === "major" && nextValue !== "Other"
-        ? { majorOther: "" }
-        : {})
     }))
 
-    if (normalizedField === "college" && nextValue !== "Other") {
-      clearFieldError("collegeOther")
-    }
-    if (normalizedField === "major" && nextValue !== "Other") {
-      clearFieldError("majorOther")
-    }
 
     if (fieldErrors[normalizedField]) {
       clearFieldError(normalizedField)
@@ -311,27 +263,22 @@ export default function SignupFlow() {
     switch (normalizedField) {
       case "fullName":
         return validateName(value)
-      case "email":
+      case "personalEmail":
+      case "universityEmail":
         return validateEmail(value)
       case "password":
         return validatePassword(value)
-      case "confirmEmail":
-        return validateEmailConfirmation(value, formValues.email)
       case "confirmPassword":
         return validateConfirmPassword(value, formValues.password)
       case "phone":
         return validatePhone(value)
       case "university":
-        return validateRequiredText(value, "university")
-      case "universityId":
-        return validateRequiredText(value, "universityId")
+      case "branch":
       case "college":
-        return validateSelect(value, "college")
-      case "collegeOther":
-      case "majorOther":
-        return validateOtherAcademicText(value)
       case "major":
-        return validateSelect(value, "major")
+      case "level":
+      case "role":
+        return validateSelect(value, normalizedField)
       default:
         return ""
     }
