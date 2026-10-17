@@ -94,19 +94,9 @@ export default function SignupDetails({
         id="college"
         label={t("fields.college.label")}
         placeholder={t("fields.college.placeholder")}
-        options={collegeOptions.map(({ value, labelKey }) => ({
-          value,
-          label: t(`options.college.${labelKey}`)
-        }))}
+        options={collegeOptions.map((value) => ({ value, label: value }))}
         value={values.college}
         error={errors.college}
-        other={{
-          value: values.collegeOther ?? "",
-          placeholder: t("fields.college.otherPlaceholder"),
-          error: errors.collegeOther,
-          onChange: (value) => onChange("collegeOther", value),
-          onBlur: () => onBlur("collegeOther")
-        }}
         onChange={(value) => onChange("college", value)}
         onBlur={() => onBlur("college")}
       />
@@ -115,19 +105,9 @@ export default function SignupDetails({
         id="major"
         label={t("fields.major.label")}
         placeholder={t("fields.major.placeholder")}
-        options={majorOptions.map(({ value, labelKey }) => ({
-          value,
-          label: t(`options.major.${labelKey}`)
-        }))}
+        options={majorOptions.map((value) => ({ value, label: value }))}
         value={values.major}
         error={errors.major}
-        other={{
-          value: values.majorOther ?? "",
-          placeholder: t("fields.major.otherPlaceholder"),
-          error: errors.majorOther,
-          onChange: (value) => onChange("majorOther", value),
-          onBlur: () => onBlur("majorOther")
-        }}
         onChange={(value) => onChange("major", value)}
         onBlur={() => onBlur("major")}
       />
