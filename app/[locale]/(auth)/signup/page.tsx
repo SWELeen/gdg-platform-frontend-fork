@@ -28,13 +28,12 @@ export default function SignUp({ params }: PageProps<"/[locale]/signup">) {
       <AuthFormPanel scrollableOnDesktop>
         <AuthCard
           size="lg"
-          title={t("title")}
           description=""
-          className="my-8 shrink-0 lg:mt-4"
+          className="my-8 shrink-0 lg:mt-6 lg:mb-8"
         >
           <SignupFlow />
 
-          <p className="mt-4 pb-4 text-center text-sm text-foreground/55 lg:mt-4 lg:pb-3">
+          <p className="mt-8 pb-6 text-center text-sm text-foreground/55 lg:mt-8 lg:pb-6">
             {t("haveAccount")}
             <Link
               href="/login"

@@ -15,6 +15,7 @@
   "fullNameTooLong": "Full name must be 255 characters or fewer.",
   "nameInvalid": "Name can only include letters, spaces, and common punctuation.",
   "genderRequired": "Please select your gender.",
+  "membershipRequired": "Please select whether you are a member.",
   "phoneRequired": "Please enter your phone number.",
   "phoneInvalid": "Please enter a valid phone number.",
   "phoneFormat": "Enter a 9-digit Saudi mobile number starting with 5.",

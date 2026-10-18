@@ -78,12 +78,14 @@ function validateChoice(field: FieldName, value: string) {
   return selectOptions[field]?.includes(value) ? "" : "fieldInvalid"
 }
 
-function validateField(field: FieldName, values: FormValues) {
+function validateField(field: FieldName, values: FormValues, membership: "member" | "nonMember" | "") {
   const value = field === "committees" ? "" : values[field] as string
   switch (field) {
     case "fullName": return validateName(value)
-    case "personalEmail":
-    case "universityEmail": return validateEmail(value)
+    case "personalEmail": return validateEmail(value)
+    case "universityEmail":
+      if (membership === "nonMember" && !value.trim()) return ""
+      return validateEmail(value)
     case "password": return validatePassword(value)
     case "confirmPassword": return validateConfirmPassword(value, values.password)
     case "phone": return validatePhone(value)
@@ -98,7 +100,7 @@ function validateField(field: FieldName, values: FormValues) {
 
 function TextField({
   id, label, value, onChange, onBlur, error, type = "text", placeholder,
-  maxLength = 255, inputMode, autoComplete,
+  maxLength = 255, inputMode, autoComplete, required = true,
   className = "",
 }: {
   id: string
@@ -112,12 +114,13 @@ function TextField({
   maxLength?: number
   inputMode?: "text" | "email" | "tel"
   autoComplete?: string
+  required?: boolean
   className?: string
 }) {
   const errorId = `${id}-error`
   return (
     <label htmlFor={id} className={`relative block text-sm font-medium ${className}`}>
-      {label} <span className="text-gdg-red" aria-hidden="true">*</span>
+      {label} {required && <span className="text-gdg-red" aria-hidden="true">*</span>}
       <input
         id={id}
         name={id}
@@ -128,7 +131,7 @@ function TextField({
         onBlur={onBlur}
         placeholder={placeholder}
         maxLength={maxLength}
-        required
+        required={required}
         autoComplete={autoComplete}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
@@ -220,17 +223,24 @@ function ChoiceField({
 
 export default function SignupForm() {
   const t = useTranslations("auth.signup")
-  const [step, setStep] = useState<1 | 2>(1)
+  const [step, setStep] = useState<0 | 1 | 2>(0)
+  const [membership, setMembership] = useState<"member" | "nonMember" | "">("")
+  const [membershipError, setMembershipError] = useState("")
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
+    const hideBranch = field === "university" && value !== "University of Jeddah"
+    if (hideBranch) next.branch = ""
     setValues(next)
     if (errors[field]) {
-      const error = validateField(field, next)
+      const error = validateField(field, next, membership)
       setErrors((current) => ({ ...current, [field]: error || undefined }))
+    }
+    if (hideBranch) {
+      setErrors((current) => ({ ...current, branch: undefined }))
     }
     if (field === "password" && next.confirmPassword) {
       const confirmError = validateConfirmPassword(next.confirmPassword, next.password)
@@ -239,23 +249,43 @@ export default function SignupForm() {
   }
 
   const blur = (field: FieldName) => {
-    const error = validateField(field, values)
+    const error = validateField(field, values, membership)
     setErrors((current) => ({ ...current, [field]: error || undefined }))
   }
 
   const fields: FieldName[] = step === 1
-    ? ["fullName", "phone", "personalEmail", "universityEmail", "password", "confirmPassword", "gender"]
-    : ["university", "branch", "college", "major", "level", "committees"]
+    ? membership === "member"
+      ? ["fullName", "phone", "personalEmail", "universityEmail", "password", "confirmPassword", "gender"]
+      : ["fullName", "personalEmail", "universityEmail", "phone", "gender", "password", "confirmPassword"]
+    : membership === "member"
+      ? [
+        "university",
+        ...(values.university === "University of Jeddah" ? ["branch" as const] : []),
+        "college",
+        "major",
+        "level",
+        "committees",
+      ]
+      : ["university", "college", "major", "level"]
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (isSubmitting) return
+    if (step === 0) {
+      if (!membership) {
+        setMembershipError("membershipRequired")
+        return
+      }
+      setMembershipError("")
+      setStep(1)
+      return
+    }
     const nextErrors: FieldErrors = {}
     fields.forEach((field) => {
-      const error = validateField(field, values)
+      const error = validateField(field, values, membership)
       if (error) nextErrors[field] = error
     })
-    if (step === 2) {
+    if (step === 2 && membership === "member") {
       values.committees.forEach((committee) => {
         const role = values.committeeRoles[committee]
         if (!role) {
@@ -281,7 +311,24 @@ export default function SignupForm() {
 
   const handleBack = () => {
     setErrors({})
-    setStep(1)
+    if (step === 2) setStep(1)
+    else setStep(0)
+  }
+
+  const chooseMembership = (value: "member" | "nonMember") => {
+    setMembership(value)
+    setMembershipError("")
+    setErrors({})
+    if (value === "nonMember") {
+      setValues((current) => ({
+        ...current,
+        universityEmail: "",
+        confirmPassword: "",
+        branch: "",
+        committees: [],
+        committeeRoles: {},
+      }))
+    }
   }
 
   const updateCommitteeRole = (committee: string, role: string) => {
@@ -329,7 +376,7 @@ export default function SignupForm() {
 
   const personalEmail = t("fields.personalEmail.label")
   const universityEmail = t("fields.universityEmail.label")
-  const renderPersonal: ReactNode = (
+  const renderMemberPersonal: ReactNode = (
     <>
       <TextField id="fullName" label={t("fields.fullName.label")} value={values.fullName} onChange={(value) => update("fullName", value)} onBlur={() => blur("fullName")} error={errors.fullName} placeholder={t("fields.fullName.placeholder")} autoComplete="name" />
       <TextField id="phone" label={t("fields.phone.label")} type="tel" inputMode="tel" value={values.phone} onChange={(value) => update("phone", value)} onBlur={() => blur("phone")} error={errors.phone} placeholder={t("fields.phone.placeholder")} maxLength={9} autoComplete="tel-national" />
@@ -344,26 +391,64 @@ export default function SignupForm() {
     </>
   )
 
+  const renderNonMemberPersonal: ReactNode = (
+    <>
+      <TextField id="fullName" label={t("fields.fullName.label")} value={values.fullName} onChange={(value) => update("fullName", value)} onBlur={() => blur("fullName")} error={errors.fullName} placeholder={t("fields.fullName.placeholder")} autoComplete="name" />
+      <TextField id="phone" label={t("fields.phone.label")} type="tel" inputMode="tel" value={values.phone} onChange={(value) => update("phone", value)} onBlur={() => blur("phone")} error={errors.phone} placeholder={t("fields.phone.placeholder")} maxLength={9} autoComplete="tel-national" />
+      <TextField id="personalEmail" label={personalEmail} type="email" inputMode="email" value={values.personalEmail} onChange={(value) => update("personalEmail", value)} onBlur={() => blur("personalEmail")} error={errors.personalEmail} placeholder={t("fields.personalEmail.placeholder")} maxLength={254} autoComplete="email" />
+      <TextField id="universityEmail" label={`${universityEmail} (${t("optional")})`} type="email" inputMode="email" value={values.universityEmail} onChange={(value) => update("universityEmail", value)} onBlur={() => blur("universityEmail")} error={errors.universityEmail} placeholder={t("fields.universityEmail.placeholder")} maxLength={254} autoComplete="email" required={false} />
+      <PasswordField id="password" label={t("fields.password.label")} value={values.password} onChange={(value) => update("password", value)} onBlur={() => blur("password")} error={errors.password} placeholder={t("fields.password.placeholder")} />
+      <PasswordField id="confirmPassword" label={t("fields.confirmPassword.label")} value={values.confirmPassword} onChange={(value) => update("confirmPassword", value)} onBlur={() => blur("confirmPassword")} error={errors.confirmPassword} placeholder={t("fields.confirmPassword.placeholder")} />
+      {field("gender", t("fields.gender.label"), t("fields.gender.placeholder"), genderOptions.map(({ value, labelKey }) => ({
+        value,
+        label: t(`options.gender.${labelKey}`),
+      })))}
+    </>
+  )
+
   return (
     <>
-      <SignupProgress step={step} />
-      <form onSubmit={handleSubmit} noValidate className="mt-6 flex w-full flex-col">
-        <AuthStepTransition stepKey={step} className="grid w-full grid-cols-1 gap-x-6 gap-y-7 md:grid-cols-2">
-          {step === 1 ? (
+      {(step === 1 || step === 2) && <SignupProgress step={step} />}
+      {step === 0 && (
+        <h1 className="text-center text-3xl font-bold leading-tight md:text-4xl">
+          {t("title")}
+        </h1>
+      )}
+      <form onSubmit={handleSubmit} noValidate className={`${step === 0 ? "mt-8" : "mt-6"} flex w-full flex-col`}>
+        <AuthStepTransition stepKey={step} className="grid w-full grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
+          {step === 0 ? (
+            <fieldset data-membership-choice className="col-span-full" aria-describedby={membershipError ? "membership-error" : undefined}>
+              <legend className="mb-8 text-sm font-medium">{t("membershipQuestion")}</legend>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {(["member", "nonMember"] as const).map((option) => (
+                  <label key={option} className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-3 text-sm ${membership === option ? "border-blue bg-blue/5" : "border-foreground/15"}`}>
+                    <input type="radio" name="membership" value={option} checked={membership === option} onChange={() => chooseMembership(option)} aria-invalid={Boolean(membershipError)} />
+                    {t(option === "member" ? "memberChoice" : "nonMemberChoice")}
+                  </label>
+                ))}
+              </div>
+              <AuthErrorMessage id="membership-error" message={membershipError} className="mt-1" />
+              <div className="mt-10">
+                <button type="submit" className="h-8.75 w-full rounded-[5px] bg-blue text-sm font-medium text-[var(--white)] hover:bg-blue/90">{t("continue")}</button>
+              </div>
+            </fieldset>
+          ) : step === 1 ? (
             <>
-              {renderPersonal}
-              <div className="col-span-full flex justify-end">
+              {membership === "member" ? renderMemberPersonal : renderNonMemberPersonal}
+              <div className="col-span-full mt-2 flex w-full flex-col gap-3 lg:flex-row">
+                <button type="button" onClick={handleBack} className="h-8.75 w-full rounded-[5px] border border-blue text-sm font-medium text-blue hover:bg-blue/10">{t("back")}</button>
                 <button type="submit" className="h-8.75 w-full rounded-[5px] bg-blue text-sm font-medium text-[var(--white)] hover:bg-blue/90">{t("continue")}</button>
               </div>
             </>
           ) : (
             <>
               {field("university", t("fields.university.label"), t("fields.university.placeholder"), universityOptions)}
-              {field("branch", t("fields.branch.label"), t("fields.branch.placeholder"), branchOptions)}
+              {membership === "member" && values.university === "University of Jeddah" &&
+                field("branch", t("fields.branch.label"), t("fields.branch.placeholder"), branchOptions)}
               {field("college", t("fields.college.label"), t("fields.college.placeholder"), collegeOptions)}
               {field("major", t("fields.major.label"), t("fields.major.placeholder"), majorOptions)}
               {field("level", t("fields.level.label"), t("fields.level.placeholder"), levelOptions)}
-              <fieldset
+              {membership === "member" && <fieldset
                 className="relative col-span-full"
                 aria-required="true"
                 aria-invalid={Boolean(errors.committees)}
@@ -415,7 +500,7 @@ export default function SignupForm() {
                     })}
                   </div>
                 )}
-              </fieldset>
+              </fieldset>}
               <div className="col-span-full mt-2 flex w-full flex-col gap-3 lg:flex-row">
                 <button type="button" onClick={handleBack} className="h-8.75 w-full rounded-[5px] border border-blue text-sm font-medium text-blue hover:bg-blue/10">{t("back")}</button>
                 <button type="submit" disabled={isSubmitting} className="h-8.75 w-full rounded-[5px] bg-blue text-sm font-medium text-[var(--white)] disabled:cursor-not-allowed disabled:bg-blue/70">
