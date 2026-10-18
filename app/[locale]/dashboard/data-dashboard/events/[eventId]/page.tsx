@@ -1,9 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { EventDetails } from "@/components/dashboard/data-analysis/EventDetails";
+import { EventReportsPanel } from "@/components/dashboard/data-analysis/EventReportsPanel";
 
 export default function LeaderEventDetailsPage() {
   const params = useParams<{ eventId: string }>();
-  return <EventDetails eventId={params.eventId} />;
+  return <EventReportsPanel eventId={params.eventId} />;
 }

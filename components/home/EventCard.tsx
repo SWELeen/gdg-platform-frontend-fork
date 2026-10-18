@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import type { CSSProperties } from "react";
+import type { RegistrationQuestion } from "@/components/dashboard/shared/types";
 
 export type HomeEvent = {
   id: string;
@@ -15,6 +16,8 @@ export type HomeEvent = {
   time: string;
   location: string;
   description?: string;
+  registrationQuestions?: RegistrationQuestion[];
+  requiredRegistrantFields?: string[];
 };
 
 type EventCardProps = {

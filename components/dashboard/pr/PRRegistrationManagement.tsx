@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 import type {
   EventRegistration,
@@ -15,6 +16,7 @@ import {
 } from "./mock-data";
 import { ConfirmModal } from "../shared/ConfirmModal";
 import { PRAttendancePanel } from "./PRAttendancePanel";
+import { CreateEventModal } from "../data-analysis/CreateEventForm";
 import {
   ArrowLeft,
   Calendar,
@@ -26,6 +28,10 @@ import {
   CircleCheck,
   CircleX,
   Eye,
+  ListPlus,
+  Plus,
+  Send,
+  Sparkles,
 } from "lucide-react";
 
 function RegistrationStatusBadge({
@@ -210,11 +216,14 @@ export function PROverviewRegistrations() {
 }
 
 export function PREventsList() {
-  const { events } = useLeaderDashboard();
+  const { events, canManageEvents, addEvent, publishDraft } = useLeaderDashboard();
+  const router = useRouter();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [createEventOpen, setCreateEventOpen] = useState(false);
   const availableEvents = events.filter((event) => event.status !== "Draft");
+  const draftEvents = events.filter((event) => event.status === "Draft");
   const filteredEvents = availableEvents.filter((event) => {
     const query = search.trim().toLowerCase();
     const matchesQuery = !query || event.title.toLowerCase().includes(query) || event.location.toLowerCase().includes(query);
@@ -224,10 +233,19 @@ export function PREventsList() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-foreground sm:text-2xl">{t("registrations.title")}</h2>
-        <p className="mt-1 text-sm text-muted">{t("registrations.description")}</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-bold text-foreground sm:text-2xl">{t("registrations.title")}</h2>
+          <p className="mt-1 text-sm text-muted">{t("registrations.description")}</p>
+        </div>
+        {canManageEvents && <button type="button" onClick={() => setCreateEventOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><Plus className="size-4" />{t("eventForm.create")}</button>}
       </div>
+
+      {draftEvents.length > 0 && <section className="rounded-2xl border border-border bg-surface-muted/40 p-4">
+        <div className="flex items-center gap-2"><Sparkles className="size-4 text-blue-500" /><h3 className="text-sm font-bold text-foreground">{t("eventManagement.unpublished", { count: draftEvents.length })}</h3></div>
+        <p className="mt-1 text-xs text-muted">{t("eventManagement.draftsDescription")}</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="min-w-0"><span className="block truncate text-sm font-semibold text-foreground">{draft.title}</span><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div><button type="button" onClick={() => publishDraft(draft.id)} className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div>)}</div>
+      </section>}
 
       <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-3 shadow-2xs sm:flex-row sm:items-center">
         <div className="relative min-w-0 flex-1">
@@ -283,7 +301,7 @@ export function PREventsList() {
                     <td className="px-4 py-3.5 text-foreground/80">{event.location}</td>
                     <td className="px-4 py-3.5">
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-muted px-2.5 py-1 text-[11px] font-medium text-muted">
-                        {t("registrations.statusUnavailable")}
+                        {t(`eventFilters.${event.status === "Needs Update" ? "needsUpdate" : event.status.toLowerCase()}`)}
                       </span>
                     </td>
                     <td className="px-4 py-3.5"><RegistrationCounts eventId={event.id} /></td>
@@ -302,6 +320,7 @@ export function PREventsList() {
           </div>
         )}
       </div>
+      <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} />
     </div>
   );
 }
@@ -312,6 +331,7 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<EventRegistration | null>(null);
+  const [decisionRegistration, setDecisionRegistration] = useState<EventRegistration | null>(null);
   const [decision, setDecision] = useState<RegistrationStatus | null>(null);
 
   const event = events.find((item) => item.id === eventId && item.status !== "Draft");
@@ -342,6 +362,10 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
     (item) => item.status === "Accepted" &&
       (item.confirmationStatus === "NotSent" || item.confirmationStatus === "Pending")
   ).length;
+  const requestDecision = (registration: EventRegistration, nextDecision: RegistrationStatus) => {
+    setDecisionRegistration(registration);
+    setDecision(nextDecision);
+  };
 
   return (
     <div className="space-y-6">
@@ -448,9 +472,24 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                       />
                     </td>
                     <td className="px-5 py-3.5 text-end">
-                      <button type="button" onClick={() => setSelectedRegistration(registration)} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground hover:bg-surface-muted">
-                        <Eye className="size-3.5" /> {t("registrations.review")}
-                      </button>
+                      <div className="inline-flex flex-wrap items-center justify-end gap-1.5">
+                        {registration.status === "Pending" && canManageRegistrations && (
+                          <>
+                            <button type="button" onClick={() => requestDecision(registration, "Accepted")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-emerald-700 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/40">
+                              <CircleCheck className="size-3.5" /> {t("registrations.accept")}
+                            </button>
+                            <button type="button" onClick={() => requestDecision(registration, "Rejected")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-rose-700 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-950/40">
+                              <CircleX className="size-3.5" /> {t("registrations.reject")}
+                            </button>
+                            <button type="button" onClick={() => requestDecision(registration, "Waitlisted")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-blue-700 transition hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-950/40">
+                              <ListPlus className="size-3.5" /> {t("registrations.waitlist")}
+                            </button>
+                          </>
+                        )}
+                        <button type="button" onClick={() => setSelectedRegistration(registration)} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground hover:bg-surface-muted">
+                          <Eye className="size-3.5" /> {t("registrations.review")}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -522,13 +561,6 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
             </div>
 
             <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-border pt-4">
-              {selectedRegistration.status === "Pending" && canManageRegistrations && (
-                <>
-                  <button type="button" onClick={() => setDecision("Waitlisted")} className="rounded-xl border border-blue-500/40 px-4 py-2 text-xs font-semibold text-blue-700 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-950/40">{t("registrations.waitlist")}</button>
-                  <button type="button" onClick={() => setDecision("Rejected")} className="rounded-xl border border-rose-500/40 px-4 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-950/40">{t("registrations.reject")}</button>
-                  <button type="button" onClick={() => setDecision("Accepted")} className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700">{t("registrations.accept")}</button>
-                </>
-              )}
               {selectedRegistration.status === "Accepted" && canManageRegistrations && (
                 <button type="button" disabled className="cursor-not-allowed rounded-xl border border-border px-4 py-2 text-xs font-semibold text-muted opacity-70" title={t("registrations.sendConfirmationTitle")}>
                   {t("registrations.sendConfirmationUnavailable")}
@@ -541,18 +573,18 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
       )}
 
       <ConfirmModal
-        isOpen={Boolean(decision && selectedRegistration)}
-        onClose={() => setDecision(null)}
+        isOpen={Boolean(decision && decisionRegistration)}
+        onClose={() => { setDecision(null); setDecisionRegistration(null); }}
         onConfirm={() => {
-          if (decision && selectedRegistration) {
-            updateRegistrationStatus(selectedRegistration.id, decision);
-            setSelectedRegistration(null);
+          if (decision && decisionRegistration) {
+            updateRegistrationStatus(decisionRegistration.id, decision);
+            setDecisionRegistration(null);
           }
         }}
         title={decision === "Accepted" ? t("registrations.acceptRegistration") : decision === "Waitlisted" ? t("registrations.waitlist") : t("registrations.rejectRegistration")}
         message={decision === "Waitlisted"
-          ? <>{t("registrations.placeWaitlist", { name: selectedRegistration?.applicantName ?? "" })}</>
-          : <>{t("registrations.confirmDecision", { decision: decision === "Accepted" ? t("registrations.statuses.accepted") : t("registrations.statuses.rejected"), name: selectedRegistration?.applicantName ?? "" })}</>}
+          ? <>{t("registrations.placeWaitlist", { name: decisionRegistration?.applicantName ?? "" })}</>
+          : <>{t("registrations.confirmDecision", { decision: decision === "Accepted" ? t("registrations.statuses.accepted") : t("registrations.statuses.rejected"), name: decisionRegistration?.applicantName ?? "" })}</>}
         confirmText={decision === "Waitlisted" ? t("registrations.waitlist") : decision === "Accepted" ? t("registrations.accept") : decision === "Rejected" ? t("registrations.reject") : t("registrations.confirm")}
         cancelText={t("registrations.cancel")}
         danger={decision === "Rejected"}

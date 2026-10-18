@@ -398,7 +398,7 @@
   },
   "directory": {
     "searchLabel": "Search members by name",
-    "subtitle": "Meet the amazing members in our committee",
+    "subtitle": "Meet the amazing members in your committee",
     "searchPlaceholder": "Search members by name",
     "myTeam": "My Team",
     "teamLead": "Team Lead",
@@ -829,6 +829,22 @@
       "pagination": "Events pagination",
       "pageLabel": "Page {page}",
       "openDetails": "Open details page"
+    },
+    "eventReports": {
+      "eyebrow": "Event reports",
+      "title": "Guest exports",
+      "description": "Download an Excel-ready report for each guest status.",
+      "event": "Event",
+      "empty": "No event is available for reporting yet.",
+      "sampleNotice": "Preview downloads use sample guest records. Live event data will connect when the backend report contract is available.",
+      "allGuests": "All Guests",
+      "allGuestsDescription": "Everyone who registered for this event",
+      "going": "Going",
+      "goingDescription": "Accepted attendees",
+      "checkedIn": "Checked In",
+      "checkedInDescription": "Attendees who checked in",
+      "guestCount": "{count} guests",
+      "download": "Download Excel"
     },
     "eventForm": {
       "create": "Create New Event",
