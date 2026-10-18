@@ -1,4 +1,5 @@
 {
+  "membershipRequired": "يرجى تحديد ما إذا كنت عضوًا.",
   "phoneRequired": "يرجى إدخال رقم الجوال.",
   "universityChoiceRequired": "يرجى اختيار الجامعة.",
   "branchRequired": "يرجى اختيار الفرع.",
