@@ -2,6 +2,7 @@
   CommitteeEvent,
   EventRegistration,
   LeaderDashboardSeed,
+  RegistrationStatus,
 } from "@/components/dashboard/shared/types";
 
 const events: CommitteeEvent[] = [
@@ -27,7 +28,7 @@ const events: CommitteeEvent[] = [
     date: "Oct 17, 2026",
     time: "4:00 PM",
     location: "University of Jeddah - Main Auditorium",
-    registered: 2,
+    registered: 12,
     capacity: 160,
     status: "Upcoming",
     created: "Sep 22",
@@ -113,6 +114,31 @@ const registrations: EventRegistration[] = [
     profile: { "College": "Engineering", "Major": "Electrical Engineering" },
     answers: [],
   },
+  ...([
+    ["pr-reg-007", "Noura Alharbi", "noura.alharbi@example.com", "Oct 2, 2026", "Pending"],
+    ["pr-reg-008", "Yousef Alqahtani", "yousef.qahtani@example.com", "Oct 2, 2026", "Pending"],
+    ["pr-reg-009", "Mariam Alzahrani", "mariam.z@example.com", "Oct 3, 2026", "Pending"],
+    ["pr-reg-010", "Khalid Almutairi", "khalid.m@example.com", "Oct 3, 2026", "Pending"],
+    ["pr-reg-011", "Reem Alshehri", "reem.shehri@example.com", "Oct 4, 2026", "Pending"],
+    ["pr-reg-012", "Abdulrahman Alghamdi", "abdulrahman.g@example.com", "Oct 4, 2026", "Pending"],
+    ["pr-reg-013", "Dana Aljohani", "dana.johani@example.com", "Oct 5, 2026", "Pending"],
+    ["pr-reg-014", "Fahad Alotaibi", "fahad.otaibi@example.com", "Oct 5, 2026", "Pending"],
+    ["pr-reg-015", "Hala Alsulami", "hala.sulami@example.com", "Oct 6, 2026", "Rejected"],
+    ["pr-reg-016", "Rakan Alshammari", "rakan.sh@example.com", "Oct 6, 2026", "Waitlisted"],
+  ] as [string, string, string, string, RegistrationStatus][]).map(([id, applicantName, email, registeredAt, status]) => ({
+    id,
+    eventId: "pr-event-devfest",
+    applicantName,
+    email,
+    registeredAt,
+    status,
+    ...(status === "Waitlisted" ? { waitlistPosition: 1 } : {}),
+    profile: {
+      College: "Computing and Information Technology",
+      Major: "Computer Science",
+    },
+    answers: [],
+  })),
 ];
 
 /** Demo-only PR workspace data. Replace through the dashboard API adapter later. */

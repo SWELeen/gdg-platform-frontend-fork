@@ -9,6 +9,7 @@ import {
 import { validateEmail } from "@/app/lib/validation/email";
 import { validateRequiredText } from "@/app/lib/validation/text";
 import { validatePhone } from "@/app/lib/validation/phone";
+import type { RegistrationQuestion } from "@/components/dashboard/shared/types";
 
 type FormData = {
     fullName: string;
@@ -34,8 +35,10 @@ const initialFormData: FormData = {
 
 export function RegistrationForm({
     onClose,
+    questions = [],
 }: {
     onClose?: () => void;
+    questions?: RegistrationQuestion[];
 }) {
     const t = useTranslations("eventRegistration");
     const tValidation = useTranslations("validation");
@@ -43,6 +46,8 @@ export function RegistrationForm({
     const [formData, setFormData] = useState<FormData>(initialFormData);
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [answers, setAnswers] = useState<Record<string, string>>({});
+    const [questionErrors, setQuestionErrors] = useState<Record<string, boolean>>({});
 
     function updateField<K extends keyof FormData>(
         field: K,
@@ -122,8 +127,12 @@ export function RegistrationForm({
         if (isSubmitting) return;
 
         const validationErrors = validateForm();
+        const missingAnswers = Object.fromEntries(questions
+            .filter((question) => question.required && !answers[question.id]?.trim())
+            .map((question) => [question.id, true]));
+        setQuestionErrors(missingAnswers);
 
-        if (Object.keys(validationErrors).length > 0) {
+        if (Object.keys(validationErrors).length > 0 || Object.keys(missingAnswers).length > 0) {
             setErrors(validationErrors);
             return;
         }
@@ -485,6 +494,32 @@ export function RegistrationForm({
                             </p>
                         )}
                     </fieldset>
+
+                    {questions.map((question) => (
+                        <div key={question.id} className="mt-5">
+                            <label htmlFor={`custom-question-${question.id}`} className="block text-start text-sm font-semibold text-foreground">
+                                {question.text}{question.required && <span className="text-gdg-red">{" "}*</span>}
+                            </label>
+                            {question.type === "long-answer" ? (
+                                <textarea id={`custom-question-${question.id}`} value={answers[question.id] ?? ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.value }))} className="mt-2 min-h-24 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-gdg-blue focus:ring-2 focus:ring-gdg-blue/20" />
+                            ) : question.options?.length && ["multiple-choice", "checkboxes"].includes(question.type) ? (
+                                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+                                    {question.options.map((option) => {
+                                        const selected = (answers[question.id] ?? "").split(", ").filter(Boolean);
+                                        return <label key={option} className="flex items-center gap-2 text-sm text-foreground"><input type="checkbox" checked={selected.includes(option)} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.checked ? [...selected, option].join(", ") : selected.filter((value) => value !== option).join(", ") }))} className="size-4 accent-[var(--gdg-dark)]" />{option}</label>;
+                                    })}
+                                </div>
+                            ) : question.options?.length ? (
+                                <select id={`custom-question-${question.id}`} value={answers[question.id] ?? ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.value }))} className="mt-2 h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-gdg-blue focus:ring-2 focus:ring-gdg-blue/20">
+                                    <option value="">Select an answer</option>
+                                    {question.options.map((option) => <option key={option} value={option}>{option}</option>)}
+                                </select>
+                            ) : (
+                                <input id={`custom-question-${question.id}`} type="text" value={answers[question.id] ?? ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.value }))} className={inputClassName} />
+                            )}
+                            {questionErrors[question.id] && <p className="mt-1 text-start text-xs text-gdg-red">{tValidation("fieldRequired")}</p>}
+                        </div>
+                    ))}
 
                     <div className="mt-auto flex justify-end pt-8">
                         <button

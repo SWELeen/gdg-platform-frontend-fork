@@ -3,7 +3,8 @@
 import { events } from "@/data/home";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { getPublishedHomeEventsSnapshot, readPublishedHomeEvents, subscribeToPublishedHomeEvents } from "@/lib/events/published-home-events";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import EventCard from "./EventCard";
 import type { HomeEvent } from "./EventCard";
@@ -17,11 +18,24 @@ export default function UpcomingEvents() {
   const [activeEvent, setActiveEvent] = useState(0);
   const [perView, setPerView] = useState(1);
   const [eventToRegister, setEventToRegister] = useState<HomeEvent | null>(null);
+  const publishedEventsSnapshot = useSyncExternalStore(
+    subscribeToPublishedHomeEvents,
+    getPublishedHomeEventsSnapshot,
+    () => "[]",
+  );
+  const homepageEvents = useMemo<HomeEvent[]>(() => {
+    try {
+      const published = JSON.parse(publishedEventsSnapshot) as HomeEvent[];
+      return [...published, ...events];
+    } catch {
+      return [...readPublishedHomeEvents(), ...events];
+    }
+  }, [publishedEventsSnapshot]);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const maxIndex = Math.max(0, events.length - perView);
+  const maxIndex = Math.max(0, homepageEvents.length - perView);
 
   // كم كارد يظهر في نفس الوقت (1 على الجوال، 2 على الشاشات الكبيرة)
   useEffect(() => {
@@ -93,7 +107,7 @@ export default function UpcomingEvents() {
           style={{ gap: GAP }}
           className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto py-2"
         >
-          {events.map((event, index) => (
+          {homepageEvents.map((event, index) => (
             <div
               key={event.id}
               ref={(element) => {

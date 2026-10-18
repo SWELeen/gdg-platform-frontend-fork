@@ -21,6 +21,7 @@ import type {
 } from "./types";
 import { leaderCommitteeConfig } from "./committee-config";
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
+import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -160,11 +161,23 @@ export function LeaderDashboardProvider({
                 confirmationStatus ??
                 (status === "Accepted" ? "NotSent" : undefined),
               waitlistPosition:
-                status === "Waitlisted" ? registration.waitlistPosition : undefined,
+                status === "Waitlisted"
+                  ? registration.waitlistPosition ??
+                    current.filter((item) => item.eventId === registration.eventId && item.status === "Waitlisted").length + 1
+                  : undefined,
             }
           : registration
       )
     );
+  };
+
+  const syncHomepageEvent = (event: CommitteeEvent | null, eventId?: string) => {
+    if (typeof window === "undefined") return;
+    const published = readPublishedHomeEvents().filter((item) => item.id !== (event?.id ?? eventId));
+    if (event && event.status !== "Draft" && event.isDraft !== true) {
+      published.unshift(toPublishedHomeEvent(event));
+    }
+    window.localStorage.setItem(PUBLISHED_HOME_EVENTS_KEY, JSON.stringify(published));
   };
 
   // Event handlers
@@ -177,6 +190,7 @@ export function LeaderDashboardProvider({
       isDraft: data.status === "Draft",
     };
     setEvents((prev) => [newEvent, ...prev]);
+    syncHomepageEvent(newEvent);
 
     // Add recent activity
     const newAct: RecentActivityItem = {
@@ -191,12 +205,15 @@ export function LeaderDashboardProvider({
   };
 
   const updateEvent = (id: string, updates: Partial<CommitteeEvent>) => {
+    const current = events.find((event) => event.id === id);
+    if (current) syncHomepageEvent({ ...current, ...updates }, id);
     setEvents((prev) =>
       prev.map((e) => (e.id === id ? { ...e, ...updates, updated: "Just now" } : e))
     );
   };
 
   const deleteEvent = (id: string) => {
+    syncHomepageEvent(null, id);
     setEvents((prev) => prev.filter((e) => e.id !== id));
   };
 
@@ -216,6 +233,7 @@ export function LeaderDashboardProvider({
 
     const target = events.find((e) => e.id === id);
     if (target) {
+      syncHomepageEvent({ ...target, status: "Upcoming", isDraft: false, updated: "Just now" });
       setRecentActivities((prev) => [
         {
           id: `act-${Date.now()}`,

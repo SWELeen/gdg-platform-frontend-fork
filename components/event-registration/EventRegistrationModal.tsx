@@ -61,7 +61,7 @@ export default function EventRegistrationModal({
         className="max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-surface shadow-2xl sm:max-h-[calc(100dvh-3rem)]"
       >
         <EventInfo event={eventInfo} />
-        <RegistrationForm onClose={onClose} />
+        <RegistrationForm onClose={onClose} questions={event.registrationQuestions} />
       </motion.div>
     </div>
   );
