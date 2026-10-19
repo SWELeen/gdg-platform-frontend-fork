@@ -70,13 +70,13 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
       <div>
         {variant === "light" ? (
           <Image
-            src="/black-logo-with-colors.svg"
+            src="/images/black-logo-with-colors.png"
             alt={tCommon("logoAlt")}
             width={1421}
             height={165}
             priority
             unoptimized
-            className="h-7 w-auto sm:h-8"
+            className="h-9 w-auto sm:h-10 lg:h-12 -translate-x-3"
           />
         ) : (
           <img

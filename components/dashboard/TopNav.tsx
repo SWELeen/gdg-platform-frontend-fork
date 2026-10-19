@@ -49,13 +49,13 @@ export function TopNav() {
       <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <a href={sectionHref("#home")} aria-label={t("logoAlt")}>
           <Image
-            src="/black-logo-with-colors.svg"
+            src="/images/black-logo-with-colors.png"
             alt={t("logoAlt")}
             width={1421}
             height={165}
             priority
             unoptimized
-            className="topnav-logo-light h-6 w-auto min-w-0 max-w-full object-contain object-left sm:h-7 lg:h-8 rtl:object-right"
+            className="topnav-logo-light h-9 w-auto min-w-0 max-w-full object-contain object-left sm:h-10 lg:h-12 rtl:object-right -translate-x-3"
           />
           <Image
             src="/images/gdg-white-logo.png"
