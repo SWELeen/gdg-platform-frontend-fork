@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 import CommitteeCard from "./CommitteeCard";
+import CommitteePersonCard from "./CommitteePersonCard";
 import { committees, teamMembers } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -39,84 +41,54 @@ type AdvisorCardProps = {
 };
 
 function AdvisorCard({ title, advisors, description, number }: AdvisorCardProps) {
-  const reduceMotion = useReducedMotion();
+  const dir = useTextDirection();
 
   return (
     <article
-      className="relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-4 shadow-sm sm:p-5"
+      className="group relative flex h-[550px] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-3 shadow-sm sm:h-[460px] sm:p-4"
       style={{
         borderTopColor: "var(--gdg-blue)",
         borderTopWidth: 3,
-        borderInlineStartColor: "var(--gdg-blue)",
-        borderInlineStartWidth: 3,
-      }}
+        "--committee-accent": "var(--gdg-blue)",
+      } as CSSProperties}
     >
-      <div className="relative">
+      <div className="relative flex min-w-0 flex-1 flex-col">
         <div className="relative z-10 flex items-start justify-between gap-3">
-          <h3 className="text-2xl font-semibold leading-snug text-gdg-blue sm:text-3xl">{title}</h3>
-          <span className="shrink-0 rounded-full bg-gdg-blue/10 px-3 py-1 text-xs font-semibold tabular-nums text-gdg-blue">
+          <h3
+            dir={dir}
+            className="text-balance break-words text-lg font-semibold leading-snug text-[var(--committee-accent)] sm:text-xl"
+          >
+            {title}
+          </h3>
+          <span className="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--committee-accent)_12%,transparent)] px-2.5 py-1 text-[10px] font-semibold tabular-nums text-[var(--committee-accent)]">
             {String(number).padStart(2, "0")}
           </span>
         </div>
-        <p className="relative z-10 mt-3 max-w-2xl text-sm leading-relaxed text-foreground/65 sm:text-base">
+        <p
+          dir={dir}
+          className="relative z-10 mt-2 max-w-full text-start text-sm leading-relaxed text-foreground/75 sm:text-base"
+        >
           {description}
         </p>
       </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-3">
-        {advisors.map((advisor, index) => (
-          <motion.article
-            key={advisor.name}
-            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.3, delay: reduceMotion ? 0 : index * 0.08, ease: "easeOut" }}
-            whileHover={reduceMotion ? undefined : { y: -4 }}
-            className="group relative mt-2 flex h-full min-h-[245px] w-full max-w-[220px] flex-col overflow-visible rounded-2xl border border-foreground/10 bg-background p-2.5 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg sm:min-h-[265px] sm:p-3"
-          >
-            <span aria-hidden="true" className="absolute -top-2 start-4 h-2 w-16 rounded-t-md bg-gdg-blue" />
-            <div className="mx-auto h-24 w-full max-w-24 overflow-hidden rounded-xl bg-surface-muted sm:h-28 sm:max-w-28">
-              <img
-                src={advisor.image}
-                alt={advisor.name}
-                loading="lazy"
-                decoding="async"
-                className={`h-full w-full object-contain object-bottom motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03] ${advisor.imagePositionClass ?? ""}`}
-              />
-            </div>
-            <div className="relative mt-2 flex flex-1 flex-col items-center overflow-hidden rounded-t-2xl rounded-b-xl border border-foreground/10 bg-foreground/[0.03] px-2.5 pb-1.5 pt-3">
-              <img src="/images/Google-design%20.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70" />
-              <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/65" />
-              <span aria-hidden="true" className="absolute inset-x-4 top-0 z-10 h-0.5 rounded-full bg-gdg-blue/40" />
-              <div className="relative z-10 mx-auto w-fit max-w-full px-2 py-1.5">
-                <p className="text-xs font-semibold text-gdg-blue">{advisor.role}</p>
-                <p className="mt-1 text-sm font-bold text-foreground sm:text-base">{advisor.name}</p>
-              </div>
-              <div className="relative z-10 mt-auto flex items-center justify-center gap-2 pt-2">
-                <a
-                  href={advisor.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${advisor.name} on LinkedIn`}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-linkedin-blue text-white transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zm1.782 13.019H3.555V9h3.564v11.452z" />
-                  </svg>
-                </a>
-                <a
-                  href={advisor.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${advisor.name} on X`}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </motion.article>
-        ))}
+      <div className="mt-3 border-t border-foreground/10 pt-3">
+        <div className="flex flex-wrap justify-center gap-3">
+          {advisors.map((advisor, index) => (
+            <CommitteePersonCard
+              key={advisor.name}
+              image={advisor.image}
+              alt={advisor.name}
+              label={advisor.role}
+              name={advisor.name}
+              dir={dir}
+              accentColor="var(--gdg-blue)"
+              index={index}
+              linkedin={advisor.linkedin}
+              x={advisor.x}
+              layoutClass="w-[calc(50%-0.375rem)] min-w-[140px] max-w-[220px]"
+            />
+          ))}
+        </div>
       </div>
     </article>
   );
