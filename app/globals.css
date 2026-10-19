@@ -95,6 +95,12 @@ html[data-theme="dark"] .topnav-logo-dark {
   /* Committees / Leadership */
   --committee-blue: #4967a4;
   --committee-red: #b85d55;
+  --committee-cybersecurity: #20212b;
+  --committee-web-development: #1b2832;
+  --committee-automation: #2d4354;
+  --committee-robotics-iot: #534145;
+  --committee-data-analysis: #3c3d36;
+  --committee-artificial-intelligence: #73766a;
 
   --committee-gradient-blue: #2d5495;
   --committee-gradient-red: #c44744;

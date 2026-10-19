@@ -84,6 +84,8 @@ export const teamMembers = [
     id: "1",
     type: "leader",
     image: "/images/abdullah-leader.png",
+    imageScaleClass: "scale-[1.08]",
+    imagePositionClass: "translate-x-1 translate-y-3",
     role: "Lead",
     name: "Abdullah Misar",
     linkedin: "#", // حطي الرابط الحقيقي
@@ -93,6 +95,7 @@ export const teamMembers = [
     id: "2",
     type: "leader",
     image: "/images/jumanah-coleader.png",
+    imageScaleClass: "scale-[1.08]",
     role: "Co-Lead",
     name: "Jumanah Alshaibi",
     linkedin: "#",
@@ -102,6 +105,7 @@ export const teamMembers = [
     id: "3",
     type: "advisor",
     image: "/images/Fahad-advisor.png",
+    imagePositionClass: "translate-y-3",
     role: "Advisor",
     name: "Fahad Aljudaibi",
     linkedin: "#",
@@ -111,6 +115,7 @@ export const teamMembers = [
     id: "4",
     type: "advisor",
     image: "/images/Ahmed-advisor.png",
+    imagePositionClass: "translate-x-1 translate-y-2",
     role: "Advisor",
     name: "Ahmed Bawazeer",
     linkedin: "#",
@@ -118,7 +123,7 @@ export const teamMembers = [
   },
 ];
 
-export const committees = [
+const allCommittees = [
   {
     id: "content-writing",
     name: "Content Writing",
@@ -127,11 +132,11 @@ export const committees = [
       "Creates and manages the group’s written and media content, ensuring content quality, consistency in style and identity, and clarity of messaging across various platforms.",
     lead: {
       name: "Asma Alhasani",
-      image: "/images/leader-default.png",
+      image: "/images/unknown.png",
     },
     coLeader:{
       name: "Sameera Radwan",
-      image: "/images/leader-default.png",
+      image: "/images/unknown.png",
     },
   },
 
@@ -159,7 +164,7 @@ export const committees = [
       "A space where ideas transform into creativity through innovative designs, visual storytelling, and purposeful digital content. We bring together design, photography, video editing, and marketing to create content that reflects ideas and leaves an impact.",
     lead: {
       name: "Joud Abdullah",
-      image: "/images/leader-default.png",
+      image: "/images/unknown.png",
     },
     coLeader:{
       name: "Linda Alminhali",
@@ -175,7 +180,7 @@ export const committees = [
       "Representing the group externally, building strong relationships, and strengthening its image with partners, stakeholders, and the wider community.",
     lead: {
       name: "Layan Mashraie",
-      image: "/images/leader-default.png",
+      image: "/images/unknown.png",
     },
     coLeader:{
       name: "Abdullah Saif",
@@ -197,43 +202,45 @@ export const committees = [
     {
         id: "web-development",
         name: "Web Design & Development",
-        color: "#000000",
+        color: "var(--committee-web-development)",
         description:
           " A creative space for developers passionate about building modern web experiences. Members explore frontend and backend development, from design to deployment. The committee works with modern technologies to create functional and responsive websites. It encourages collaboration, problem solving, and clean development practices. Members turn ideas into real digital experiences and practical projects. ",
         lead: {
           name: "Leen Alghamdi",
           image: "/images/web-lead.png",
+          imageScaleClass: "scale-125",
+          imagePositionClass: "translate-y-4",
         },
     },
 
       {
         id: "artificial-intelligence",
         name: "Artificial Intelligence",
-        color: "#000000",
+        color: "var(--committee-artificial-intelligence)",
         description:
           "A space for exploring the world of artificial intelligence and emerging technologies. Members learn about AI concepts, machine learning, and intelligent applications. The committee encourages experimentation with AI tools and real-world use cases. Members collaborate on innovative projects that use AI to solve meaningful problems. It aims to make AI more accessible, practical, and impactful. ",
         lead: {
           name: "Atheer Alzahrani",
-          image: "/images/leader-default.png",
+          image: "/images/unknown.png",
         },
       },
 
       {
         id: "robotics-iot",
         name: "Robotics & IOT",
-        color: "#000000",
+        color: "var(--committee-robotics-iot)",
         description:
           "A hands-on space for building smart systems that connect the physical and digital worlds. Members explore robotics, sensors, embedded systems, and Internet of Things technologies. The committee encourages experimentation, prototyping, and practical problem-solving. Members work together to design and build interactive and connected solutions. It turns ideas into real-world systems through technology and creativity. ",
         lead: {
           name: "Saeed Alghamdi",
-          image: "/images/leader-default.png",
+          image: "/images/unknown.png",
         },
       },
 
       {
         id: "cybersecurity",
         name: "Cybersecurity",
-        color: "#000000",
+        color: "var(--committee-cybersecurity)",
         description:
           "A space for learning how to protect systems, applications, networks, and digital information. Members explore cybersecurity concepts, security practices, and common digital threats. The committee promotes awareness of secure development and responsible technology use. Members practice identifying vulnerabilities and understanding how systems can be protected. It builds a strong foundation for creating safer and more secure digital environments. ",
         lead: {
@@ -245,19 +252,19 @@ export const committees = [
       {
         id: "automation",
         name: "Automation",
-        color: "#000000",
+        color: "var(--committee-automation)",
         description:
           " A space focused on using technology to simplify tasks and improve workflows. Members explore automation tools, scripting, APIs, and process optimization. The committee encourages finding repetitive tasks that can be transformed into efficient solutions. Members collaborate to build automated workflows and practical productivity tools. It helps turn time-consuming processes into smarter and more efficient systems. ",
         lead: {
           name: "Asma Aldossari",
-          image: "/images/leader-default.png",
+          image: "/images/unknown.png",
         },
       },
 
       {
         id: "data-analysis",
         name: "Data Analysis",
-        color: "#000000",
+        color: "var(--committee-data-analysis)",
         description:
           "A space for turning raw data into meaningful insights and informed decisions. Members explore data collection, cleaning, analysis, visualization, and interpretation. The committee works with real-world datasets to understand patterns and trends. Members develop analytical thinking and learn how to communicate insights effectively. It connects data with practical solutions, helping transform information into knowledge. ",
         lead: {
@@ -335,6 +342,28 @@ export const committees = [
   //     },
   //   ],
 ];
+
+const developerSubCommitteeIds = [
+  "automation",
+  "web-development",
+  "data-analysis",
+  "artificial-intelligence",
+  "robotics-iot",
+  "cybersecurity",
+];
+
+const developerSubCommittees = developerSubCommitteeIds.flatMap((id) => {
+  const committee = allCommittees.find((item) => item.id === id);
+  return committee ? [committee] : [];
+});
+
+export const committees = allCommittees
+  .filter((committee) => !developerSubCommitteeIds.includes(committee.id))
+  .map((committee) =>
+    committee.id === "developers"
+      ? { ...committee, subCommittees: developerSubCommittees }
+      : committee,
+  );
 
 export const sponsors = [
   {

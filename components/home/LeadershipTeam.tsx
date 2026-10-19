@@ -120,8 +120,6 @@ export default function LeadershipTeam() {
   const t = useTranslations("home.leadership");
 
   const leaders = teamMembers.filter((m) => m.type === "leader");
-  const advisors = teamMembers.filter((m) => m.type === "advisor");
-
   return (
     <section
       id="leadership"
@@ -135,14 +133,6 @@ export default function LeadershipTeam() {
           description={t("description")}
         />
 
-        <TeamGroup
-          id="advisors"
-          reverse
-          members={advisors}
-          eyebrow={t("advisors.eyebrow")}
-          title={t("advisors.title")}
-          description={t("advisors.description")}
-        />
       </div>
     </section>
   );

@@ -12,6 +12,8 @@ export type TeamMember = {
   name: string;
   linkedin: string;
   x: string;
+  imageScaleClass?: string;
+  imagePositionClass?: string;
 };
 
 type TeamCardProps = {
@@ -47,62 +49,71 @@ export default function TeamCard({ member }: TeamCardProps) {
       className="group flex w-full flex-col overflow-hidden rounded-2xl bg-[var(--committee-card-surface)] shadow-md transition-shadow duration-300 hover:shadow-xl"
     >
       {/* Photo */}
-      <div className="aspect-[4/3.5] w-full overflow-hidden bg-surface-muted">
+      <div className="aspect-[4/4.5] w-full overflow-hidden bg-surface-muted">
         <img
           src={member.image}
           alt={t(`team.${member.id}.name`)}
           loading="lazy"
-          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          className={`h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} group-hover:scale-[1.12]`}
         />
       </div>
 
       {/* Info */}
       <div
         dir={dir}
-        className="relative -mt-4 rounded-t-2xl bg-background px-4 pb-4 pt-4 text-start"
+        className="relative -mt-4 overflow-hidden rounded-t-2xl bg-background px-4 pb-4 pt-4 text-start"
       >
-        <h4 className="text-base font-semibold leading-snug text-foreground sm:text-lg">
-          {t(`team.${member.id}.name`)}
-        </h4>
+        <img
+          src="/images/Google-design%20.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70"
+        />
+        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/65" />
+        <div className="relative z-10">
+          <h4 className="text-base font-semibold leading-snug text-foreground sm:text-lg">
+            {t(`team.${member.id}.name`)}
+          </h4>
 
-        {/* Google Developer Group */}
-        <p className="mt-1 text-xs font-normal leading-normal sm:text-sm">
-          <span className="text-gdg-blue">G</span>
-          <span className="text-gdg-red">o</span>
-          <span className="text-gdg-yellow">o</span>
-          <span className="text-gdg-blue">g</span>
-          <span className="text-gdg-green">l</span>
-          <span className="text-gdg-red">e</span>{" "}
-          <span className="text-foreground">Developer Group</span>
-        </p>
+          {/* Google Developer Group */}
+          <p className="mt-1 text-xs font-normal leading-normal sm:text-sm">
+            <span className="text-gdg-blue">G</span>
+            <span className="text-gdg-red">o</span>
+            <span className="text-gdg-yellow">o</span>
+            <span className="text-gdg-blue">g</span>
+            <span className="text-gdg-green">l</span>
+            <span className="text-gdg-red">e</span>{" "}
+            <span className="text-foreground">Developer Group</span>
+          </p>
 
-        {/* Role */}
-        <p className="text-xs font-normal leading-normal text-foreground sm:text-sm">
-          {t(`team.${member.id}.role`)}
-        </p>
+          {/* Role */}
+          <p className="text-xs font-normal leading-normal text-foreground sm:text-sm">
+            {t(`team.${member.id}.role`)}
+          </p>
 
-        {/* Socials */}
-        <div className="mt-3 flex items-center gap-2">
-          {socials.map((s) => (
-            <motion.a
-              key={s.key}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${t(`team.${member.id}.name`)} - ${s.label}`}
-              whileHover={reduce ? undefined : { scale: 1.2, rotate: 8 }}
-              whileTap={{ scale: 0.9 }}
-              className={`flex h-6 w-6 items-center justify-center rounded-full ${s.style}`}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-3 w-3 fill-current"
-                aria-hidden="true"
+          {/* Socials */}
+          <div className="mt-3 flex items-center gap-2">
+            {socials.map((s) => (
+              <motion.a
+                key={s.key}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${t(`team.${member.id}.name`)} - ${s.label}`}
+                whileHover={reduce ? undefined : { scale: 1.2, rotate: 8 }}
+                whileTap={{ scale: 0.9 }}
+                className={`flex h-6 w-6 items-center justify-center rounded-full ${s.style}`}
               >
-                <path d={s.path} />
-              </svg>
-            </motion.a>
-          ))}
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3 fill-current"
+                  aria-hidden="true"
+                >
+                  <path d={s.path} />
+                </svg>
+              </motion.a>
+            ))}
+          </div>
         </div>
       </div>
     </motion.article>
