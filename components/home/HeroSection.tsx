@@ -21,10 +21,10 @@ import { getPathname } from "@/i18n/navigation";
 /* SETTINGS                                                  */
 /* ========================================================= */
 
-const LOGO_SRC = "/gdg-logo.png";
+const LOGO_SRC = "/gdg-logo-motion.png";
 
-const LOGO_W = 480;
-const LOGO_H = 290;
+const LOGO_W = 220;
+const LOGO_H = 133;
 
 const CX = 835;
 const CY = 395;
