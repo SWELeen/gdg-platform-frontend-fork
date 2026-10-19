@@ -95,6 +95,7 @@
     }
   },
   "committees": {
+    "advisorsLabel": "Advisors",
     "title": "Meet",
     "highlight": "Our Committees",
     "subtitle": "Explore the teams driving ideas, activities, and collaboration across our community.",
