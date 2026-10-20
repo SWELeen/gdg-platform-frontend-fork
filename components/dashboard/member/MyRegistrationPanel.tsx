@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { CircleAlert, CircleCheck, Info, RotateCcw } from "lucide-react";
 import { RegistrationStatusBadge } from "@/components/user-registrations/RegistrationStatusBadge";
@@ -10,6 +11,8 @@ import {
   resetDemoRegistration,
   type RegistrationActionResult,
 } from "@/lib/user-registrations/demo-state";
+import { API_ENABLED } from "@/lib/api/client";
+import { respondToRegistration } from "@/lib/user-registrations/repository";
 import type { RegistrationAvailability } from "@/lib/user-registrations/rules";
 import type { UserRegistration } from "@/lib/user-registrations/types";
 import { AttendanceTicket } from "./AttendanceTicket";
@@ -79,12 +82,19 @@ export function MyRegistrationPanel({
               : "attendanceStep.awaiting"
             : "attendanceStep.notRequired";
 
+  const router = useRouter();
   const runAction = async () => {
     if (!pendingAction || busy) return;
     setBusy(true);
     let result: RegistrationActionResult;
     try {
-      result = pendingAction === "confirm" ? await confirmRegistration(registration) : await cancelRegistration(registration);
+      if (API_ENABLED) {
+        const outcome = await respondToRegistration(registration.id, pendingAction === "confirm" ? "confirm" : "decline");
+        result = outcome.ok ? { ok: true, mode: "api" } : { ok: false, reason: "not-allowed" };
+        if (outcome.ok) router.refresh();
+      } else {
+        result = pendingAction === "confirm" ? await confirmRegistration(registration) : await cancelRegistration(registration);
+      }
     } catch {
       result = { ok: false, reason: "storage-unavailable" };
     }

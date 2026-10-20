@@ -2,6 +2,8 @@
 
 export type UserRegistrationStatus =
   | "pending"
+  /** Placed on the event's ordered waiting list by PR. */
+  | "waitlisted"
   | "need-confirmation"
   | "approved"
   | "declined"
@@ -32,6 +34,8 @@ export interface UserRegistration {
   attendanceQrCodeDataUrl?: string;
   checkInStatus?: UserCheckInStatus;
   checkedInAt?: string;
+  /** Place on the waiting list (1 = next to be offered a seat). */
+  waitlistPosition?: number;
 }
 
 export type UserRegistrationsResult =

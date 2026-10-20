@@ -25,7 +25,9 @@
       "checked-in": "Check-in recorded successfully.",
       "already-checked-in": "Already checked in.",
       "invalid-qr": "Invalid QR code or event mismatch.",
-      "service-unavailable": "QR was read, but check-in is unavailable until the backend is connected. No attendance was recorded."
+      "service-unavailable": "QR was read, but check-in is unavailable until the backend is connected. No attendance was recorded.",
+      "check-in-closed": "Check-in is closed. It opens one hour before the event starts and closes when it ends.",
+      "error": "Check-in failed. Please scan again."
     }
   },
   "table": {

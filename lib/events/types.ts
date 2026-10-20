@@ -17,6 +17,7 @@ export type PlatformEvent = Pick<
   | "registrationDeadline"
   | "requirements"
   | "imageUrl"
+  | "registrationQuestions"
 > & {
   committee: LeaderCommittee;
 };

@@ -27,12 +27,13 @@ export function getRegistrationAvailability(registration: UserRegistration, now:
     hasStarted,
     confirmationExpired,
     canConfirm: awaitingConfirmation && !confirmationExpired && !hasStarted,
-    // A member can withdraw while their place is still open: under review, awaiting
-    // their confirmation (before the deadline), or accepted — never after it starts.
+    // Same rules as the backend: leave the waiting list, decline an open offer
+    // (before its deadline), or cancel a confirmed seat not yet used — never after
+    // the event starts. An application still under review cannot be withdrawn.
     canCancel:
       !hasStarted &&
-      (registration.status === "pending" ||
-        registration.status === "approved" ||
+      (registration.status === "waitlisted" ||
+        (registration.status === "approved" && registration.checkInStatus !== "checked-in") ||
         (registration.status === "need-confirmation" && !confirmationExpired)),
     hasTicket: registration.status === "approved" && registration.attendanceConfirmationStatus === "confirmed",
   };

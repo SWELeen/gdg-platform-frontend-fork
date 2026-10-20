@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import type { HomeEvent } from "@/components/home/EventCard";
 import { EventInfo } from "./EventInfo";
 import { eventRegistrationMock } from "@/data/event-registration";
 import { RegistrationForm } from "./RegistrationForm";
+import { API_ENABLED } from "@/lib/api/client";
+import { fetchEventDetails, toRegistrationQuestion } from "@/lib/events/api";
 
 type EventRegistrationModalProps = {
   event: HomeEvent;
@@ -18,6 +20,13 @@ export default function EventRegistrationModal({
   onClose,
 }: EventRegistrationModalProps) {
   const t = useTranslations("eventRegistration");
+  const [questions, setQuestions] = useState(event.registrationQuestions);
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    fetchEventDetails(event.id).then((details) =>
+      setQuestions(details?.questions.map(toRegistrationQuestion) ?? []),
+    );
+  }, [event.id]);
   const eventInfo = {
     ...eventRegistrationMock,
     name: event.name,
@@ -61,7 +70,11 @@ export default function EventRegistrationModal({
         className="max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-surface shadow-2xl sm:max-h-[calc(100dvh-3rem)]"
       >
         <EventInfo event={eventInfo} />
-        <RegistrationForm onClose={onClose} questions={event.registrationQuestions} />
+        <RegistrationForm
+          onClose={onClose}
+          questions={questions}
+          eventId={API_ENABLED ? event.id : undefined}
+        />
       </motion.div>
     </div>
   );

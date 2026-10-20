@@ -4,7 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Camera, CameraOff, Check, CircleAlert, ScanLine } from "lucide-react";
 import type { CommitteeEvent, EventRegistration } from "../shared/types";
-import { checkInAttendance } from "@/lib/attendance/repository";
+import { checkInAttendance, type AttendanceCheckInResult } from "@/lib/attendance/repository";
+import { useLeaderDashboard } from "@/components/dashboard/shared/LeaderDashboardContext";
 
 function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
   const t = useTranslations("attendance");
@@ -172,8 +173,9 @@ export function PRAttendancePanel({
   registrations: EventRegistration[];
 }) {
   const t = useTranslations("attendance");
+  const { reloadRegistrations } = useLeaderDashboard();
   const [verificationState, setVerificationState] = useState<
-    "checked-in" | "already-checked-in" | "invalid-qr" | "service-unavailable" | null
+    AttendanceCheckInResult["state"] | null
   >(null);
 
   const accepted = registrations.filter((item) => item.status === "Accepted");
@@ -188,6 +190,7 @@ export function PRAttendancePanel({
     setVerificationState(null);
     const result = await checkInAttendance({ eventId: event.id, token });
     setVerificationState(result.state);
+    if (result.state === "checked-in") await reloadRegistrations(event.id);
   };
 
   const checkInLabel = (registration: EventRegistration) => {

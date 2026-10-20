@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useCallback,
   useEffect,
   useState,
   type ReactNode,
@@ -22,6 +23,8 @@ import type {
 import { leaderCommitteeConfig } from "./committee-config";
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
+import { API_ENABLED } from "@/lib/api/client";
+import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -63,6 +66,11 @@ interface LeaderDashboardContextValue {
     status: RegistrationStatus,
     confirmationStatus?: RegistrationConfirmationStatus
   ) => void;
+  /** API mode: the last failed registration action, as the backend explained it. */
+  registrationError: string | null;
+  clearRegistrationError: () => void;
+  /** API mode: re-reads one event's registrants (e.g. after a QR check-in). */
+  reloadRegistrations: (eventId: string) => Promise<void>;
   // Global search & filters
   searchQuery: string;
   setSearchQuery: (q: string) => void;
@@ -146,11 +154,39 @@ export function LeaderDashboardProvider({
   const canManageSettings = true;
   const canManageRegistrations = committeeConfig.canManageRegistrations;
 
+  // With NEXT_PUBLIC_USE_API=true the PR workspace reads and changes real
+  // registrations; every other workspace keeps its seeded demo data.
+  const useApi = API_ENABLED && committee === "pr";
+  const [registrationError, setRegistrationError] = useState<string | null>(null);
+
+  const reloadRegistrations = useCallback(async (eventId: string) => {
+    const fresh = await fetchRegistrants(eventId);
+    setRegistrations((current) => [...current.filter((item) => item.eventId !== eventId), ...fresh]);
+  }, []);
+
+  useEffect(() => {
+    if (!useApi) return;
+    fetchPrEvents().then(async (list) => {
+      setEvents(list);
+      setRegistrations((await Promise.all(list.map((event) => fetchRegistrants(event.id)))).flat());
+    });
+  }, [useApi]);
+
   const updateRegistrationStatus = (
     registrationId: string,
     status: RegistrationStatus,
     confirmationStatus?: RegistrationConfirmationStatus
   ) => {
+    if (useApi) {
+      const registration = registrations.find((item) => item.id === registrationId);
+      if (!registration) return;
+      const eventRegistrations = registrations.filter((item) => item.eventId === registration.eventId);
+      void applyDecision(registration, status, eventRegistrations).then(async (error) => {
+        setRegistrationError(error);
+        await reloadRegistrations(registration.eventId);
+      });
+      return;
+    }
     setRegistrations((current) =>
       current.map((registration) =>
         registration.id === registrationId
@@ -418,6 +454,9 @@ export function LeaderDashboardProvider({
     deleteTask,
     updateMemberPoints,
     updateRegistrationStatus,
+    registrationError,
+    clearRegistrationError: () => setRegistrationError(null),
+    reloadRegistrations,
     searchQuery,
     setSearchQuery,
     statusFilter,

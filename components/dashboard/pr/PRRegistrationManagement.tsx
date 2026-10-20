@@ -326,7 +326,7 @@ export function PREventsList() {
 }
 
 export function PREventRegistrations({ eventId }: { eventId: string }) {
-  const { events, registrations, updateRegistrationStatus, canManageRegistrations } = useLeaderDashboard();
+  const { events, registrations, updateRegistrationStatus, canManageRegistrations, registrationError, clearRegistrationError } = useLeaderDashboard();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -372,6 +372,13 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
       <Link href="/dashboard/pr-dashboard/events" className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground">
         <ArrowLeft className="size-4" /> {t("registrations.title")}
       </Link>
+
+      {registrationError && (
+        <div role="alert" className="flex items-start justify-between gap-3 rounded-xl border border-gdg-red/40 bg-gdg-red/5 px-4 py-3 text-sm text-gdg-red">
+          <span>{registrationError}</span>
+          <button type="button" onClick={clearRegistrationError} aria-label={t("registrations.cancel")} className="font-semibold">×</button>
+        </div>
+      )}
 
       <section className="rounded-2xl border border-border bg-surface p-5 shadow-2xs sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">

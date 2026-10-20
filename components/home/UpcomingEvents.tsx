@@ -9,6 +9,8 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import EventCard from "./EventCard";
 import type { HomeEvent } from "./EventCard";
 import EventRegistrationModal from "@/components/event-registration/EventRegistrationModal";
+import { API_ENABLED } from "@/lib/api/client";
+import { fetchPublishedEvents, formatDate, formatTime } from "@/lib/events/api";
 
 const GAP = 24;
 
@@ -23,14 +25,32 @@ export default function UpcomingEvents() {
     getPublishedHomeEventsSnapshot,
     () => "[]",
   );
+  const [apiEvents, setApiEvents] = useState<HomeEvent[]>([]);
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    fetchPublishedEvents().then((list) =>
+      setApiEvents(
+        list.map((event) => ({
+          id: String(event.eventId),
+          image: event.imageUrl || "/images/event-placeholder.png",
+          name: event.name,
+          date: formatDate(event.startsAt),
+          time: formatTime(event.startsAt),
+          location: event.location ?? "",
+          description: event.description ?? undefined,
+        })),
+      ),
+    );
+  }, []);
   const homepageEvents = useMemo<HomeEvent[]>(() => {
+    if (API_ENABLED) return apiEvents;
     try {
       const published = JSON.parse(publishedEventsSnapshot) as HomeEvent[];
       return [...published, ...events];
     } catch {
       return [...readPublishedHomeEvents(), ...events];
     }
-  }, [publishedEventsSnapshot]);
+  }, [publishedEventsSnapshot, apiEvents]);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const eventRefs = useRef<(HTMLDivElement | null)[]>([]);

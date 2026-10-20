@@ -23,6 +23,7 @@ const dateOptions = { numberingSystem: "latn", month: "short", day: "numeric", y
 // Status dot inside the card's white pill, so the state reads at a glance on any tile color.
 const statusDots: Record<UserRegistrationStatus, string> = {
   pending: "bg-amber-500",
+  waitlisted: "bg-indigo-500",
   "need-confirmation": "bg-gdg-blue",
   approved: "bg-gdg-green",
   declined: "bg-gdg-red",
