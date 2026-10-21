@@ -11,14 +11,15 @@ import { useTextDirection } from "@/i18n/useTextDirection";
 export type Project = {
   id: string;
   img: string;
-  projectName: string;
-  description: string;
-  madeBy: string;
+  detailsImg?: string;
+  detailsImages?: string[];
   tags?: string[]; // اختيارية: إذا ما وجدت ما تظهر الشارات
 };
 
 type ProjectCardProps = {
   project: Project;
+  onViewProject?: () => void;
+  detailsOpen?: boolean;
   position: number; // موقع الكرت بالنسبة للكرت النشط: 0 = المنتصف، -1 = يسار، 1 = يمين ...
   index: number; // رقم المشروع الفعلي (يظهر في التبويبة)
   isActive?: boolean;
@@ -113,9 +114,17 @@ export default function ProjectCard({
   index,
   isActive = false,
   onSelect,
+  onViewProject,
+  detailsOpen = false,
 }: ProjectCardProps) {
   const t = useTranslations("home.projects");
   const dir = useTextDirection();
+  const titleKey = `items.${project.id}.title`;
+  const descriptionKey = `items.${project.id}.shortDescription`;
+  const projectTitle = t.has(titleKey) ? t(titleKey) : project.id;
+  const committeeKey = `items.${project.id}.committee`;
+  const projectDescription = t.has(descriptionKey) ? t(descriptionKey) : "";
+  const projectCommittee = t.has(committeeKey) ? t(committeeKey) : "";
 
   // abs = بُعد الكرت عن المنتصف، side = جهته (-1 يسار، 1 يمين)
   const abs = Math.min(Math.abs(position), MAX_SIDE);
@@ -144,7 +153,7 @@ export default function ProjectCard({
         WebkitBoxReflect:
           "below 4px linear-gradient(transparent 78%, rgba(255,255,255,0.16))",
       }}
-      onClick={!isActive ? onSelect : undefined}
+      onClick={!isActive ? (detailsOpen ? onViewProject : onSelect) : undefined}
       className={`absolute left-1/2 top-0 -ml-[140px] h-[420px] w-[280px] ${
         !isActive && onSelect ? "cursor-pointer" : ""
       }`}
@@ -160,7 +169,7 @@ export default function ProjectCard({
         {/* صورة المشروع */}
         <img
           src={project.img}
-          alt={project.projectName}
+          alt={projectTitle}
           className="absolute inset-0 h-full w-full object-cover"
         />
 
@@ -192,23 +201,27 @@ export default function ProjectCard({
         >
           {/* اسم المشروع */}
           <h3 className="text-2xl font-semibold leading-tight tracking-tight text-white">
-            {project.projectName}
+            {projectTitle}
           </h3>
 
           {/* صانع المشروع (madeBy) */}
           <p className="mt-1 text-[11px] text-white/60">
-            {t("madeBy", { name: project.madeBy })}
+            {projectCommittee}
           </p>
 
           {/* الوصف + زر السهم */}
           <div className="mt-2 flex items-end justify-between gap-3">
             <p className="line-clamp-4 max-w-[190px] text-xs leading-[1.6] text-white/80">
-              {project.description}
+              {projectDescription}
             </p>
 
             <button
               type="button"
               aria-label={t("viewProject")}
+              onClick={(event) => {
+                event.stopPropagation();
+                onViewProject?.();
+              }}
               className="group flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/80 bg-white/5 transition-all duration-300 hover:scale-110 hover:bg-white"
             >
               {/* rtl:-scale-x-100 تقلب السهم في العربي */}

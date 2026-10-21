@@ -5,12 +5,16 @@ import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { useState } from "react";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import ProjectCard, { MAX_SIDE, PERSPECTIVE } from "./ProjectCard";
 
 export default function FeaturedProjects() {
   const t = useTranslations("home.projects");
   const dir = useTextDirection();
+  const projectMessage = (projectId: string, field: string) => {
+    const key = `items.${projectId}.${field}`;
+    return t.has(key) ? t(key) : "";
+  };
 
   /*
    * offset: عدّاد غير محدود (يزيد وينقص بدون حد).
@@ -18,6 +22,8 @@ export default function FeaturedProjects() {
    * وهذا اللي يخلي الحركة سلسة بدل ما الكرت يختفي ويظهر.
    */
   const [offset, setOffset] = useState(0);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const selectedProject = projects.find((project) => project.id === selectedProjectId);
 
   const total = projects.length; // عدد المشاريع (ديناميكي بالكامل)
   if (total === 0) return null; // ما في مشاريع = ما نعرض شي
@@ -34,24 +40,20 @@ export default function FeaturedProjects() {
    * مشروعان     = كرت على كل جهة
    * ثلاثة فأكثر = الحد الأقصى (MAX_SIDE)
    */
-  const maxSide = total === 1 ? 0 : total === 2 ? 1 : MAX_SIDE;
 
   // قائمة المواقع مثلًا: [-3,-2,-1,0,1,2,3]
-  const positions = Array.from(
-    { length: maxSide * 2 + 1 },
-    (_, i) => i - maxSide,
-  );
-
   const handleNext = () => setOffset((p) => p + 1);
   const handlePrevious = () => setOffset((p) => p - 1);
 
   // نجهّز بيانات الكروت اللي بتظهر (تتكرر الكروت لو المشاريع قليلة)
-  const visible = positions.map((position) => ({
-    key: offset + position,
-    position,
-    index: mod(offset + position),
-    project: projects[mod(offset + position)],
-  }));
+  const visible = projects
+    .map((project, index) => {
+      let position = index - activeIndex;
+      if (position > total / 2) position -= total;
+      if (position < -total / 2) position += total;
+      return { key: project.id, position, index, project };
+    })
+    .filter(({ position }) => Math.abs(position) <= (selectedProject ? 1 : MAX_SIDE));
 
   // الأزرار تتعطل إذا في مشروع واحد فقط
   const canNavigate = total > 1;
@@ -122,10 +124,16 @@ export default function FeaturedProjects() {
           perspectiveOrigin 100%: نقطة نظر العين عند قاع الكروت،
           عشان قواعد الكروت كلها تبقى على خط واحد.
         */}
-        <div
-          className="relative mx-auto h-[420px] w-full"
-          style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}
-        >
+        <div className="relative mx-auto h-[420px] w-full" style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}>
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              x: selectedProject ? (dir === "rtl" ? 280 : -280) : 0,
+              scale: selectedProject ? 0.90 : 1,
+            }}
+            style={{ transformOrigin: "center center" }}
+            transition={{ type: "spring", stiffness: 180, damping: 24 }}
+          >
           {visible.map(({ key, project, index, position }) => (
             <ProjectCard
               key={key}
@@ -133,14 +141,60 @@ export default function FeaturedProjects() {
               position={position}
               index={index}
               isActive={position === 0}
+              detailsOpen={Boolean(selectedProject)}
               // الضغط على كرت جانبي ينقلك له مباشرة
               onSelect={() => setOffset((p) => p + position)}
+              onViewProject={() => {
+                setOffset(index);
+                setSelectedProjectId(project.id);
+              }}
             />
           ))}
+          </motion.div>
+
+          <AnimatePresence>
+            {selectedProject && (
+              <motion.article
+                key={selectedProject.id}
+                dir={dir}
+                className={`absolute inset-y-0 ${dir === "rtl" ? "right-[56%]" : "left-[56%]"} z-20 w-[44%] overflow-y-auto rounded-3xl border border-border bg-background/95 p-7 text-foreground shadow-xl`}
+                initial={{ opacity: 0, x: 90 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 60 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <button type="button" onClick={() => setSelectedProjectId(null)} className="mb-5 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium transition hover:bg-surface-muted">
+                  <FiArrowLeft className="rtl:-scale-x-100" />
+                  {t("backToProjects")}
+                </button>
+                <img src={selectedProject.detailsImg ?? selectedProject.img} alt={projectMessage(selectedProject.id, "title")} className="h-44 w-full rounded-2xl object-cover" style={{ objectPosition: "center 65%" }} />
+                <h3 className="mt-5 text-2xl font-semibold">{projectMessage(selectedProject.id, "title")}</h3>
+                <p className="mt-2 text-sm text-foreground/60">{projectMessage(selectedProject.id, "committee")}</p>
+                <p className="mt-5 text-base leading-8 text-foreground/80">{projectMessage(selectedProject.id, "fullDescription")}</p>
+                {selectedProject.detailsImages?.length ? (
+                  <div className="mt-6 grid grid-cols-1 gap-4">
+                    {selectedProject.detailsImages.map((image, index) => (
+                      <div key={image} className="w-full overflow-hidden rounded-2xl border border-border bg-surface-muted shadow-md">
+                        <motion.img
+                          src={image}
+                          alt={t("screenshotAlt", { number: index + 1 })}
+                          className="block h-auto w-full object-contain transition-transform duration-300 hover:scale-[1.02]"
+                          initial={{ opacity: 0, y: 16 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </motion.article>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* أزرار التنقل (تحت الانعكاس) */}
-        <div className="mt-24 flex items-center justify-center gap-6">
+        <div className={`mt-24 flex items-center justify-center gap-6 ${selectedProject ? "invisible" : ""}`}>
           <button
             type="button"
             aria-label={t("previous")}
@@ -170,7 +224,7 @@ export default function FeaturedProjects() {
         <motion.div
           key={projects[activeIndex].id}
           initial={{ opacity: 0, x: 35 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={{ opacity: 1, x: selectedProject ? (dir === "rtl" ? 70 : -70) : 0, scale: selectedProject ? 0.88 : 1 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="relative mx-auto h-[420px] w-[280px] max-w-full"
         >
@@ -179,10 +233,51 @@ export default function FeaturedProjects() {
             position={0}
             index={activeIndex}
             isActive
+            detailsOpen={Boolean(selectedProject)}
+            onViewProject={() => setSelectedProjectId(projects[activeIndex].id)}
           />
         </motion.div>
 
-        <div className="mt-8 flex items-center justify-center gap-6">
+        <AnimatePresence>
+          {selectedProject && (
+            <motion.article
+              key={selectedProject.id}
+              dir={dir}
+              className="mx-auto mt-8 max-w-xl rounded-3xl border border-border bg-background p-5 text-foreground shadow-xl"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.35 }}
+            >
+              <button type="button" onClick={() => setSelectedProjectId(null)} className="mb-4 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium">
+                <FiArrowLeft className="rtl:-scale-x-100" />
+                {t("backToProjects")}
+              </button>
+              <img src={selectedProject.detailsImg ?? selectedProject.img} alt={projectMessage(selectedProject.id, "title")} className="h-48 w-full rounded-2xl object-cover" style={{ objectPosition: "center 65%" }} />
+              <h3 className="mt-4 text-xl font-semibold">{projectMessage(selectedProject.id, "title")}</h3>
+              <p className="mt-2 text-sm text-foreground/60">{projectMessage(selectedProject.id, "committee")}</p>
+              <p className="mt-4 text-sm leading-7 text-foreground/80">{projectMessage(selectedProject.id, "fullDescription")}</p>
+              {selectedProject.detailsImages?.length ? (
+                <div className="mt-5 grid grid-cols-1 gap-3">
+                  {selectedProject.detailsImages.map((image, index) => (
+                    <div key={image} className="w-full overflow-hidden rounded-xl border border-border bg-surface-muted shadow-sm">
+                      <motion.img
+                        src={image}
+                        alt={t("screenshotAlt", { number: index + 1 })}
+                        className="block h-auto w-full object-contain"
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.35, delay: index * 0.1 }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </motion.article>
+          )}
+        </AnimatePresence>
+
+        <div className={`mt-8 flex items-center justify-center gap-6 ${selectedProject ? "invisible" : ""}`}>
           <button
             type="button"
             aria-label={t("previous")}

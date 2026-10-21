@@ -1,53 +1,45 @@
 //   Mock data, The actual data will be retrieved from database 
 export const projects = [
     {
-      id: "1",
+      id: "gdg-gaming-platform",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 1",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
+      detailsImg: "/images/GDG-game-project.png",
+      detailsImages: [
+        "/images/GDG-game2-project.png",
+        "/images/GDG-game3-project.png",
+      ],
     },
     {
-      id: "2",
+      id: "bracket-click",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 2",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
     },
     {
-      id: "3",
+      id: "gdg-air-hockey",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 3",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
     },
     {
-      id: "4",
+      id: "gdg-prompt-pilot",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 4",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
     },
     {
-      id: "5",
+      id: "gdg-face-retrieval",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 5",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
-    },    
-    {
-      id: "6",
-      img: "/images/project-placeholder.png",
-      projectName: "Project Name 6",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
     },
     {
-      id: "7",
+      id: "applicant-evaluation-system",
       img: "/images/project-placeholder.png",
-      projectName: "Project Name 7",
-      description: "Short Description of the project here",
-      madeBy: "Developer community",
+    },
+    {
+      id: "integrated-data-visualization-system",
+      img: "/images/project-placeholder.png",
+    },
+    {
+      id: "internal-phishing-simulation",
+      img: "/images/project-placeholder.png",
+    },
+    {
+      id: "website-security-assessment",
+      img: "/images/project-placeholder.png",
     },
   ];
     

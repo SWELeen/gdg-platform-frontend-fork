@@ -23,8 +23,8 @@ import { getPathname } from "@/i18n/navigation";
 
 const LOGO_SRC = "/gdg-logo-motion.png";
 
-const LOGO_W = 220;
-const LOGO_H = 133;
+const LOGO_W = 190;
+const LOGO_H = 115;
 
 const CX = 835;
 const CY = 395;
@@ -723,7 +723,7 @@ export default function HeroSection() {
       {/* ========================================================= */}
 
       <div
-        className="pointer-events-none absolute left-1/2 top-[42%] z-[2] h-0 w-0"
+        className="pointer-events-none absolute left-1/2 top-[38%] z-[2] h-0 w-0"
         style={{ transform: "scale(var(--stage-scale))" }}
       >
 
@@ -955,7 +955,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-x-0 z-10 flex flex-col items-center px-5 sm:px-8"
         style={{
-          top: "calc(42% + var(--stage-scale) * 100px + 20px)",
+          top: "calc(38% + var(--stage-scale) * 100px + 20px)",
         }}
       >
 
