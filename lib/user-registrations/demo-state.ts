@@ -90,7 +90,7 @@ export function useDemoRegistrationChanges() {
 }
 
 export type RegistrationActionResult =
-  | { ok: true; mode: "demo" }
+  | { ok: true; mode: "demo" | "api" }
   | { ok: false; reason: "not-allowed" | "storage-unavailable" };
 
 async function record(registration: UserRegistration, change: Omit<Override, "updatedAt">, allowed: boolean) {

@@ -25,5 +25,13 @@
   "date": "Date",
   "time": "Time",
   "location": "Location",
-  "speaker": "Speaker"
+  "speaker": "Speaker",
+  "result": {
+    "success": "You're registered. PR will review your registration and email you.",
+    "ALREADY_REGISTERED": "You're already registered for this event.",
+    "REGISTRATION_CLOSED": "Registration for this event is closed.",
+    "UNAUTHORIZED": "Please sign in to register.",
+    "VALIDATION_ERROR": "Some answers are missing or not valid.",
+    "error": "Registration failed. Please try again."
+  }
 }

@@ -21,6 +21,7 @@ type TimeFilter = "upcoming" | "past" | "all";
 const timeFilters: TimeFilter[] = ["upcoming", "past", "all"];
 const statuses: UserRegistrationStatus[] = [
   "pending",
+  "waitlisted",
   "need-confirmation",
   "approved",
   "declined",

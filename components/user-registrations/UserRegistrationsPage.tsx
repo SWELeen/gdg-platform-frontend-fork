@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { API_ENABLED } from "@/lib/api/client";
+import { respondToRegistration } from "@/lib/user-registrations/repository";
 import { useLocale, useTranslations } from "next-intl";
 import type { UserRegistration, UserRegistrationsResult } from "@/lib/user-registrations/types";
 import { userRegistrationsMockUser } from "@/data/user-registrations";
@@ -24,9 +27,22 @@ export function UserRegistrationsPage({
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [actionFeedback, setActionFeedback] = useState<PendingAction | null>(null);
 
-  const finishDemoAction = () => {
+  const router = useRouter();
+  const finishDemoAction = async () => {
     if (!pendingAction) return;
-    // Keep the UI demo honest until the backend exposes confirmation/cancellation APIs.
+    if (API_ENABLED) {
+      const outcome = await respondToRegistration(
+        pendingAction.registration.id,
+        pendingAction.action === "confirm" ? "confirm" : "decline",
+      );
+      setPendingAction(null);
+      if (outcome.ok) {
+        setActionFeedback(pendingAction);
+        router.refresh();
+      }
+      return;
+    }
+    // Demo mode: no backend, so only show the feedback.
     setActionFeedback(pendingAction);
     setPendingAction(null);
   };

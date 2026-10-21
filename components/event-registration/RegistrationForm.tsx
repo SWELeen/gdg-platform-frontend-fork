@@ -10,6 +10,7 @@ import { validateEmail } from "@/app/lib/validation/email";
 import { validateRequiredText } from "@/app/lib/validation/text";
 import { validatePhone } from "@/app/lib/validation/phone";
 import type { RegistrationQuestion } from "@/components/dashboard/shared/types";
+import { CHOICE_SEPARATOR, registerForEvent } from "@/lib/events/api";
 
 type FormData = {
     fullName: string;
@@ -36,9 +37,12 @@ const initialFormData: FormData = {
 export function RegistrationForm({
     onClose,
     questions = [],
+    eventId,
 }: {
     onClose?: () => void;
     questions?: RegistrationQuestion[];
+    /** When set, the form submits to the backend for this event. */
+    eventId?: string;
 }) {
     const t = useTranslations("eventRegistration");
     const tValidation = useTranslations("validation");
@@ -48,6 +52,7 @@ export function RegistrationForm({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [questionErrors, setQuestionErrors] = useState<Record<string, boolean>>({});
+    const [result, setResult] = useState<{ ok: boolean; key: string } | null>(null);
 
     function updateField<K extends keyof FormData>(
         field: K,
@@ -121,7 +126,7 @@ export function RegistrationForm({
         return newErrors;
     }
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         if (isSubmitting) return;
@@ -138,9 +143,16 @@ export function RegistrationForm({
         }
 
         setErrors({});
+        if (!eventId) return;
         setIsSubmitting(true);
-
+        const outcome = await registerForEvent(eventId, questions, answers);
         setIsSubmitting(false);
+        const known = ["ALREADY_REGISTERED", "REGISTRATION_CLOSED", "UNAUTHORIZED", "VALIDATION_ERROR"];
+        setResult(
+            outcome.ok
+                ? { ok: true, key: "result.success" }
+                : { ok: false, key: `result.${known.includes(outcome.code) ? outcome.code : "error"}` },
+        );
     }
 
     const inputClassName =
@@ -505,8 +517,8 @@ export function RegistrationForm({
                             ) : question.options?.length && ["multiple-choice", "checkboxes"].includes(question.type) ? (
                                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
                                     {question.options.map((option) => {
-                                        const selected = (answers[question.id] ?? "").split(", ").filter(Boolean);
-                                        return <label key={option} className="flex items-center gap-2 text-sm text-foreground"><input type="checkbox" checked={selected.includes(option)} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.checked ? [...selected, option].join(", ") : selected.filter((value) => value !== option).join(", ") }))} className="size-4 accent-[var(--gdg-dark)]" />{option}</label>;
+                                        const selected = (answers[question.id] ?? "").split(CHOICE_SEPARATOR).filter(Boolean);
+                                        return <label key={option} className="flex items-center gap-2 text-sm text-foreground"><input type="checkbox" checked={selected.includes(option)} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: event.target.checked ? [...selected, option].join(CHOICE_SEPARATOR) : selected.filter((value) => value !== option).join(CHOICE_SEPARATOR) }))} className="size-4 accent-[var(--gdg-dark)]" />{option}</label>;
                                     })}
                                 </div>
                             ) : question.options?.length ? (
@@ -521,10 +533,16 @@ export function RegistrationForm({
                         </div>
                     ))}
 
+                    {result && (
+                        <p role="status" className={`mt-6 text-start text-sm ${result.ok ? "text-gdg-green" : "text-gdg-red"}`}>
+                            {t(result.key)}
+                        </p>
+                    )}
+
                     <div className="mt-auto flex justify-end pt-8">
                         <button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || result?.ok}
                             className="inline-flex h-10 items-center justify-center gap-3 rounded-md bg-gdg-dark px-4 text-sm font-medium text-[var(--white)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <span>

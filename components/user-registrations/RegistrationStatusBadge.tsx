@@ -3,6 +3,7 @@ import type { UserRegistrationStatus } from "@/lib/user-registrations/types";
 
 const statusClasses: Record<UserRegistrationStatus, string> = {
   pending: "border-amber-500/20 bg-amber-500/10 text-amber-800 dark:text-amber-300",
+  waitlisted: "border-indigo-500/20 bg-indigo-500/10 text-indigo-800 dark:text-indigo-300",
   "need-confirmation": "border-blue-500/20 bg-blue-500/10 text-blue-800 dark:text-blue-300",
   approved: "border-emerald-500/20 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
   declined: "border-rose-500/20 bg-rose-500/10 text-rose-800 dark:text-rose-300",
