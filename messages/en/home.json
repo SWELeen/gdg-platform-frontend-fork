@@ -43,6 +43,65 @@
     }
   },
   "projects": {
+    "closeDetails": "Close project details",
+    "backToProjects": "Back to projects",
+    "screenshotAlt": "Game screenshot {number}",
+    "items": {
+      "gdg-gaming-platform": {
+        "title": "GDG UJ Interactive Gaming Platform",
+        "committee": "Web Design and Development Committee",
+        "shortDescription": "A customizable multiplayer gaming platform for GDG events.",
+        "fullDescription": "A web-based gaming platform developed for GDG University of Jeddah to support workshops, events, and community activities. It includes three main game types: image guessing, survey-style games, and letter-based puzzles. Users can create customized games, add questions and visual assets, host multiplayer sessions, share join codes, track scores, and view results and leaderboards. It also supports community games that can be saved, shared, and replayed, providing an alternative to external gaming platforms with limited free features."
+      },
+      "bracket-click": {
+        "title": "BracketClick",
+        "committee": "AI Committee",
+        "shortDescription": "An AI-powered photobooth triggered by hand gestures.",
+        "fullDescription": "An interactive photobooth that uses computer vision and MediaPipe to detect when a participant forms the GDG bracket gesture <> with their hands. Once the gesture is recognized, the system automatically starts a countdown, captures a photo, and delivers it to the participant. The project captured and delivered more than 300 photos."
+      },
+      "gdg-air-hockey": {
+        "title": "GDG Air Hockey",
+        "committee": "AI Committee",
+        "shortDescription": "A touchless air hockey game controlled by hand movements.",
+        "fullDescription": "A two-player digital air hockey game that uses a camera and MediaPipe to track players' hands in real time. Their fingertip positions control virtual paddles that hit a digital puck. The game dynamically updates puck movement, boundaries, and scores. The team optimized hand processing to reduce lag during fast gameplay."
+      },
+      "gdg-prompt-pilot": {
+        "title": "GDG Prompt Pilot",
+        "committee": "AI Committee",
+        "shortDescription": "A shared AI prompt library for GDG committees.",
+        "fullDescription": "A centralized repository of structured, reusable AI prompts designed to improve productivity across GDG committees. It addresses the difficulty members faced in writing effective prompts and reusing successful templates. The library includes prompts for content writing, digital media and design, project management, and public relations. The project produced more than 28 open-source prompts."
+      },
+      "gdg-face-retrieval": {
+        "title": "GDG Face Retrieval",
+        "committee": "AI Committee",
+        "shortDescription": "AI-powered search for personal photos from GDG events.",
+        "fullDescription": "An automated computer vision system that helps GDG members find and download their photos from community events. It processes event images, removes duplicates and images without detectable faces, extracts facial features, and indexes them in a vector space for efficient similarity search. The report states that the system can retrieve matching photos from more than 2,500 images in approximately 10 seconds."
+      },
+      "applicant-evaluation-system": {
+        "title": "Applicant Evaluation System",
+        "committee": "Automation Committee",
+        "shortDescription": "An automated system for evaluating and ranking event applicants.",
+        "fullDescription": "A platform that automates applicant screening for GDG events using configurable eligibility requirements and scoring criteria. It imports applicant data from Google Sheets or Excel/CSV files, checks mandatory conditions, uses an AI model to evaluate written responses, applies organizer-defined scoring weights, and generates ranked results with eligibility statuses and explanations. Organizers can review and export the results. Planned enhancements include editing decisions and sending acceptance or rejection emails directly from the platform."
+      },
+      "integrated-data-visualization-system": {
+        "title": "Integrated Data Management and Visualization System",
+        "committee": "Data Analysis Committee",
+        "shortDescription": "A centralized database and live dashboards for GDG data.",
+        "fullDescription": "A data management and visualization solution that consolidates information from multiple forms and sources into a structured MySQL database. The data is cleaned, integrated, and organized into database tables, then connected to Power BI through ODBC to create dashboards for monitoring members, events, and committee activities. The system improves data organization, visibility, reporting, and decision-making. Future improvements include automated form-to-database integration and predictive analytics."
+      },
+      "internal-phishing-simulation": {
+        "title": "Internal Phishing Simulation",
+        "committee": "Cybersecurity Committee",
+        "shortDescription": "A controlled phishing campaign to assess security awareness.",
+        "fullDescription": "A controlled social engineering simulation designed to measure how well GDG members recognize suspicious emails and links. The team created a fake Year-End Ceremony registration invitation using urgency, a spoofed sender domain, and a custom landing page. It tracked participant interactions and analyzed the results to identify security-awareness gaps across committees. The campaign targeted 88 members, and 10% submitted data through the simulated phishing page. The exercise was designed to assess awareness without compromising real data."
+      },
+      "website-security-assessment": {
+        "title": "Website Security Assessment & Hardening",
+        "committee": "Cybersecurity Committee",
+        "shortDescription": "A security audit and hardening project for the GDG web platform.",
+        "fullDescription": "A comprehensive security initiative that audited the GDG web application across its frontend, backend, database, and cloud infrastructure. The team identified vulnerabilities including WebSocket hijacking, exposed client-side logic, and insecure direct object references (IDOR). It strengthened CORS policies, introduced JWT verification before real-time connections, moved sensitive validation and scoring logic to the backend, enforced ownership checks, improved input and DOM sanitization, and restricted uploaded file types. The project also included cloud deployment and performance monitoring. The report records mitigation of the three major vulnerabilities and approximately 18,000 incoming requests over 30 days, with an average response time of 159.73 ms."
+      }
+    },
     "eyebrow": "Featured work",
     "title": "Featured Projects",
     "description": "A look at the projects, ideas, and initiatives that reflect our community's energy and creativity.",
