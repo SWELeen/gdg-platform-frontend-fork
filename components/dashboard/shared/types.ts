@@ -88,9 +88,10 @@ export interface RecentActivityItem {
 export type LeaderCommittee =
   | "data-analysis"
   | "pr"
+  | "project-management"
   | "content-writing"
   | "web-development"
-  | "automation-ai"
+  | "automation"
   | "artificial-intelligence"
   | "robotics-iot"
   | "cybersecurity"

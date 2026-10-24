@@ -42,13 +42,16 @@ export const leaderDashboardMockData: Record<LeaderCommittee, CommitteeDashboard
       autoApproveMembers: false,
     },
   },
+  "project-management": {
+    name: "Project Management Committee", description: "Plans and coordinates GDG on Campus UJ projects, schedules, and team delivery.", headerSubtitle: "Project Management · UJ", leaderDisplayName: "Committee Leader", coLeaderDisplayName: "Committee Co-Leader", leaderRoleDescription: "Primary Committee Leader", coLeaderRoleDescription: "Committee Co-Leader", settings: { notifyOnSubmission: true, autoApproveMembers: false },
+  },
   "content-writing": {
     name: "Content Writing Committee", description: "Plans and creates clear, engaging content for GDG on Campus UJ.", headerSubtitle: "Content Writing · UJ", leaderDisplayName: "Committee Leader", coLeaderDisplayName: "Committee Co-Leader", leaderRoleDescription: "Primary Committee Leader", coLeaderRoleDescription: "Committee Co-Leader", settings: { notifyOnSubmission: true, autoApproveMembers: false },
   },
   "web-development": {
     name: "Web and Development Committee", description: "Builds and maintains digital experiences and platform projects for GDG on Campus UJ.", headerSubtitle: "Web and Development · UJ", leaderDisplayName: "Committee Leader", coLeaderDisplayName: "Committee Co-Leader", leaderRoleDescription: "Primary Committee Leader", coLeaderRoleDescription: "Committee Co-Leader", settings: { notifyOnSubmission: true, autoApproveMembers: false },
   },
-  "automation-ai": {
+  automation: {
     name: "Automation Committee", description: "Builds automated workflows and practical automation projects for GDG on Campus UJ.", headerSubtitle: "Automation · UJ", leaderDisplayName: "Committee Leader", coLeaderDisplayName: "Committee Co-Leader", leaderRoleDescription: "Primary Committee Leader", coLeaderRoleDescription: "Committee Co-Leader", settings: { notifyOnSubmission: true, autoApproveMembers: false },
   },
   "artificial-intelligence": {

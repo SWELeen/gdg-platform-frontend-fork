@@ -5,6 +5,7 @@ import { useState } from "react"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route"
 import { useRouter } from "@/i18n/navigation"
 import AuthCard from "@/app/components/auth/AuthCard"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
@@ -102,7 +103,13 @@ export default function LoginFlow() {
       return
     }
     storeAuthSession(result.data)
-    router.replace("/dashboard")
+    const identity = await apiRequest<AuthenticatedIdentity>("/me")
+    if (!identity.ok) {
+      setSubmitError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+    router.replace(dashboardPathFor(identity.data))
   }
 
   const handleBack = () => {

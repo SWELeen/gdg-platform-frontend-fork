@@ -28,8 +28,8 @@ export function MembersSection({
   onOpenUpdatePoints,
 }: MembersSectionProps) {
   const t = useTranslations("dashboard.leader");
-  const { members, removeMember, canManageMembers, canAddMembers, canManagePoints, committeeName, committee } = useLeaderDashboard();
-  const showTemporaryAccess = leaderCommitteeConfig[committee].canGrantTemporaryAccess;
+  const { members, removeMember, canManageMembers, canAddMembers, canManagePoints, committeeName, committee, clubLeadership } = useLeaderDashboard();
+  const showTemporaryAccess = !clubLeadership && leaderCommitteeConfig[committee].canGrantTemporaryAccess;
   const [searchTerm, setSearchTerm] = useState("");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const [memberToRemove, setMemberToRemove] = useState<CommitteeMember | null>(null);

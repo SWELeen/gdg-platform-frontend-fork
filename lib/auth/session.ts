@@ -1,28 +1,25 @@
 export interface AuthSession {
-  accessToken: string;
-  refreshToken: string;
+  authenticated?: boolean;
+  accessToken?: string;
+  refreshToken?: string;
   expiresAt?: number;
+  universityEmailVerificationRequired?: boolean;
+  registrationPendingApproval?: boolean;
 }
 
 const SESSION_KEY = 'gdg.auth.session';
 
 export function readAuthSession(): AuthSession | null {
   if (typeof window === 'undefined') return null;
-  try {
-    const value = window.sessionStorage.getItem(SESSION_KEY);
-    if (!value) return null;
-    const session = JSON.parse(value) as Partial<AuthSession>;
-    return typeof session.accessToken === 'string' && typeof session.refreshToken === 'string'
-      ? session as AuthSession
-      : null;
-  } catch {
-    return null;
-  }
+  const value = window.sessionStorage.getItem(SESSION_KEY);
+  if (value === 'authenticated') return { authenticated: true };
+  if (value) window.sessionStorage.removeItem(SESSION_KEY);
+  return null;
 }
 
 export function storeAuthSession(session: AuthSession) {
   if (typeof window === 'undefined') return;
-  window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  if (session.authenticated !== false) window.sessionStorage.setItem(SESSION_KEY, 'authenticated');
 }
 
 export function clearAuthSession() {

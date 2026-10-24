@@ -20,8 +20,6 @@ import { useTranslations } from "next-intl"
 import SignupProgress from "./SignupProgress"
 import { useRouter } from "@/i18n/navigation"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
-import { storeAuthSession } from "@/lib/auth/session"
-import { submitMembershipRequest, type MembershipApplicationPayload } from "@/lib/membership-requests/api"
 
 const membershipCommitteeCodes: Record<string, string> = {
   "Project Management Committee": "PM",
@@ -103,13 +101,13 @@ function validateChoice(field: FieldName, value: string) {
   return selectOptions[field]?.includes(value) ? "" : "fieldInvalid"
 }
 
-function validateField(field: FieldName, values: FormValues, membership: "member" | "nonMember" | "") {
+function validateField(field: FieldName, values: FormValues) {
   const value = field === "committees" ? "" : values[field] as string
   switch (field) {
     case "fullName": return validateName(value)
     case "personalEmail": return validateEmail(value)
     case "universityEmail":
-      if (membership === "nonMember" && !value.trim()) return ""
+      if (!value.trim()) return ""
       return validateEmail(value)
     case "password": return validatePassword(value)
     case "confirmPassword": return validateConfirmPassword(value, values.password)
@@ -263,7 +261,7 @@ export default function SignupForm() {
     if (hideBranch) next.branch = ""
     setValues(next)
     if (errors[field]) {
-      const error = validateField(field, next, membership)
+      const error = validateField(field, next)
       setErrors((current) => ({ ...current, [field]: error || undefined }))
     }
     if (hideBranch) {
@@ -276,7 +274,7 @@ export default function SignupForm() {
   }
 
   const blur = (field: FieldName) => {
-    const error = validateField(field, values, membership)
+    const error = validateField(field, values)
     setErrors((current) => ({ ...current, [field]: error || undefined }))
   }
 
@@ -309,7 +307,7 @@ export default function SignupForm() {
     }
     const nextErrors: FieldErrors = {}
     fields.forEach((field) => {
-      const error = validateField(field, values, membership)
+      const error = validateField(field, values)
       if (error) nextErrors[field] = error
     })
     if (step === 2 && membership === "member") {
@@ -339,30 +337,16 @@ export default function SignupForm() {
       return
     }
 
-    const membershipApplication: MembershipApplicationPayload | null = membership === "member"
-      ? {
-          applicationData: {
+    const applicationData = {
             phoneNumber: `+966${values.phone}`,
-            universityEmail: values.universityEmail,
+            ...(values.universityEmail ? { universityEmail: values.universityEmail } : {}),
             university: values.university,
             ...(values.branch ? { branch: values.branch } : {}),
             college: values.college,
             major: values.major,
             level: values.level,
             gender: values.gender,
-          },
-          committees: values.committees.map((committee) => ({
-            committeeCode: membershipCommitteeCode(committee),
-            requestedRole: values.committeeRoles[committee],
-          })),
-          ...((values.developerCommitteesLeader || values.advisor)
-            ? { requestedGlobalRoles: [
-                ...(values.developerCommitteesLeader ? ["Developer Committees Leader"] : []),
-                ...(values.advisor ? ["Advisor"] : []),
-              ] }
-            : {}),
-        }
-      : null
+          }
 
     const result = await apiRequest<{
       accessToken?: string;
@@ -374,7 +358,18 @@ export default function SignupForm() {
       body: {
         fullName: values.fullName,
         email: values.personalEmail,
+        universityEmail: values.universityEmail || undefined,
         password: values.password,
+        registrationType: membership === "member" ? "MEMBER" : "NON_MEMBER",
+        applicationData,
+        committees: membership === "member" ? values.committees.map((committee) => ({
+          committeeCode: membershipCommitteeCode(committee),
+          requestedRole: values.committeeRoles[committee],
+        })) : [],
+        requestedGlobalRoles: membership === "member" ? [
+          ...(values.developerCommitteesLeader ? ["DEVELOPER_COMMITTEES_LEADER"] : []),
+          ...(values.advisor ? ["ADVISOR"] : []),
+        ] : [],
       },
     })
     if (!result.ok) {
@@ -393,30 +388,8 @@ export default function SignupForm() {
       return
     }
 
-    const pending = {
-      email: values.personalEmail,
-      membershipApplication,
-    }
+    const pending = { email: values.personalEmail, universityEmail: values.universityEmail || null }
     window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify(pending))
-
-    if (result.data.accessToken && result.data.refreshToken) {
-      storeAuthSession({
-        accessToken: result.data.accessToken,
-        refreshToken: result.data.refreshToken,
-        expiresAt: result.data.expiresAt,
-      })
-      if (membershipApplication) {
-        const requestResult = await submitMembershipRequest(membershipApplication)
-        if (!requestResult.ok) {
-          router.push("/signup/verify")
-          return
-        }
-      }
-      window.sessionStorage.removeItem("gdg.pending-signup")
-      router.replace("/dashboard")
-      return
-    }
-
     router.push("/signup/verify")
     setIsSubmitting(false)
   }
@@ -494,7 +467,7 @@ export default function SignupForm() {
       <TextField id="fullName" label={t("fields.fullName.label")} value={values.fullName} onChange={(value) => update("fullName", value)} onBlur={() => blur("fullName")} error={errors.fullName} placeholder={t("fields.fullName.placeholder")} autoComplete="name" />
       <TextField id="phone" label={t("fields.phone.label")} type="tel" inputMode="tel" value={values.phone} onChange={(value) => update("phone", value)} onBlur={() => blur("phone")} error={errors.phone} placeholder={t("fields.phone.placeholder")} maxLength={9} autoComplete="tel-national" />
       <TextField id="personalEmail" label={personalEmail} type="email" inputMode="email" value={values.personalEmail} onChange={(value) => update("personalEmail", value)} onBlur={() => blur("personalEmail")} error={errors.personalEmail} placeholder={t("fields.personalEmail.placeholder")} maxLength={254} autoComplete="email" />
-      <TextField id="universityEmail" label={universityEmail} type="email" inputMode="email" value={values.universityEmail} onChange={(value) => update("universityEmail", value)} onBlur={() => blur("universityEmail")} error={errors.universityEmail} placeholder={t("fields.universityEmail.placeholder")} maxLength={254} autoComplete="email" />
+      <TextField id="universityEmail" label={`${universityEmail} (${t("optional")})`} type="email" inputMode="email" value={values.universityEmail} onChange={(value) => update("universityEmail", value)} onBlur={() => blur("universityEmail")} error={errors.universityEmail} placeholder={t("fields.universityEmail.placeholder")} maxLength={254} autoComplete="email" required={false} />
       <PasswordField id="password" label={t("fields.password.label")} value={values.password} onChange={(value) => update("password", value)} onBlur={() => blur("password")} error={errors.password} placeholder={t("fields.password.placeholder")} />
       <PasswordField id="confirmPassword" label={t("fields.confirmPassword.label")} value={values.confirmPassword} onChange={(value) => update("confirmPassword", value)} onBlur={() => blur("confirmPassword")} error={errors.confirmPassword} placeholder={t("fields.confirmPassword.placeholder")} />
       {field("gender", t("fields.gender.label"), t("fields.gender.placeholder"), genderOptions.map(({ value, labelKey }) => ({

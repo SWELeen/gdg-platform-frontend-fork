@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl"
 import AuthErrorMessage from "./AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 import { readAuthSession, storeAuthSession, type AuthSession } from "@/lib/auth/session"
-import { submitMembershipRequest, type MembershipApplicationPayload } from "@/lib/membership-requests/api"
 import { useRouter } from "@/i18n/navigation"
 
 const CODE_LENGTH = 6
@@ -32,7 +31,14 @@ export default function VerifyCodeForm() {
   )
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [hasSession, setHasSession] = useState(() => Boolean(readAuthSession()))
+  const [isResending, setIsResending] = useState(false)
+  const [resendMessage, setResendMessage] = useState("")
+  const [phase, setPhase] = useState<"personal" | "university">(() => {
+    try {
+      const pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}") as { awaitingUniversityVerification?: boolean }
+      return readAuthSession() && pending.awaitingUniversityVerification ? "university" : "personal"
+    } catch { return "personal" }
+  })
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   function updateCode(index: number, value: string) {
@@ -78,6 +84,26 @@ export default function VerifyCodeForm() {
     }
   }
 
+  async function handleResend() {
+    if (isResending || !API_ENABLED) return
+    let pending: { email?: string } = {}
+    try {
+      pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
+    } catch { pending = {} }
+    if (phase === "personal" && !pending.email) {
+      setError("authRequestFailed")
+      return
+    }
+    setIsResending(true)
+    setResendMessage("")
+    const result = phase === "personal"
+      ? await apiRequest<{ sent: true }>("/auth/resend-personal-verification", { method: "POST", body: { email: pending.email } })
+      : await apiRequest<{ sent: true }>("/auth/resend-university-verification", { method: "POST" })
+    if (result.ok) setResendMessage(t("resent"))
+    else setError("authRequestFailed")
+    setIsResending(false)
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -85,8 +111,7 @@ export default function VerifyCodeForm() {
       return
     }
 
-    const existingSession = readAuthSession()
-    const message = existingSession ? "" : validateCode(code)
+    const message = validateCode(code)
     if (message) {
       setError(message)
       return
@@ -100,20 +125,20 @@ export default function VerifyCodeForm() {
       return
     }
 
-    let pending: { email?: string; membershipApplication?: MembershipApplicationPayload | null } = {}
+    let pending: { email?: string; awaitingUniversityVerification?: boolean } = {}
     try {
       pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
     } catch {
       pending = {}
     }
-    if (!existingSession && !pending.email) {
+    if (!pending.email) {
       setError("authRequestFailed")
       setIsSubmitting(false)
       return
     }
 
-    if (!existingSession) {
-      const verified = await apiRequest<AuthSession>("/auth/verify-email", {
+    if (phase === "personal") {
+      const verified = await apiRequest<AuthSession & { universityEmailVerificationRequired?: boolean }>("/auth/verify-email", {
         method: "POST",
         body: { email: pending.email, token: code.join("") },
       })
@@ -123,18 +148,27 @@ export default function VerifyCodeForm() {
         return
       }
       storeAuthSession(verified.data)
-      setHasSession(true)
-    }
-    if (pending.membershipApplication) {
-      const submitted = await submitMembershipRequest(pending.membershipApplication)
-      if (!submitted.ok) {
-        setError("membershipRequestFailed")
+      if (verified.data.universityEmailVerificationRequired) {
+        pending.awaitingUniversityVerification = true
+        window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify(pending))
+        setPhase("university")
+        setCode(Array.from({ length: CODE_LENGTH }, () => ""))
+        setIsSubmitting(false)
+        return
+      }
+    } else {
+      const verified = await apiRequest<{ registrationPendingApproval: true }>("/auth/verify-university-email", {
+        method: "POST",
+        body: { code: code.join("") },
+      })
+      if (!verified.ok) {
+        setError("authRequestFailed")
         setIsSubmitting(false)
         return
       }
     }
     window.sessionStorage.removeItem("gdg.pending-signup")
-    router.replace("/dashboard")
+    router.replace("/signup/pending")
   }
 
   return (
@@ -149,7 +183,7 @@ export default function VerifyCodeForm() {
         readOnly
       />
 
-      {!hasSession && <div className="relative">
+      <div className="relative">
         <div
           className="flex w-full justify-between gap-2.5"
           // Digits always read left to right, even on Arabic pages.
@@ -185,25 +219,28 @@ export default function VerifyCodeForm() {
           message={error}
           className="absolute inset-x-0 top-full mt-1.5 text-center"
         />
-      </div>}
+      </div>
 
-      {hasSession && <p className="mt-3 text-center text-sm text-foreground/60">{t("continueApplication")}</p>}
+      <p className="mt-3 text-center text-sm text-foreground/60">{phase === "personal" ? t("personalEmailCode") : t("universityEmailCode")}</p>
+      {resendMessage ? <p role="status" className="mt-2 text-center text-sm text-green-700">{resendMessage}</p> : null}
 
       <button
         type="submit"
         disabled={isSubmitting}
         className="mt-10.25 h-8.75 w-full rounded-[5px] bg-gdg-blue text-sm font-medium text-[var(--white)] transition-colors duration-200 hover:bg-gdg-blue/90 active:bg-gdg-blue/80 disabled:cursor-not-allowed disabled:bg-gdg-blue/70"
       >
-        {isSubmitting ? t("verifying") : hasSession ? t("continueApplication") : t("verify")}
+        {isSubmitting ? t("verifying") : t("verify")}
       </button>
 
       <p className="mt-7.5 text-center text-sm text-foreground/45">
         {t("noCode")}{" "}
         <button
           type="button"
+          disabled={isResending}
+          onClick={handleResend}
           className="cursor-pointer text-sm font-medium text-gdg-blue hover:text-gdg-blue/90 active:text-gdg-blue/80"
         >
-          {t("resend")}
+          {isResending ? t("verifying") : t("resend")}
         </button>
       </p>
     </form>

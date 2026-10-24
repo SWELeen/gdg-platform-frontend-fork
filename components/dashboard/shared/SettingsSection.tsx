@@ -9,7 +9,8 @@ import { Check, Shield, Bell, Save } from "lucide-react";
 
 export function SettingsSection() {
   const t = useTranslations("dashboard.leader");
-  const { canManageSettings, committeeName, committeeDescription, committee } = useLeaderDashboard();
+  const leadershipT = useTranslations("dashboard.leadershipDashboard");
+  const { canManageSettings, committeeName, committeeDescription, committee, clubLeadership } = useLeaderDashboard();
   const config = leaderCommitteeConfig[committee];
   const defaultSettings = leaderDashboardMockData[committee].settings;
 
@@ -162,8 +163,8 @@ export function SettingsSection() {
         <div className="mt-4 space-y-3 text-xs">
           <div className="flex items-center justify-between rounded-xl border border-border/80 p-3">
             <div>
-              <span className="font-bold text-foreground block">{config.leaderDisplayName}</span>
-              <span className="text-muted block text-[11px]">{config.leaderRoleDescription}</span>
+              <span className="font-bold text-foreground block">{clubLeadership ? leadershipT("clubLeaderRole") : config.leaderDisplayName}</span>
+              <span className="text-muted block text-[11px]">{clubLeadership ? leadershipT("clubLeaderDescription") : config.leaderRoleDescription}</span>
             </div>
             <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">
               {t("settings.leader")}
@@ -172,8 +173,8 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between rounded-xl border border-border/80 p-3">
             <div>
-              <span className="font-bold text-foreground block">{config.coLeaderDisplayName}</span>
-              <span className="text-muted block text-[11px]">{config.coLeaderRoleDescription}</span>
+              <span className="font-bold text-foreground block">{clubLeadership ? leadershipT("clubCoLeaderRole") : config.coLeaderDisplayName}</span>
+              <span className="text-muted block text-[11px]">{clubLeadership ? leadershipT("clubCoLeaderDescription") : config.coLeaderRoleDescription}</span>
             </div>
             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
               {t("settings.coLeader")}

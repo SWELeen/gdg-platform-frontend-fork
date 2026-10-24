@@ -1,4 +1,28 @@
 {
+  "leadershipDashboard": {
+    "clubTitle": "Club Leadership Dashboard",
+    "clubLeaderRole": "Club Leader",
+    "clubCoLeaderRole": "Club Co-Leader",
+    "clubLeaderDescription": "Reviews club-wide leadership and advisor applications.",
+    "clubCoLeaderDescription": "Shares the club-wide leadership review queue and permissions.",
+    "developerTitle": "Developer Committees Leader Dashboard",
+    "developerDescription": "Oversight for Automation, Data Analysis, Web Development, AI, IoT, and Cybersecurity committees.",
+    "overviewTitle": "Developer committees overview",
+    "approvalNavigation": "Leadership requests",
+    "overviewLoading": "Loading committee information…",
+    "overviewError": "Committee information could not be loaded.",
+    "committeeMembers": "Members",
+    "committeeLeaders": "Leaders",
+    "activeTasks": "Active tasks"
+  },
+  "leadershipApprovals": {
+    "title": "Leadership registration requests",
+    "loading": "Loading requests…",
+    "empty": "There are no pending leadership requests.",
+    "error": "Requests could not be loaded. Please try again.",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
   "nav": {
     "sectionsLabel": "Dashboard sections",
     "accountLabel": "Account",
@@ -259,6 +283,7 @@
       "email": "Email address",
       "committee": "Committee",
       "role": "Role",
+      "loading": "Loading profile…",
       "notAvailable": "Not available yet",
       "managedByLeadership": "Committee details are managed by your committee's leadership. Contact your committee leader if something needs to change.",
       "demoNote": "Shown from demo data until sign-in is connected."
@@ -470,6 +495,7 @@
       "openSidebar": "Open sidebar",
       "committeeData": "Data Analysis Committee",
       "committeePR": "Public Relations Committee",
+      "committeeProjectManagement": "Project Management Committee",
       "committeeContentWriting": "Content Writing Committee",
       "committeeWebDevelopment": "Web and Development Committee",
       "committeeAutomation": "Automation Committee",

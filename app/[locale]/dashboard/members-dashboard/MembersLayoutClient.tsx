@@ -9,6 +9,7 @@ import { MembersSidebar } from "@/components/dashboard/members/MembersSidebar";
 import { MembersCompactNav } from "@/components/dashboard/members/MembersCompactNav";
 import { MembersPageHeader } from "@/components/dashboard/members/MembersPageHeader";
 import { usePathname } from "@/i18n/navigation";
+import { DashboardAccessGate } from "@/components/dashboard/shared/DashboardAccessGate";
 
 const HOME_ROUTE = "/dashboard/members-dashboard";
 
@@ -18,6 +19,7 @@ export function MembersLayoutClient({ children }: { children: ReactNode }) {
   const isHome = pathname.replace(/\/+$/, "") === HOME_ROUTE;
 
   return (
+    <DashboardAccessGate requirement={{ kind: "member" }}>
     <div className="flex flex-col bg-surface text-foreground">
       <MotionConfig reducedMotion="user">
         {/* Header + sidebar/content fill at least the viewport, so the footer starts below the fold. */}
@@ -43,5 +45,6 @@ export function MembersLayoutClient({ children }: { children: ReactNode }) {
       </MotionConfig>
       <Footer />
     </div>
+    </DashboardAccessGate>
   );
 }

@@ -12,24 +12,40 @@ import {
   Trophy,
   Settings,
   X,
+  ClipboardCheck,
 } from "lucide-react";
 
 interface LeaderSidebarProps {
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
   committee?: import("./types").LeaderCommittee;
+  developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
 }
 
 export function LeaderSidebar({
   mobileOpen = false,
   onCloseMobile,
   committee = "data-analysis",
+  developerCommitteesLeader = false,
+  clubLeadership = false,
 }: LeaderSidebarProps) {
   const pathname = usePathname();
   const t = useTranslations("dashboard.leader");
   const config = leaderCommitteeConfig[committee];
-  const basePath = config.routeBase;
-  const navItems = [
+  const basePath = developerCommitteesLeader ? "/dashboard/developer-committees-dashboard" : clubLeadership ? "/dashboard/club-leadership-dashboard" : config.routeBase;
+  const leadershipT = useTranslations("dashboard.leadershipDashboard");
+  const navItems = developerCommitteesLeader ? [
+    { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
+    { id: "approvals", label: leadershipT("approvalNavigation"), href: `${basePath}#leadership-approvals-title`, icon: ClipboardCheck },
+  ] : clubLeadership ? [
+    { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
+    { id: "members", label: t("nav.members"), href: `${basePath}/members`, icon: Users },
+    { id: "tasks", label: t("nav.tasks"), href: `${basePath}/tasks`, icon: CheckSquare },
+    { id: "points", label: t("nav.points"), href: `${basePath}/points`, icon: Trophy },
+    { id: "settings", label: t("nav.settings"), href: `${basePath}/settings`, icon: Settings },
+    { id: "approvals", label: leadershipT("approvalNavigation"), href: `${basePath}#leadership-approvals-title`, icon: ClipboardCheck },
+  ] : [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
     { id: "events", label: t(committee === "pr" ? "nav.eventRegistrations" : "nav.events"), href: `${basePath}/events`, icon: Calendar },
     { id: "members", label: t("nav.members"), href: `${basePath}/members`, icon: Users },
@@ -55,7 +71,7 @@ export function LeaderSidebar({
               {t("nav.leaderWorkspace")}
             </span>
             <span className="mt-0.5 block text-sm font-semibold text-foreground">
-              {t(`nav.${committeeTranslationKeys[committee]}`)}
+              {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
             </span>
           </div>
           {onCloseMobile && (
