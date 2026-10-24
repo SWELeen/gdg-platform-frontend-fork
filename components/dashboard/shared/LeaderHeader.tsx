@@ -13,12 +13,14 @@ interface LeaderHeaderProps {
   onOpenMobileMenu?: () => void;
   committee?: LeaderCommittee;
   developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
 }
 
 export function LeaderHeader({
   onOpenMobileMenu,
   committee = "data-analysis",
   developerCommitteesLeader = false,
+  clubLeadership = false,
 }: LeaderHeaderProps) {
   const pathname = usePathname();
   const t = useTranslations("dashboard.leader");
@@ -34,7 +36,7 @@ export function LeaderHeader({
     });
     return () => { active = false; };
   }, [currentMember?.name, developerCommitteesLeader]);
-  const routeRoot = developerCommitteesLeader ? "/dashboard/developer-committees-dashboard" : config.routeBase;
+  const routeRoot = developerCommitteesLeader ? "/dashboard/developer-committees-dashboard" : clubLeadership ? "/dashboard/club-leadership-dashboard" : config.routeBase;
   const displayName = currentMember?.name ?? identityName;
   const leaderInitials = displayName
     .split(/\s+/)
@@ -45,7 +47,7 @@ export function LeaderHeader({
     .toUpperCase();
 
   // Determine current section title based on pathname
-  let pageTitle = developerCommitteesLeader ? leadershipT("developerTitle") : t("nav.overview");
+  let pageTitle = developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t("nav.overview");
   if (pathname.startsWith(`${routeRoot}/events`)) {
     pageTitle = t(committee === "pr" ? "nav.eventRegistrations" : "nav.events");
   } else if (pathname.startsWith(`${routeRoot}/members`)) pageTitle = t("nav.members");
@@ -86,7 +88,7 @@ export function LeaderHeader({
                 {displayName}
               </span>
               <span className="block text-[10px] text-muted leading-tight">
-                {developerCommitteesLeader ? leadershipT("developerTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
+                {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
               </span>
             </div>
           </div>

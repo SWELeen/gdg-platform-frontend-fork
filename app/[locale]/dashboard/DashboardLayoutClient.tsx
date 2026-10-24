@@ -14,10 +14,12 @@ function LeaderLayoutShell({
   children,
   committee,
   developerCommitteesLeader,
+  clubLeadership,
 }: {
   children: ReactNode;
   committee: LeaderCommittee;
   developerCommitteesLeader: boolean;
+  clubLeadership: boolean;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -34,6 +36,7 @@ function LeaderLayoutShell({
           onCloseMobile={() => setMobileMenuOpen(false)}
           committee={committee}
           developerCommitteesLeader={developerCommitteesLeader}
+          clubLeadership={clubLeadership}
         />
 
         {/* Main Content Area */}
@@ -43,6 +46,7 @@ function LeaderLayoutShell({
             onOpenMobileMenu={() => setMobileMenuOpen(true)}
             committee={committee}
             developerCommitteesLeader={developerCommitteesLeader}
+            clubLeadership={clubLeadership}
           />
 
           {/* Content Body */}
@@ -66,19 +70,23 @@ export function LeaderLayoutClient({
   committee = "data-analysis",
   seed,
   developerCommitteesLeader = false,
+  clubLeadership = false,
 }: {
   children: ReactNode;
   committee?: LeaderCommittee;
   seed?: LeaderDashboardSeed;
   developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
 }) {
   const requirement = developerCommitteesLeader
     ? { kind: "global-role" as const, roles: ["DEVELOPER_COMMITTEES_LEADER"] }
+    : clubLeadership
+      ? { kind: "global-role" as const, roles: ["GROUP_LEADER", "GROUP_CO_LEADER"] }
     : { kind: "committee-leader" as const, committee };
   return (
     <DashboardAccessGate requirement={requirement}>
-      <LeaderDashboardProvider committee={committee} seed={seed} developerCommitteesLeader={developerCommitteesLeader}>
-        <LeaderLayoutShell committee={committee} developerCommitteesLeader={developerCommitteesLeader}>{children}</LeaderLayoutShell>
+      <LeaderDashboardProvider committee={committee} seed={seed} developerCommitteesLeader={developerCommitteesLeader} clubLeadership={clubLeadership}>
+        <LeaderLayoutShell committee={committee} developerCommitteesLeader={developerCommitteesLeader} clubLeadership={clubLeadership}>{children}</LeaderLayoutShell>
       </LeaderDashboardProvider>
     </DashboardAccessGate>
   );

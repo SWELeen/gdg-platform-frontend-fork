@@ -56,21 +56,29 @@ type ApiTask = {
   priority: string; status: string; createdAt: string; updatedAt: string;
 };
 
-export async function fetchCommitteeDashboard(code: string): Promise<ApiResult<CommitteeDashboardData>> {
-  const result = await apiRequest<Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
-    members: ApiMember[];
-    events: { id: string; title: string; date: string; endsAt: string; location: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
-    tasks: ApiTask[];
-    pointHistory: (Omit<PointHistoryItem, "timestamp"> & { createdAt: string })[];
-    recentActivities: (Omit<RecentActivityItem, "timeAgo"> & { createdAt: string })[];
-  }>(`/committees/${encodeURIComponent(code)}/dashboard`);
-  if (!result.ok) return result;
+type RawCommitteeDashboardData = Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
+  members: ApiMember[];
+  events: { id: string; title: string; date: string; endsAt: string; location: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
+  tasks: ApiTask[];
+  pointHistory: (Omit<PointHistoryItem, "timestamp"> & { createdAt: string })[];
+  recentActivities: (Omit<RecentActivityItem, "timeAgo"> & { createdAt: string })[];
+};
 
-  const data = result.data;
+export async function fetchCommitteeDashboard(code: string): Promise<ApiResult<CommitteeDashboardData>> {
+  const result = await apiRequest<RawCommitteeDashboardData>(`/committees/${encodeURIComponent(code)}/dashboard`);
+  if (!result.ok) return result;
+  return { ok: true, data: mapDashboardData(result.data) };
+}
+
+export async function fetchClubLeadershipDashboard(): Promise<ApiResult<CommitteeDashboardData>> {
+  const result = await apiRequest<RawCommitteeDashboardData>("/club-leadership/dashboard");
+  if (!result.ok) return result;
+  return { ok: true, data: mapDashboardData(result.data) };
+}
+
+function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardData {
   const memberById = new Map(data.members.map((member) => [member.id, member]));
   return {
-    ok: true,
-    data: {
       ...data,
       members: data.members.map((member) => ({
         ...member,
@@ -108,8 +116,7 @@ export async function fetchCommitteeDashboard(code: string): Promise<ApiResult<C
       })),
       pointHistory: data.pointHistory.map((item) => ({ ...item, timestamp: relativeTime(item.createdAt) })),
       recentActivities: data.recentActivities.map((item) => ({ ...item, timeAgo: relativeTime(item.createdAt) })),
-    },
-  };
+    };
 }
 
 export async function createCommitteeTask(code: string, task: Omit<CommitteeTask, "id">) {

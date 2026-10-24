@@ -25,11 +25,12 @@ import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-con
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
-import { fetchCommitteeDashboard, fetchDeveloperCommitteeOverview, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
   developerCommitteesOverview: DeveloperCommitteeOverview[];
+  clubLeadership: boolean;
   committeeName: string;
   committeeDescription: string;
   events: CommitteeEvent[];
@@ -97,16 +98,19 @@ export function LeaderDashboardProvider({
   children,
   committee = "data-analysis",
   developerCommitteesLeader = false,
+  clubLeadership = false,
   seed,
 }: {
   children: ReactNode;
   committee?: LeaderCommittee;
   developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
   seed?: LeaderDashboardSeed;
 }) {
   const t = useTranslations("dashboard.leader");
+  const leadershipT = useTranslations("dashboard.leadershipDashboard");
   const committeeConfig = leaderCommitteeConfig[committee];
-  const committeeName = t(`nav.${committeeTranslationKeys[committee]}`);
+  const committeeName = clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`);
   const committeeDescription = committeeConfig.description;
   const [events, setEvents] = useState<CommitteeEvent[]>(seed?.events ?? []);
   const [members, setMembers] = useState<CommitteeMember[]>(seed?.members ?? []);
@@ -188,6 +192,27 @@ export function LeaderDashboardProvider({
   const reloadDashboard = useCallback(async () => {
     setDashboardLoading(true);
     setDashboardError(null);
+    if (clubLeadership) {
+      const result = await fetchClubLeadershipDashboard();
+      if (!result.ok) {
+        setDashboardError(result.status === 401 ? "UNAUTHORIZED" : result.status === 403 ? "FORBIDDEN" : result.code);
+        setDashboardLoading(false);
+        return;
+      }
+      setEvents(result.data.events ?? []);
+      setMembers(result.data.members ?? []);
+      setTasks(result.data.tasks ?? []);
+      setPointHistory(result.data.pointHistory ?? []);
+      setRecentActivities(result.data.recentActivities ?? []);
+      setStats(result.data.stats);
+      setCurrentMember(result.data.currentMember);
+      setCanAddMembers(false);
+      setCanManageTasks(false);
+      setCanManagePoints(false);
+      setCanManageRegistrations(false);
+      setDashboardLoading(false);
+      return;
+    }
     if (developerCommitteesLeader) {
       const result = await fetchDeveloperCommitteeOverview();
       if (!result.ok) {
@@ -220,7 +245,7 @@ export function LeaderDashboardProvider({
     setCanManagePoints(result.data.permissions.canManagePoints);
     setCanManageRegistrations(result.data.permissions.canManageRegistrations);
     setDashboardLoading(false);
-  }, [committeeConfig.committeeCode, developerCommitteesLeader]);
+  }, [committeeConfig.committeeCode, clubLeadership, developerCommitteesLeader]);
 
   useEffect(() => {
     queueMicrotask(() => void reloadDashboard());
@@ -438,6 +463,7 @@ export function LeaderDashboardProvider({
   const value = {
     committee,
     developerCommitteesOverview,
+    clubLeadership,
     committeeName,
     committeeDescription,
     events,

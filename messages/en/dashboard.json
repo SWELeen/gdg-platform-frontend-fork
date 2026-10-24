@@ -1,6 +1,10 @@
 {
   "leadershipDashboard": {
     "clubTitle": "Club Leadership Dashboard",
+    "clubLeaderRole": "Club Leader",
+    "clubCoLeaderRole": "Club Co-Leader",
+    "clubLeaderDescription": "Reviews club-wide leadership and advisor applications.",
+    "clubCoLeaderDescription": "Shares the club-wide leadership review queue and permissions.",
     "developerTitle": "Developer Committees Leader Dashboard",
     "developerDescription": "Oversight for Automation, Data Analysis, Web Development, AI, IoT, and Cybersecurity committees.",
     "overviewTitle": "Developer committees overview",

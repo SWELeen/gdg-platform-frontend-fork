@@ -1,6 +1,10 @@
 {
   "leadershipDashboard": {
     "clubTitle": "لوحة قيادة النادي",
+    "clubLeaderRole": "قائد النادي",
+    "clubCoLeaderRole": "نائب قائد النادي",
+    "clubLeaderDescription": "مراجعة طلبات قيادة لجان النادي والمستشارين.",
+    "clubCoLeaderDescription": "مشاركة صلاحيات وقائمة مراجعة طلبات قيادة النادي.",
     "developerTitle": "لوحة قائد لجان التطوير",
     "developerDescription": "الإشراف على لجان الأتمتة وتحليل البيانات وتطوير الويب والذكاء الاصطناعي وإنترنت الأشياء والأمن السيبراني.",
     "overviewTitle": "نظرة عامة على لجان التطوير",
