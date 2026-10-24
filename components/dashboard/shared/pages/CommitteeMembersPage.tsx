@@ -8,6 +8,7 @@ import { PointsModal } from "../PointsModal";
 import { useLeaderDashboard } from "../LeaderDashboardContext";
 import { leaderCommitteeConfig } from "../committee-config";
 import type { CommitteeMember } from "../types";
+import { MembershipRequestsPanel } from "../MembershipRequestsPanel";
 
 export function CommitteeMembersPage() {
   const { committee } = useLeaderDashboard();
@@ -17,7 +18,8 @@ export function CommitteeMembersPage() {
   const [pointsMember, setPointsMember] = useState<CommitteeMember | null>(null);
 
   return (
-    <div>
+    <div className="space-y-6">
+      <MembershipRequestsPanel />
       <MembersSection
         onOpenAddMember={() => setAddMemberOpen(true)}
         onOpenTemporaryAccess={canGrantTemporaryAccess ? setAccessMember : undefined}

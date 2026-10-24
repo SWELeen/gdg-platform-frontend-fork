@@ -1127,5 +1127,38 @@
         "durationMax": "Duration cannot exceed 10,080 minutes (7 days)."
       }
     }
+  },
+  "membershipRequests": {
+    "title": "Membership requests",
+    "description": "Review applications for your committee. Each committee records its decision separately.",
+    "loading": "Loading requests...",
+    "empty": "There are no membership requests for this committee yet.",
+    "apiDisabled": "Connect the authenticated API to review real membership requests.",
+    "unauthorized": "Sign in with an authorized leader account to review requests.",
+    "forbidden": "You do not have permission to review this committee’s requests.",
+    "loadError": "Membership requests could not be loaded.",
+    "decisionError": "Your decision could not be saved. Refresh and try again.",
+    "submitted": "Submitted {date}",
+    "requestedRole": "Requested role: {role}",
+    "selectedCommittees": "Selected committees",
+    "approve": "Approve",
+    "reject": "Reject",
+    "saving": "Saving...",
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "universityEmail": "University email",
+      "university": "University",
+      "branch": "Branch",
+      "college": "College",
+      "major": "Major",
+      "level": "Level",
+      "gender": "Gender"
+    }
   }
 }

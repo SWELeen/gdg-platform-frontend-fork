@@ -3,6 +3,10 @@
 import { type ClipboardEvent, type FormEvent, useRef, useState } from "react"
 import { useTranslations } from "next-intl"
 import AuthErrorMessage from "./AuthErrorMessage"
+import { API_ENABLED, apiRequest } from "@/lib/api/client"
+import { readAuthSession, storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { submitMembershipRequest, type MembershipApplicationPayload } from "@/lib/membership-requests/api"
+import { useRouter } from "@/i18n/navigation"
 
 const CODE_LENGTH = 6
 
@@ -22,11 +26,13 @@ function validateCode(code: string[]) {
 
 export default function VerifyCodeForm() {
   const t = useTranslations("auth.verifyCode")
+  const router = useRouter()
   const [code, setCode] = useState<string[]>(() =>
     Array.from({ length: CODE_LENGTH }, () => "")
   )
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasSession, setHasSession] = useState(() => Boolean(readAuthSession()))
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   function updateCode(index: number, value: string) {
@@ -72,14 +78,15 @@ export default function VerifyCodeForm() {
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (isSubmitting) {
       return
     }
 
-    const message = validateCode(code)
+    const existingSession = readAuthSession()
+    const message = existingSession ? "" : validateCode(code)
     if (message) {
       setError(message)
       return
@@ -87,12 +94,47 @@ export default function VerifyCodeForm() {
 
     setError("")
     setIsSubmitting(true)
-
-    // No verification API is documented/available yet; simulate the request
-    // the same way the other auth flows do until one is wired up.
-    window.setTimeout(() => {
+    if (!API_ENABLED) {
+      setError("apiRequired")
       setIsSubmitting(false)
-    }, 800)
+      return
+    }
+
+    let pending: { email?: string; membershipApplication?: MembershipApplicationPayload | null } = {}
+    try {
+      pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
+    } catch {
+      pending = {}
+    }
+    if (!existingSession && !pending.email) {
+      setError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+
+    if (!existingSession) {
+      const verified = await apiRequest<AuthSession>("/auth/verify-email", {
+        method: "POST",
+        body: { email: pending.email, token: code.join("") },
+      })
+      if (!verified.ok) {
+        setError("authRequestFailed")
+        setIsSubmitting(false)
+        return
+      }
+      storeAuthSession(verified.data)
+      setHasSession(true)
+    }
+    if (pending.membershipApplication) {
+      const submitted = await submitMembershipRequest(pending.membershipApplication)
+      if (!submitted.ok) {
+        setError("membershipRequestFailed")
+        setIsSubmitting(false)
+        return
+      }
+    }
+    window.sessionStorage.removeItem("gdg.pending-signup")
+    router.replace("/dashboard")
   }
 
   return (
@@ -107,7 +149,7 @@ export default function VerifyCodeForm() {
         readOnly
       />
 
-      <div className="relative">
+      {!hasSession && <div className="relative">
         <div
           className="flex w-full justify-between gap-2.5"
           // Digits always read left to right, even on Arabic pages.
@@ -143,14 +185,16 @@ export default function VerifyCodeForm() {
           message={error}
           className="absolute inset-x-0 top-full mt-1.5 text-center"
         />
-      </div>
+      </div>}
+
+      {hasSession && <p className="mt-3 text-center text-sm text-foreground/60">{t("continueApplication")}</p>}
 
       <button
         type="submit"
         disabled={isSubmitting}
         className="mt-10.25 h-8.75 w-full rounded-[5px] bg-gdg-blue text-sm font-medium text-[var(--white)] transition-colors duration-200 hover:bg-gdg-blue/90 active:bg-gdg-blue/80 disabled:cursor-not-allowed disabled:bg-gdg-blue/70"
       >
-        {isSubmitting ? t("verifying") : t("verify")}
+        {isSubmitting ? t("verifying") : hasSession ? t("continueApplication") : t("verify")}
       </button>
 
       <p className="mt-7.5 text-center text-sm text-foreground/45">
