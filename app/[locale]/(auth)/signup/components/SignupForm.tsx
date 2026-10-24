@@ -18,6 +18,27 @@ import {
 } from "@/data/signup"
 import { useTranslations } from "next-intl"
 import SignupProgress from "./SignupProgress"
+import { useRouter } from "@/i18n/navigation"
+import { API_ENABLED, apiRequest } from "@/lib/api/client"
+import { storeAuthSession } from "@/lib/auth/session"
+import { submitMembershipRequest, type MembershipApplicationPayload } from "@/lib/membership-requests/api"
+
+const membershipCommitteeCodes: Record<string, string> = {
+  "Project Management Committee": "PM",
+  "Public Relations Committee": "PR",
+  "Digital Media and Design Committee": "MEDIA",
+  "Content Writing Committee": "CONTENT",
+  "Artificial Intelligence Committee": "AI",
+  "Data Analytics Committee": "DATA",
+  "Cybersecurity Committee": "CYBER",
+  "Robotics Committee": "ROBOTICS",
+  "Automation Committee": "AUTOMATION",
+  "Web design and development": "WEB",
+}
+
+function membershipCommitteeCode(name: string) {
+  return membershipCommitteeCodes[name] ?? name.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 20)
+}
 
 type FieldName =
   | "fullName" | "phone" | "personalEmail" | "universityEmail" | "password" | "confirmPassword" | "gender"
@@ -223,12 +244,14 @@ function ChoiceField({
 
 export default function SignupForm() {
   const t = useTranslations("auth.signup")
+  const router = useRouter()
   const [step, setStep] = useState<0 | 1 | 2>(0)
   const [membership, setMembership] = useState<"member" | "nonMember" | "">("")
   const [membershipError, setMembershipError] = useState("")
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
@@ -268,7 +291,7 @@ export default function SignupForm() {
       ]
       : ["university", "college", "major", "level"]
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (isSubmitting) return
     if (step === 0) {
@@ -304,9 +327,78 @@ export default function SignupForm() {
       return
     }
 
-    // No registration endpoint is published in this frontend's API contract yet.
+    setSubmitError("")
     setIsSubmitting(true)
-    window.setTimeout(() => setIsSubmitting(false), 800)
+    if (!API_ENABLED) {
+      setSubmitError("apiRequired")
+      setIsSubmitting(false)
+      return
+    }
+
+    const membershipApplication: MembershipApplicationPayload | null = membership === "member"
+      ? {
+          applicationData: {
+            phoneNumber: `+966${values.phone}`,
+            universityEmail: values.universityEmail,
+            university: values.university,
+            ...(values.branch ? { branch: values.branch } : {}),
+            college: values.college,
+            major: values.major,
+            level: values.level,
+            gender: values.gender,
+          },
+          committees: values.committees.map((committee) => ({
+            committeeCode: membershipCommitteeCode(committee),
+            requestedRole: values.committeeRoles[committee],
+          })),
+        }
+      : null
+
+    const result = await apiRequest<{
+      accessToken?: string;
+      refreshToken?: string;
+      expiresAt?: number;
+      emailVerificationRequired?: boolean;
+    }>("/auth/signup", {
+      method: "POST",
+      body: {
+        fullName: values.fullName,
+        email: values.personalEmail,
+        password: values.password,
+      },
+    })
+    if (!result.ok) {
+      setSubmitError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+
+    const pending = {
+      email: values.personalEmail,
+      membershipApplication,
+    }
+    window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify(pending))
+
+    if (result.data.accessToken && result.data.refreshToken) {
+      storeAuthSession({
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken,
+        expiresAt: result.data.expiresAt,
+      })
+      if (membershipApplication) {
+        const requestResult = await submitMembershipRequest(membershipApplication)
+        if (!requestResult.ok) {
+          router.push("/signup/verify")
+          return
+        }
+      }
+      window.sessionStorage.removeItem("gdg.pending-signup")
+      router.replace("/dashboard")
+      return
+    }
+
+    router.push("/signup/verify")
+    setIsSubmitting(false)
   }
 
   const handleBack = () => {
@@ -415,6 +507,7 @@ export default function SignupForm() {
         </h1>
       )}
       <form onSubmit={handleSubmit} noValidate className={`${step === 0 ? "mt-8" : "mt-6"} flex w-full flex-col`}>
+        <AuthErrorMessage message={submitError} className="mb-3" />
         <AuthStepTransition stepKey={step} className="grid w-full grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
           {step === 0 ? (
             <fieldset data-membership-choice className="col-span-full" aria-describedby={membershipError ? "membership-error" : undefined}>
@@ -422,7 +515,7 @@ export default function SignupForm() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {(["member", "nonMember"] as const).map((option) => (
                   <label key={option} className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-3 text-sm ${membership === option ? "border-blue bg-blue/5" : "border-foreground/15"}`}>
-                    <input type="radio" name="membership" value={option} checked={membership === option} onChange={() => chooseMembership(option)} aria-invalid={Boolean(membershipError)} />
+                    <input type="radio" name="membership" value={option} checked={membership === option} onChange={() => chooseMembership(option)} />
                     {t(option === "member" ? "memberChoice" : "nonMemberChoice")}
                   </label>
                 ))}

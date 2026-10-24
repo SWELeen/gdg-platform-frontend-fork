@@ -44,5 +44,8 @@
   "urlInvalid": "Enter a full URL, e.g. https://example.com",
   "urlProtocol": "URL must start with http:// or https://",
   "githubDomain": "Must be a github.com link",
-  "linkedinDomain": "Must be a linkedin.com link"
+  "linkedinDomain": "Must be a linkedin.com link",
+  "apiRequired": "The secure service is unavailable in this environment. Please try again later.",
+  "authRequestFailed": "We could not complete that request. Check your details and try again.",
+  "membershipRequestFailed": "Your account was created, but the membership request could not be saved. Sign in and retry from your profile."
 }

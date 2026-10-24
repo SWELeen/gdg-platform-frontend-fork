@@ -44,5 +44,8 @@
   "urlInvalid": "أدخل رابطًا كاملًا، مثل https://example.com",
   "urlProtocol": "يجب أن يبدأ الرابط بـ http:// أو https://",
   "githubDomain": "يجب أن يكون رابطًا من github.com",
-  "linkedinDomain": "يجب أن يكون رابطًا من linkedin.com"
+  "linkedinDomain": "يجب أن يكون رابطًا من linkedin.com",
+  "apiRequired": "الخدمة الآمنة غير متاحة حاليًا. حاول مرة أخرى لاحقًا.",
+  "authRequestFailed": "تعذر إكمال الطلب. تحقق من بياناتك وحاول مرة أخرى.",
+  "membershipRequestFailed": "تم إنشاء حسابك، لكن تعذر حفظ طلب العضوية. سجّل الدخول وأعد المحاولة من ملفك."
 }

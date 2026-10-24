@@ -2,6 +2,10 @@
 
 import { useTranslations } from "next-intl"
 import { useState } from "react"
+import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
+import { API_ENABLED, apiRequest } from "@/lib/api/client"
+import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { useRouter } from "@/i18n/navigation"
 import { useRouter } from "@/i18n/navigation"
 import AuthCard from "@/app/components/auth/AuthCard"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
@@ -25,6 +29,7 @@ export default function LoginFlow() {
   const [password, setPassword] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
   const isEmailStep = step === 1
 
   const handleEmailChange = (value: string) => {
@@ -83,7 +88,19 @@ export default function LoginFlow() {
 
     const nextPassword = normalizeText(password)
     setPassword(nextPassword)
+    setSubmitError("")
     setIsSubmitting(true)
+    if (!API_ENABLED) {
+      setSubmitError("apiRequired")
+      setIsSubmitting(false)
+      return
+    }
+    const result = await apiRequest<AuthSession>("/auth/login", {
+      method: "POST",
+      body: { email: normalizeText(email), password: nextPassword },
+    })
+    if (!result.ok) {
+      setSubmitError("authRequestFailed")
 
     const result = await apiRequest<{ accessToken: string; refreshToken: string; expiresAt: number | null }>("/auth/login", {
       method: "POST",
@@ -92,6 +109,10 @@ export default function LoginFlow() {
     if (!result.ok) {
       setPasswordError(t("passwordStep.signInFailed"))
       setIsSubmitting(false)
+      return
+    }
+    storeAuthSession(result.data)
+    router.replace("/dashboard")
       return
     }
     saveApiSession({ accessToken: result.data.accessToken, expiresAt: result.data.expiresAt })
@@ -116,6 +137,7 @@ export default function LoginFlow() {
           : t("passwordStep.description")
       }
     >
+      <AuthErrorMessage message={submitError} className="mb-3 w-full" />
       <AuthStepTransition
         stepKey={step}
         className="flex w-full flex-col items-center"
