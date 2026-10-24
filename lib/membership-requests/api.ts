@@ -39,6 +39,7 @@ export interface MembershipRequest {
 export interface MembershipApplicationPayload {
   applicationData: MembershipRequest["applicant"]["details"];
   committees: Array<{ committeeCode: string; requestedRole: string }>;
+  requestedGlobalRoles?: string[];
 }
 
 export async function fetchMembershipRequests(committeeCode: string): Promise<ApiResult<MembershipRequest[]>> {

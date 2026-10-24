@@ -93,6 +93,7 @@ export async function registerForEvent(
   eventId: string,
   questions: RegistrationQuestion[],
   answers: Record<string, string>,
+  registrationSource?: string,
 ): Promise<RegisterResult> {
   const body = {
     answers: questions
@@ -105,6 +106,7 @@ export async function registerForEvent(
             : answers[question.id].trim(),
       })),
   };
+  if (registrationSource) Object.assign(body, { registrationSource });
   const result = await apiRequest(`/events/${eventId}/registrations`, { method: "POST", body });
   return result.ok ? { ok: true } : { ok: false, code: result.code };
 }

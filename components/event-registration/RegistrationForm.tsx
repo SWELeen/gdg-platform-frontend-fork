@@ -3,8 +3,11 @@
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+    collegeOptions,
     defaultPhoneCountryCode,
+    eventRegistrationSourceOptions,
     eventRegistrationMembershipValues,
+    majorOptions,
 } from "@/data/signup";
 import { validateEmail } from "@/app/lib/validation/email";
 import { validateRequiredText } from "@/app/lib/validation/text";
@@ -20,6 +23,7 @@ type FormData = {
     phone: string;
     email: string;
     membership: "" | (typeof eventRegistrationMembershipValues)[number];
+    registrationSource: "" | (typeof eventRegistrationSourceOptions)[number];
 };
 
 type FormErrors = Partial<Record<keyof FormData, string>>;
@@ -32,6 +36,7 @@ const initialFormData: FormData = {
     phone: "",
     email: "",
     membership: "",
+    registrationSource: "",
 };
 
 export function RegistrationForm({
@@ -123,6 +128,10 @@ export function RegistrationForm({
             newErrors.membership = "fieldRequired";
         }
 
+        if (!formData.registrationSource) {
+            newErrors.registrationSource = "fieldRequired";
+        }
+
         return newErrors;
     }
 
@@ -145,7 +154,7 @@ export function RegistrationForm({
         setErrors({});
         if (!eventId) return;
         setIsSubmitting(true);
-        const outcome = await registerForEvent(eventId, questions, answers);
+        const outcome = await registerForEvent(eventId, questions, answers, formData.registrationSource);
         setIsSubmitting(false);
         const known = ["ALREADY_REGISTERED", "REGISTRATION_CLOSED", "UNAUTHORIZED", "VALIDATION_ERROR"];
         setResult(
@@ -299,24 +308,18 @@ export function RegistrationForm({
                                 {t("college")} <span className="text-gdg-red">*</span>
                             </label>
 
-                            <input
+                            <select
                                 id="college"
                                 name="college"
-                                type="text"
-                                placeholder={t("collegePlaceholder")}
                                 value={formData.college}
-                                onChange={(event) =>
-                                    updateField("college", event.target.value)
-                                }
+                                onChange={(event) => updateField("college", event.target.value)}
                                 aria-invalid={Boolean(errors.college)}
-                                aria-describedby={
-                                    errors.college ? "college-error" : undefined
-                                }
-                                className={
-                                    inputClassName +
-                                    errorClass(Boolean(errors.college))
-                                }
-                            />
+                                aria-describedby={errors.college ? "college-error" : undefined}
+                                className={inputClassName + errorClass(Boolean(errors.college))}
+                            >
+                                <option value="">{t("collegePlaceholder")}</option>
+                                {collegeOptions.map((college) => <option key={college} value={college}>{college}</option>)}
+                            </select>
 
                             {errors.college && (
                                 <p
@@ -338,24 +341,18 @@ export function RegistrationForm({
                                 {t("major")} <span className="text-gdg-red">*</span>
                             </label>
 
-                            <input
+                            <select
                                 id="major"
                                 name="major"
-                                type="text"
-                                placeholder={t("majorPlaceholder")}
                                 value={formData.major}
-                                onChange={(event) =>
-                                    updateField("major", event.target.value)
-                                }
+                                onChange={(event) => updateField("major", event.target.value)}
                                 aria-invalid={Boolean(errors.major)}
-                                aria-describedby={
-                                    errors.major ? "major-error" : undefined
-                                }
-                                className={
-                                    inputClassName +
-                                    errorClass(Boolean(errors.major))
-                                }
-                            />
+                                aria-describedby={errors.major ? "major-error" : undefined}
+                                className={inputClassName + errorClass(Boolean(errors.major))}
+                            >
+                                <option value="">{t("majorPlaceholder")}</option>
+                                {majorOptions.map((major) => <option key={major} value={major}>{major}</option>)}
+                            </select>
 
                             {errors.major && (
                                 <p
@@ -505,6 +502,21 @@ export function RegistrationForm({
                                 {tValidation(errors.membership)}
                             </p>
                         )}
+                    </fieldset>
+
+                    <fieldset className="mt-5" aria-describedby={errors.registrationSource ? "registration-source-error" : undefined}>
+                        <legend className="text-start text-sm font-semibold text-foreground">
+                            {t("registrationSourceQuestion")} <span className="text-gdg-red">*</span>
+                        </legend>
+                        <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3">
+                            {eventRegistrationSourceOptions.map((source) => (
+                                <label key={source} className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+                                    <input type="radio" name="registrationSource" value={source} checked={formData.registrationSource === source} onChange={() => updateField("registrationSource", source)} className="h-4 w-4 accent-[var(--gdg-dark)]" />
+                                    {source}
+                                </label>
+                            ))}
+                        </div>
+                        {errors.registrationSource && <p id="registration-source-error" className="mt-1 text-start text-xs text-gdg-red">{tValidation(errors.registrationSource)}</p>}
                     </fieldset>
 
                     {questions.map((question) => (

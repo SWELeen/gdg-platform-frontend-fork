@@ -47,6 +47,8 @@ type FieldName =
 type FormValues = Record<Exclude<FieldName, "committees">, string> & {
   committees: string[]
   committeeRoles: Record<string, string>
+  developerCommitteesLeader: boolean
+  advisor: boolean
 }
 type FieldErrors = Partial<Record<FieldName, string>> & Record<string, string | undefined>
 
@@ -69,6 +71,8 @@ const initialValues: FormValues = {
   level: "",
   committees: [],
   committeeRoles: {},
+  developerCommitteesLeader: false,
+  advisor: false,
 }
 
 const selectOptions: Partial<Record<FieldName, readonly string[]>> = {
@@ -111,7 +115,7 @@ function validateField(field: FieldName, values: FormValues, membership: "member
     case "confirmPassword": return validateConfirmPassword(value, values.password)
     case "phone": return validatePhone(value)
     case "committees":
-      if (!values.committees.length) return "committeeRequired"
+      if (!values.committees.length && !values.developerCommitteesLeader && !values.advisor) return "committeeRequired"
       return values.committees.every((item) => committeeOptions.includes(item as typeof committeeOptions[number]))
         ? ""
         : "fieldInvalid"
@@ -351,6 +355,12 @@ export default function SignupForm() {
             committeeCode: membershipCommitteeCode(committee),
             requestedRole: values.committeeRoles[committee],
           })),
+          ...((values.developerCommitteesLeader || values.advisor)
+            ? { requestedGlobalRoles: [
+                ...(values.developerCommitteesLeader ? ["Developer Committees Leader"] : []),
+                ...(values.advisor ? ["Advisor"] : []),
+              ] }
+            : {}),
         }
       : null
 
@@ -429,6 +439,7 @@ export default function SignupForm() {
         branch: "",
         committees: [],
         committeeRoles: {},
+        advisor: false,
       }))
     }
   }
@@ -571,6 +582,22 @@ export default function SignupForm() {
                       {committee}
                     </label>
                   ))}
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(values.developerCommitteesLeader)}
+                      onChange={(event) => setValues((current) => ({ ...current, developerCommitteesLeader: event.target.checked }))}
+                    />
+                    Developer Committees Leader
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(values.advisor)}
+                      onChange={(event) => setValues((current) => ({ ...current, advisor: event.target.checked }))}
+                    />
+                    Advisor
+                  </label>
                 </div>
                 <AuthErrorMessage id="committees-error" message={errors.committees ?? ""} className="mt-1" />
                 {values.committees.length > 0 && (
@@ -582,13 +609,13 @@ export default function SignupForm() {
                       const errorKey = committeeRoleErrorKey(committee)
                       const error = errors[errorKey]
                       return (
+                        <div key={committee} className="space-y-2">
                         <ChoiceField
-                          key={committee}
                           id={`committee-role-${index}`}
                           label={`${t("fields.role.label")}: ${committee.replace(/ Committee$/, "")}`}
                           placeholder={t("fields.role.placeholder")}
                           options={roleOptions}
-                          value={values.committeeRoles[committee] ?? ""}
+                          value={values.committeeRoles[committee] === "Advisor" ? "" : values.committeeRoles[committee] ?? ""}
                           error={error}
                           onChange={(role) => updateCommitteeRole(committee, role)}
                           onBlur={() => {
@@ -599,6 +626,7 @@ export default function SignupForm() {
                             }))
                           }}
                         />
+                        </div>
                       )
                     })}
                   </div>
