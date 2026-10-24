@@ -1,11 +1,10 @@
 // Shared client for the NestJS API. Pages keep working on demo data unless
 // NEXT_PUBLIC_USE_API=true, so turning the API on is an explicit choice.
 //
-// Authentication is not wired yet: once the auth task issues tokens, attach
-// the signed-in user's credentials here, in one place, for every request.
+import { getApiAccessToken } from "./session";
 
 export const API_ENABLED = process.env.NEXT_PUBLIC_USE_API === "true";
-const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 const API_URL = RAW_API_URL.endsWith("/") ? RAW_API_URL.slice(0, -1) : RAW_API_URL;
 
 export type ApiResult<T> =
@@ -17,6 +16,8 @@ export async function apiRequest<T>(
   init: { method?: string; body?: unknown } = {},
 ): Promise<ApiResult<T>> {
   const headers: Record<string, string> = {};
+  const token = getApiAccessToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
   if (init.body !== undefined) headers["Content-Type"] = "application/json";
 
   let response: Response;

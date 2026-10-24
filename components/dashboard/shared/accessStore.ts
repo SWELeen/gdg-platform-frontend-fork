@@ -18,7 +18,7 @@ export function getElevatedAccess(): ElevatedAccessRecord | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const record: ElevatedAccessRecord = JSON.parse(raw);
-    if (record.committee !== "data-analysis" && record.committee !== "pr") {
+    if (!["data-analysis", "pr", "content-writing", "web-development", "automation-ai", "artificial-intelligence", "robotics-iot", "cybersecurity", "digital-media-design"].includes(record.committee)) {
       localStorage.removeItem(STORAGE_KEY);
       return null;
     }

@@ -3,8 +3,9 @@
 import { usePathname } from "@/i18n/navigation";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { leaderCommitteeConfig } from "./committee-config";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
 import type { LeaderCommittee } from "./types";
+import { useLeaderDashboard } from "./LeaderDashboardContext";
 
 interface LeaderHeaderProps {
   onOpenMobileMenu?: () => void;
@@ -18,8 +19,10 @@ export function LeaderHeader({
   const pathname = usePathname();
   const t = useTranslations("dashboard.leader");
   const config = leaderCommitteeConfig[committee];
+  const { currentMember } = useLeaderDashboard();
   const routeRoot = config.routeBase;
-  const leaderInitials = config.leaderDisplayName
+  const displayName = currentMember?.name ?? "";
+  const leaderInitials = displayName
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -66,10 +69,10 @@ export function LeaderHeader({
             </div>
             <div className="text-start">
               <span className="block text-xs font-semibold text-foreground leading-tight">
-                {config.leaderDisplayName}
+                {displayName}
               </span>
               <span className="block text-[10px] text-muted leading-tight">
-                {config.headerSubtitle}
+                {t(`nav.${committeeTranslationKeys[committee]}`)}
               </span>
             </div>
           </div>

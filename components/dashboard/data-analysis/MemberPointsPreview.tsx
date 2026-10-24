@@ -4,13 +4,15 @@ import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 import { useTranslations } from "next-intl";
 import type { CommitteeMember } from "../shared/types";
 import { Link } from "@/i18n/navigation";
+import { leaderCommitteeConfig } from "../shared/committee-config";
 
 interface MemberPointsPreviewProps {
   onUpdatePoints: (member: CommitteeMember) => void;
 }
 
 export function MemberPointsPreview({ onUpdatePoints }: MemberPointsPreviewProps) {
-  const { members, canManagePoints } = useLeaderDashboard();
+  const { members, canManagePoints, committee } = useLeaderDashboard();
+  const pointsHref = `${leaderCommitteeConfig[committee].routeBase}/points`;
   const t = useTranslations("dashboard.leader");
 
   const previewMembers = members.slice(0, 4);
@@ -27,7 +29,7 @@ export function MemberPointsPreview({ onUpdatePoints }: MemberPointsPreviewProps
           </p>
         </div>
         <Link
-          href="/dashboard/data-dashboard/points"
+          href={pointsHref}
           className="text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
         >
           {t("points.historyLink")}

@@ -48,6 +48,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      suppressHydrationWarning
       data-scroll-behavior="smooth"
       // Arabic mirrors the whole layout; use logical classes (ms-/pe-/start-/end-) so components flip with it.
       dir={localeMetadata[locale].dir}

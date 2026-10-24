@@ -6,6 +6,7 @@ import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { LeaderSidebar } from "@/components/dashboard/shared/LeaderSidebar";
 import { LeaderHeader } from "@/components/dashboard/shared/LeaderHeader";
+import { LeaderDashboardStatus } from "@/components/dashboard/shared/LeaderDashboardStatus";
 import type { LeaderCommittee, LeaderDashboardSeed } from "@/components/dashboard/shared/types";
 
 function LeaderLayoutShell({
@@ -42,6 +43,7 @@ function LeaderLayoutShell({
           {/* Content Body */}
           <main className="flex-1 p-4 sm:p-6 lg:p-8">
             <div className="mx-auto max-w-7xl">
+              <LeaderDashboardStatus />
               {children}
             </div>
           </main>

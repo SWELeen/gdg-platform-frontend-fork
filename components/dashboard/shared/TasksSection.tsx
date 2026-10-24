@@ -66,8 +66,8 @@ export function TasksSection({
     }
   };
 
-  const handleStatusChange = (task: CommitteeTask, newStatus: TaskStatus) => {
-    updateTask(task.id, { status: newStatus });
+  const handleStatusChange = async (task: CommitteeTask, newStatus: TaskStatus) => {
+    await updateTask(task.id, { status: newStatus }).catch(() => undefined);
   };
 
   return (
