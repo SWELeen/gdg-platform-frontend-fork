@@ -6,15 +6,12 @@ import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
 import { useRouter } from "@/i18n/navigation"
-import { useRouter } from "@/i18n/navigation"
 import AuthCard from "@/app/components/auth/AuthCard"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import { validateEmail } from "@/app/lib/validation/email"
 import { validatePassword } from "@/app/lib/validation/password"
 import LoginEmail from "./LoginEmail"
 import LoginPassword from "./LoginPassword"
-import { apiRequest } from "@/lib/api/client"
-import { saveApiSession } from "@/lib/api/session"
 
 function normalizeText(value: string) {
   return value.trim()
@@ -101,23 +98,11 @@ export default function LoginFlow() {
     })
     if (!result.ok) {
       setSubmitError("authRequestFailed")
-
-    const result = await apiRequest<{ accessToken: string; refreshToken: string; expiresAt: number | null }>("/auth/login", {
-      method: "POST",
-      body: { email: normalizeText(email), password: nextPassword },
-    })
-    if (!result.ok) {
-      setPasswordError(t("passwordStep.signInFailed"))
       setIsSubmitting(false)
       return
     }
     storeAuthSession(result.data)
     router.replace("/dashboard")
-      return
-    }
-    saveApiSession({ accessToken: result.data.accessToken, expiresAt: result.data.expiresAt })
-    router.push("/dashboard")
-    router.refresh()
   }
 
   const handleBack = () => {
