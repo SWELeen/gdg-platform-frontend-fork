@@ -368,7 +368,17 @@ export default function SignupForm() {
       },
     })
     if (!result.ok) {
-      setSubmitError("authRequestFailed")
+      if (result.code === "EMAIL_ALREADY_EXISTS") {
+        setSubmitError("emailAlreadyExists")
+      } else if (result.code === "EMAIL_ADDRESS_NOT_AUTHORIZED") {
+        setSubmitError("signupEmailNotAuthorized")
+      } else if (result.status === 429) {
+        setSubmitError("emailRateLimited")
+      } else if (result.status === 0 || result.status >= 500) {
+        setSubmitError("signupServiceUnavailable")
+      } else {
+        setSubmitError("authRequestFailed")
+      }
       setIsSubmitting(false)
       return
     }
