@@ -1,4 +1,24 @@
 {
+  "leadershipDashboard": {
+    "clubTitle": "لوحة قيادة النادي",
+    "developerTitle": "لوحة قائد لجان التطوير",
+    "developerDescription": "الإشراف على لجان الأتمتة وتحليل البيانات وتطوير الويب والذكاء الاصطناعي وإنترنت الأشياء والأمن السيبراني.",
+    "overviewTitle": "نظرة عامة على لجان التطوير",
+    "approvalNavigation": "طلبات القيادة",
+    "overviewLoading": "جارٍ تحميل بيانات اللجان…",
+    "overviewError": "تعذر تحميل بيانات اللجان.",
+    "committeeMembers": "الأعضاء",
+    "committeeLeaders": "القيادات",
+    "activeTasks": "المهام النشطة"
+  },
+  "leadershipApprovals": {
+    "title": "طلبات تسجيل القيادات",
+    "loading": "جارٍ تحميل الطلبات…",
+    "empty": "لا توجد طلبات قيادة بانتظار الموافقة.",
+    "error": "تعذر تحميل الطلبات. حاول مرة أخرى.",
+    "approve": "موافقة",
+    "reject": "رفض"
+  },
   "nav": {
     "sectionsLabel": "أقسام لوحة التحكم",
     "accountLabel": "الحساب",
@@ -259,6 +279,7 @@
       "email": "البريد الإلكتروني",
       "committee": "اللجنة",
       "role": "الدور",
+      "loading": "جارٍ تحميل الملف الشخصي…",
       "notAvailable": "غير متوفر بعد",
       "managedByLeadership": "تتولى قيادة لجنتك إدارة تفاصيل اللجنة. تواصل مع قائد لجنتك إذا احتاج شيء إلى تعديل.",
       "demoNote": "معروضة من بيانات تجريبية حتى يتم ربط تسجيل الدخول."
@@ -470,6 +491,7 @@
       "openSidebar": "فتح القائمة الجانبية",
       "committeeData": "لجنة تحليل البيانات",
       "committeePR": "لجنة العلاقات العامة",
+      "committeeProjectManagement": "Project Management Committee",
       "committeeContentWriting": "لجنة كتابة المحتوى",
       "committeeWebDevelopment": "لجنة تطوير الويب",
       "committeeAutomation": "لجنة الأتمتة",

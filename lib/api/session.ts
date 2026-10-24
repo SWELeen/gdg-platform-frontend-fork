@@ -6,24 +6,14 @@ export interface ApiSession {
 }
 
 export function saveApiSession(session: ApiSession) {
-  if (typeof window === "undefined") return;
-  window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  void session;
+  if (typeof window !== "undefined") window.sessionStorage.removeItem(SESSION_KEY);
 }
 
 export function getApiAccessToken() {
   if (typeof window === "undefined") return null;
-  try {
-    const session = JSON.parse(window.sessionStorage.getItem(SESSION_KEY) ?? "null") as ApiSession | null;
-    if (!session?.accessToken) return null;
-    if (session.expiresAt && Date.now() >= session.expiresAt * 1000) {
-      window.sessionStorage.removeItem(SESSION_KEY);
-      return null;
-    }
-    return session.accessToken;
-  } catch {
-    window.sessionStorage.removeItem(SESSION_KEY);
-    return null;
-  }
+  window.sessionStorage.removeItem(SESSION_KEY);
+  return null;
 }
 
 export function clearApiSession() {

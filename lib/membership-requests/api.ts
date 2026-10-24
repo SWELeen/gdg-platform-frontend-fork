@@ -42,6 +42,28 @@ export interface MembershipApplicationPayload {
   requestedGlobalRoles?: string[];
 }
 
+export interface LeadershipApplication {
+  id: number;
+  type: "COMMITTEE_LEADERSHIP" | "GLOBAL_ROLE";
+  submittedAt: string;
+  decisionStatus: MembershipDecision;
+  applicant: MembershipRequest["applicant"];
+  committee?: { committeeCode: string; committeeName: string };
+  requestedRole?: string;
+  role?: { roleCode: string; description: string | null };
+}
+
+export function fetchLeadershipApplications(scope: "CLUB" | "DEVELOPER_COMMITTEES") {
+  return apiRequest<LeadershipApplication[]>(`/membership-requests/leadership?scope=${scope}`);
+}
+
+export function decideLeadershipApplication(application: LeadershipApplication, decision: "APPROVED" | "REJECTED") {
+  const suffix = application.type === "GLOBAL_ROLE"
+    ? `global-roles/${encodeURIComponent(application.role?.roleCode ?? "")}`
+    : `committees/${encodeURIComponent(application.committee?.committeeCode ?? "")}`;
+  return apiRequest(`/membership-requests/${application.id}/leadership/${suffix}`, { method: "PATCH", body: { decision } });
+}
+
 export async function fetchMembershipRequests(committeeCode: string): Promise<ApiResult<MembershipRequest[]>> {
   if (!API_ENABLED) {
     return { ok: false, status: 0, code: "API_DISABLED", message: "API mode is disabled." };

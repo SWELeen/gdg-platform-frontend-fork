@@ -8,13 +8,16 @@ import { LeaderSidebar } from "@/components/dashboard/shared/LeaderSidebar";
 import { LeaderHeader } from "@/components/dashboard/shared/LeaderHeader";
 import { LeaderDashboardStatus } from "@/components/dashboard/shared/LeaderDashboardStatus";
 import type { LeaderCommittee, LeaderDashboardSeed } from "@/components/dashboard/shared/types";
+import { DashboardAccessGate } from "@/components/dashboard/shared/DashboardAccessGate";
 
 function LeaderLayoutShell({
   children,
   committee,
+  developerCommitteesLeader,
 }: {
   children: ReactNode;
   committee: LeaderCommittee;
+  developerCommitteesLeader: boolean;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -30,6 +33,7 @@ function LeaderLayoutShell({
           mobileOpen={mobileMenuOpen}
           onCloseMobile={() => setMobileMenuOpen(false)}
           committee={committee}
+          developerCommitteesLeader={developerCommitteesLeader}
         />
 
         {/* Main Content Area */}
@@ -38,6 +42,7 @@ function LeaderLayoutShell({
           <LeaderHeader
             onOpenMobileMenu={() => setMobileMenuOpen(true)}
             committee={committee}
+            developerCommitteesLeader={developerCommitteesLeader}
           />
 
           {/* Content Body */}
@@ -60,14 +65,21 @@ export function LeaderLayoutClient({
   children,
   committee = "data-analysis",
   seed,
+  developerCommitteesLeader = false,
 }: {
   children: ReactNode;
   committee?: LeaderCommittee;
   seed?: LeaderDashboardSeed;
+  developerCommitteesLeader?: boolean;
 }) {
+  const requirement = developerCommitteesLeader
+    ? { kind: "global-role" as const, roles: ["DEVELOPER_COMMITTEES_LEADER"] }
+    : { kind: "committee-leader" as const, committee };
   return (
-    <LeaderDashboardProvider committee={committee} seed={seed}>
-      <LeaderLayoutShell committee={committee}>{children}</LeaderLayoutShell>
-    </LeaderDashboardProvider>
+    <DashboardAccessGate requirement={requirement}>
+      <LeaderDashboardProvider committee={committee} seed={seed} developerCommitteesLeader={developerCommitteesLeader}>
+        <LeaderLayoutShell committee={committee} developerCommitteesLeader={developerCommitteesLeader}>{children}</LeaderLayoutShell>
+      </LeaderDashboardProvider>
+    </DashboardAccessGate>
   );
 }

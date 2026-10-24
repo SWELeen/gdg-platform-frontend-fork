@@ -24,10 +24,11 @@ export interface LeaderCommitteeConfig {
 
 export const committeeTranslationKeys: Record<LeaderCommittee, string> = {
   pr: "committeePR",
+  "project-management": "committeeProjectManagement",
   "data-analysis": "committeeData",
   "content-writing": "committeeContentWriting",
   "web-development": "committeeWebDevelopment",
-  "automation-ai": "committeeAutomation",
+  automation: "committeeAutomation",
   "artificial-intelligence": "committeeAI",
   "robotics-iot": "committeeRoboticsIot",
   cybersecurity: "committeeCybersecurity",
@@ -95,9 +96,10 @@ export const leaderCommitteeConfig: Record<LeaderCommittee, LeaderCommitteeConfi
     registrationNotificationDescription:
       "Receive dashboard alerts when an applicant registers for an event.",
   },
+  "project-management": makeGeneralCommitteeConfig("project-management", "project-management-dashboard", "PM"),
   "content-writing": makeGeneralCommitteeConfig("content-writing", "content-writing-dashboard", "CONTENT"),
   "web-development": makeGeneralCommitteeConfig("web-development", "web-development-dashboard", "WEB"),
-  "automation-ai": makeGeneralCommitteeConfig("automation-ai", "automation-ai-dashboard", "AUTOMATION"),
+  automation: makeGeneralCommitteeConfig("automation", "automation-dashboard", "AUTOMATION"),
   "artificial-intelligence": makeGeneralCommitteeConfig("artificial-intelligence", "artificial-intelligence-dashboard", "AI"),
   "robotics-iot": makeGeneralCommitteeConfig("robotics-iot", "robotics-iot-dashboard", "ROBOTICS"),
   cybersecurity: makeGeneralCommitteeConfig("cybersecurity", "cybersecurity-dashboard", "CYBER"),

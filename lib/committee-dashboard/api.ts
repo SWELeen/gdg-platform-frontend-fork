@@ -25,6 +25,18 @@ export interface CommitteeDashboardStats {
   rejectedRegistrations: number;
 }
 
+export interface DeveloperCommitteeOverview {
+  code: string;
+  name: string;
+  memberCount: number;
+  leaderCount: number;
+  activeTaskCount: number;
+}
+
+export function fetchDeveloperCommitteeOverview() {
+  return apiRequest<DeveloperCommitteeOverview[]>("/developer-committees/dashboard");
+}
+
 export interface CommitteeDashboardData extends LeaderDashboardSeed {
   committee: { id: number | null; code: string; name: string };
   currentMember: { id: string; name: string; role: string } | null;
