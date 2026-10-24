@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
-import { leaderCommitteeConfig } from "./committee-config";
-import { defaultNewTaskDueDate } from "@/data/leader-dashboard";
 import type { CommitteeTask, TaskPriority, TaskStatus } from "./types";
 import { X, CheckSquare, Calendar } from "lucide-react";
+
+function toDateInputValue(value?: string) {
+  if (value && /^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10);
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -21,16 +26,16 @@ interface TaskFormProps {
 
 function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
   const t = useTranslations("dashboard.leader");
-  const { addTask, updateTask, members, canManageTasks, committeeName, committee } =
+  const { addTask, updateTask, members, canManageTasks, committeeName, currentMember } =
     useLeaderDashboard();
-  const createdBy = leaderCommitteeConfig[committee].leaderDisplayName;
+  const createdBy = currentMember?.name ?? "";
 
   const [title, setTitle] = useState(taskToEdit?.title ?? "");
   const [description, setDescription] = useState(taskToEdit?.description ?? "");
   const [assignedMemberId, setAssignedMemberId] = useState(
     taskToEdit?.assignedMemberId ?? members[0]?.id ?? ""
   );
-  const [dueDate, setDueDate] = useState(taskToEdit?.dueDate ?? defaultNewTaskDueDate);
+  const [dueDate, setDueDate] = useState(() => toDateInputValue(taskToEdit?.dueDate));
   const [priority, setPriority] = useState<TaskPriority>(
     taskToEdit?.priority ?? "Medium"
   );
@@ -52,13 +57,12 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
   };
 
   const validateAssigned = (val: string) => {
-    if (!val) return t("taskForm.selectMember");
+    if (!val || !members.some((member) => member.id === val)) return t("taskForm.selectMember");
     return "";
   };
 
   const validateDueDate = (val: string) => {
-    const trimmed = val.trim();
-    if (!trimmed) return t("taskForm.dateRequired");
+    if (!val || Number.isNaN(Date.parse(`${val}T00:00:00`))) return t("taskForm.dateRequired");
     return "";
   };
 
@@ -66,7 +70,7 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
   const assignedError = touched.assignedMemberId ? validateAssigned(assignedMemberId) : "";
   const dueDateError = touched.dueDate ? validateDueDate(dueDate) : "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ title: true, assignedMemberId: true, dueDate: true });
 
@@ -82,30 +86,22 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
     const assigned = members.find((m) => m.id === assignedMemberId);
     const assignedName = assigned ? assigned.name : "Unassigned";
 
-    if (taskToEdit) {
-      updateTask(taskToEdit.id, {
-        title: title.trim(),
-        description: description.trim(),
-        assignedMemberId,
-        assignedMemberName: assignedName,
-        dueDate: dueDate.trim(),
-        priority,
-        status,
-      });
-    } else {
-      addTask({
-        title: title.trim(),
-        description: description.trim(),
-        assignedMemberId,
-        assignedMemberName: assignedName,
-        createdBy,
-        dueDate: dueDate.trim(),
-        priority,
-        status,
-      });
+    try {
+      if (taskToEdit) {
+        await updateTask(taskToEdit.id, {
+          title: title.trim(), description: description.trim(), assignedMemberId,
+          assignedMemberName: assignedName, dueDate: dueDate.trim(), priority, status,
+        });
+      } else {
+        await addTask({
+          title: title.trim(), description: description.trim(), assignedMemberId,
+          assignedMemberName: assignedName, createdBy, dueDate: dueDate.trim(), priority, status,
+        });
+      }
+      onClose();
+    } catch (error) {
+      setGeneralError(error instanceof Error ? error.message : t("taskForm.requestFailed"));
     }
-
-    onClose();
   };
 
   return (
@@ -146,11 +142,10 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
       )}
 
       <div className="mt-4 space-y-4">
-        {/* {t("taskForm.title")}/}
         <div>
           <div className="flex items-center justify-between">
             <label className="block text-xs font-semibold text-foreground">
-              Task Title *
+              {t("taskForm.title")}
             </label>
             <span className="text-[10px] text-muted">
               {title.length}/150
@@ -254,7 +249,7 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
             <div className="relative mt-1">
               <Calendar className="pointer-events-none absolute start-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted" />
               <input
-                type="text"
+                type="date"
                 value={dueDate}
                 maxLength={40}
                 onChange={(e) => {
@@ -279,7 +274,7 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
 
           <div>
             <label className="block text-xs font-semibold text-foreground">
-              Priority
+              {t("taskForm.priority")}
             </label>
             <select
               value={priority}
@@ -294,7 +289,7 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
 
           <div>
             <label className="block text-xs font-semibold text-foreground">
-              Status
+              {t("taskForm.status")}
             </label>
             <select
               value={status}

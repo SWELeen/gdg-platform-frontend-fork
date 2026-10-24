@@ -469,10 +469,24 @@
       "closeMenu": "Close menu",
       "openSidebar": "Open sidebar",
       "committeeData": "Data Analysis Committee",
-      "committeePR": "Public Relations Committee"
+      "committeePR": "Public Relations Committee",
+      "committeeContentWriting": "Content Writing Committee",
+      "committeeWebDevelopment": "Web and Development Committee",
+      "committeeAutomation": "Automation Committee",
+      "committeeAI": "Artificial Intelligence Committee",
+      "committeeRoboticsIot": "Robotics & IoT Committee",
+      "committeeCybersecurity": "Cybersecurity Committee",
+      "committeeDigitalMediaDesign": "Digital Media and Design Committee"
+    },
+    "dataState": {
+      "loading": "Loading committee data…",
+      "unauthorized": "Sign in to view this committee dashboard.",
+      "forbidden": "Your account does not have access to this committee dashboard.",
+      "failed": "Committee data could not be loaded. Check the API connection and try again.",
+      "retry": "Try again"
     },
     "greeting": {
-      "title": "Good morning, {name}",
+      "title": "Good morning",
       "dateFallback": "Today"
     },
     "metrics": {
@@ -550,6 +564,7 @@
       "statusLabel": "Status",
       "namePlaceholder": "e.g. Layla Al-Ghamdi",
       "emailPlaceholder": "e.g. layla@uj.edu.sa",
+      "newMemberRole": "The new member will be added as a committee Member.",
       "cancel": "Cancel",
       "requiredName": "Member full name is required.",
       "nameMin": "Name must be at least 3 characters.",
@@ -560,6 +575,7 @@
       "emailInvalid": "Please enter a valid email address (e.g. user@uj.edu.sa).",
       "duplicateEmail": "A committee member with this email already exists.",
       "formError": "Please correct the errors in the form before submitting.",
+      "requestFailed": "Could not add the member. Please try again.",
       "roles": {
         "leader": "Leader",
         "dataAnalyst": "Data Analyst",
@@ -594,7 +610,27 @@
       "actions": "Actions",
       "emptyMembers": "No committee members are available.",
       "emptyHistory": "No point changes have been recorded yet.",
-      "history": "Point History Log"
+      "history": "Point History Log",
+      "modalTitle": "Update member points",
+      "current": "Current points: {count}",
+      "permission": "You do not have permission to update points in this committee.",
+      "award": "Award points",
+      "deduct": "Deduct points",
+      "amount": "Amount",
+      "wholeNumbers": "Whole numbers only",
+      "reason": "Reason",
+      "reasonPlaceholder": "Describe the contribution or adjustment",
+      "cancel": "Cancel",
+      "fixErrors": "Please correct the highlighted fields before saving.",
+      "requestFailed": "Could not update points. Please try again.",
+      "required": "Enter a points amount.",
+      "integer": "Points must be a whole number.",
+      "positive": "Points must be greater than zero.",
+      "max": "You can change up to 2,000 points at a time.",
+      "tooMany": "Cannot deduct {requested} points. This member has only {available}.",
+      "reasonRequired": "Enter a reason for this points change.",
+      "reasonMin": "The reason must be at least 5 characters.",
+      "reasonMax": "The reason cannot exceed 150 characters."
     },
     "registrations": {
       "pendingTitle": "Pending registrations",
@@ -766,7 +802,8 @@
       "titleMax": "Task title cannot exceed 150 characters.",
       "selectMember": "Please select a member to assign this task.",
       "dateRequired": "Due date is required.",
-      "formError": "Please resolve the required fields before saving."
+      "formError": "Please resolve the required fields before saving.",
+      "requestFailed": "Could not save the task. Please try again."
     },
     "eventFilters": {
       "search": "Search events by name or location",

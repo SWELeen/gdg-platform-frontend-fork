@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useTranslations } from "next-intl";
 import type {
   CommitteeEvent,
   CommitteeMember,
@@ -20,11 +21,11 @@ import type {
   LeaderCommittee,
   LeaderDashboardSeed,
 } from "./types";
-import { leaderCommitteeConfig } from "./committee-config";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
-import { API_ENABLED } from "@/lib/api/client";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
+import { fetchCommitteeDashboard, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -35,10 +36,16 @@ interface LeaderDashboardContextValue {
   tasks: CommitteeTask[];
   pointHistory: PointHistoryItem[];
   recentActivities: RecentActivityItem[];
+  stats: CommitteeDashboardStats;
+  dashboardLoading: boolean;
+  dashboardError: string | null;
+  currentMember: { id: string; name: string; role: string } | null;
+  reloadDashboard: () => Promise<void>;
   registrations: EventRegistration[];
   // Permissions (Permanent for Leader workspace)
   canManageEvents: boolean;
   canManageMembers: boolean;
+  canAddMembers: boolean;
   canManageTasks: boolean;
   canManagePoints: boolean;
   canManageSettings: boolean;
@@ -50,17 +57,17 @@ interface LeaderDashboardContextValue {
   deleteEvent: (id: string) => void;
   publishDraft: (id: string) => void;
   // Member Actions
-  addMember: (member: Omit<CommitteeMember, "id" | "points" | "tasksCompleted" | "initials" | "avatarBgColor" | "lastActivity" | "isElevated" | "accessExpiresAt">) => void;
+  addMember: (member: { name: string; email: string }) => Promise<void>;
   updateMember: (id: string, updates: Partial<CommitteeMember>) => void;
   removeMember: (id: string) => void;
   grantTemporaryAccess: (memberId: string, durationMinutes: number) => void;
   revokeTemporaryAccess: (memberId: string) => void;
   // Task Actions
-  addTask: (task: Omit<CommitteeTask, "id">) => void;
-  updateTask: (id: string, updates: Partial<CommitteeTask>) => void;
-  deleteTask: (id: string) => void;
+  addTask: (task: Omit<CommitteeTask, "id">) => Promise<void>;
+  updateTask: (id: string, updates: Partial<CommitteeTask>) => Promise<void>;
+  deleteTask: (id: string) => Promise<void>;
   // Points Actions
-  updateMemberPoints: (memberId: string, delta: number, reason: string) => void;
+  updateMemberPoints: (memberId: string, delta: number, reason: string) => Promise<void>;
   updateRegistrationStatus: (
     registrationId: string,
     status: RegistrationStatus,
@@ -94,8 +101,9 @@ export function LeaderDashboardProvider({
   committee?: LeaderCommittee;
   seed?: LeaderDashboardSeed;
 }) {
+  const t = useTranslations("dashboard.leader");
   const committeeConfig = leaderCommitteeConfig[committee];
-  const committeeName = committeeConfig.name;
+  const committeeName = t(`nav.${committeeTranslationKeys[committee]}`);
   const committeeDescription = committeeConfig.description;
   const [events, setEvents] = useState<CommitteeEvent[]>(seed?.events ?? []);
   const [members, setMembers] = useState<CommitteeMember[]>(seed?.members ?? []);
@@ -106,7 +114,20 @@ export function LeaderDashboardProvider({
   const [recentActivities, setRecentActivities] = useState<RecentActivityItem[]>(
     seed?.recentActivities ?? []
   );
-  // Registration records come from the typed demo seed until a backend contract exists.
+  const [stats, setStats] = useState<CommitteeDashboardStats>({
+    committeeMembers: 0, activeMembers: 0, awayMembers: 0, upcomingEvents: 0,
+    upcomingEventsInNext30Days: 0, totalPoints: 0, pointsThisMonth: 0,
+    activeTasks: 0, tasksDueThisWeek: 0, eventsCreated: 0, eventsPublishedThisYear: 0,
+    pendingRegistrations: 0, acceptedRegistrations: 0, rejectedRegistrations: 0,
+  });
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
+  const [currentMember, setCurrentMember] = useState<{ id: string; name: string; role: string } | null>(null);
+  const [canAddMembers, setCanAddMembers] = useState(false);
+  const [canManageTasks, setCanManageTasks] = useState(false);
+  const [canManagePoints, setCanManagePoints] = useState(false);
+  const [canManageRegistrations, setCanManageRegistrations] = useState(false);
+  // Registration records use the typed local seed until a backend contract exists.
   const [registrations, setRegistrations] = useState<EventRegistration[]>(seed?.registrations ?? []);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -147,22 +168,45 @@ export function LeaderDashboardProvider({
   }, []);
 
   // Full management permissions inside the Leader workspace
-  const canManageEvents = committeeConfig.canManageEvents;
-  const canManageMembers = true;
-  const canManageTasks = true;
-  const canManagePoints = true;
-  const canManageSettings = true;
-  const canManageRegistrations = committeeConfig.canManageRegistrations;
+  const canManageEvents = false;
+  const canManageMembers = false;
+  const canManageSettings = false;
 
-  // With NEXT_PUBLIC_USE_API=true the PR workspace reads and changes real
-  // registrations; every other workspace keeps its seeded demo data.
-  const useApi = API_ENABLED && committee === "pr";
+  // The PR registration workflow is currently controlled by the existing API flag.
+  const useApi = committee === "pr";
   const [registrationError, setRegistrationError] = useState<string | null>(null);
 
   const reloadRegistrations = useCallback(async (eventId: string) => {
     const fresh = await fetchRegistrants(eventId);
     setRegistrations((current) => [...current.filter((item) => item.eventId !== eventId), ...fresh]);
   }, []);
+
+  const reloadDashboard = useCallback(async () => {
+    setDashboardLoading(true);
+    setDashboardError(null);
+    const result = await fetchCommitteeDashboard(committeeConfig.committeeCode);
+    if (!result.ok) {
+      setDashboardError(result.status === 401 ? "UNAUTHORIZED" : result.status === 403 ? "FORBIDDEN" : result.code);
+      setDashboardLoading(false);
+      return;
+    }
+    setEvents(result.data.events ?? []);
+    setMembers(result.data.members ?? []);
+    setTasks(result.data.tasks ?? []);
+    setPointHistory(result.data.pointHistory ?? []);
+    setRecentActivities(result.data.recentActivities ?? []);
+    setStats(result.data.stats);
+    setCurrentMember(result.data.currentMember);
+    setCanAddMembers(result.data.permissions.canAddMembers);
+    setCanManageTasks(result.data.permissions.canManageTasks);
+    setCanManagePoints(result.data.permissions.canManagePoints);
+    setCanManageRegistrations(result.data.permissions.canManageRegistrations);
+    setDashboardLoading(false);
+  }, [committeeConfig.committeeCode]);
+
+  useEffect(() => {
+    queueMicrotask(() => void reloadDashboard());
+  }, [reloadDashboard]);
 
   useEffect(() => {
     if (!useApi) return;
@@ -284,31 +328,10 @@ export function LeaderDashboardProvider({
   };
 
   // Member handlers
-  const addMember = (
-    data: Omit<
-      CommitteeMember,
-      "id" | "points" | "tasksCompleted" | "initials" | "avatarBgColor" | "lastActivity" | "isElevated" | "accessExpiresAt"
-    >
-  ) => {
-    const initials = data.name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-
-    const newMember: CommitteeMember = {
-      ...data,
-      id: `mem-${Date.now()}`,
-      initials,
-      avatarBgColor: "bg-blue-100 text-blue-700",
-      points: 0,
-      tasksCompleted: 0,
-      lastActivity: "Just now",
-      isElevated: false,
-      accessExpiresAt: null,
-    };
-    setMembers((prev) => [newMember, ...prev]);
+  const addMember = async (data: { name: string; email: string }) => {
+    const result = await createCommitteeMember(committeeConfig.committeeCode, data);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
   };
 
   const updateMember = (id: string, updates: Partial<CommitteeMember>) => {
@@ -369,59 +392,29 @@ export function LeaderDashboardProvider({
   };
 
   // Task handlers
-  const addTask = (data: Omit<CommitteeTask, "id">) => {
-    const newTask: CommitteeTask = {
-      ...data,
-      id: `task-${Date.now()}`,
-    };
-    setTasks((prev) => [newTask, ...prev]);
+  const addTask = async (data: Omit<CommitteeTask, "id">) => {
+    const result = await createCommitteeTask(committeeConfig.committeeCode, data);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
   };
 
-  const updateTask = (id: string, updates: Partial<CommitteeTask>) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...updates } : t)));
+  const updateTask = async (id: string, updates: Partial<CommitteeTask>) => {
+    const result = await updateCommitteeTask(committeeConfig.committeeCode, id, updates);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
   };
 
-  const deleteTask = (id: string) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+  const deleteTask = async (id: string) => {
+    const result = await deleteCommitteeTask(committeeConfig.committeeCode, id);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
   };
 
   // Points handler
-  const updateMemberPoints = (memberId: string, delta: number, reason: string) => {
-    setMembers((prev) =>
-      prev.map((m) =>
-        m.id === memberId
-          ? {
-              ...m,
-              points: Math.max(0, m.points + delta),
-              lastActivity: "Just now",
-            }
-          : m
-      )
-    );
-
-    const member = members.find((m) => m.id === memberId);
-    if (member) {
-      const historyItem: PointHistoryItem = {
-        id: `ph-${Date.now()}`,
-        memberId,
-        memberName: member.name,
-        pointsDelta: delta,
-        reason: reason || "Manual point adjustment",
-        timestamp: "Just now",
-      };
-      setPointHistory((prev) => [historyItem, ...prev]);
-
-      setRecentActivities((prev) => [
-        {
-          id: `act-${Date.now()}`,
-          type: "points_awarded",
-          title: delta >= 0 ? "Points awarded" : "Points deducted",
-          description: `${delta >= 0 ? "+" : ""}${delta} points to ${member.name} for ${reason || "contribution"}.`,
-          timeAgo: "Just now",
-        },
-        ...prev,
-      ]);
-    }
+  const updateMemberPoints = async (memberId: string, delta: number, reason: string) => {
+    const result = await updateCommitteePoints(committeeConfig.committeeCode, memberId, delta, reason);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
   };
 
   const value = {
@@ -433,9 +426,15 @@ export function LeaderDashboardProvider({
     tasks,
     pointHistory,
     recentActivities,
+    stats,
+    dashboardLoading,
+    dashboardError,
+    currentMember,
+    reloadDashboard,
     registrations,
     canManageEvents,
     canManageMembers,
+    canAddMembers,
     canManageTasks,
     canManagePoints,
     canManageSettings,

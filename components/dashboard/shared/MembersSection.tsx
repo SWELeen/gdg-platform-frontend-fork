@@ -28,7 +28,7 @@ export function MembersSection({
   onOpenUpdatePoints,
 }: MembersSectionProps) {
   const t = useTranslations("dashboard.leader");
-  const { members, removeMember, canManageMembers, committeeName, committee } = useLeaderDashboard();
+  const { members, removeMember, canManageMembers, canAddMembers, canManagePoints, committeeName, committee } = useLeaderDashboard();
   const showTemporaryAccess = leaderCommitteeConfig[committee].canGrantTemporaryAccess;
   const [searchTerm, setSearchTerm] = useState("");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
@@ -92,7 +92,7 @@ export function MembersSection({
               />
             </div>
 
-            {canManageMembers && (
+            {canAddMembers && (
               <button
                 type="button"
                 onClick={onOpenAddMember}
@@ -218,7 +218,7 @@ export function MembersSection({
                         )}
 
                         {/* Update Points */}
-                        {canManageMembers && (
+                        {canManagePoints && (
                           <button
                             type="button"
                             title={t("members.updatePoints")}

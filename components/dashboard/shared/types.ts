@@ -9,6 +9,8 @@ export interface CommitteeEvent {
   time: string; // e.g. "4:00 PM"
   location: string;
   registered: number;
+  confirmed?: number;
+  checkedIn?: number;
   capacity: number;
   status: EventStatus;
   created: string; // e.g. "Sep 18"
@@ -33,19 +35,7 @@ export interface RegistrationQuestion {
 }
 
 export type MemberStatus = "Active" | "Away";
-export type MemberRole =
-  | "Member"
-  | "Leader"
-  | "Database Co-Lead"
-  | "Data Coordinator"
-  | "Event Data Member"
-  | "Database Member"
-  | "Data Analyst"
-  | "Research Member"
-  | "Public Relations Co-Lead"
-  | "Outreach Coordinator"
-  | "Communications Member"
-  | "Partnerships Member";
+export type MemberRole = string;
 
 export interface CommitteeMember {
   id: string;
@@ -95,7 +85,16 @@ export interface RecentActivityItem {
   timeAgo: string;
 }
 
-export type LeaderCommittee = "data-analysis" | "pr";
+export type LeaderCommittee =
+  | "data-analysis"
+  | "pr"
+  | "content-writing"
+  | "web-development"
+  | "automation-ai"
+  | "artificial-intelligence"
+  | "robotics-iot"
+  | "cybersecurity"
+  | "digital-media-design";
 export type RegistrationStatus = "Pending" | "Accepted" | "Rejected" | "Waitlisted";
 export type RegistrationConfirmationStatus =
   | "NotSent"

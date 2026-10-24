@@ -3,7 +3,7 @@
 import { usePathname } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { leaderCommitteeConfig } from "./committee-config";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
 import {
   LayoutDashboard,
   Calendar,
@@ -17,7 +17,7 @@ import {
 interface LeaderSidebarProps {
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
-  committee?: "data-analysis" | "pr";
+  committee?: import("./types").LeaderCommittee;
 }
 
 export function LeaderSidebar({
@@ -55,7 +55,7 @@ export function LeaderSidebar({
               {t("nav.leaderWorkspace")}
             </span>
             <span className="mt-0.5 block text-sm font-semibold text-foreground">
-              {t(committee === "pr" ? "nav.committeePR" : "nav.committeeData")}
+              {t(`nav.${committeeTranslationKeys[committee]}`)}
             </span>
           </div>
           {onCloseMobile && (
