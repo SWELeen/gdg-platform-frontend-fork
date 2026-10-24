@@ -11,6 +11,7 @@
   "collegePlaceholder": "e.g. Computer Science and Engineering",
   "major": "Major",
   "majorPlaceholder": "e.g. Software Engineering",
+  "registrationSourceQuestion": "Where did you find this event?",
   "phone": "Phone Number",
   "phonePlaceholder": "5xxxxxxxx",
   "email": "Email Address",
