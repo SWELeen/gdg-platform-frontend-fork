@@ -1,6 +1,7 @@
 import type {
   CommitteeEvent,
   CommitteeMember,
+  CommitteeOption,
   CommitteeTask,
   LeaderDashboardSeed,
   PointHistoryItem,
@@ -47,6 +48,8 @@ export interface CommitteeDashboardData extends LeaderDashboardSeed {
     canManageRegistrations: boolean;
     canAddMembers: boolean;
   };
+  /** Club leadership only: every committee, for the filters. */
+  committees?: CommitteeOption[];
 }
 
 type ApiMember = Omit<CommitteeMember, "isElevated" | "accessExpiresAt" | "initials" | "avatarBgColor" | "lastActivity"> & { lastActivity: string | null };
@@ -54,6 +57,7 @@ type ApiTask = {
   id: string; title: string; description: string; assignedMemberId: string;
   assignedMemberName: string; createdByMemberId: string; dueAt: string;
   priority: string; status: string; createdAt: string; updatedAt: string;
+  committeeCode?: string; committeeName?: string;
 };
 
 type RawCommitteeDashboardData = Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
@@ -113,6 +117,8 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
         dueDate: task.dueAt,
         priority: task.priority === "HIGH" ? "High" : task.priority === "LOW" ? "Low" : "Medium",
         status: task.status === "COMPLETED" ? "Completed" : task.status === "IN_PROGRESS" ? "In Progress" : "To Do",
+        committeeCode: task.committeeCode,
+        committeeName: task.committeeName,
       })),
       pointHistory: data.pointHistory.map((item) => ({ ...item, timestamp: relativeTime(item.createdAt) })),
       recentActivities: data.recentActivities.map((item) => ({ ...item, timeAgo: relativeTime(item.createdAt) })),
@@ -156,6 +162,14 @@ export async function createCommitteeMember(code: string, member: { name: string
   return apiRequest(`/committees/${encodeURIComponent(code)}/members`, {
     method: "POST",
     body: { fullName: member.name, email: member.email },
+  });
+}
+
+/** Club leadership: adds an existing member to another committee as a Member. */
+export async function addClubMemberToCommittee(memberId: string, committeeCode: string) {
+  return apiRequest(`/club-leadership/members/${encodeURIComponent(memberId)}/committees`, {
+    method: "POST",
+    body: { committeeCode },
   });
 }
 

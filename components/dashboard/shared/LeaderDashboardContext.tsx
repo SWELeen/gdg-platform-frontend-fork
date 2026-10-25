@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import type {
   CommitteeEvent,
   CommitteeMember,
+  CommitteeOption,
   CommitteeTask,
   PointHistoryItem,
   RecentActivityItem,
@@ -25,7 +26,7 @@ import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-con
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
-import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, addClubMemberToCommittee, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -35,6 +36,8 @@ interface LeaderDashboardContextValue {
   committeeDescription: string;
   events: CommitteeEvent[];
   members: CommitteeMember[];
+  /** Club leadership only: every committee, for filters and adding members. */
+  committees: CommitteeOption[];
   tasks: CommitteeTask[];
   pointHistory: PointHistoryItem[];
   recentActivities: RecentActivityItem[];
@@ -60,6 +63,7 @@ interface LeaderDashboardContextValue {
   publishDraft: (id: string) => void;
   // Member Actions
   addMember: (member: { name: string; email: string }) => Promise<void>;
+  addMemberToCommittee: (memberId: string, committeeCode: string) => Promise<void>;
   updateMember: (id: string, updates: Partial<CommitteeMember>) => void;
   removeMember: (id: string) => void;
   grantTemporaryAccess: (memberId: string, durationMinutes: number) => void;
@@ -114,6 +118,7 @@ export function LeaderDashboardProvider({
   const committeeDescription = committeeConfig.description;
   const [events, setEvents] = useState<CommitteeEvent[]>(seed?.events ?? []);
   const [members, setMembers] = useState<CommitteeMember[]>(seed?.members ?? []);
+  const [committees, setCommittees] = useState<CommitteeOption[]>([]);
   const [tasks, setTasks] = useState<CommitteeTask[]>(seed?.tasks ?? []);
   const [pointHistory, setPointHistory] = useState<PointHistoryItem[]>(
     seed?.pointHistory ?? []
@@ -206,7 +211,8 @@ export function LeaderDashboardProvider({
       setRecentActivities(result.data.recentActivities ?? []);
       setStats(result.data.stats);
       setCurrentMember(result.data.currentMember);
-      setCanAddMembers(false);
+      setCommittees(result.data.committees ?? []);
+      setCanAddMembers(result.data.permissions.canAddMembers);
       setCanManageTasks(false);
       setCanManagePoints(false);
       setCanManageRegistrations(false);
@@ -377,7 +383,13 @@ export function LeaderDashboardProvider({
     await reloadDashboard();
   };
 
-  const updateMember = (id: string, updates: Partial<CommitteeMember>) => {
+  const addMemberToCommittee = async (memberId: string, committeeCode: string) => {
+    const result = await addClubMemberToCommittee(memberId, committeeCode);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
+  };
+
+  const updateMember =(id: string, updates: Partial<CommitteeMember>) => {
     setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)));
   };
 
@@ -468,6 +480,7 @@ export function LeaderDashboardProvider({
     committeeDescription,
     events,
     members,
+    committees,
     tasks,
     pointHistory,
     recentActivities,
@@ -489,6 +502,7 @@ export function LeaderDashboardProvider({
     deleteEvent,
     publishDraft,
     addMember,
+    addMemberToCommittee,
     updateMember,
     removeMember,
     grantTemporaryAccess,

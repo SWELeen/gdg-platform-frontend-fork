@@ -1152,6 +1152,33 @@
         "durationMin": "Duration must be at least 5 minutes.",
         "durationMax": "Duration cannot exceed 10,080 minutes (7 days)."
       }
+    },
+    "clubFilters": {
+      "allCommittees": "All committees",
+      "noCommittee": "No committee",
+      "committee": "Committee",
+      "committees": "Committees",
+      "allRoles": "All roles",
+      "roleLeader": "Leader",
+      "roleCoLeader": "Co-Leader",
+      "roleMember": "Member",
+      "roleClubLeadership": "Club leadership",
+      "roleAdvisor": "Advisor",
+      "searchMember": "Search by member...",
+      "clearFilters": "Clear filters",
+      "noMembers": "No members match these filters.",
+      "noHistory": "No point changes match these filters.",
+      "pointsIn": "Points in {committee}",
+      "addToCommittee": "Add to committee",
+      "addToCommitteeTitle": "Add a member to a committee",
+      "addToCommitteeDescription": "Choose an existing club member and the committee to add them to. They join as a Member.",
+      "selectMember": "Member",
+      "selectMemberPlaceholder": "Choose a member",
+      "selectCommittee": "Committee",
+      "selectCommitteePlaceholder": "Choose a committee",
+      "alreadyInAll": "This member is already in every committee.",
+      "requiredSelection": "Choose a member and a committee.",
+      "requestFailed": "Could not add the member. Try again."
     }
   },
   "membershipRequests": {

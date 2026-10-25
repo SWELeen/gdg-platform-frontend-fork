@@ -37,6 +37,17 @@ export interface RegistrationQuestion {
 export type MemberStatus = "Active" | "Away";
 export type MemberRole = string;
 
+export interface CommitteeOption {
+  code: string;
+  name: string;
+}
+
+/** Club leadership view: one committee a member belongs to, with their points there. */
+export interface MemberCommitteeInfo extends CommitteeOption {
+  role: string;
+  points: number;
+}
+
 export interface CommitteeMember {
   id: string;
   name: string;
@@ -51,6 +62,8 @@ export interface CommitteeMember {
   points: number;
   tasksCompleted: number;
   lastActivity: string;
+  committees?: MemberCommitteeInfo[];
+  globalRoles?: string[];
 }
 
 export type TaskPriority = "High" | "Medium" | "Low";
@@ -66,6 +79,8 @@ export interface CommitteeTask {
   dueDate: string;
   priority: TaskPriority;
   status: TaskStatus;
+  committeeCode?: string;
+  committeeName?: string;
 }
 
 export interface PointHistoryItem {
@@ -75,6 +90,8 @@ export interface PointHistoryItem {
   pointsDelta: number;
   reason: string;
   timestamp: string;
+  committeeCode?: string;
+  committeeName?: string;
 }
 
 export interface RecentActivityItem {
