@@ -42,10 +42,16 @@ const initialFormData: FormData = {
 export function RegistrationForm({
     onClose,
     questions = [],
+    questionsLoading = false,
+    questionsError = false,
+    onRetryQuestions,
     eventId,
 }: {
     onClose?: () => void;
     questions?: RegistrationQuestion[];
+    questionsLoading?: boolean;
+    questionsError?: boolean;
+    onRetryQuestions?: () => void;
     /** When set, the form submits to the backend for this event. */
     eventId?: string;
 }) {
@@ -57,7 +63,7 @@ export function RegistrationForm({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [questionErrors, setQuestionErrors] = useState<Record<string, boolean>>({});
-    const [result, setResult] = useState<{ ok: boolean; key: string } | null>(null);
+    const [result, setResult] = useState<{ ok: boolean; key: string; detail?: string } | null>(null);
 
     function updateField<K extends keyof FormData>(
         field: K,
@@ -141,6 +147,7 @@ export function RegistrationForm({
         if (isSubmitting) return;
 
         const validationErrors = validateForm();
+        if (questionsLoading || questionsError) return;
         const missingAnswers = Object.fromEntries(questions
             .filter((question) => question.required && !answers[question.id]?.trim())
             .map((question) => [question.id, true]));
@@ -154,13 +161,17 @@ export function RegistrationForm({
         setErrors({});
         if (!eventId) return;
         setIsSubmitting(true);
-        const outcome = await registerForEvent(eventId, questions, answers, formData.registrationSource);
+        const outcome = await registerForEvent(eventId, questions, answers);
         setIsSubmitting(false);
         const known = ["ALREADY_REGISTERED", "REGISTRATION_CLOSED", "UNAUTHORIZED", "VALIDATION_ERROR"];
         setResult(
             outcome.ok
                 ? { ok: true, key: "result.success" }
-                : { ok: false, key: `result.${known.includes(outcome.code) ? outcome.code : "error"}` },
+                : {
+                    ok: false,
+                    key: `result.${known.includes(outcome.code) ? outcome.code : "error"}`,
+                    detail: outcome.details.map((item) => item.message).join(" "),
+                },
         );
     }
 
@@ -545,16 +556,33 @@ export function RegistrationForm({
                         </div>
                     ))}
 
+                    {questionsLoading && (
+                        <p role="status" className="mt-5 text-sm text-muted">
+                            {t("questionsLoading")}
+                        </p>
+                    )}
+                    {questionsError && (
+                        <div role="alert" className="mt-5 text-sm text-gdg-red">
+                            <p>{t("questionsUnavailable")}</p>
+                            {onRetryQuestions && (
+                                <button type="button" onClick={onRetryQuestions} className="mt-2 font-semibold underline">
+                                    {t("retryQuestions")}
+                                </button>
+                            )}
+                        </div>
+                    )}
+
                     {result && (
                         <p role="status" className={`mt-6 text-start text-sm ${result.ok ? "text-gdg-green" : "text-gdg-red"}`}>
                             {t(result.key)}
+                            {result.detail && <span className="mt-1 block text-xs">{result.detail}</span>}
                         </p>
                     )}
 
                     <div className="mt-auto flex justify-end pt-8">
                         <button
                             type="submit"
-                            disabled={isSubmitting || result?.ok}
+                            disabled={isSubmitting || result?.ok || questionsLoading || questionsError}
                             className="inline-flex h-10 items-center justify-center gap-3 rounded-md bg-gdg-dark px-4 text-sm font-medium text-[var(--white)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <span>

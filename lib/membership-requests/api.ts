@@ -66,7 +66,7 @@ export function decideLeadershipApplication(application: LeadershipApplication, 
 
 export async function fetchMembershipRequests(committeeCode: string): Promise<ApiResult<MembershipRequest[]>> {
   if (!API_ENABLED) {
-    return { ok: false, status: 0, code: "API_DISABLED", message: "API mode is disabled." };
+    return { ok: false, status: 0, code: "API_DISABLED", message: "API mode is disabled.", details: [] };
   }
   return apiRequest<MembershipRequest[]>(`/membership-requests?committeeCode=${encodeURIComponent(committeeCode)}`);
 }

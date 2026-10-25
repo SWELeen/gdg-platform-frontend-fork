@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { apiRequest } from "@/lib/api/client";
 import type { LeaderCommittee } from "./types";
 import { leaderCommitteeConfig } from "./committee-config";
@@ -19,6 +19,7 @@ type Requirement =
 
 export function DashboardAccessGate({ requirement, children }: { requirement: Requirement; children: ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [allowed, setAllowed] = useState(false);
   const [ready, setReady] = useState(false);
   const requirementKey = JSON.stringify(requirement);
@@ -29,7 +30,7 @@ export function DashboardAccessGate({ requirement, children }: { requirement: Re
     void apiRequest<DashboardIdentity>("/me").then((result) => {
       if (!active) return;
       if (!result.ok) {
-        router.replace("/login");
+        router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
         setReady(true);
         return;
       }
@@ -47,11 +48,11 @@ export function DashboardAccessGate({ requirement, children }: { requirement: Re
       if (!hasAccess) router.replace(identity.memberId ? "/dashboard/members-dashboard" : "/signup/pending");
     }).catch(() => {
       if (!active) return;
-      router.replace("/login");
+      router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
       setReady(true);
     });
     return () => { active = false; };
-  }, [requirementKey, router]);
+  }, [requirementKey, pathname, router]);
 
   if (!ready || !allowed) return <main className="flex min-h-screen items-center justify-center" aria-busy="true"><span className="sr-only">Checking dashboard access</span></main>;
   return children;

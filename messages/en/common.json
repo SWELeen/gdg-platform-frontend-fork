@@ -6,7 +6,9 @@
     "projects": "Projects",
     "events": "Events",
     "announcements": "Announcements",
-    "community": "Community"
+    "community": "Community",
+    "profile": "Profile",
+    "signOut": "Sign out"
   },
   "language": {
     "label": "Language",

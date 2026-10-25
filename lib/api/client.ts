@@ -12,13 +12,22 @@ const API_URL = RAW_API_URL.endsWith("/") ? RAW_API_URL.slice(0, -1) : RAW_API_U
 
 export type ApiResult<T> =
   | { ok: true; data: T }
-  | { ok: false; status: number; code: string; message: string };
+  | {
+      ok: false;
+      status: number;
+      code: string;
+      message: string;
+      details: readonly { pointer: string; message: string }[];
+    };
 
 type ApiEnvelope<T> = {
   success?: boolean;
   data?: T;
   message?: string;
-  error?: { code?: string };
+  error?: {
+    code?: string;
+    details?: readonly { pointer: string; message: string }[];
+  };
 } | null;
 
 function requestHeaders(body: unknown): Record<string, string> {
@@ -71,7 +80,7 @@ export async function apiRequest<T>(
       response = await makeRequest();
     }
   } catch {
-    return { ok: false, status: 0, code: "NETWORK_ERROR", message: "The service is unavailable." };
+    return { ok: false, status: 0, code: "NETWORK_ERROR", message: "The service is unavailable.", details: [] };
   }
 
   const envelope = await response.json().catch(() => null) as ApiEnvelope<T>;
@@ -81,6 +90,7 @@ export async function apiRequest<T>(
     status: response.status,
     code: envelope?.error?.code ?? "HTTP_ERROR",
     message: envelope?.message ?? "The request could not be completed.",
+    details: envelope?.error?.details ?? [],
   };
 }
 

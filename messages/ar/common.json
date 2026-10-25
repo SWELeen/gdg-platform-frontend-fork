@@ -6,7 +6,9 @@
     "projects": "المشاريع",
     "events": "الفعاليات",
     "announcements": "الإعلانات",
-    "community": "المجتمع"
+    "community": "المجتمع",
+    "profile": "الملف الشخصي",
+    "signOut": "تسجيل الخروج"
   },
   "language": {
     "label": "اللغة",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { Link } from "@/i18n/navigation";
@@ -23,6 +23,8 @@ import {
 import { validateInfoField } from "@/lib/validateInfoField";
 import { validateSocialLink } from "@/lib/validateSocialLink";
 import { useMemberSince } from "@/lib/useMemberSince";
+import { API_ENABLED, apiRequest } from "@/lib/api/client";
+import { useRouter } from "@/i18n/navigation";
 
 function linksToValues(
   links: SocialLink[],
@@ -47,6 +49,8 @@ export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
   const locale = useLocale();
   const format = useFormatter();
   const memberSinceIso = useMemberSince();
+  const router = useRouter();
+  const [account, setAccount] = useState<{ fullName: string; email: string | null } | null>(null);
   // Western digits keep dates consistent with the other numbers on the page.
   const memberSince = memberSinceIso
     ? format.dateTime(new Date(memberSinceIso), {
@@ -56,6 +60,20 @@ export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
     })
     : "";
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    let active = true;
+    void apiRequest<{ fullName: string; email: string | null }>("/me").then((result) => {
+      if (!active) return;
+      if (!result.ok) {
+        if (result.status === 401) router.replace("/login?returnTo=%2Fprofile");
+        return;
+      }
+      setAccount(result.data);
+    });
+    return () => { active = false; };
+  }, [router]);
 
   const [bio, setBio] = useState(initialProfileBio);
   const [bioDraft, setBioDraft] = useState("");
@@ -205,10 +223,18 @@ export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
       ? t("academicValues.softwareEngineering")
       : major;
 
-  const displayedName =
+  const displayedName = account?.fullName ?? (API_ENABLED ? "" :
     sampleProfile.name === "Jana Alshaikh"
       ? t("academicValues.janaAlshaikh")
-      : sampleProfile.name;
+      : sampleProfile.name);
+  const displayedPersonalData: InfoCardData = {
+    ...personalData,
+    rows: personalData.rows.map((row) =>
+      row.key === "fullName" && account ? { ...row, value: account.fullName }
+        : row.key === "email" && account ? { ...row, value: account.email ?? "" }
+          : row,
+    ),
+  };
 
   const studentId = findRowValue(personalData, "studentId");
  const chips = [
@@ -221,9 +247,9 @@ export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
       <TopNav />
 
       <ProfileHero
-        initials={sampleProfile.initials}
+        initials={displayedName.slice(0, 1) || sampleProfile.initials}
         name={displayedName}
-        email={sampleProfile.email}
+        email={account?.email ?? (API_ENABLED ? "" : sampleProfile.email)}
         chips={chips}
 
         memberSince={memberSince}
@@ -266,7 +292,7 @@ export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
         />
 
         <ProfileTabs
-          personalInfo={personalData}
+          personalInfo={displayedPersonalData}
           academicInfo={academicData}
           socialLinks={links}
           isEditing={isEditing}

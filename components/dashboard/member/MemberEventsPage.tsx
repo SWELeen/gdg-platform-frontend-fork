@@ -38,7 +38,7 @@ function EventCard({ registration, accent }: { registration: UserRegistration; a
   const tr = useTranslations("userRegistrations");
   const format = useFormatter();
   const startsAt = new Date(registration.startsAt);
-  const href = `${MEMBER_EVENTS_PATH}/${registration.id}`;
+  const href = MEMBER_EVENTS_PATH;
 
   return (
     <motion.article

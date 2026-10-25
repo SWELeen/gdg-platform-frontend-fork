@@ -18,6 +18,13 @@ function normalizeText(value: string) {
   return value.trim()
 }
 
+function dashboardReturnPath(): string | null {
+  const requested = new URLSearchParams(window.location.search).get("returnTo")
+  return requested?.startsWith("/") && !requested.startsWith("//") && !requested.includes("\\")
+    ? requested
+    : null
+}
+
 export default function LoginFlow() {
   const t = useTranslations("auth.login")
   const router = useRouter()
@@ -109,7 +116,7 @@ export default function LoginFlow() {
       setIsSubmitting(false)
       return
     }
-    router.replace(dashboardPathFor(identity.data))
+    router.replace(dashboardReturnPath() ?? dashboardPathFor(identity.data))
   }
 
   const handleBack = () => {

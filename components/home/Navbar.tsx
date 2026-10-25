@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
@@ -9,11 +9,86 @@ import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import ThemeToggle from "@/components/ui/ThemeToggle"; 
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useHomeSectionHref } from "@/components/layout/useHomeSectionHref";
+import { ChevronDown, LogOut, UserRound } from "lucide-react";
+import { API_ENABLED, apiRequest, logoutSession } from "@/lib/api/client";
 
 // Locale-aware Link with the same hover motion as the hash links.
 const MotionLink = motion.create(Link);
+
+function ProfileAccountMenu({
+  name,
+  onSignOut,
+  variant,
+}: {
+  name: string;
+  onSignOut: () => void;
+  variant: "desktop" | "mobile";
+}) {
+  const t = useTranslations("common.nav");
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
+  return (
+    <div ref={menuRef} className={`relative ${variant === "mobile" ? "w-full" : ""}`}>
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={`flex items-center gap-2 font-medium ${variant === "mobile" ? "w-full text-sm" : "text-sm"}`}
+      >
+        <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <span className="truncate">{name}</span>
+        <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden="true" />
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className={`absolute top-full z-[220] mt-3 min-w-44 overflow-hidden rounded-xl border border-border bg-surface p-1.5 text-foreground shadow-xl ${variant === "mobile" ? "start-0" : "end-0"}`}
+        >
+          <button
+            role="menuitem"
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              onSignOut();
+            }}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-start text-sm text-gdg-red hover:bg-surface-muted"
+          >
+            <LogOut className="h-4 w-4" aria-hidden="true" />
+            {t("signOut")}
+          </button>
+          <Link
+            role="menuitem"
+            href="/profile"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm hover:bg-surface-muted"
+          >
+            <UserRound className="h-4 w-4" aria-hidden="true" />
+            {t("profile")}
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
 
 type NavbarProps = {
   // "overlay" sits on the homepage video hero; "light" is for pages with a white
@@ -26,10 +101,30 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   const tCommon = useTranslations("common");
   const dir = useTextDirection();
   const [isOpen, setIsOpen] = useState(false);
+  const [profileName, setProfileName] = useState<string | null>(null);
+  const router = useRouter();
   const pathname = usePathname();
   const sectionHref = useHomeSectionHref();
   const isAnnouncementsActive =
     pathname === "/announcements" || pathname.startsWith("/announcements/");
+
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    let active = true;
+    void apiRequest<{ fullName: string }>("/me").then((result) => {
+      if (active && result.ok) setProfileName(result.data.fullName);
+    });
+    return () => { active = false; };
+  }, []);
+
+  const profileHref = profileName || !API_ENABLED ? "/profile" : "/login?returnTo=%2Fprofile";
+
+  const handleSignOut = async () => {
+    await logoutSession();
+    setProfileName(null);
+    setIsOpen(false);
+    router.replace("/login");
+  };
 
   const menuVariants = {
     closed: {
@@ -156,6 +251,19 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           <span className="mt-1 h-[2px] w-0 rounded-full bg-[image:var(--google-gradient)] transition-all duration-300 group-hover:w-full" />
         </motion.a>
         <ThemeToggle />
+        {profileName ? (
+          <ProfileAccountMenu name={profileName} onSignOut={handleSignOut} variant="desktop" />
+        ) : (
+          <MotionLink
+            href={profileHref}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2 text-sm font-medium"
+          >
+            <UserRound className="h-4 w-4" aria-hidden="true" />
+            <span>{t("profile")}</span>
+          </MotionLink>
+        )}
         <LanguageSwitcher />
       </div>
 
@@ -240,6 +348,24 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             >
               <span dir={dir}>{t("community")}</span>
             </motion.a>
+
+            {profileName ? (
+              <motion.div variants={itemVariants} className="w-full">
+                <ProfileAccountMenu name={profileName} onSignOut={handleSignOut} variant="mobile" />
+              </motion.div>
+            ) : (
+              <MotionLink
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+                href={profileHref}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 text-sm font-medium leading-none hover:underline"
+              >
+                <UserRound className="h-4 w-4" aria-hidden="true" />
+                <span>{t("profile")}</span>
+              </MotionLink>
+            )}
 
             <LanguageSwitcher className="mt-2" />
           </motion.div>

@@ -1,7 +1,7 @@
 import type { UserRegistration } from "@/lib/user-registrations/types";
 
 /** Member "My Events" route. Task 4 (sidebar navigation) links its Events item here. */
-export const MEMBER_EVENTS_PATH = "/dashboard/members-dashboard/events";
+export const MEMBER_EVENTS_PATH = "/registrations";
 
 /** Published platform events coming up (not limited to the member's registrations). */
 export const UPCOMING_EVENTS_PATH = "/dashboard/members-dashboard/upcoming-events";
