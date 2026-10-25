@@ -10,6 +10,7 @@ type RegistrationActionDialogProps = {
   registrationTitle: string;
   onDismiss: () => void;
   onApprove: () => void;
+  isSubmitting?: boolean;
 };
 
 export function RegistrationActionDialog({
@@ -17,6 +18,7 @@ export function RegistrationActionDialog({
   registrationTitle,
   onDismiss,
   onApprove,
+  isSubmitting = false,
 }: RegistrationActionDialogProps) {
   const t = useTranslations("userRegistrations.actionDialog");
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -58,6 +60,7 @@ export function RegistrationActionDialog({
           <button
             type="button"
             onClick={onDismiss}
+            disabled={isSubmitting}
             className="rounded-lg border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/5"
           >
             {t("backButton")}
@@ -65,13 +68,14 @@ export function RegistrationActionDialog({
           <button
             type="button"
             onClick={onApprove}
+            disabled={isSubmitting}
             className={`rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition ${
               isConfirm
                 ? "bg-blue hover:bg-blue/90"
                 : "bg-red-600 hover:bg-red-700"
             }`}
           >
-            {t(isConfirm ? "confirmButton" : "cancelButton")}
+            {t(isSubmitting ? "submitting" : isConfirm ? "confirmButton" : "cancelButton")}
           </button>
         </div>
       </div>

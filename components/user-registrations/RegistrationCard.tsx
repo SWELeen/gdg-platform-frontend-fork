@@ -10,7 +10,11 @@ type RegistrationCardProps = {
   dateAccent: number;
   onConfirm: () => void;
   onCancel: () => void;
-  actionFeedback?: "confirm" | "cancel" | null;
+  actionFeedback?: {
+    action: "confirm" | "cancel";
+    state: "success" | "error";
+    code?: string;
+  } | null;
 };
 
 export function RegistrationCard({
@@ -139,12 +143,16 @@ export function RegistrationCard({
             </button>
           </div>
           {actionFeedback && (
-            <p role="status" className="mt-3 text-xs text-muted">
-              {t(
-                actionFeedback === "confirm"
-                  ? "confirmationUnavailable"
-                  : "cancellationUnavailable",
-              )}
+            <p role={actionFeedback.state === "error" ? "alert" : "status"} className={`mt-3 text-xs ${actionFeedback.state === "error" ? "text-gdg-red" : "text-gdg-green"}`}>
+              {actionFeedback.state === "success"
+                ? t(actionFeedback.action === "confirm" ? "confirmSuccess" : "cancelSuccess")
+                : t(actionFeedback.code === "CONFIRMATION_EXPIRED"
+                    ? "actionErrors.expired"
+                    : actionFeedback.code === "INVALID_STATUS_TRANSITION"
+                      ? "actionErrors.statusChanged"
+                      : actionFeedback.code === "ATTENDANCE_QR_UNAVAILABLE"
+                        ? "actionErrors.qrUnavailable"
+                        : "actionErrors.generic")}
             </p>
           )}
         </div>

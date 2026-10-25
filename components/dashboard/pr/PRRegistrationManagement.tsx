@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useRouter } from "@/i18n/navigation";
@@ -17,6 +17,7 @@ import {
 import { ConfirmModal } from "../shared/ConfirmModal";
 import { PRAttendancePanel } from "./PRAttendancePanel";
 import { CreateEventModal } from "../data-analysis/CreateEventForm";
+import { API_ENABLED } from "@/lib/api/client";
 import {
   ArrowLeft,
   Calendar,
@@ -326,13 +327,35 @@ export function PREventsList() {
 }
 
 export function PREventRegistrations({ eventId }: { eventId: string }) {
-  const { events, registrations, updateRegistrationStatus, canManageRegistrations, registrationError, clearRegistrationError } = useLeaderDashboard();
+  const { events, registrations, updateRegistrationStatus, canManageRegistrations, registrationError, clearRegistrationError, reloadRegistrations } = useLeaderDashboard();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<EventRegistration | null>(null);
   const [decisionRegistration, setDecisionRegistration] = useState<EventRegistration | null>(null);
   const [decision, setDecision] = useState<RegistrationStatus | null>(null);
+
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    let active = true;
+    let refreshing = false;
+    const refresh = async () => {
+      if (!active || refreshing || document.visibilityState !== "visible") return;
+      refreshing = true;
+      try {
+        await reloadRegistrations(eventId);
+      } finally {
+        refreshing = false;
+      }
+    };
+    window.addEventListener("focus", refresh);
+    const timer = window.setInterval(refresh, 10_000);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", refresh);
+      window.clearInterval(timer);
+    };
+  }, [eventId, reloadRegistrations]);
 
   const event = events.find((item) => item.id === eventId && item.status !== "Draft");
   const eventRegistrations = registrations.filter((item) => item.eventId === eventId);

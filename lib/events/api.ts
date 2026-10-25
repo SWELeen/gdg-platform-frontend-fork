@@ -86,14 +86,15 @@ export async function fetchEventDetails(id: string): Promise<ApiEventDetails | u
 // a control character never appears inside an option's text.
 export const CHOICE_SEPARATOR = "\u001f";
 
-export type RegisterResult = { ok: true } | { ok: false; code: string };
+export type RegisterResult =
+  | { ok: true }
+  | { ok: false; code: string; details: readonly { pointer: string; message: string }[] };
 
 // Checkbox answers travel as a list of the chosen options.
 export async function registerForEvent(
   eventId: string,
   questions: RegistrationQuestion[],
   answers: Record<string, string>,
-  registrationSource?: string,
 ): Promise<RegisterResult> {
   const body = {
     answers: questions
@@ -106,7 +107,8 @@ export async function registerForEvent(
             : answers[question.id].trim(),
       })),
   };
-  if (registrationSource) Object.assign(body, { registrationSource });
   const result = await apiRequest(`/events/${eventId}/registrations`, { method: "POST", body });
-  return result.ok ? { ok: true } : { ok: false, code: result.code };
+  return result.ok
+    ? { ok: true }
+    : { ok: false, code: result.code, details: result.details };
 }

@@ -20,13 +20,25 @@ export default function EventRegistrationModal({
   onClose,
 }: EventRegistrationModalProps) {
   const t = useTranslations("eventRegistration");
-  const [questions, setQuestions] = useState(event.registrationQuestions);
+  const [questions, setQuestions] = useState(event.registrationQuestions ?? []);
+  const [questionsState, setQuestionsState] = useState<"loading" | "ready" | "error">(
+    API_ENABLED ? "loading" : "ready",
+  );
+  const [questionRetry, setQuestionRetry] = useState(0);
   useEffect(() => {
     if (!API_ENABLED) return;
-    fetchEventDetails(event.id).then((details) =>
-      setQuestions(details?.questions.map(toRegistrationQuestion) ?? []),
-    );
-  }, [event.id]);
+    let active = true;
+    void fetchEventDetails(event.id).then((details) => {
+      if (!active) return;
+      if (!details) {
+        setQuestionsState("error");
+        return;
+      }
+      setQuestions(details.questions.map(toRegistrationQuestion));
+      setQuestionsState("ready");
+    });
+    return () => { active = false; };
+  }, [event.id, questionRetry]);
   const eventInfo = {
     ...eventRegistrationMock,
     name: event.name,
@@ -73,6 +85,12 @@ export default function EventRegistrationModal({
         <RegistrationForm
           onClose={onClose}
           questions={questions}
+          questionsLoading={questionsState === "loading"}
+          questionsError={questionsState === "error"}
+          onRetryQuestions={() => {
+            setQuestionsState("loading");
+            setQuestionRetry((current) => current + 1);
+          }}
           eventId={API_ENABLED ? event.id : undefined}
         />
       </motion.div>

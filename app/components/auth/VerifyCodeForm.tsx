@@ -138,12 +138,18 @@ export default function VerifyCodeForm() {
     }
 
     if (phase === "personal") {
-      const verified = await apiRequest<AuthSession & { universityEmailVerificationRequired?: boolean }>("/auth/verify-email", {
+      const verified = await apiRequest<AuthSession & { authenticated?: true; universityEmailVerificationRequired?: boolean; registrationPendingApproval?: boolean } | { authenticated: false; registrationPendingApproval: true }>("/auth/verify-email", {
         method: "POST",
         body: { email: pending.email, token: code.join("") },
       })
       if (!verified.ok) {
         setError("authRequestFailed")
+        setIsSubmitting(false)
+        return
+      }
+      if (verified.data.authenticated === false) {
+        window.sessionStorage.removeItem("gdg.pending-signup")
+        router.replace("/signup/pending")
         setIsSubmitting(false)
         return
       }

@@ -73,5 +73,7 @@ export type MyRegistrationAction = "confirm" | "decline";
 /** Confirms or declines the member's seat through the backend. */
 export async function respondToRegistration(registrationId: string, action: MyRegistrationAction) {
   const result = await apiRequest(`/registrations/${registrationId}/${action}`, { method: "POST" });
-  return result.ok ? ({ ok: true } as const) : ({ ok: false, code: result.code } as const);
+  return result.ok
+    ? ({ ok: true } as const)
+    : ({ ok: false, code: result.code, message: result.message } as const);
 }

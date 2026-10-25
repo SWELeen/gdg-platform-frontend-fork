@@ -254,6 +254,7 @@ export default function SignupForm() {
   const [errors, setErrors] = useState<FieldErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  const [submitErrorDetails, setSubmitErrorDetails] = useState("")
 
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
@@ -330,6 +331,7 @@ export default function SignupForm() {
     }
 
     setSubmitError("")
+    setSubmitErrorDetails("")
     setIsSubmitting(true)
     if (!API_ENABLED) {
       setSubmitError("apiRequired")
@@ -375,8 +377,19 @@ export default function SignupForm() {
     if (!result.ok) {
       if (result.code === "EMAIL_ALREADY_EXISTS") {
         setSubmitError("emailAlreadyExists")
+      } else if (result.code === "UNIVERSITY_EMAIL_MISMATCH") {
+        setSubmitError("signupUniversityEmailMismatch")
+      } else if (result.code === "EMAILS_MUST_DIFFER") {
+        setSubmitError("signupEmailsMustDiffer")
+      } else if (result.code === "SIGNUP_WEAK_PASSWORD") {
+        setSubmitError("signupWeakPassword")
       } else if (result.code === "EMAIL_ADDRESS_NOT_AUTHORIZED") {
         setSubmitError("signupEmailNotAuthorized")
+      } else if (result.code === "UNIVERSITY_EMAIL_VERIFICATION_NOT_CONFIGURED") {
+        setSubmitError("signupUniversityEmailNotConfigured")
+      } else if (result.code === "VALIDATION_ERROR" && result.details.length > 0) {
+        setSubmitError("authRequestFailed")
+        setSubmitErrorDetails(result.details.map(({ pointer, message }) => `${pointer || "form"}: ${message}`).join("; "))
       } else if (result.status === 429) {
         setSubmitError("emailRateLimited")
       } else if (result.status === 0 || result.status >= 500) {
@@ -501,7 +514,7 @@ export default function SignupForm() {
         </h1>
       )}
       <form onSubmit={handleSubmit} noValidate className={`${step === 0 ? "mt-8" : "mt-6"} flex w-full flex-col`}>
-        <AuthErrorMessage message={submitError} className="mb-3" />
+        <AuthErrorMessage message={submitError} detailText={submitErrorDetails} className="mb-3" />
         <AuthStepTransition stepKey={step} className="grid w-full grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
           {step === 0 ? (
             <fieldset data-membership-choice className="col-span-full" aria-describedby={membershipError ? "membership-error" : undefined}>

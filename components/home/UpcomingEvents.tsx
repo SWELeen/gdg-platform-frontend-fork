@@ -9,14 +9,17 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import EventCard from "./EventCard";
 import type { HomeEvent } from "./EventCard";
 import EventRegistrationModal from "@/components/event-registration/EventRegistrationModal";
-import { API_ENABLED } from "@/lib/api/client";
+import { API_ENABLED, apiRequest } from "@/lib/api/client";
 import { fetchPublishedEvents, formatDate, formatTime } from "@/lib/events/api";
+import { useRouter, usePathname } from "@/i18n/navigation";
 
 const GAP = 24;
 
 export default function UpcomingEvents() {
   const t = useTranslations("home.events");
   const dir = useTextDirection();
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeEvent, setActiveEvent] = useState(0);
   const [perView, setPerView] = useState(1);
   const [eventToRegister, setEventToRegister] = useState<HomeEvent | null>(null);
@@ -56,6 +59,34 @@ export default function UpcomingEvents() {
   const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const maxIndex = Math.max(0, homepageEvents.length - perView);
+
+  useEffect(() => {
+    if (!API_ENABLED || homepageEvents.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get("registerEvent");
+    if (!eventId) return;
+    const event = homepageEvents.find((item) => item.id === eventId);
+    if (!event) return;
+    window.history.replaceState(null, "", `${pathname}#events`);
+    const openModal = window.setTimeout(() => setEventToRegister(event), 0);
+    return () => window.clearTimeout(openModal);
+  }, [homepageEvents, pathname]);
+
+  const handleRegister = async (event: HomeEvent) => {
+    if (!API_ENABLED) {
+      setEventToRegister(event);
+      return;
+    }
+
+    const identity = await apiRequest<{ fullName: string }>("/me");
+    if (identity.ok) {
+      setEventToRegister(event);
+      return;
+    }
+
+    const returnTo = `${pathname}?registerEvent=${encodeURIComponent(event.id)}#events`;
+    router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+  };
 
   // كم كارد يظهر في نفس الوقت (1 على الجوال، 2 على الشاشات الكبيرة)
   useEffect(() => {
@@ -135,7 +166,7 @@ export default function UpcomingEvents() {
               }}
               className="w-full shrink-0 snap-start lg:w-[calc((100%-24px)/2)]"
             >
-              <EventCard event={event} onRegister={setEventToRegister} />
+              <EventCard event={event} onRegister={handleRegister} />
             </div>
           ))}
         </div>

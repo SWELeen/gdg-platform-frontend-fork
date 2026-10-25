@@ -104,7 +104,7 @@ export function MemberEventCards({ tiles }: { tiles: MyEventTile[] }) {
                 className="min-w-0"
               >
                 <Link
-                  href={`${MEMBER_EVENTS_PATH}/${registration.id}`}
+                  href={MEMBER_EVENTS_PATH}
                   className={`group flex h-full min-h-32 min-w-0 flex-col justify-between gap-3 rounded-2xl p-3 text-foreground transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface sm:p-4 ${tile.background}`}
                 >
                   <div className="flex items-start justify-between gap-2">

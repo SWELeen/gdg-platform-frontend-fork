@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl"
 type AuthErrorMessageProps = {
   // A key from messages/*/validation.json, or "" for no error.
   message: string
+  detailText?: string
   id?: string
   className?: string
 }
@@ -13,6 +14,7 @@ type AuthErrorMessageProps = {
 // Presentational only: caller controls positioning via `className`.
 export default function AuthErrorMessage({
   message,
+  detailText,
   id,
   className = "",
 }: AuthErrorMessageProps) {
@@ -33,6 +35,7 @@ export default function AuthErrorMessage({
           className={`text-xs font-normal leading-normal text-gdg-red ${className}`}
         >
           {text}
+          {detailText ? <span className="mt-1 block">{detailText}</span> : null}
         </motion.p>
       ) : null}
     </AnimatePresence>
