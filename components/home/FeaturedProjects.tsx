@@ -106,7 +106,7 @@ export default function FeaturedProjects() {
     >
       <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
         {t("titleStart")}{" "}
-        <span className="bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pe-1 italic text-transparent rtl:not-italic">
+        <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("titleHighlight")}
         </span>
       </h2>
@@ -167,12 +167,11 @@ export default function FeaturedProjects() {
                   <FiArrowLeft className="rtl:-scale-x-100" />
                   {t("backToProjects")}
                 </button>
-                <img src={selectedProject.detailsImg ?? selectedProject.img} alt={projectMessage(selectedProject.id, "title")} className="h-44 w-full rounded-2xl object-cover" style={{ objectPosition: "center 65%" }} />
                 <h3 className="mt-5 text-2xl font-semibold">{projectMessage(selectedProject.id, "title")}</h3>
                 <p className="mt-2 text-sm text-foreground/60">{projectMessage(selectedProject.id, "committee")}</p>
                 <p className="mt-5 text-base leading-8 text-foreground/80">{projectMessage(selectedProject.id, "fullDescription")}</p>
                 {selectedProject.detailsImages?.length ? (
-                  <div className="mt-6 grid grid-cols-1 gap-4">
+                  <div className={`mt-6 grid ${selectedProject.detailsImages.length === 1 ? "grid-cols-1" : "grid-cols-2"} gap-4`}>
                     {selectedProject.detailsImages.map((image, index) => (
                       <div key={image} className="w-full overflow-hidden rounded-2xl border border-border bg-surface-muted shadow-md">
                         <motion.img
@@ -221,22 +220,36 @@ export default function FeaturedProjects() {
 
       {/* ===== نسخة الجوال والتابلت: كرت واحد فقط ===== */}
       <div className="mt-10 lg:hidden">
-        <motion.div
-          key={projects[activeIndex].id}
-          initial={{ opacity: 0, x: 35 }}
-          animate={{ opacity: 1, x: selectedProject ? (dir === "rtl" ? 70 : -70) : 0, scale: selectedProject ? 0.88 : 1 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="relative mx-auto h-[420px] w-[280px] max-w-full"
+        <div
+          className="relative mx-auto h-[205px] w-full overflow-visible"
+          style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}
         >
-          <ProjectCard
-            project={projects[activeIndex]}
-            position={0}
-            index={activeIndex}
-            isActive
-            detailsOpen={Boolean(selectedProject)}
-            onViewProject={() => setSelectedProjectId(projects[activeIndex].id)}
-          />
-        </motion.div>
+          <motion.div
+            initial={false}
+            animate={{ x: 2, scale: 0.48 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="absolute inset-x-0 top-0 h-[420px] w-full"
+            style={{ transformOrigin: "top center" }}
+          >
+            {visible
+              .filter(({ position }) => Math.abs(position) <= 1)
+              .map(({ key, project, index, position }) => (
+                <ProjectCard
+                  key={key}
+                  project={project}
+                  position={position}
+                  index={index}
+                  isActive={position === 0}
+                  detailsOpen={Boolean(selectedProject)}
+                  onSelect={() => setOffset((current) => current + position)}
+                  onViewProject={() => {
+                    setOffset(index);
+                    setSelectedProjectId(project.id);
+                  }}
+                />
+              ))}
+          </motion.div>
+        </div>
 
         <AnimatePresence>
           {selectedProject && (
@@ -253,12 +266,11 @@ export default function FeaturedProjects() {
                 <FiArrowLeft className="rtl:-scale-x-100" />
                 {t("backToProjects")}
               </button>
-              <img src={selectedProject.detailsImg ?? selectedProject.img} alt={projectMessage(selectedProject.id, "title")} className="h-48 w-full rounded-2xl object-cover" style={{ objectPosition: "center 65%" }} />
               <h3 className="mt-4 text-xl font-semibold">{projectMessage(selectedProject.id, "title")}</h3>
               <p className="mt-2 text-sm text-foreground/60">{projectMessage(selectedProject.id, "committee")}</p>
               <p className="mt-4 text-sm leading-7 text-foreground/80">{projectMessage(selectedProject.id, "fullDescription")}</p>
               {selectedProject.detailsImages?.length ? (
-                <div className="mt-5 grid grid-cols-1 gap-3">
+                <div className={`mt-5 grid ${selectedProject.detailsImages.length === 1 ? "grid-cols-1" : "grid-cols-2"} gap-3`}>
                   {selectedProject.detailsImages.map((image, index) => (
                     <div key={image} className="w-full overflow-hidden rounded-xl border border-border bg-surface-muted shadow-sm">
                       <motion.img

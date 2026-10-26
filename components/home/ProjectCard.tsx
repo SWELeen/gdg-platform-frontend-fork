@@ -11,6 +11,7 @@ import { useTextDirection } from "@/i18n/useTextDirection";
 export type Project = {
   id: string;
   img: string;
+  committeeColor?: string;
   detailsImg?: string;
   detailsImages?: string[];
   tags?: string[]; // اختيارية: إذا ما وجدت ما تظهر الشارات
@@ -34,7 +35,7 @@ const CARD_W = 280; // عرض الكرت بالبكسل
 const HALF_W = CARD_W / 2;
 
 /** المسافة الظاهرة بين كل كرتين متجاورين (بالبكسل) */
-const GAP = 5;
+const GAP = -12;
 
 /** قوة الـ perspective: لازم نفس القيمة تنستخدم في FeaturedProjects */
 export const PERSPECTIVE = 1800;
@@ -47,10 +48,10 @@ export const PERSPECTIVE = 1800;
  * dim     = قوة التغميق فوق الكرت
  */
 const RAW = [
-  { scale: 1, rotateY: 0, opacity: 1, dim: 0 }, // الكرت النشط
-  { scale: 0.92, rotateY: 24, opacity: 1, dim: 0.08 },
-  { scale: 0.84, rotateY: 38, opacity: 1, dim: 0.16 },
-  { scale: 0.76, rotateY: 50, opacity: 0.9, dim: 0.24 },
+  { scale: 1, rotateY: 0, z: 0, opacity: 1, dim: 0 }, // الكرت النشط
+  { scale: 0.92, rotateY: 24, z: -24, opacity: 1, dim: 0.08 },
+  { scale: 0.84, rotateY: 38, z: -88, opacity: 1, dim: 0.16 },
+  { scale: 0.76, rotateY: 50, z: -180, opacity: 0.9, dim: 0.24 },
 ];
 
 /* ============================================================
@@ -139,6 +140,7 @@ export default function ProjectCard({
       initial={false}
       animate={{
         x: slot.x * side * mirror, // الإزاحة الأفقية
+        z: slot.z, // إبعاد الكروت الجانبية لتتبع قوس أسطواني
         scale: slot.scale,
         rotateY: slot.rotateY * side * mirror, // الدوران ثلاثي الأبعاد
         opacity: slot.opacity,
@@ -165,14 +167,9 @@ export default function ProjectCard({
             ? "shadow-[0_28px_50px_rgba(40,40,70,0.25)]"
             : "shadow-[0_18px_32px_rgba(40,40,70,0.14)]"
         }`}
+        style={{ backgroundColor: project.committeeColor ?? "var(--surface-muted)" }}
       >
         {/* صورة المشروع */}
-        <img
-          src={project.img}
-          alt={projectTitle}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-
         {/* تدرج داكن في أسفل الكرت عشان يوضح النص */}
         <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-b from-transparent via-[color:var(--gdg-dark)]/55 to-[color:var(--gdg-dark)]/90" />
 

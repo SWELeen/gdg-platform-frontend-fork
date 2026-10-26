@@ -88,6 +88,7 @@ function ProfileAccountMenu({
       )}
     </div>
   );
+
 }
 
 type NavbarProps = {
@@ -159,10 +160,10 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
       className={`fixed inset-x-4 top-4 z-[200] mx-auto flex h-14 items-center justify-between gap-8 rounded-full border ps-5 pe-3 shadow-lg backdrop-blur-xl backdrop-saturate-150 lg:w-fit lg:gap-10 lg:ps-12 lg:pe-8 ${
         variant === "light"
           ? "border-border bg-surface/85 text-foreground shadow-black/5"
-          : "border-white/15 bg-gdg-dark/20 text-[var(--white)] shadow-black/20"
+          : "border-white/20 bg-gdg-dark/35 text-[var(--white)] shadow-black/25"
       }`}
     >
-      <div>
+      <div className="lg:shrink-0">
         {variant === "light" ? (
           <Image
             src="/images/black-logo-with-colors.png"
@@ -177,12 +178,12 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           <img
             src="/images/gdg-white-logo.png"
             alt={tCommon("logoAlt")}
-            className="h-14 w-auto"
+            className="h-14 w-auto lg:scale-x-[1.06] lg:origin-left"
           />
         )}
       </div>
 
-      <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-8">
+      <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-6">
         <motion.a
           href={sectionHref("#home")}
           whileHover={{ scale: 1.05 }}
@@ -348,6 +349,9 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             >
               <span dir={dir}>{t("community")}</span>
             </motion.a>
+            <motion.div variants={itemVariants} className="flex items-center">
+              <ThemeToggle />
+            </motion.div>
 
             {profileName ? (
               <motion.div variants={itemVariants} className="w-full">

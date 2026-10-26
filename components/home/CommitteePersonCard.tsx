@@ -29,6 +29,7 @@ type CommitteePersonCardProps = {
   linkedin?: string;
   x?: string;
   darkAccent?: boolean;
+  googleAccent?: boolean;
 };
 
 export default function CommitteePersonCard({
@@ -45,6 +46,7 @@ export default function CommitteePersonCard({
   linkedin = "#",
   x = "#",
   darkAccent = false,
+  googleAccent = false,
 }: CommitteePersonCardProps) {
   const reduceMotion = useReducedMotion();
 
@@ -55,17 +57,21 @@ export default function CommitteePersonCard({
       transition={{ type: "spring", stiffness: 260, damping: 22, delay: reduceMotion ? 0 : index * 0.1 }}
       whileHover={reduceMotion ? undefined : { y: -6, scale: 1.02 }}
       whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-      className={`group relative mt-2 flex h-full min-h-[245px] min-w-0 flex-col overflow-visible rounded-2xl border border-foreground/10 bg-background p-2.5 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg sm:min-h-[265px] sm:p-3 ${layoutClass}`}
+      className={`group relative mt-2 flex h-auto min-h-[245px] min-w-0 flex-col overflow-visible rounded-2xl border border-foreground/10 bg-background p-2.5 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg sm:min-h-[265px] sm:p-3 ${layoutClass}`}
       style={{ "--committee-accent": accentColor } as CSSProperties}
     >
-      <span aria-hidden="true" className="absolute -top-2 start-4 z-10 h-2 w-16 rounded-t-md" style={{ backgroundColor: accentColor }} />
-      <div className="mx-auto h-24 w-full max-w-24 overflow-hidden rounded-xl bg-surface-muted sm:h-28 sm:max-w-28">
+      <span
+        aria-hidden="true"
+        className={`absolute -top-2 start-4 z-10 h-2 w-16 rounded-t-md ${googleAccent ? "bg-[image:var(--google-gradient)]" : ""}`}
+        style={googleAccent ? undefined : { backgroundColor: accentColor }}
+      />
+      <div className="mx-auto h-28 w-full max-w-28 overflow-hidden rounded-xl bg-surface-muted sm:h-32 sm:max-w-32">
         <img
           src={image?.trim() ? image : DEFAULT_MEMBER_IMAGE}
           alt={alt}
           loading="lazy"
           decoding="async"
-          className={`h-full w-full ${imagePositionClass ?? "translate-y-3"} ${imageScaleClass ?? "scale-110"} object-contain object-bottom motion-safe:transition-transform motion-safe:duration-300 ${imageScaleClass ? "motion-safe:group-hover:scale-[1.3]" : "motion-safe:group-hover:scale-[1.15]"}`}
+          className={`h-full w-full ${imagePositionClass ?? "translate-y-5"} ${imageScaleClass ?? "scale-[1.25]"} object-contain object-bottom motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.3]`}
           onError={(event) => {
             if (!event.currentTarget.src.endsWith(DEFAULT_MEMBER_IMAGE)) {
               event.currentTarget.src = DEFAULT_MEMBER_IMAGE;
@@ -76,9 +82,13 @@ export default function CommitteePersonCard({
       <div dir={dir} className="relative mt-2 flex min-w-0 flex-1 flex-col overflow-hidden rounded-t-2xl rounded-b-xl border border-foreground/10 bg-foreground/[0.03] px-2.5 pb-1.5 pt-3">
         <img src="/images/Google-design%20.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70" />
         <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/65" />
-        <span aria-hidden="true" className="absolute inset-x-4 top-0 z-10 h-0.5 rounded-full" style={{ backgroundColor: `color-mix(in srgb, ${accentColor} 35%, transparent)` }} />
+        <span
+          aria-hidden="true"
+          className={`absolute inset-x-4 top-0 z-10 h-0.5 rounded-full ${googleAccent ? "bg-[image:var(--google-gradient)]" : ""}`}
+          style={googleAccent ? undefined : { backgroundColor: `color-mix(in srgb, ${accentColor} 35%, transparent)` }}
+        />
         <div className="relative z-10 mx-auto w-fit max-w-full px-2 py-1.5">
-          <p className={`text-xs font-semibold leading-tight text-[var(--committee-accent)] sm:text-sm ${darkAccent ? darkText : ""}`}>
+          <p className={`text-xs font-semibold leading-tight sm:text-sm ${googleAccent ? "bg-[image:var(--google-gradient)] bg-clip-text text-transparent" : "text-[var(--committee-accent)]"} ${darkAccent ? darkText : ""}`}>
             {label}
           </p>
           <h4 className="mt-1 break-words text-sm font-bold text-foreground sm:text-base">{name}</h4>

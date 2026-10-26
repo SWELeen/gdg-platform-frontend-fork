@@ -107,7 +107,7 @@ export default function AnnouncementsSection({
           <div className="max-w-[700px]">
       <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
         {t("title")}{" "}
-        <span className="bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pe-1 italic text-transparent rtl:not-italic">
+        <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("highlight")}
         </span>
       </h2>
