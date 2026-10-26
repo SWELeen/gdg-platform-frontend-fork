@@ -221,12 +221,12 @@ export default function FeaturedProjects() {
       {/* ===== نسخة الجوال والتابلت: كرت واحد فقط ===== */}
       <div className="mt-10 lg:hidden">
         <div
-          className="relative mx-auto h-[205px] w-full overflow-visible"
+          className="relative mx-auto h-[255px] w-full overflow-visible"
           style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}
         >
           <motion.div
             initial={false}
-            animate={{ x: 2, scale: 0.48 }}
+            animate={{ x: 2, scale: 0.60 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="absolute inset-x-0 top-0 h-[420px] w-full"
             style={{ transformOrigin: "top center" }}
