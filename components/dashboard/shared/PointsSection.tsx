@@ -1,19 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import { useTranslations } from "next-intl";
 import type { CommitteeMember } from "./types";
-import { ArrowUpRight, ArrowDownRight, History } from "lucide-react";
+import { ALL, CommitteeFilterSelect, CommitteeTag, matchesCommittee, pointsFor, useClubCommittees } from "./ClubFilters";
+import { ArrowUpRight, ArrowDownRight, History, Search } from "lucide-react";
 
 interface PointsSectionProps {
   onOpenUpdatePoints: (member: CommitteeMember) => void;
 }
 
 export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
-  const { members, pointHistory, canManagePoints } = useLeaderDashboard();
+  const { members, pointHistory, canManagePoints, clubLeadership } = useLeaderDashboard();
+  const committees = useClubCommittees();
   const t = useTranslations("dashboard.leader");
+  const [committeeFilter, setCommitteeFilter] = useState(ALL);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const totalPoints = members.reduce((sum, m) => sum + m.points, 0);
+  const search = searchTerm.trim().toLowerCase();
+  const filteredMembers = members.filter(
+    (m) => matchesCommittee(m, committeeFilter) && (!search || m.name.toLowerCase().includes(search))
+  );
+  const filteredHistory = pointHistory.filter(
+    (item) =>
+      (committeeFilter === ALL || item.committeeCode === committeeFilter) &&
+      (!search || item.memberName.toLowerCase().includes(search))
+  );
+  const filtersActive = committeeFilter !== ALL || Boolean(search);
+  const selectedCommitteeName = committees.find((item) => item.code === committeeFilter)?.name;
+  const totalPoints = filteredMembers.reduce((sum, m) => sum + pointsFor(m, committeeFilter), 0);
 
   return (
     <div className="space-y-6">
@@ -29,12 +45,27 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
 
       {/* Member Points Table */}
       <div className="rounded-2xl border border-border bg-surface shadow-2xs">
-        <div className="flex items-center justify-between border-b border-border/80 p-5">
+        <div className="flex flex-col gap-3 border-b border-border/80 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-base font-bold text-foreground">
               {t("points.standings")}
             </h3>
           </div>
+          {clubLeadership && (
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative">
+                <Search className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={t("clubFilters.searchMember")}
+                  className="h-9 rounded-xl border border-border bg-surface-muted/40 ps-8 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
+                />
+              </div>
+              <CommitteeFilterSelect value={committeeFilter} onChange={setCommitteeFilter} />
+            </div>
+          )}
         </div>
 
         <div className="overflow-x-auto">
@@ -43,20 +74,22 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
               <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3.5 text-start">{t("points.member")}</th>
                 <th className="px-4 py-3.5 text-start">{t("points.role")}</th>
-                <th className="px-4 py-3.5 text-start">{t("points.currentPoints")}</th>
+                <th className="px-4 py-3.5 text-start">
+                  {selectedCommitteeName ? t("clubFilters.pointsIn", { committee: selectedCommitteeName }) : t("points.currentPoints")}
+                </th>
                 <th className="px-4 py-3.5 text-start">{t("points.tasksCompleted")}</th>
                 <th className="px-4 py-3.5 text-start">{t("points.lastUpdated")}</th>
                 <th className="px-5 py-3.5 text-end">{t("points.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
-              {members.length === 0 ? (
+              {filteredMembers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-10 text-center text-sm text-muted">
-                    {t("points.emptyMembers")}
+                    {filtersActive ? t("clubFilters.noMembers") : t("points.emptyMembers")}
                   </td>
                 </tr>
-              ) : members.map((member) => (
+              ) : filteredMembers.map((member) => (
                 <tr key={member.id} className="transition hover:bg-surface-muted/20">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
@@ -72,7 +105,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                   </td>
                   <td className="px-4 py-3.5 text-muted">{member.role}</td>
                   <td className="px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 text-sm">
-                    {member.points.toLocaleString()}
+                    {pointsFor(member, committeeFilter).toLocaleString()}
                   </td>
                   <td className="px-4 py-3.5 text-foreground/80">{member.tasksCompleted}</td>
                   <td className="px-4 py-3.5 text-muted">{member.lastActivity}</td>
@@ -103,9 +136,9 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
         </div>
 
         <div className="mt-3 divide-y divide-border/60 text-xs">
-          {pointHistory.length === 0 ? (
-            <p className="py-4 text-sm text-muted">{t("points.emptyHistory")}</p>
-          ) : pointHistory.map((item) => (
+          {filteredHistory.length === 0 ? (
+            <p className="py-4 text-sm text-muted">{filtersActive ? t("clubFilters.noHistory") : t("points.emptyHistory")}</p>
+          ) : filteredHistory.map((item) => (
             <div
               key={item.id}
               className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between"
@@ -129,6 +162,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                     {item.memberName}:
                   </span>{" "}
                   <span className="text-muted">{item.reason}</span>
+                  {clubLeadership && <span className="ms-2"><CommitteeTag code={item.committeeCode} name={item.committeeName} /></span>}
                 </div>
               </div>
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { MembersSection } from "../MembersSection";
-import { AddMemberModal } from "../AddMemberModal";
+import { AddToCommitteeModal } from "../AddToCommitteeModal";
 import { PointsModal } from "../PointsModal";
 import type { CommitteeMember } from "../types";
 
@@ -12,7 +12,7 @@ export function ClubMembersPage() {
   return (
     <div className="space-y-6">
       <MembersSection onOpenAddMember={() => setAddMemberOpen(true)} onOpenUpdatePoints={setPointsMember} />
-      <AddMemberModal isOpen={addMemberOpen} onClose={() => setAddMemberOpen(false)} />
+      <AddToCommitteeModal isOpen={addMemberOpen} onClose={() => setAddMemberOpen(false)} />
       <PointsModal isOpen={Boolean(pointsMember)} onClose={() => setPointsMember(null)} member={pointsMember} />
     </div>
   );

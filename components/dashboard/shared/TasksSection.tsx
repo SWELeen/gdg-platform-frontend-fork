@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import type { CommitteeTask, TaskPriority, TaskStatus } from "./types";
 import { ConfirmModal } from "./ConfirmModal";
+import { ALL, CommitteeFilterSelect, CommitteeTag } from "./ClubFilters";
 import {
   Plus,
   Calendar,
@@ -26,16 +27,18 @@ export function TasksSection({
   onOpenCreateTask,
   onEditTask,
 }: TasksSectionProps) {
-  const { tasks, updateTask, deleteTask, canManageTasks } =
+  const { tasks, updateTask, deleteTask, canManageTasks, clubLeadership } =
     useLeaderDashboard();
   const t = useTranslations("dashboard.leader");
 
   const [viewMode, setViewMode] = useState<"board" | "table">("board");
   const [filterPriority, setFilterPriority] = useState<string>("all");
+  const [filterCommittee, setFilterCommittee] = useState(ALL);
   const [taskToDelete, setTaskToDelete] = useState<CommitteeTask | null>(null);
 
   const filteredTasks = tasks.filter((t) => {
     if (filterPriority !== "all" && t.priority !== filterPriority) return false;
+    if (filterCommittee !== ALL && t.committeeCode !== filterCommittee) return false;
     return true;
   });
 
@@ -81,6 +84,8 @@ export function TasksSection({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {clubLeadership && <CommitteeFilterSelect value={filterCommittee} onChange={setFilterCommittee} />}
+
           {/* Priority filter */}
           <select
             value={filterPriority}
@@ -171,8 +176,9 @@ export function TasksSection({
                   )}
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="size-3" />
@@ -250,8 +256,9 @@ export function TasksSection({
                   )}
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="size-3" />
@@ -323,8 +330,9 @@ export function TasksSection({
                   </div>
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1 text-emerald-600">
                       ✓ Done
@@ -366,6 +374,7 @@ export function TasksSection({
             <thead>
               <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3.5 text-start">{t("tasks.task")}</th>
+                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("clubFilters.committee")}</th>}
                 <th className="px-4 py-3.5 text-start">{t("tasks.assignedTo")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.dueDate")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.priority")}</th>
@@ -379,6 +388,7 @@ export function TasksSection({
                   <td className="px-5 py-3.5 font-bold text-foreground">
                     {task.title}
                   </td>
+                  {clubLeadership && <td className="px-4 py-3.5"><CommitteeTag code={task.committeeCode} name={task.committeeName} /></td>}
                   <td className="px-4 py-3.5 text-muted">{task.assignedMemberName}</td>
                   <td className="px-4 py-3.5 text-muted">{task.dueDate}</td>
                   <td className="px-4 py-3.5">{getPriorityBadge(task.priority)}</td>

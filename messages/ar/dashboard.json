@@ -495,7 +495,7 @@
       "openSidebar": "فتح القائمة الجانبية",
       "committeeData": "لجنة تحليل البيانات",
       "committeePR": "لجنة العلاقات العامة",
-      "committeeProjectManagement": "Project Management Committee",
+      "committeeProjectManagement": "لجنة إدارة المشاريع",
       "committeeContentWriting": "لجنة كتابة المحتوى",
       "committeeWebDevelopment": "لجنة تطوير الويب",
       "committeeAutomation": "لجنة الأتمتة",
@@ -1152,6 +1152,33 @@
         "durationMin": "يجب ألا تقل المدة عن 5 دقائق.",
         "durationMax": "يجب ألا تتجاوز المدة 10,080 دقيقة (7 أيام)."
       }
+    },
+    "clubFilters": {
+      "allCommittees": "كل اللجان",
+      "noCommittee": "بدون لجنة",
+      "committee": "اللجنة",
+      "committees": "اللجان",
+      "allRoles": "كل الأدوار",
+      "roleLeader": "ليدر",
+      "roleCoLeader": "كو-ليدر",
+      "roleMember": "عضو",
+      "roleClubLeadership": "قيادة النادي",
+      "roleAdvisor": "مستشار",
+      "searchMember": "ابحث باسم العضو...",
+      "clearFilters": "مسح الفلاتر",
+      "noMembers": "ما فيه أعضاء يطابقون الفلاتر.",
+      "noHistory": "ما فيه تغييرات نقاط تطابق الفلاتر.",
+      "pointsIn": "النقاط في {committee}",
+      "addToCommittee": "إضافة للجنة",
+      "addToCommitteeTitle": "إضافة عضو للجنة",
+      "addToCommitteeDescription": "اختر عضو موجود في النادي واللجنة اللي تبي تضيفه لها. بينضاف بدور عضو.",
+      "selectMember": "العضو",
+      "selectMemberPlaceholder": "اختر عضو",
+      "selectCommittee": "اللجنة",
+      "selectCommitteePlaceholder": "اختر لجنة",
+      "alreadyInAll": "هذا العضو موجود في كل اللجان.",
+      "requiredSelection": "اختر العضو واللجنة.",
+      "requestFailed": "ما قدرنا نضيف العضو. حاول مرة ثانية."
     }
   },
   "membershipRequests": {
