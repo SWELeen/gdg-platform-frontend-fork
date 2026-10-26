@@ -46,6 +46,7 @@
   "githubDomain": "Must be a github.com link",
   "linkedinDomain": "Must be a linkedin.com link",
   "apiRequired": "The secure service is unavailable in this environment. Please try again later.",
+  "invalidCredentials": "Incorrect email or password.",
   "authRequestFailed": "We could not complete that request. Check your details and try again.",
   "emailAlreadyExists": "An account already exists with this email. Sign in or use another email address.",
   "signupUniversityEmailMismatch": "The university email does not match the email entered in your application details.",

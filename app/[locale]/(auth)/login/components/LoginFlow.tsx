@@ -5,7 +5,7 @@ import { useState } from "react"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
-import { dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route"
+import { canReturnTo, dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route"
 import { useRouter } from "@/i18n/navigation"
 import AuthCard from "@/app/components/auth/AuthCard"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
@@ -105,7 +105,7 @@ export default function LoginFlow() {
       body: { email: normalizeText(email), password: nextPassword },
     })
     if (!result.ok) {
-      setSubmitError("authRequestFailed")
+      setSubmitError(result.status === 401 ? "invalidCredentials" : "authRequestFailed")
       setIsSubmitting(false)
       return
     }
@@ -116,7 +116,8 @@ export default function LoginFlow() {
       setIsSubmitting(false)
       return
     }
-    router.replace(dashboardReturnPath() ?? dashboardPathFor(identity.data))
+    const returnPath = dashboardReturnPath()
+    router.replace(returnPath && canReturnTo(returnPath, identity.data) ? returnPath : dashboardPathFor(identity.data))
   }
 
   const handleBack = () => {
