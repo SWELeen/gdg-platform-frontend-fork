@@ -78,7 +78,7 @@ function TeamGroup({
           </motion.span>
           <motion.span
             variants={textItem}
-            className="inline-block bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pb-1 text-transparent rtl:bg-gradient-to-l"
+            className="inline-block bg-[image:var(--google-gradient)] bg-clip-text pb-1 text-transparent"
           >
             {title}
           </motion.span>

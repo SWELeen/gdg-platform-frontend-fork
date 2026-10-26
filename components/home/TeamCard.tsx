@@ -49,12 +49,13 @@ export default function TeamCard({ member }: TeamCardProps) {
       className="group flex w-full flex-col overflow-hidden rounded-2xl bg-[var(--committee-card-surface)] shadow-md transition-shadow duration-300 hover:shadow-xl"
     >
       {/* Photo */}
-      <div className="aspect-[4/4.5] w-full overflow-hidden bg-surface-muted">
+      <div className="relative isolate aspect-[4/4.5] w-full overflow-hidden bg-surface-muted">
+        <div aria-hidden="true" className="absolute -inset-5 scale-110 opacity-20 blur-2xl" style={{ background: "radial-gradient(ellipse at 78% 24%, #EA4335 0%, rgb(234 67 53 / 78%) 22%, transparent 58%), linear-gradient(135deg, #4285F4 0%, #34A853 34%, #FBBC04 68%, #EA4335 100%)" }} />
         <img
           src={member.image}
           alt={t(`team.${member.id}.name`)}
           loading="lazy"
-          className={`h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} group-hover:scale-[1.12]`}
+          className={`relative z-10 h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} group-hover:scale-[1.2]`}
         />
       </div>
 

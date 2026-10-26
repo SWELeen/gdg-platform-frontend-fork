@@ -378,24 +378,8 @@ const RIBBONS = RIBBON_DEFS.map((r) => {
 /* SPARKS / DUST                                             */
 /* ========================================================= */
 
-const SPARKS = [
-  { x: 417, y: 241, s: 10, c: "var(--gdg-blue)", d: 3 },
-  { x: 243, y: 505, s: 14, c: "var(--gdg-blue)", d: 3.6 },
-  { x: 459, y: 487, s: 9, c: "var(--gdg-blue)", d: 2.8 },
-
-  { x: 387, y: 341, s: 13, c: "var(--gdg-red)", d: 3.2 },
-  { x: 550, y: 399, s: 11, c: "var(--gdg-red)", d: 2.6 },
-
-  { x: 1253, y: 250, s: 14, c: "var(--gdg-green)", d: 3.4 },
-  { x: 1117, y: 390, s: 11, c: "var(--gdg-green)", d: 2.9 },
-
-  { x: 1152, y: 461, s: 10, c: "var(--gdg-yellow)", d: 3.1 },
-  { x: 1211, y: 499, s: 13, c: "var(--gdg-yellow)", d: 3.8 },
-  { x: 1581, y: 557, s: 10, c: "var(--gdg-yellow)", d: 3 },
-];
-
 const DUST = Array.from(
-  { length: 44 },
+  { length: 110 },
   (_, i) => {
     const r = (n: number) => {
       const x =
@@ -407,8 +391,8 @@ const DUST = Array.from(
     };
 
     return {
-      x: Math.round(r(1) * 1672),
-      y: Math.round(r(2) * 700 + 80),
+      x: Math.round(r(1) * 1000),
+      y: Math.round(r(2) * 1000),
       r: +(r(3) * 1.4 + 0.5).toFixed(2),
       o: +(r(4) * 0.5 + 0.2).toFixed(2),
 
@@ -579,7 +563,7 @@ export default function HeroSection() {
     clamp: true,
   });
   const reduceMotion = useReducedMotion();
-  const introSpread = useMotionValue(LOGO_W * 0.2);
+  const introSpread = useMotionValue(LOGO_W * 0.65);
   const [introComplete, setIntroComplete] = useState(false);
   const activeLogoSpread = introComplete ? logoSpread : introSpread;
   const leftLogoSpread = useTransform(activeLogoSpread, (value) => -value);
@@ -592,7 +576,7 @@ export default function HeroSection() {
     }
 
     const animation = animate(introSpread, 0, {
-      duration: 1.15,
+      duration: 1.35,
       ease: "easeInOut",
       onComplete: () => setIntroComplete(true),
     });
@@ -630,74 +614,37 @@ export default function HeroSection() {
         "
       />
 
-      <div
-        className="
-          pointer-events-none
-          absolute inset-0 z-0
-          bg-[radial-gradient(ellipse_at_center,transparent_55%,var(--hero-vignette)_100%)]
-        "
-      />
-
-      {/* ========================================================= */}
-      {/* FLOOR                                                     */}
-      {/* ========================================================= */}
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] overflow-hidden">
-
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--hero-floor-white-strong)] via-[var(--hero-floor-white-soft)] to-transparent" />
-
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--hero-floor-line)] to-transparent" />
-
-        <div className="absolute inset-x-[10%] top-0 h-10 bg-gradient-to-b from-[var(--hero-floor-glow)] to-transparent blur-xl" />
-
-        <div
-          className="absolute inset-x-[-20%] bottom-0 h-full opacity-30"
-          style={{
-            backgroundImage: `
-              linear-gradient(var(--hero-grid) 1px, transparent 1px),
-              linear-gradient(90deg, var(--hero-grid) 1px, transparent 1px)
-            `,
-            backgroundSize: "80px 50px",
-            transform:
-              "perspective(500px) rotateX(62deg)",
-            transformOrigin: "bottom",
-            maskImage:
-              "radial-gradient(ellipse at 50% 100%, black 25%, transparent 75%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse at 50% 100%, black 25%, transparent 75%)",
-          }}
-        />
-
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {[
           {
             left: "18%",
             color: "var(--gdg-red)",
-            o: 0.3,
+            o: 0.16,
           },
           {
             left: "40%",
             color: "var(--gdg-blue)",
-            o: 0.45,
+            o: 0.24,
           },
           {
             left: "54%",
             color: "var(--gdg-yellow)",
-            o: 0.4,
+            o: 0.21,
           },
           {
             left: "73%",
             color: "var(--gdg-green)",
-            o: 0.35,
+            o: 0.18,
           },
           {
             left: "80%",
             color: "var(--gdg-yellow-accent)",
-            o: 0.25,
+            o: 0.13,
           },
         ].map((r, i) => (
           <motion.div
             key={i}
-            className="absolute top-[28%] h-[55%] w-[8%] rounded-full blur-3xl"
+            className="absolute top-[22%] h-[62%] w-[10%] rounded-full blur-3xl"
             style={{
               left: r.left,
               background: r.color,
@@ -718,153 +665,40 @@ export default function HeroSection() {
         ))}
       </div>
 
+      <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        {DUST.map((p, i) => (
+          <motion.circle
+            key={i}
+            cx={p.x}
+            cy={p.y}
+            r={p.r}
+            fill={p.c}
+            animate={{ opacity: [p.o * 0.2, Math.min(p.o * 1.15, 1), p.o * 0.2] }}
+            transition={{ duration: p.d, repeat: Infinity }}
+          />
+        ))}
+      </svg>
+
+      <div
+        className="
+          pointer-events-none
+          absolute inset-0 z-0
+          bg-[radial-gradient(ellipse_at_center,transparent_55%,var(--hero-vignette)_100%)]
+        "
+      />
+
       {/* ========================================================= */}
       {/* STAGE                                                     */}
       {/* ========================================================= */}
 
       <div
-        className="pointer-events-none absolute left-1/2 top-[38%] z-[2] h-0 w-0"
+        className="pointer-events-none absolute left-1/2 top-[26%] z-[2] h-0 w-0"
         style={{ transform: "scale(var(--stage-scale))" }}
       >
 
         {/* RIBBONS */}
 
-        <svg
-          className="absolute max-w-none"
-          style={{
-            left: -CX,
-            top: -CY,
-          }}
-          width={1672}
-          height={940}
-          viewBox="0 0 1672 940"
-          fill="none"
-        >
-          <defs>
-            {RIBBONS.map((r) => (
-              <linearGradient
-                key={r.id}
-                id={`grad-${r.id}`}
-                gradientUnits="userSpaceOnUse"
-                x1={r.x1}
-                y1="0"
-                x2={r.x2}
-                y2="0"
-              >
-                <stop
-                  offset="0"
-                  stopColor={r.color}
-                  stopOpacity="0.95"
-                />
 
-                <stop
-                  offset="0.6"
-                  stopColor={r.color}
-                  stopOpacity="0.9"
-                />
-
-                <stop
-                  offset="1"
-                  stopColor={r.color}
-                  stopOpacity="0.25"
-                />
-              </linearGradient>
-            ))}
-          </defs>
-
-          {/* LEFT ribbons: تنضغط أفقياً باتجاه حافة اللوقو */}
-          <g
-            style={{
-              transformOrigin: `${LEFT_END}px 0px`,
-              transform: "scaleX(var(--ribbon-x))",
-            }}
-          >
-            {RIBBONS.map(
-              (r, i) =>
-                r.side === "l" && (
-                  <Ribbon
-                    key={r.id}
-                    r={r}
-                    index={i}
-                  />
-                )
-            )}
-          </g>
-
-          {/* RIGHT ribbons + thin silver line */}
-          <g
-            style={{
-              transformOrigin: `${RIGHT_END}px 0px`,
-              transform: "scaleX(var(--ribbon-x))",
-            }}
-          >
-            {RIBBONS.map(
-              (r, i) =>
-                r.side === "r" && (
-                  <Ribbon
-                    key={r.id}
-                    r={r}
-                    index={i}
-                  />
-                )
-            )}
-
-            <line
-              x1="1530"
-              y1="130"
-              x2="1290"
-              y2="248"
-              stroke="var(--hero-white)"
-              strokeOpacity="0.55"
-              strokeWidth="1"
-            />
-          </g>
-
-          {/* dust */}
-          {DUST.map((p, i) => (
-            <motion.circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r={p.r}
-              fill={p.c}
-              animate={{
-                opacity: [
-                  p.o * 0.3,
-                  p.o,
-                  p.o * 0.3,
-                ],
-              }}
-              transition={{
-                duration: p.d,
-                repeat: Infinity,
-              }}
-            />
-          ))}
-
-          {/* sparks */}
-          {SPARKS.map((s, i) => (
-            <motion.rect
-              key={i}
-              x={s.x}
-              y={s.y}
-              width={s.s}
-              height={s.s}
-              fill={s.c}
-              animate={{
-                opacity: [
-                  0.35,
-                  1,
-                  0.35,
-                ],
-              }}
-              transition={{
-                duration: s.d,
-                repeat: Infinity,
-              }}
-            />
-          ))}
-        </svg>
 
         {/* ======================================================= */}
         {/* LOGO — SPLIT ENTRANCE                                  */}
@@ -955,7 +789,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-x-0 z-10 flex flex-col items-center px-5 sm:px-8"
         style={{
-          top: "calc(38% + var(--stage-scale) * 100px + 20px)",
+          top: "calc(26% + var(--stage-scale) * 100px + 20px)",
         }}
       >
 

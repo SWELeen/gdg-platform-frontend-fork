@@ -124,7 +124,7 @@ export default function CommitteeCard({
           className="relative z-10 flex h-full flex-col gap-3"
         >
           {/* Start Side */}
-          <div className="relative min-w-0 flex-1">
+          <div className="relative min-w-0 flex-none sm:flex-1">
             <div className="relative z-10">
             {/* Committee Name */}
             <div className="flex items-start justify-between gap-3">
@@ -157,7 +157,7 @@ export default function CommitteeCard({
 
           {/* End / Bottom Side */}
           <div className="mt-3 border-t border-foreground/10 pt-3">
-            <div className="flex w-full flex-wrap justify-center gap-3">
+            <div className="flex w-full flex-wrap items-stretch justify-center gap-3">
               {leaders.map((leader, index) => (
                 <CommitteePersonCard
                   key={`${activeCommittee.id}-${leader.key}`}
