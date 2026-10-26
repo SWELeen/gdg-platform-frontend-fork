@@ -6,12 +6,14 @@ export type EventInfoData = {
   location: string;
   imageSrc: string;
   imageAlt: string;
-  speaker: {
+  speaker?: {
     name: string;
     title: string;
     bio: string;
     imageSrc: string;
   };
+  /** Speakers as the event creator typed them; real events have no speaker card. */
+  speakersText?: string;
 };
 
 export const eventRegistrationMock: EventInfoData = {

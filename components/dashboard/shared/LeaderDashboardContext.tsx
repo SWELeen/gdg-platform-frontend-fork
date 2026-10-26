@@ -26,7 +26,8 @@ import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-con
 import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
-import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, addClubMemberToCommittee, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { API_ENABLED } from "@/lib/api/client";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, addClubMemberToCommittee, createCommitteeMember, createCommitteeTask, updateCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -49,6 +50,8 @@ interface LeaderDashboardContextValue {
   registrations: EventRegistration[];
   // Permissions (Permanent for Leader workspace)
   canManageEvents: boolean;
+  /** The backend lets this member create events for the committee. */
+  canCreateEvents: boolean;
   canManageMembers: boolean;
   canAddMembers: boolean;
   canManageTasks: boolean;
@@ -57,10 +60,14 @@ interface LeaderDashboardContextValue {
   canManageRegistrations: boolean;
   // Event Actions
   /** Adds an event to the in-memory dashboard state and returns its new id. */
-  addEvent: (event: Omit<CommitteeEvent, "id" | "created" | "updated">) => string;
+  addEvent: (event: Omit<CommitteeEvent, "id" | "created" | "updated">, schedule?: EventSchedule) => Promise<string>;
   updateEvent: (id: string, updates: Partial<CommitteeEvent>) => void;
   deleteEvent: (id: string) => void;
-  publishDraft: (id: string) => void;
+  publishDraft: (id: string) => Promise<void>;
+  /** Full details of one of this committee's events, drafts included. */
+  loadEventDetails: (id: string) => Promise<CommitteeEventDetails>;
+  /** Deletes a draft event; published events cannot be deleted. */
+  deleteDraft: (id: string) => Promise<void>;
   // Member Actions
   addMember: (member: { name: string; email: string }) => Promise<void>;
   addMemberToCommittee: (memberId: string, committeeCode: string) => Promise<void>;
@@ -137,6 +144,8 @@ export function LeaderDashboardProvider({
   const [currentMember, setCurrentMember] = useState<{ id: string; name: string; role: string } | null>(null);
   const [developerCommitteesOverview, setDeveloperCommitteesOverview] = useState<DeveloperCommitteeOverview[]>([]);
   const [canAddMembers, setCanAddMembers] = useState(false);
+  const [canCreateEvents, setCanCreateEvents] = useState(false);
+  const [prDrafts, setPrDrafts] = useState<CommitteeEvent[]>([]);
   const [canManageTasks, setCanManageTasks] = useState(false);
   const [canManagePoints, setCanManagePoints] = useState(false);
   const [canManageRegistrations, setCanManageRegistrations] = useState(false);
@@ -239,7 +248,10 @@ export function LeaderDashboardProvider({
       setDashboardLoading(false);
       return;
     }
-    setEvents(result.data.events ?? []);
+    // PR reviews every committee's published events (fetchPrEvents); from its own events it only adds the drafts.
+    if (useApi) setPrDrafts((result.data.events ?? []).filter((event) => event.status === "Draft"));
+    else setEvents(result.data.events ?? []);
+    setCanCreateEvents(result.data.permissions.canCreateEvents ?? false);
     setMembers(result.data.members ?? []);
     setTasks(result.data.tasks ?? []);
     setPointHistory(result.data.pointHistory ?? []);
@@ -251,19 +263,22 @@ export function LeaderDashboardProvider({
     setCanManagePoints(result.data.permissions.canManagePoints);
     setCanManageRegistrations(result.data.permissions.canManageRegistrations);
     setDashboardLoading(false);
-  }, [committeeConfig.committeeCode, clubLeadership, developerCommitteesLeader]);
+  }, [committeeConfig.committeeCode, clubLeadership, developerCommitteesLeader, useApi]);
 
   useEffect(() => {
     queueMicrotask(() => void reloadDashboard());
   }, [reloadDashboard]);
 
+  const reloadPrEvents = useCallback(async () => {
+    const list = await fetchPrEvents();
+    setEvents(list);
+    setRegistrations((await Promise.all(list.map((event) => fetchRegistrants(event.id)))).flat());
+  }, []);
+
   useEffect(() => {
     if (!useApi) return;
-    fetchPrEvents().then(async (list) => {
-      setEvents(list);
-      setRegistrations((await Promise.all(list.map((event) => fetchRegistrants(event.id)))).flat());
-    });
-  }, [useApi]);
+    queueMicrotask(() => void reloadPrEvents());
+  }, [useApi, reloadPrEvents]);
 
   const updateRegistrationStatus = (
     registrationId: string,
@@ -310,7 +325,15 @@ export function LeaderDashboardProvider({
   };
 
   // Event handlers
-  const addEvent = (data: Omit<CommitteeEvent, "id" | "created" | "updated">) => {
+  const addEvent = async (data: Omit<CommitteeEvent, "id" | "created" | "updated">, schedule?: EventSchedule) => {
+    if (API_ENABLED) {
+      if (!schedule) throw new Error("The event schedule is missing.");
+      const result = await createCommitteeEvent(committeeConfig.committeeCode, data, schedule);
+      // Field details say what to fix, e.g. "Choice questions need at least two different options."
+      if (!result.ok) throw new Error([result.message, ...result.details.map((detail) => detail.message)].join(" "));
+      await Promise.all([reloadDashboard(), useApi ? reloadPrEvents() : Promise.resolve()]);
+      return result.data.id;
+    }
     const newEvent: CommitteeEvent = {
       ...data,
       id: `evt-${Date.now()}`,
@@ -346,7 +369,29 @@ export function LeaderDashboardProvider({
     setEvents((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const publishDraft = (id: string) => {
+  const loadEventDetails = async (id: string) => {
+    const result = await fetchCommitteeEvent(committeeConfig.committeeCode, id);
+    if (!result.ok) throw new Error(result.message);
+    return result.data;
+  };
+
+  const deleteDraft = async (id: string) => {
+    if (API_ENABLED) {
+      const result = await deleteCommitteeDraftEvent(committeeConfig.committeeCode, id);
+      if (!result.ok) throw new Error(result.message);
+      await reloadDashboard();
+      return;
+    }
+    deleteEvent(id);
+  };
+
+  const publishDraft = async (id: string) => {
+    if (API_ENABLED) {
+      const result = await publishCommitteeEvent(committeeConfig.committeeCode, id);
+      if (!result.ok) throw new Error([result.message, ...result.details.map((detail) => detail.message)].join(" "));
+      await Promise.all([reloadDashboard(), useApi ? reloadPrEvents() : Promise.resolve()]);
+      return;
+    }
     setEvents((prev) =>
       prev.map((e) =>
         e.id === id
@@ -478,7 +523,7 @@ export function LeaderDashboardProvider({
     clubLeadership,
     committeeName,
     committeeDescription,
-    events,
+    events: useApi ? [...events, ...prDrafts.filter((draft) => !events.some((event) => event.id === draft.id))] : events,
     members,
     committees,
     tasks,
@@ -491,6 +536,7 @@ export function LeaderDashboardProvider({
     reloadDashboard,
     registrations,
     canManageEvents,
+    canCreateEvents,
     canManageMembers,
     canAddMembers,
     canManageTasks,
@@ -501,6 +547,8 @@ export function LeaderDashboardProvider({
     updateEvent,
     deleteEvent,
     publishDraft,
+    loadEventDetails,
+    deleteDraft,
     addMember,
     addMemberToCommittee,
     updateMember,
