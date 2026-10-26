@@ -11,8 +11,6 @@ import type {
 import { apiRequest, type ApiResult } from "@/lib/api/client";
 import { formatDate, formatTime } from "@/lib/events/api";
 import { registrantFieldKeyByValue } from "@/components/dashboard/data-analysis/event-form-config";
-import { formatDate, formatTime } from "@/lib/events/api";
-import { registrantFieldKeyByValue } from "@/components/dashboard/data-analysis/event-form-config";
 
 export interface CommitteeDashboardStats {
   committeeMembers: number;
