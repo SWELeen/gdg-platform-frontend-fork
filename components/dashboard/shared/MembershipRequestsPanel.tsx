@@ -9,6 +9,7 @@ import {
   type MembershipDecision,
   type MembershipRequest,
 } from "@/lib/membership-requests/api";
+import { leaderCommitteeConfig } from "./committee-config";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 
 function decisionOrder(status: MembershipDecision) {
@@ -19,7 +20,7 @@ export function MembershipRequestsPanel() {
   const t = useTranslations("dashboard.membershipRequests");
   const locale = useLocale();
   const { committee } = useLeaderDashboard();
-  const committeeCode = committee === "pr" ? "PR" : "DATA";
+  const committeeCode = leaderCommitteeConfig[committee].committeeCode;
   const [items, setItems] = useState<MembershipRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
