@@ -34,7 +34,7 @@ export function TasksSection({
   onOpenCreateTask,
   onEditTask,
 }: TasksSectionProps) {
-  const { tasks, updateTask, deleteTask, canManageTasks, clubLeadership } =
+  const { tasks, updateTask, deleteTask, reviewTask, canManageTasks, clubLeadership } =
     useLeaderDashboard();
   const t = useTranslations("dashboard.leader");
 
