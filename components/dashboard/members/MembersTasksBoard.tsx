@@ -3,11 +3,12 @@
 import { useId } from "react";
 import type { ReactElement } from "react";
 import { useTranslations } from "next-intl";
-import { Calendar, CheckCircle2, Clock, ListTodo } from "lucide-react";
+import { Calendar, CheckCircle2, Clock, Hourglass, ListTodo } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { TaskDoneMark } from "@/components/dashboard/members/TaskDoneMark";
+import { MemberTaskStatusControl } from "@/components/dashboard/members/MemberTaskStatusControl";
 import {
   priorityKeys,
   priorityStyles,
@@ -28,6 +29,7 @@ const priorityAccents: Record<TaskPriority, string> = {
 const columns: { status: TaskStatus; Icon: LucideIcon }[] = [
   { status: "To Do", Icon: ListTodo },
   { status: "In Progress", Icon: Clock },
+  { status: "Pending Review", Icon: Hourglass },
   { status: "Complete", Icon: CheckCircle2 },
 ];
 
@@ -53,6 +55,8 @@ function TaskCard({ task }: { task: DashboardTask }): ReactElement {
       </div>
 
       <p className="mt-2 line-clamp-2 text-xs text-muted">{task.description}</p>
+
+      <MemberTaskStatusControl task={task} />
 
       <div className="mt-3 flex items-center gap-1.5 border-t border-border/60 pt-3 text-xs text-muted">
         <Calendar aria-hidden="true" className="size-3.5 shrink-0" />
@@ -130,7 +134,7 @@ export function MembersTasksBoard({ tasks }: { tasks: DashboardTask[] }): ReactE
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
       {columns.map(({ status, Icon }) => (
         <BoardColumn
           key={status}

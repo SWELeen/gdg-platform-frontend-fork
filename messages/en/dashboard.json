@@ -97,7 +97,8 @@
       "all": "All",
       "inProgress": "In progress",
       "toDo": "To Do",
-      "complete": "Complete"
+      "complete": "Complete",
+      "pendingReview": "Awaiting confirmation"
     },
     "columns": {
       "task": "Task",
@@ -108,7 +109,8 @@
     "status": {
       "inProgress": "In Progress",
       "toDo": "To Do",
-      "complete": "Complete"
+      "complete": "Complete",
+      "pendingReview": "Awaiting confirmation"
     },
     "priority": {
       "high": "High",
@@ -132,7 +134,13 @@
     "listView": "List view",
     "done": "Done",
     "progress": "{done} of {total} completed",
-    "progressLabel": "Task completion"
+    "progressLabel": "Task completion",
+    "actions": {
+      "markDone": "Done (send for confirmation)",
+      "changeStatus": "Change status of {title}",
+      "waitingForLeader": "Waiting for your committee leader to confirm.",
+      "updateFailed": "Could not update the task. Try again."
+    }
   },
   "memberEvents": {
     "title": "My Events",
@@ -550,7 +558,8 @@
       "low": "Low",
       "completed": "Completed",
       "inProgress": "In Progress",
-      "toDo": "To Do"
+      "toDo": "To Do",
+      "pendingReview": "Awaiting confirmation"
     },
     "members": {
       "temporaryTitle": "Temporary Elevated Permissions System",
@@ -803,7 +812,13 @@
       "deleteTitle": "Delete Task",
       "deleteMessage": "Are you sure you want to delete {name}? This will remove it from the committee board.",
       "deleteConfirm": "Delete Task",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "pendingReview": "Awaiting confirmation",
+      "pendingReviewTitle": "Awaiting your confirmation ({count})",
+      "pendingReviewHelp": "Members marked these tasks done. Confirm to complete them, or return them to the member.",
+      "confirmDone": "Confirm completed",
+      "returnToMember": "Return to member",
+      "reviewFailed": "Could not update the task. Try again."
     },
     "taskForm": {
       "editTitle": "Edit Task",
@@ -1232,5 +1247,8 @@
       "level": "Level",
       "gender": "Gender"
     }
+  },
+  "committeeSwitcher": {
+    "label": "Choose a committee"
   }
 }

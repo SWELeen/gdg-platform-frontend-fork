@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { TaskDoneMark } from "@/components/dashboard/members/TaskDoneMark";
+import { MemberTaskStatusControl } from "@/components/dashboard/members/MemberTaskStatusControl";
 import { DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import {
   priorityKeys,
@@ -75,6 +76,7 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
                     <TaskBadge className={statusStyles[task.status]}>
                       {t(`status.${statusKeys[task.status]}`)}
                     </TaskBadge>
+                    <MemberTaskStatusControl task={task} />
                   </td>
                 </tr>
               );
@@ -111,6 +113,7 @@ export function MembersTasksList({ tasks }: { tasks: DashboardTask[] }): ReactEl
                   {t(`status.${statusKeys[task.status]}`)}
                 </TaskBadge>
               </div>
+              <MemberTaskStatusControl task={task} />
             </li>
           );
         })}

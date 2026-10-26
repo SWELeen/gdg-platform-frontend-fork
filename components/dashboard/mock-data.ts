@@ -6,7 +6,8 @@ import { MEMBER_EVENTS_PATH, UPCOMING_EVENTS_PATH } from "@/components/dashboard
 import { MEMBER_HELP_PATH, MEMBER_SETTINGS_PATH } from "@/components/dashboard/members/member-routes";
 
 export type TaskPriority = "High" | "Medium" | "Low";
-export type TaskStatus = "In Progress" | "To Do" | "Complete";
+// "Pending Review": the member marked it done and a committee leader still has to confirm it.
+export type TaskStatus = "In Progress" | "To Do" | "Pending Review" | "Complete";
 
 export interface DashboardUser {
   name: string;

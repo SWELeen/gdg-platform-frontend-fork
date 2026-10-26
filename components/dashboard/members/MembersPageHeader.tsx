@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 
 import { usePathname } from "@/i18n/navigation";
 import {
-  currentUser,
   sidebarPrimaryItems,
   sidebarSecondaryItems,
 } from "@/components/dashboard/mock-data";
@@ -29,7 +28,7 @@ export function MembersPageHeader(): ReactElement {
         </h1>
       )}
       <div className="ms-auto shrink-0">
-        <MembersUserInfo user={currentUser} />
+        <MembersUserInfo />
       </div>
     </header>
   );

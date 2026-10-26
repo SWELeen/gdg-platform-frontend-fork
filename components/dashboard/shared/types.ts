@@ -67,7 +67,8 @@ export interface CommitteeMember {
 }
 
 export type TaskPriority = "High" | "Medium" | "Low";
-export type TaskStatus = "To Do" | "In Progress" | "Completed";
+// "Pending Review": the member marked it done; a committee leader confirms it as Completed.
+export type TaskStatus = "To Do" | "In Progress" | "Pending Review" | "Completed";
 
 export interface CommitteeTask {
   id: string;
