@@ -46,6 +46,7 @@
   "githubDomain": "يجب أن يكون رابطًا من github.com",
   "linkedinDomain": "يجب أن يكون رابطًا من linkedin.com",
   "apiRequired": "الخدمة الآمنة غير متاحة حاليًا. حاول مرة أخرى لاحقًا.",
+  "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
   "authRequestFailed": "تعذر إكمال الطلب. تحقق من بياناتك وحاول مرة أخرى.",
   "emailAlreadyExists": "يوجد حساب مسجل بهذا البريد. سجّل الدخول أو استخدم بريدًا آخر.",
   "signupUniversityEmailMismatch": "البريد الجامعي لا يطابق البريد المكتوب في بيانات الطلب.",

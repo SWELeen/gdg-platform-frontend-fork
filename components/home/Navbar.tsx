@@ -11,18 +11,21 @@ import { useTextDirection } from "@/i18n/useTextDirection";
 import ThemeToggle from "@/components/ui/ThemeToggle"; 
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useHomeSectionHref } from "@/components/layout/useHomeSectionHref";
-import { ChevronDown, LogOut, UserRound } from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogOut, UserRound } from "lucide-react";
 import { API_ENABLED, apiRequest, logoutSession } from "@/lib/api/client";
+import { dashboardPathsFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route";
 
 // Locale-aware Link with the same hover motion as the hash links.
 const MotionLink = motion.create(Link);
 
 function ProfileAccountMenu({
   name,
+  dashboardHref,
   onSignOut,
   variant,
 }: {
   name: string;
+  dashboardHref: string | null;
   onSignOut: () => void;
   variant: "desktop" | "mobile";
 }) {
@@ -84,6 +87,17 @@ function ProfileAccountMenu({
             <UserRound className="h-4 w-4" aria-hidden="true" />
             {t("profile")}
           </Link>
+          {dashboardHref && (
+            <Link
+              role="menuitem"
+              href={dashboardHref}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm hover:bg-surface-muted"
+            >
+              <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+              {t("dashboard")}
+            </Link>
+          )}
         </div>
       )}
     </div>
@@ -103,6 +117,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   const dir = useTextDirection();
   const [isOpen, setIsOpen] = useState(false);
   const [profileName, setProfileName] = useState<string | null>(null);
+  const [dashboardHref, setDashboardHref] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const sectionHref = useHomeSectionHref();
@@ -112,8 +127,10 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   useEffect(() => {
     if (!API_ENABLED) return;
     let active = true;
-    void apiRequest<{ fullName: string }>("/me").then((result) => {
-      if (active && result.ok) setProfileName(result.data.fullName);
+    void apiRequest<AuthenticatedIdentity & { fullName: string }>("/me").then((result) => {
+      if (!active || !result.ok) return;
+      setProfileName(result.data.fullName);
+      setDashboardHref(dashboardPathsFor(result.data)[0] ?? null);
     });
     return () => { active = false; };
   }, []);
@@ -123,6 +140,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   const handleSignOut = async () => {
     await logoutSession();
     setProfileName(null);
+    setDashboardHref(null);
     setIsOpen(false);
     router.replace("/login");
   };
@@ -253,7 +271,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
         </motion.a>
         <ThemeToggle />
         {profileName ? (
-          <ProfileAccountMenu name={profileName} onSignOut={handleSignOut} variant="desktop" />
+          <ProfileAccountMenu name={profileName} dashboardHref={dashboardHref} onSignOut={handleSignOut} variant="desktop" />
         ) : (
           <MotionLink
             href={profileHref}
@@ -355,7 +373,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
 
             {profileName ? (
               <motion.div variants={itemVariants} className="w-full">
-                <ProfileAccountMenu name={profileName} onSignOut={handleSignOut} variant="mobile" />
+                <ProfileAccountMenu name={profileName} dashboardHref={dashboardHref} onSignOut={handleSignOut} variant="mobile" />
               </motion.div>
             ) : (
               <MotionLink

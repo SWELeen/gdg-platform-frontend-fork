@@ -3,14 +3,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { apiRequest } from "@/lib/api/client";
+import { dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route";
 import type { LeaderCommittee } from "./types";
 import { leaderCommitteeConfig } from "./committee-config";
-
-type DashboardIdentity = {
-  memberId: number | null;
-  roles: string[];
-  committees: Array<{ code: string; position: string }>;
-};
 
 type Requirement =
   | { kind: "member" }
@@ -27,7 +22,7 @@ export function DashboardAccessGate({ requirement, children }: { requirement: Re
   useEffect(() => {
     const requested = JSON.parse(requirementKey) as Requirement;
     let active = true;
-    void apiRequest<DashboardIdentity>("/me").then((result) => {
+    void apiRequest<AuthenticatedIdentity>("/me").then((result) => {
       if (!active) return;
       if (!result.ok) {
         router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
@@ -45,7 +40,7 @@ export function DashboardAccessGate({ requirement, children }: { requirement: Re
             );
       setAllowed(hasAccess);
       setReady(true);
-      if (!hasAccess) router.replace(identity.memberId ? "/dashboard/members-dashboard" : "/signup/pending");
+      if (!hasAccess) router.replace(dashboardPathFor(identity));
     }).catch(() => {
       if (!active) return;
       router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
