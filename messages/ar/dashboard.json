@@ -97,7 +97,8 @@
       "all": "الكل",
       "inProgress": "قيد التنفيذ",
       "toDo": "للتنفيذ",
-      "complete": "مكتملة"
+      "complete": "مكتملة",
+      "pendingReview": "بانتظار التأكيد"
     },
     "columns": {
       "task": "المهمة",
@@ -108,7 +109,8 @@
     "status": {
       "inProgress": "قيد التنفيذ",
       "toDo": "للتنفيذ",
-      "complete": "مكتملة"
+      "complete": "مكتملة",
+      "pendingReview": "بانتظار التأكيد"
     },
     "priority": {
       "high": "عالية",
@@ -132,7 +134,13 @@
     "listView": "عرض القائمة",
     "done": "تم",
     "progress": "{done} من {total} مكتملة",
-    "progressLabel": "نسبة إنجاز المهام"
+    "progressLabel": "نسبة إنجاز المهام",
+    "actions": {
+      "markDone": "مكتملة (إرسال للتأكيد)",
+      "changeStatus": "تغيير حالة {title}",
+      "waitingForLeader": "بانتظار تأكيد ليدر اللجنة.",
+      "updateFailed": "ما قدرنا نحدّث المهمة. حاول مرة ثانية."
+    }
   },
   "memberEvents": {
     "title": "فعالياتي",
@@ -550,7 +558,8 @@
       "low": "منخفضة",
       "completed": "مكتملة",
       "inProgress": "قيد التنفيذ",
-      "toDo": "لم تبدأ"
+      "toDo": "لم تبدأ",
+      "pendingReview": "بانتظار التأكيد"
     },
     "members": {
       "temporaryTitle": "نظام الصلاحيات الإدارية المؤقتة",
@@ -803,7 +812,13 @@
       "deleteTitle": "حذف المهمة",
       "deleteMessage": "هل تريد بالتأكيد حذف {name}؟ ستُزال المهمة من لوحة اللجنة.",
       "deleteConfirm": "حذف المهمة",
-      "cancel": "إلغاء"
+      "cancel": "إلغاء",
+      "pendingReview": "بانتظار التأكيد",
+      "pendingReviewTitle": "بانتظار تأكيدك ({count})",
+      "pendingReviewHelp": "الأعضاء حدّدوا هذي المهام كمكتملة. أكّدها عشان تكتمل، أو رجّعها للعضو.",
+      "confirmDone": "تأكيد الاكتمال",
+      "returnToMember": "إرجاع للعضو",
+      "reviewFailed": "ما قدرنا نحدّث المهمة. حاول مرة ثانية."
     },
     "taskForm": {
       "editTitle": "تعديل المهمة",
@@ -1232,5 +1247,8 @@
       "level": "المستوى",
       "gender": "الجنس"
     }
+  },
+  "committeeSwitcher": {
+    "label": "اختر اللجنة"
   }
 }

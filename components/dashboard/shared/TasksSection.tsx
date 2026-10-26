@@ -23,6 +23,13 @@ interface TasksSectionProps {
   onEditTask: (task: CommitteeTask) => void;
 }
 
+const taskStatusKeys: Record<TaskStatus, string> = {
+  "To Do": "tasks.toDo",
+  "In Progress": "tasks.inProgress",
+  "Pending Review": "tasks.pendingReview",
+  Completed: "tasks.complete",
+};
+
 export function TasksSection({
   onOpenCreateTask,
   onEditTask,
@@ -35,6 +42,21 @@ export function TasksSection({
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [filterCommittee, setFilterCommittee] = useState(ALL);
   const [taskToDelete, setTaskToDelete] = useState<CommitteeTask | null>(null);
+  const [reviewing, setReviewing] = useState<string | null>(null);
+  const [reviewError, setReviewError] = useState("");
+  const pendingReviewTasks = tasks.filter((task) => task.status === "Pending Review");
+
+  const review = async (task: CommitteeTask, decision: "APPROVE" | "RETURN") => {
+    setReviewing(task.id);
+    setReviewError("");
+    try {
+      await reviewTask(task.id, decision);
+    } catch (error) {
+      setReviewError(error instanceof Error && error.message ? error.message : t("tasks.reviewFailed"));
+    } finally {
+      setReviewing(null);
+    }
+  };
 
   const filteredTasks = tasks.filter((t) => {
     if (filterPriority !== "all" && t.priority !== filterPriority) return false;
@@ -138,6 +160,53 @@ export function TasksSection({
           )}
         </div>
       </div>
+
+      {/* Tasks members marked done, waiting for a leader to confirm them */}
+      {pendingReviewTasks.length > 0 && (
+        <section
+          aria-labelledby="tasks-pending-review"
+          className="rounded-2xl border border-violet-300 bg-violet-50/60 p-4 dark:border-violet-800/60 dark:bg-violet-950/20"
+        >
+          <h3 id="tasks-pending-review" className="text-sm font-bold text-foreground">
+            {t("tasks.pendingReviewTitle", { count: pendingReviewTasks.length })}
+          </h3>
+          <p className="mt-1 text-xs text-muted">{t("tasks.pendingReviewHelp")}</p>
+          {reviewError && (
+            <p role="alert" className="mt-2 text-xs font-medium text-rose-600 dark:text-rose-400">{reviewError}</p>
+          )}
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+            {pendingReviewTasks.map((task) => (
+              <li key={task.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-foreground">{task.title}</p>
+                  <p className="text-[11px] text-muted">{task.assignedMemberName}</p>
+                </div>
+                {canManageTasks && (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      disabled={reviewing === task.id}
+                      onClick={() => void review(task, "APPROVE")}
+                      className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                    >
+                      <CheckCircle2 className="size-3.5" />
+                      {t("tasks.confirmDone")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={reviewing === task.id}
+                      onClick={() => void review(task, "RETURN")}
+                      className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-surface-muted disabled:opacity-60"
+                    >
+                      {t("tasks.returnToMember")}
+                    </button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Notion-Style Kanban Board View */}
       {viewMode === "board" ? (
@@ -392,7 +461,7 @@ export function TasksSection({
                   <td className="px-4 py-3.5 text-muted">{task.assignedMemberName}</td>
                   <td className="px-4 py-3.5 text-muted">{task.dueDate}</td>
                   <td className="px-4 py-3.5">{getPriorityBadge(task.priority)}</td>
-                  <td className="px-4 py-3.5 font-semibold text-foreground/80">{task.status === "To Do" ? t("tasks.toDo") : task.status === "In Progress" ? t("tasks.inProgress") : t("tasks.complete")}</td>
+                  <td className="px-4 py-3.5 font-semibold text-foreground/80">{t(taskStatusKeys[task.status])}</td>
                   <td className="px-5 py-3.5 text-end">
                     {canManageTasks && (
                       <div className="inline-flex items-center gap-1">

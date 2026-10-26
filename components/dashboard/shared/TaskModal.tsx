@@ -298,6 +298,8 @@ function TaskForm({ taskToEdit, onClose }: TaskFormProps) {
             >
               <option value="To Do">{t("tasks.toDo")}</option>
               <option value="In Progress">{t("tasks.inProgress")}</option>
+              {/* Set by the member, not chosen here; listed so an awaiting task still shows its status. */}
+              <option value="Pending Review" disabled>{t("tasks.pendingReview")}</option>
               <option value="Completed">{t("tasks.complete")}</option>
             </select>
           </div>

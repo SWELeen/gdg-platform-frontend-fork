@@ -79,6 +79,8 @@ interface LeaderDashboardContextValue {
   addTask: (task: Omit<CommitteeTask, "id">) => Promise<void>;
   updateTask: (id: string, updates: Partial<CommitteeTask>) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
+  /** Confirms a task a member marked done, or sends it back. */
+  reviewTask: (id: string, decision: "APPROVE" | "RETURN") => Promise<void>;
   // Points Actions
   updateMemberPoints: (memberId: string, delta: number, reason: string) => Promise<void>;
   updateRegistrationStatus: (
@@ -504,6 +506,12 @@ export function LeaderDashboardProvider({
     await reloadDashboard();
   };
 
+  const reviewTask = async (id: string, decision: "APPROVE" | "RETURN") => {
+    const result = await reviewCommitteeTask(committeeConfig.committeeCode, id, decision);
+    if (!result.ok) throw new Error(result.message);
+    await reloadDashboard();
+  };
+
   const deleteTask = async (id: string) => {
     const result = await deleteCommitteeTask(committeeConfig.committeeCode, id);
     if (!result.ok) throw new Error(result.message);
@@ -558,6 +566,7 @@ export function LeaderDashboardProvider({
     addTask,
     updateTask,
     deleteTask,
+    reviewTask,
     updateMemberPoints,
     updateRegistrationStatus,
     registrationError,
