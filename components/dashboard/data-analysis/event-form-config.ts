@@ -56,5 +56,5 @@ export interface DraftQuestion {
   type: string;
   text: string;
   options?: string[];
-  required: true;
+  required: boolean;
 }

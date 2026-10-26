@@ -17,6 +17,7 @@ import {
 import { ConfirmModal } from "../shared/ConfirmModal";
 import { PRAttendancePanel } from "./PRAttendancePanel";
 import { CreateEventModal } from "../data-analysis/CreateEventForm";
+import { EventPreviewModal, toEventPreviewData, type EventPreviewData } from "../data-analysis/EventPreviewModal";
 import { API_ENABLED } from "@/lib/api/client";
 import {
   ArrowLeft,
@@ -33,6 +34,7 @@ import {
   Plus,
   Send,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 
 function RegistrationStatusBadge({
@@ -217,12 +219,33 @@ export function PROverviewRegistrations() {
 }
 
 export function PREventsList() {
-  const { events, canManageEvents, addEvent, publishDraft } = useLeaderDashboard();
+  const { events, canManageEvents, canCreateEvents, addEvent, publishDraft, loadEventDetails, deleteDraft } = useLeaderDashboard();
   const router = useRouter();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [createEventOpen, setCreateEventOpen] = useState(false);
+  const [publishError, setPublishError] = useState("");
+  const [draftPreview, setDraftPreview] = useState<{ id: string; data: EventPreviewData } | null>(null);
+  const publish = (id: string) => {
+    setPublishError("");
+    publishDraft(id).catch((error: unknown) => {
+      setPublishError(error instanceof Error && error.message ? error.message : t("eventManagement.publishFailed"));
+    });
+  };
+  const [draftToDelete, setDraftToDelete] = useState<{ id: string; title: string } | null>(null);
+  const removeDraft = (id: string) => {
+    setPublishError("");
+    deleteDraft(id).catch((error: unknown) => {
+      setPublishError(error instanceof Error && error.message ? error.message : t("eventManagement.deleteDraftFailed"));
+    });
+  };
+  const openDraftPreview = (id: string) => {
+    setPublishError("");
+    loadEventDetails(id)
+      .then((details) => setDraftPreview({ id, data: toEventPreviewData(details) }))
+      .catch(() => setPublishError(t("eventManagement.previewFailed")));
+  };
   const availableEvents = events.filter((event) => event.status !== "Draft");
   const draftEvents = events.filter((event) => event.status === "Draft");
   const filteredEvents = availableEvents.filter((event) => {
@@ -239,13 +262,14 @@ export function PREventsList() {
           <h2 className="text-xl font-bold text-foreground sm:text-2xl">{t("registrations.title")}</h2>
           <p className="mt-1 text-sm text-muted">{t("registrations.description")}</p>
         </div>
-        {canManageEvents && <button type="button" onClick={() => setCreateEventOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><Plus className="size-4" />{t("eventForm.create")}</button>}
+        {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => setCreateEventOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><Plus className="size-4" />{t("eventForm.create")}</button>}
       </div>
 
       {draftEvents.length > 0 && <section className="rounded-2xl border border-border bg-surface-muted/40 p-4">
         <div className="flex items-center gap-2"><Sparkles className="size-4 text-blue-500" /><h3 className="text-sm font-bold text-foreground">{t("eventManagement.unpublished", { count: draftEvents.length })}</h3></div>
         <p className="mt-1 text-xs text-muted">{t("eventManagement.draftsDescription")}</p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="min-w-0"><span className="block truncate text-sm font-semibold text-foreground">{draft.title}</span><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div><button type="button" onClick={() => publishDraft(draft.id)} className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div>)}</div>
+        {publishError && <p role="alert" className="mt-2 text-xs font-medium text-rose-600 dark:text-rose-400">{publishError}</p>}
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="min-w-0"><button type="button" onClick={() => openDraftPreview(draft.id)} title={t("eventManagement.previewDraft")} className="block max-w-full truncate text-start text-sm font-semibold text-foreground underline-offset-2 hover:text-blue-600 hover:underline">{draft.title}</button><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div><div className="flex shrink-0 items-center gap-1.5"><button type="button" onClick={() => setDraftToDelete({ id: draft.id, title: draft.title })} aria-label={t("eventManagement.deleteDraft")} title={t("eventManagement.deleteDraft")} className="rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"><Trash2 className="size-4" /></button><button type="button" onClick={() => publish(draft.id)} className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div></div>)}</div>
       </section>}
 
       <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-3 shadow-2xs sm:flex-row sm:items-center">
@@ -321,6 +345,8 @@ export function PREventsList() {
           </div>
         )}
       </div>
+      <ConfirmModal isOpen={Boolean(draftToDelete)} onClose={() => setDraftToDelete(null)} onConfirm={() => { if (draftToDelete) removeDraft(draftToDelete.id); }} title={t("eventManagement.deleteDraft")} message={t("eventManagement.deleteDraftConfirm", { title: draftToDelete?.title ?? "" })} confirmText={t("eventManagement.deleteDraft")} cancelText={t("members.cancel")} danger />
+      {draftPreview && <EventPreviewModal data={draftPreview.data} editLabel={t("eventManagement.closePreview")} onEdit={() => setDraftPreview(null)} onPublish={() => { const id = draftPreview.id; setDraftPreview(null); publish(id); }} />}
       <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} />
     </div>
   );

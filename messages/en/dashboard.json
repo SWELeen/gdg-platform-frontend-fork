@@ -888,10 +888,17 @@
       "deleteMessage": "Are you sure you want to delete {name}? This will permanently remove it from the committee schedule.",
       "pageTitle": "Committee Events Management",
       "unpublished": "Unpublished Drafts ({count})",
-      "draftsDescription": "These events are saved locally and are NOT visible on the public platform until published.",
+      "draftsDescription": "These events are saved but NOT visible on the public platform until published.",
       "pagination": "Events pagination",
       "pageLabel": "Page {page}",
-      "openDetails": "Open details page"
+      "openDetails": "Open details page",
+      "publishFailed": "Could not publish the draft. Try again.",
+      "previewDraft": "Preview this draft",
+      "previewFailed": "Could not open the draft. Try again.",
+      "closePreview": "Close",
+      "deleteDraft": "Delete draft",
+      "deleteDraftConfirm": "Delete the draft \"{title}\"? This cannot be undone.",
+      "deleteDraftFailed": "Could not delete the draft. Try again."
     },
     "eventReports": {
       "eyebrow": "Event reports",
@@ -985,7 +992,8 @@
         "capacity": "Capacity",
         "deadline": "Registration deadline",
         "requirements": "Requirements",
-        "image": "Event image"
+        "image": "Event image",
+        "status": "Status"
       },
       "placeholders": {
         "name": "Enter event name",
@@ -1027,7 +1035,7 @@
       },
       "questions": {
         "title": "Custom questions",
-        "help": "Attendees must answer these questions when they register.",
+        "help": "Drag questions to reorder them. Attendees must answer the required ones when they register.",
         "add": "Add more questions",
         "formTitle": "Add a registration question",
         "type": "Question type",
@@ -1055,13 +1063,19 @@
         "errors": {
           "type": "Select a question type.",
           "text": "Enter the question text.",
-          "options": "Add at least two options."
-        }
+          "options": "Add at least two options.",
+          "duplicateOptions": "Each option must be different."
+        },
+        "optionalBadge": "Optional",
+        "requiredToggle": "Required question",
+        "moveUp": "Move question {number} up",
+        "moveDown": "Move question {number} down"
       },
       "actions": {
         "cancel": "Cancel",
         "preview": "Preview",
-        "publish": "Publish Event"
+        "publish": "Publish Event",
+        "saveDraft": "Save Draft"
       },
       "errors": {
         "summary": "{count, plural, one {# field needs} other {# fields need}} your attention. Fix the highlighted fields to continue.",
@@ -1073,7 +1087,8 @@
         "deadlinePast": "Registration deadline cannot be in the past.",
         "deadlineAfterEvent": "Registration deadline cannot be after the event date.",
         "imageRequired": "Event image is required.",
-        "imageType": "Choose an image file (for example PNG, JPG, or WebP)."
+        "imageType": "Choose an image file (for example PNG, JPG, or WebP).",
+        "saveFailed": "Could not save the event. Try again."
       },
       "discard": {
         "title": "Discard this event?",
@@ -1107,6 +1122,10 @@
         "demoNote": "Demo data: events are kept for this browser session until the events service is connected.",
         "viewEvent": "View Event",
         "close": "Close"
+      },
+      "statusOptions": {
+        "publish": "Publish",
+        "draft": "Draft"
       }
     },
     "eventDetails": {

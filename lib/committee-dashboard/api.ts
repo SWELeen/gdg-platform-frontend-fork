@@ -3,11 +3,14 @@ import type {
   CommitteeMember,
   CommitteeOption,
   CommitteeTask,
+  EventType,
   LeaderDashboardSeed,
   PointHistoryItem,
   RecentActivityItem,
 } from "@/components/dashboard/shared/types";
 import { apiRequest, type ApiResult } from "@/lib/api/client";
+import { formatDate, formatTime } from "@/lib/events/api";
+import { registrantFieldKeyByValue } from "@/components/dashboard/data-analysis/event-form-config";
 
 export interface CommitteeDashboardStats {
   committeeMembers: number;
@@ -47,6 +50,7 @@ export interface CommitteeDashboardData extends LeaderDashboardSeed {
     canManagePoints: boolean;
     canManageRegistrations: boolean;
     canAddMembers: boolean;
+    canCreateEvents?: boolean;
   };
   /** Club leadership only: every committee, for the filters. */
   committees?: CommitteeOption[];
@@ -62,7 +66,7 @@ type ApiTask = {
 
 type RawCommitteeDashboardData = Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
   members: ApiMember[];
-  events: { id: string; title: string; date: string; endsAt: string; location: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
+  events: { id: string; title: string; date: string; eventType?: string | null; endsAt: string; location: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
   tasks: ApiTask[];
   pointHistory: (Omit<PointHistoryItem, "timestamp"> & { createdAt: string })[];
   recentActivities: (Omit<RecentActivityItem, "timeAgo"> & { createdAt: string })[];
@@ -95,9 +99,9 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
       events: data.events.map((event): CommitteeEvent => ({
         id: event.id,
         title: event.title,
-        type: "Workshop",
-        date: event.date,
-        time: "",
+        type: (event.eventType as EventType | null | undefined) ?? "Workshop",
+        date: formatDate(event.date),
+        time: formatTime(event.date),
         location: event.location ?? "",
         registered: event.registered,
         confirmed: event.confirmed,
@@ -163,6 +167,85 @@ export async function createCommitteeMember(code: string, member: { name: string
     method: "POST",
     body: { fullName: member.name, email: member.email },
   });
+}
+
+/** Exact start, end and registration close times the create-event form picked, as ISO strings. */
+export interface EventSchedule {
+  startsAt: string;
+  endsAt: string;
+  registrationDeadline: string;
+}
+
+const API_QUESTION_TYPES: Record<string, "TEXT" | "RADIO" | "CHECKBOX"> = {
+  "short-answer": "TEXT",
+  "long-answer": "TEXT",
+  "single-choice": "RADIO",
+  "yes-no": "RADIO",
+  "multiple-choice": "CHECKBOX",
+  checkboxes: "CHECKBOX",
+};
+
+export async function createCommitteeEvent(
+  code: string,
+  event: Omit<CommitteeEvent, "id" | "created" | "updated">,
+  schedule: EventSchedule,
+) {
+  return apiRequest<{ id: string }>(`/committees/${encodeURIComponent(code)}/events`, {
+    method: "POST",
+    body: {
+      name: event.title,
+      description: event.description ?? "",
+      eventType: event.type,
+      ...schedule,
+      location: event.location,
+      ...(event.mapsLink ? { mapsLink: event.mapsLink } : {}),
+      capacity: event.capacity,
+      ...(event.speakers ? { speakers: event.speakers } : {}),
+      ...(event.requirements ? { requirements: event.requirements } : {}),
+      requiredRegistrantFields: (event.requiredRegistrantFields ?? [])
+        .map((value) => registrantFieldKeyByValue[value])
+        .filter(Boolean),
+      status: event.isDraft ? "DRAFT" : "PUBLISHED",
+      questions: (event.registrationQuestions ?? []).map((question) => ({
+        text: question.text,
+        type: API_QUESTION_TYPES[question.type] ?? "TEXT",
+        required: question.required,
+        ...(question.options ? { options: question.options } : {}),
+      })),
+    },
+  });
+}
+
+/** Full details of one of the committee's events, drafts included (event creators only). */
+export interface CommitteeEventDetails {
+  id: string;
+  name: string;
+  description: string | null;
+  eventType: string | null;
+  status: string;
+  startsAt: string;
+  endsAt: string;
+  registrationDeadline: string;
+  location: string | null;
+  mapsLink: string | null;
+  capacity: number;
+  speakers: string | null;
+  requirements: string | null;
+  imageUrl: string | null;
+  questions: { questionId: number; questionText: string; questionType: string; isRequired: boolean; options: string[] | null }[];
+}
+
+export function fetchCommitteeEvent(code: string, eventId: string) {
+  return apiRequest<CommitteeEventDetails>(`/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}`);
+}
+
+/** Deletes a draft; the backend refuses published events. */
+export function deleteCommitteeDraftEvent(code: string, eventId: string) {
+  return apiRequest(`/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}`, { method: "DELETE" });
+}
+
+export async function publishCommitteeEvent(code: string, eventId: string) {
+  return apiRequest(`/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}/publish`, { method: "POST" });
 }
 
 /** Club leadership: adds an existing member to another committee as a Member. */

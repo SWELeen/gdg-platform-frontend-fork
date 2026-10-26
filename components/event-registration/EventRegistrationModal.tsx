@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import type { HomeEvent } from "@/components/home/EventCard";
 import { EventInfo } from "./EventInfo";
-import { eventRegistrationMock } from "@/data/event-registration";
+import { eventRegistrationMock, type EventInfoData } from "@/data/event-registration";
 import { RegistrationForm } from "./RegistrationForm";
 import { API_ENABLED } from "@/lib/api/client";
 import { fetchEventDetails, toRegistrationQuestion } from "@/lib/events/api";
@@ -25,6 +25,7 @@ export default function EventRegistrationModal({
     API_ENABLED ? "loading" : "ready",
   );
   const [questionRetry, setQuestionRetry] = useState(0);
+  const [details, setDetails] = useState<{ description: string; speakers: string } | null>(null);
   useEffect(() => {
     if (!API_ENABLED) return;
     let active = true;
@@ -35,12 +36,16 @@ export default function EventRegistrationModal({
         return;
       }
       setQuestions(details.questions.map(toRegistrationQuestion));
+      setDetails({ description: details.description ?? "", speakers: details.speakers ?? "" });
       setQuestionsState("ready");
     });
     return () => { active = false; };
   }, [event.id, questionRetry]);
-  const eventInfo = {
-    ...eventRegistrationMock,
+  // Demo mode keeps the sample description and speaker; real events show only what their creator entered.
+  const eventInfo: EventInfoData = {
+    ...(API_ENABLED
+      ? { description: details?.description ?? event.description ?? "", speakersText: details?.speakers }
+      : eventRegistrationMock),
     name: event.name,
     date: event.date,
     time: event.time,
