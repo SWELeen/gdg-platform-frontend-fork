@@ -9,7 +9,9 @@ import { validateConfirmPassword, validatePassword } from "@/app/lib/validation/
 import {
   branchOptions,
   collegeOptions,
+  committeeCodes,
   committeeOptions,
+  type CommitteeOption,
   genderOptions,
   levelOptions,
   majorOptions,
@@ -21,22 +23,6 @@ import SignupProgress from "./SignupProgress"
 import { useRouter } from "@/i18n/navigation"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 
-const membershipCommitteeCodes: Record<string, string> = {
-  "Project Management Committee": "PM",
-  "Public Relations Committee": "PR",
-  "Digital Media and Design Committee": "MEDIA",
-  "Content Writing Committee": "CONTENT",
-  "Artificial Intelligence Committee": "AI",
-  "Data Analytics Committee": "DATA",
-  "Cybersecurity Committee": "CYBER",
-  "Robotics Committee": "ROBOTICS",
-  "Automation Committee": "AUTOMATION",
-  "Web design and development": "WEB",
-}
-
-function membershipCommitteeCode(name: string) {
-  return membershipCommitteeCodes[name] ?? name.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 20)
-}
 
 type FieldName =
   | "fullName" | "phone" | "personalEmail" | "universityEmail" | "password" | "confirmPassword" | "gender"
@@ -114,7 +100,7 @@ function validateField(field: FieldName, values: FormValues) {
     case "phone": return validatePhone(value)
     case "committees":
       if (!values.committees.length && !values.developerCommitteesLeader && !values.advisor) return "committeeRequired"
-      return values.committees.every((item) => committeeOptions.includes(item as typeof committeeOptions[number]))
+      return values.committees.every((item) => committeeOptions.includes(item as CommitteeOption))
         ? ""
         : "fieldInvalid"
     default: return validateChoice(field, value)
@@ -365,7 +351,7 @@ export default function SignupForm() {
         registrationType: membership === "member" ? "MEMBER" : "NON_MEMBER",
         applicationData,
         committees: membership === "member" ? values.committees.map((committee) => ({
-          committeeCode: membershipCommitteeCode(committee),
+          committeeCode: committeeCodes[committee as CommitteeOption],
           requestedRole: values.committeeRoles[committee],
         })) : [],
         requestedGlobalRoles: membership === "member" ? [
