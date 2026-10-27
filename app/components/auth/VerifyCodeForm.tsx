@@ -149,7 +149,8 @@ export default function VerifyCodeForm() {
       }
       if (verified.data.authenticated === false) {
         window.sessionStorage.removeItem("gdg.pending-signup")
-        router.replace("/signup/pending")
+        // Shared-code signups get no session here, so a ready non-member signs in next.
+        router.replace(verified.data.registrationPendingApproval ? "/signup/pending" : "/login")
         setIsSubmitting(false)
         return
       }
@@ -160,6 +161,11 @@ export default function VerifyCodeForm() {
         setPhase("university")
         setCode(Array.from({ length: CODE_LENGTH }, () => ""))
         setIsSubmitting(false)
+        return
+      }
+      if (verified.data.registrationPendingApproval === false) {
+        window.sessionStorage.removeItem("gdg.pending-signup")
+        router.replace("/")
         return
       }
     } else {

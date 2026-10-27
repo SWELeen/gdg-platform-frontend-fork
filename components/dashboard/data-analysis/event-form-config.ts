@@ -16,18 +16,25 @@ export type RegistrantFieldKey = (typeof registrantFieldKeys)[number];
 /** Values stored on CommitteeEvent.requiredRegistrantFields (unchanged data shape). */
 export const requiredRegistrantFields: string[] = [
   "Full name",
-  "University ID",
-  "College",
   "Major",
   "Phone number",
   "Email address",
   "GDG on Campus membership",
 ];
 
+/** Attendee details read from each account; university ID and college are asked as event questions. */
+export const accountRegistrantFields: RegistrantFieldKey[] = ["fullName", "email", "phone", "major", "membership"];
+
 /** Stored value → translation key, so stored English values render in either locale. */
-export const registrantFieldKeyByValue: Record<string, RegistrantFieldKey> = Object.fromEntries(
-  requiredRegistrantFields.map((value, index) => [value, registrantFieldKeys[index]]),
-);
+export const registrantFieldKeyByValue: Record<string, RegistrantFieldKey> = {
+  "Full name": "fullName",
+  "University ID": "universityId",
+  College: "college",
+  Major: "major",
+  "Phone number": "phone",
+  "Email address": "email",
+  "GDG on Campus membership": "membership",
+};
 
 export const questionTypes = [
   "short-answer",

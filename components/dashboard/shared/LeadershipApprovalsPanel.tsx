@@ -4,22 +4,26 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { decideLeadershipApplication, fetchLeadershipApplications, type LeadershipApplication } from "@/lib/membership-requests/api";
 
+// A failed decision explains itself instead of reading as a failed load.
+function decisionErrorKey(status: number) {
+  if (status === 403) return "notAllowed";
+  if (status === 404 || status === 409) return "alreadyHandled";
+  return "decisionFailed";
+}
+
 export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER_COMMITTEES" }) {
   const t = useTranslations("dashboard.leadershipApprovals");
   const [items, setItems] = useState<LeadershipApplication[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [decisionError, setDecisionError] = useState("");
   const [busyId, setBusyId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     const result = await fetchLeadershipApplications(scope);
-    if (result.ok) {
-      setItems(result.data);
-      setError("");
-    } else {
-      setError(result.message);
-    }
+    if (result.ok) setItems(result.data);
+    setLoadFailed(!result.ok);
     setLoading(false);
   }, [scope]);
 
@@ -29,9 +33,11 @@ export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER
 
   async function decide(item: LeadershipApplication, decision: "APPROVED" | "REJECTED") {
     setBusyId(item.id);
+    setDecisionError("");
     const result = await decideLeadershipApplication(item, decision);
-    if (!result.ok) setError(result.message);
-    else await load();
+    if (!result.ok) setDecisionError(decisionErrorKey(result.status));
+    // Refresh either way: a request someone else already handled drops off the list.
+    await load();
     setBusyId(null);
   }
 
@@ -39,8 +45,9 @@ export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER
     <section className="rounded-2xl border border-border bg-surface p-5 shadow-2xs" aria-labelledby="leadership-approvals-title">
       <h2 id="leadership-approvals-title" className="text-lg font-bold">{t("title")}</h2>
       {loading && <p className="mt-4 text-sm text-foreground/60" aria-live="polite">{t("loading")}</p>}
-      {!loading && error && <p className="mt-4 text-sm text-gdg-red" role="alert">{t("error")}</p>}
-      {!loading && !error && items.length === 0 && <p className="mt-4 text-sm text-foreground/60">{t("empty")}</p>}
+      {!loading && loadFailed && <p className="mt-4 text-sm text-gdg-red" role="alert">{t("error")}</p>}
+      {decisionError && <p className="mt-4 text-sm text-gdg-red" role="alert">{t(decisionError)}</p>}
+      {!loading && !loadFailed && items.length === 0 && <p className="mt-4 text-sm text-foreground/60">{t("empty")}</p>}
       <div className="mt-4 space-y-4">
         {items.map((item, index) => (
           <article key={`${item.id}-${item.type}-${item.committee?.committeeCode ?? item.role?.roleCode ?? index}`} className="rounded-xl border border-border p-4">

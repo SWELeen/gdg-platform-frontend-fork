@@ -20,6 +20,9 @@
     "loading": "Loading requests…",
     "empty": "There are no pending leadership requests.",
     "error": "Requests could not be loaded. Please try again.",
+    "notAllowed": "You can't decide this request. Requests you submitted yourself go to club leadership.",
+    "alreadyHandled": "This request was already decided or moved to another approver. The list has been refreshed.",
+    "decisionFailed": "The decision was not saved. Please try again.",
     "approve": "Approve",
     "reject": "Reject"
   },
@@ -694,11 +697,19 @@
       "reviewDescription": "Review submitted information and event-specific answers.",
       "applicantInfo": "Applicant information",
       "emptyProfile": "No additional profile information was included with this registration.",
-      "emailNotice": "Confirmation messages and response deadlines require backend support; this dashboard does not send email.",
       "questionsAnswers": "Registration questions & answers",
       "emptyAnswers": "No event-specific questions or answers are available in the current registration data.",
       "waitlist": "Add to waitlist",
       "reject": "Reject",
+      "seatsLabel": "Seats taken",
+      "capacityFull": "This event is full ({taken} of {capacity} seats). Add new applicants to the waitlist: when someone declines or misses the confirmation deadline, the first person on the waitlist gets the seat automatically.",
+      "acceptDisabledFull": "The event is full. Add this applicant to the waitlist instead.",
+      "notes": {
+        "awaitingConfirmation": "The applicant was emailed a link to confirm their place before the deadline.",
+        "confirmed": "The applicant confirmed and received their attendance QR code by email.",
+        "seatFreed": "The seat was freed. If anyone is on the waitlist, the first person was offered it automatically and emailed.",
+        "lateCancellation": "The applicant cancelled less than two hours before the event, so it is recorded as a late cancellation. The seat went to the waitlist if there is one."
+      },
       "accept": "Accept",
       "close": "Close",
       "placeWaitlist": "Place {name} on the waitlist?",
@@ -729,13 +740,9 @@
       "recordsNotice": "Registration records and submitted answers will appear here when provided by the platform.",
       "closeApplicant": "Close applicant details",
       "registeredAt": "Registered",
-      "confirmation": "Confirmation: {status}",
-      "automaticPromotionNotice": "The backend should promote the first eligible waitlisted applicant after a decline or expired confirmation. Automatic promotion is not performed in the frontend.",
       "acceptRegistration": "Accept registration",
       "rejectRegistration": "Reject registration",
       "confirmDecision": "Confirm {decision} for {name}?",
-      "sendConfirmationUnavailable": "Send confirmation request (unavailable)",
-      "sendConfirmationTitle": "Available when backend confirmation delivery is implemented",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "statuses": {
@@ -747,6 +754,7 @@
         "confirmationNeeded": "Confirmation needed",
         "awaitingConfirmation": "Awaiting confirmation",
         "confirmed": "Confirmed",
+        "lateCancellation": "Late cancellation",
         "confirmationDeclined": "Confirmation declined",
         "confirmationExpired": "Confirmation expired"
       },
@@ -1027,7 +1035,7 @@
         "previewAlt": "Selected event image"
       },
       "registration": {
-        "description": "Every attendee fills in these fields when registering. They are shown here as a read-only preview.",
+        "description": "These details come from each attendee's account, so they don't type them again. Need a university ID or college? Add it as a question below.",
         "fields": {
           "fullName": "Full name",
           "universityId": "University ID",

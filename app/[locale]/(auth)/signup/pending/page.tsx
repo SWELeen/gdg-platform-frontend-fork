@@ -18,9 +18,7 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
     <main className="flex min-h-screen min-w-0 flex-col bg-white text-primary-font lg:h-screen lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount />
       <section className="flex flex-1 items-center justify-center bg-white">
-          <AuthCard size="sm" title={t("title")} description={t("description")}>
-            <p className="mt-4 text-center text-sm text-foreground/65">{t("description")}</p>
-          </AuthCard>
+          <AuthCard size="sm" title={t("title")} description={t("description")}>{null}</AuthCard>
       </section>
     </main>
   )

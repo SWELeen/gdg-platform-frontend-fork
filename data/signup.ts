@@ -109,15 +109,3 @@ export const committeeCodes: Record<CommitteeOption, string> = {
 
 export const roleOptions = ["Leader", "Co-Leader", "Member"] as const;
 
-export const eventRegistrationSourceOptions = [
-  "WhatsApp",
-  "Our Platform",
-  "LinkedIn",
-  "me-qr.com",
-  "luma feed",
-  "Google",
-  "instgram",
-  "tech",
-] as const;
-
-export const eventRegistrationMembershipValues = ["yes", "no"] as const;

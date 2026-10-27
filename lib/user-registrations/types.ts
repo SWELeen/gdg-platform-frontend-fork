@@ -40,4 +40,6 @@ export interface UserRegistration {
 
 export type UserRegistrationsResult =
   | { state: "ready"; registrations: UserRegistration[] }
-  | { state: "not-configured" };
+  // signed-out: the visitor must sign in (e.g. opened an email link elsewhere).
+  | { state: "signed-out" }
+  | { state: "error" };

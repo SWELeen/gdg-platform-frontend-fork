@@ -41,6 +41,7 @@ export default function UpcomingEvents() {
           time: formatTime(event.startsAt),
           location: event.location ?? "",
           description: event.description ?? undefined,
+          registrationOpen: event.registrationOpen,
         })),
       ),
     );
@@ -68,11 +69,13 @@ export default function UpcomingEvents() {
     const event = homepageEvents.find((item) => item.id === eventId);
     if (!event) return;
     window.history.replaceState(null, "", `${pathname}#events`);
+    if (event.registrationOpen === false) return;
     const openModal = window.setTimeout(() => setEventToRegister(event), 0);
     return () => window.clearTimeout(openModal);
   }, [homepageEvents, pathname]);
 
   const handleRegister = async (event: HomeEvent) => {
+    if (event.registrationOpen === false) return;
     if (!API_ENABLED) {
       setEventToRegister(event);
       return;

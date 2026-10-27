@@ -11,6 +11,10 @@
     "dashboard": "لوحة التحكم",
     "signOut": "تسجيل الخروج"
   },
+  "workspaces": {
+    "label": "التنقل بين لوحاتك",
+    "memberDashboard": "لوحة العضو"
+  },
   "language": {
     "label": "اللغة",
     "en": "الإنجليزية",
