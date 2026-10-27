@@ -4,6 +4,7 @@ import { usePathname } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import {
   LayoutDashboard,
   Calendar,
@@ -66,13 +67,18 @@ export function LeaderSidebar({
       <div>
         {/* Workspace Pill Card */}
         <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-surface-muted/60 p-3 shadow-2xs">
-          <div>
+          <div className="min-w-0">
             <span className="block text-[11px] font-bold uppercase tracking-wider text-muted">
               {t("nav.leaderWorkspace")}
             </span>
-            <span className="mt-0.5 block text-sm font-semibold text-foreground">
-              {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
-            </span>
+            <WorkspaceSwitcher
+              className="mt-1 w-full"
+              fallback={
+                <span className="mt-0.5 block text-sm font-semibold text-foreground">
+                  {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
+                </span>
+              }
+            />
           </div>
           {onCloseMobile && (
             <button

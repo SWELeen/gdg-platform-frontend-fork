@@ -19,6 +19,10 @@ import { PRAttendancePanel } from "./PRAttendancePanel";
 import { CreateEventModal } from "../data-analysis/CreateEventForm";
 import { EventPreviewModal, toEventPreviewData, type EventPreviewData } from "../data-analysis/EventPreviewModal";
 import { API_ENABLED } from "@/lib/api/client";
+import { registrantFieldKeys, type RegistrantFieldKey } from "../data-analysis/event-form-config";
+
+const isRegistrantFieldKey = (key: string): key is RegistrantFieldKey =>
+  (registrantFieldKeys as readonly string[]).includes(key);
 import {
   ArrowLeft,
   Calendar,
@@ -41,13 +45,16 @@ function RegistrationStatusBadge({
   status,
   confirmationStatus,
   waitlistPosition,
+  lateCancellation = false,
 }: {
   status: RegistrationStatus;
   confirmationStatus?: RegistrationConfirmationStatus;
   waitlistPosition?: number;
+  lateCancellation?: boolean;
 }) {
   const t = useTranslations("dashboard.leader");
-  const label = status === "Waitlisted"
+  const label = lateCancellation ? t("registrations.statuses.lateCancellation")
+    : status === "Waitlisted"
     ? waitlistPosition ? t("registrations.statuses.waitlistPosition", { position: waitlistPosition }) : t("registrations.statuses.waitlisted")
     : status === "Accepted" && confirmationStatus === "NotSent" ? t("registrations.statuses.confirmationNeeded")
     : status === "Accepted" && confirmationStatus === "Pending" ? t("registrations.statuses.awaitingConfirmation")
@@ -411,6 +418,12 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
     (item) => item.status === "Accepted" &&
       (item.confirmationStatus === "NotSent" || item.confirmationStatus === "Pending")
   ).length;
+  // An accepted person holds a seat until they decline or their offer expires.
+  const seatsTaken = eventRegistrations.filter(
+    (item) => item.status === "Accepted" &&
+      (item.confirmationStatus === "Pending" || item.confirmationStatus === "Confirmed")
+  ).length;
+  const eventFull = event.capacity > 0 && seatsTaken >= event.capacity;
   const requestDecision = (registration: EventRegistration, nextDecision: RegistrationStatus) => {
     setDecisionRegistration(registration);
     setDecision(nextDecision);
@@ -421,13 +434,6 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
       <Link href="/dashboard/pr-dashboard/events" className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground">
         <ArrowLeft className="size-4" /> {t("registrations.title")}
       </Link>
-
-      {registrationError && (
-        <div role="alert" className="flex items-start justify-between gap-3 rounded-xl border border-gdg-red/40 bg-gdg-red/5 px-4 py-3 text-sm text-gdg-red">
-          <span>{registrationError}</span>
-          <button type="button" onClick={clearRegistrationError} aria-label={t("registrations.cancel")} className="font-semibold">×</button>
-        </div>
-      )}
 
       <section className="rounded-2xl border border-border bg-surface p-5 shadow-2xs sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -442,9 +448,10 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
           <span className="inline-flex items-center gap-1.5"><Clock className="size-4" />{event.time}</span>
           <span className="inline-flex items-center gap-1.5"><MapPin className="size-4" />{event.location}</span>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
           {[
             { label: t("registrations.totalLabel"), value: eventRegistrations.length, icon: Users },
+            { label: t("registrations.seatsLabel"), value: `${seatsTaken} / ${event.capacity}`, icon: CircleCheck },
             { label: t("registrations.pendingLabel"), value: countByStatus("Pending"), icon: ClipboardList },
             { label: t("registrations.acceptedLabel"), value: countByStatus("Accepted"), icon: CircleCheck },
             { label: t("registrations.rejectedLabel"), value: countByStatus("Rejected"), icon: CircleX },
@@ -491,6 +498,22 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
           </div>
         </div>
 
+        {(eventFull || registrationError) && (
+          <div className="space-y-2 border-b border-border/80 px-5 py-3">
+            {eventFull && canManageRegistrations && (
+              <p role="status" className="rounded-xl border border-amber-300/60 bg-amber-50/70 px-4 py-2.5 text-xs text-amber-900 dark:border-amber-800/50 dark:bg-amber-950/30 dark:text-amber-200">
+                {t("registrations.capacityFull", { taken: seatsTaken, capacity: event.capacity })}
+              </p>
+            )}
+            {registrationError && (
+              <div role="alert" className="flex items-start justify-between gap-3 rounded-xl border border-gdg-red/40 bg-gdg-red/5 px-4 py-2.5 text-xs text-gdg-red">
+                <span>{registrationError}</span>
+                <button type="button" onClick={clearRegistrationError} aria-label={t("registrations.cancel")} className="font-semibold">×</button>
+              </div>
+            )}
+          </div>
+        )}
+
         {filteredRegistrations.length === 0 ? (
           <div className="p-8 text-center">
             <ClipboardList className="mx-auto size-8 text-muted" />
@@ -525,13 +548,14 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                         status={registration.status}
                         confirmationStatus={registration.confirmationStatus}
                         waitlistPosition={registration.waitlistPosition}
+                        lateCancellation={registration.lateCancellation}
                       />
                     </td>
                     <td className="px-5 py-3.5 text-end">
                       <div className="inline-flex flex-wrap items-center justify-end gap-1.5">
                         {registration.status === "Pending" && canManageRegistrations && (
                           <>
-                            <button type="button" onClick={() => requestDecision(registration, "Accepted")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-emerald-700 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/40">
+                            <button type="button" disabled={eventFull} title={eventFull ? t("registrations.acceptDisabledFull") : undefined} onClick={() => requestDecision(registration, "Accepted")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent dark:text-emerald-300 dark:hover:bg-emerald-950/40">
                               <CircleCheck className="size-3.5" /> {t("registrations.accept")}
                             </button>
                             <button type="button" onClick={() => requestDecision(registration, "Rejected")} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 font-semibold text-rose-700 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-950/40">
@@ -568,6 +592,7 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                 status={selectedRegistration.status}
                 confirmationStatus={selectedRegistration.confirmationStatus}
                 waitlistPosition={selectedRegistration.waitlistPosition}
+                lateCancellation={selectedRegistration.lateCancellation}
               />
             </div>
 
@@ -577,27 +602,28 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                 <p className="mt-2 text-xs text-muted">{t("registrations.emptyProfile")}</p>
               ) : (
                 <dl className="mt-2 grid gap-3 sm:grid-cols-2">
-                  {Object.entries(selectedRegistration.profile).map(([label, value]) => (
-                    <div key={label} className="rounded-xl border border-border bg-surface-muted/30 p-3">
-                      <dt className="text-[11px] text-muted">{label}</dt>
-                      <dd className="mt-1 text-xs font-medium text-foreground">{value}</dd>
+                  {Object.entries(selectedRegistration.profile).map(([key, value]) => (
+                    <div key={key} className="rounded-xl border border-border bg-surface-muted/30 p-3">
+                      <dt className="text-[11px] text-muted">{isRegistrantFieldKey(key) ? t(`createEvent.registration.fields.${key}`) : key}</dt>
+                      <dd className="mt-1 text-xs font-medium text-foreground">
+                        {key === "membership" ? t(value === "true" ? "createEvent.registration.memberYes" : "createEvent.registration.memberNo") : value}
+                      </dd>
                     </div>
                   ))}
                 </dl>
               )}
             </div>
 
-            {selectedRegistration.status === "Accepted" && (
-              <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50/70 p-3 text-xs text-blue-900 dark:border-blue-800/50 dark:bg-blue-950/30 dark:text-blue-200">
-                <p className="font-semibold">{t("registrations.confirmation", { status: selectedRegistration.confirmationStatus === "Confirmed" ? t("registrations.statuses.confirmed") : selectedRegistration.confirmationStatus === "Pending" ? t("registrations.statuses.awaitingConfirmation") : selectedRegistration.confirmationStatus === "Declined" ? t("registrations.statuses.confirmationDeclined") : selectedRegistration.confirmationStatus === "Expired" ? t("registrations.statuses.confirmationExpired") : t("registrations.statuses.confirmationNeeded") })}</p>
-                <p className="mt-1">{t("registrations.emailNotice")}</p>
-              </div>
+            {selectedRegistration.status === "Accepted" && (selectedRegistration.confirmationStatus === "Pending" || selectedRegistration.confirmationStatus === "Confirmed") && (
+              <p className="mt-5 rounded-xl border border-blue-200 bg-blue-50/70 p-3 text-xs text-blue-900 dark:border-blue-800/50 dark:bg-blue-950/30 dark:text-blue-200">
+                {t(selectedRegistration.confirmationStatus === "Confirmed" ? "registrations.notes.confirmed" : "registrations.notes.awaitingConfirmation")}
+              </p>
             )}
             {selectedRegistration.status === "Accepted" &&
               (selectedRegistration.confirmationStatus === "Declined" || selectedRegistration.confirmationStatus === "Expired") && (
-                <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900 dark:border-amber-800/50 dark:bg-amber-950/30 dark:text-amber-200">
-                  {t("registrations.automaticPromotionNotice")}
-                </div>
+                <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900 dark:border-amber-800/50 dark:bg-amber-950/30 dark:text-amber-200">
+                  {t(selectedRegistration.lateCancellation ? "registrations.notes.lateCancellation" : "registrations.notes.seatFreed")}
+                </p>
               )}
 
             <div className="mt-5 border-t border-border pt-4">
@@ -617,11 +643,6 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
             </div>
 
             <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-border pt-4">
-              {selectedRegistration.status === "Accepted" && canManageRegistrations && (
-                <button type="button" disabled className="cursor-not-allowed rounded-xl border border-border px-4 py-2 text-xs font-semibold text-muted opacity-70" title={t("registrations.sendConfirmationTitle")}>
-                  {t("registrations.sendConfirmationUnavailable")}
-                </button>
-              )}
               <button type="button" onClick={() => setSelectedRegistration(null)} className="rounded-xl border border-border px-4 py-2 text-xs font-medium text-foreground hover:bg-surface-muted">{t("registrations.close")}</button>
             </div>
           </section>

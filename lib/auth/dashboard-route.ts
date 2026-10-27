@@ -1,34 +1,46 @@
 import { leaderCommitteeConfig } from "@/components/dashboard/shared/committee-config";
+import type { LeaderCommittee } from "@/components/dashboard/shared/types";
 
 export type AuthenticatedIdentity = {
   memberId: number | null;
   roles: string[];
   committees: Array<{ code: string; position: string }>;
+  membershipRequestPending?: boolean;
 };
 
 const DASHBOARD_PATH = /^(?:\/[a-z]{2})?(\/dashboard(?:\/[^?#]*)?)(?:[?#].*)?$/;
 
+export type DashboardWorkspace =
+  | { kind: "club" | "developer" | "member"; path: string }
+  | { kind: "committee"; path: string; committee: LeaderCommittee };
+
 // Every dashboard the identity may open, highest responsibility first.
-export function dashboardPathsFor(identity: AuthenticatedIdentity): string[] {
+export function dashboardWorkspacesFor(identity: AuthenticatedIdentity): DashboardWorkspace[] {
   if (identity.memberId === null) return [];
-  const paths: string[] = [];
+  const workspaces: DashboardWorkspace[] = [];
   if (identity.roles.includes("GROUP_LEADER") || identity.roles.includes("GROUP_CO_LEADER")) {
-    paths.push("/dashboard/club-leadership-dashboard");
+    workspaces.push({ kind: "club", path: "/dashboard/club-leadership-dashboard" });
   }
   if (identity.roles.includes("DEVELOPER_COMMITTEES_LEADER")) {
-    paths.push("/dashboard/developer-committees-dashboard");
+    workspaces.push({ kind: "developer", path: "/dashboard/developer-committees-dashboard" });
   }
   for (const { code, position } of identity.committees) {
     if (position !== "Leader" && position !== "Co-Leader") continue;
-    const config = Object.values(leaderCommitteeConfig).find(({ committeeCode }) => committeeCode === code);
-    if (config) paths.push(config.routeBase);
+    const entry = Object.entries(leaderCommitteeConfig).find(([, config]) => config.committeeCode === code);
+    if (entry) workspaces.push({ kind: "committee", path: entry[1].routeBase, committee: entry[0] as LeaderCommittee });
   }
-  paths.push("/dashboard/members-dashboard");
-  return paths;
+  workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
+  return workspaces;
 }
 
+export function dashboardPathsFor(identity: AuthenticatedIdentity): string[] {
+  return dashboardWorkspacesFor(identity).map(({ path }) => path);
+}
+
+// Someone with no dashboard either waits for a membership decision or is a
+// non-member who uses the public site to join events.
 export function dashboardPathFor(identity: AuthenticatedIdentity) {
-  return dashboardPathsFor(identity)[0] ?? "/signup/pending";
+  return dashboardPathsFor(identity)[0] ?? (identity.membershipRequestPending ? "/signup/pending" : "/");
 }
 
 // A login return path is kept only when this identity can open it, so signing in

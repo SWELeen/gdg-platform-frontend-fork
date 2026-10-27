@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { API_ENABLED } from "@/lib/api/client";
 import { getCurrentUserRegistrations, respondToRegistration } from "@/lib/user-registrations/repository";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import type { UserRegistration, UserRegistrationsResult } from "@/lib/user-registrations/types";
 import { RegistrationActionDialog } from "./RegistrationActionDialog";
 import { RegistrationCard } from "./RegistrationCard";
@@ -30,15 +31,20 @@ export function UserRegistrationsPage({
   const [actionFeedback, setActionFeedback] = useState<RegistrationActionFeedback | null>(null);
   const [isSubmittingAction, setIsSubmittingAction] = useState(false);
   const [result, setResult] = useState<UserRegistrationsResult | null>(initialResult);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     if (initialResult) return;
     let active = true;
     void getCurrentUserRegistrations().then((nextResult) => {
-      if (active) setResult(nextResult);
+      if (!active) return;
+      // Email links often open in a browser that is not signed in yet.
+      if (nextResult.state === "signed-out") router.replace(`/login?returnTo=${encodeURIComponent("/registrations")}`);
+      else setResult(nextResult);
     });
     return () => { active = false; };
-  }, [initialResult]);
+  }, [initialResult, loadAttempt, router]);
 
   const finishDemoAction = async () => {
     if (!pendingAction || isSubmittingAction) return;
@@ -90,12 +96,22 @@ export function UserRegistrationsPage({
         <section className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12" aria-busy="true">
           <p className="text-sm text-muted">{t("loading")}</p>
         </section>
-      ) : result.state === "not-configured" ? (
-        <section className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
-          <h3 className="text-lg font-semibold">{t("unavailableTitle")}</h3>
+      ) : result.state !== "ready" ? (
+        <section role="alert" className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
+          <h3 className="text-lg font-semibold">{t("loadErrorTitle")}</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">
-            {t("unavailableDescription")}
+            {t("loadErrorDescription")}
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              setResult(null);
+              setLoadAttempt((attempt) => attempt + 1);
+            }}
+            className="mt-4 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-surface-muted"
+          >
+            {t("retry")}
+          </button>
         </section>
       ) : registrations.length === 0 ? (
         <section className="rounded-2xl border border-dashed border-border bg-surface p-8 text-center sm:p-12">

@@ -26,6 +26,8 @@ export default function EventRegistrationModal({
   );
   const [questionRetry, setQuestionRetry] = useState(0);
   const [details, setDetails] = useState<{ description: string; speakers: string } | null>(null);
+  // The card can be stale (a page left open past the deadline), so trust the fresh details.
+  const [registrationOpen, setRegistrationOpen] = useState(event.registrationOpen !== false);
   useEffect(() => {
     if (!API_ENABLED) return;
     let active = true;
@@ -37,6 +39,7 @@ export default function EventRegistrationModal({
       }
       setQuestions(details.questions.map(toRegistrationQuestion));
       setDetails({ description: details.description ?? "", speakers: details.speakers ?? "" });
+      setRegistrationOpen(details.registrationOpen);
       setQuestionsState("ready");
     });
     return () => { active = false; };
@@ -87,17 +90,23 @@ export default function EventRegistrationModal({
         className="max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-surface shadow-2xl sm:max-h-[calc(100dvh-3rem)]"
       >
         <EventInfo event={eventInfo} />
-        <RegistrationForm
-          onClose={onClose}
-          questions={questions}
-          questionsLoading={questionsState === "loading"}
-          questionsError={questionsState === "error"}
-          onRetryQuestions={() => {
-            setQuestionsState("loading");
-            setQuestionRetry((current) => current + 1);
-          }}
-          eventId={API_ENABLED ? event.id : undefined}
-        />
+        {registrationOpen ? (
+          <RegistrationForm
+            onClose={onClose}
+            questions={questions}
+            questionsLoading={questionsState === "loading"}
+            questionsError={questionsState === "error"}
+            onRetryQuestions={() => {
+              setQuestionsState("loading");
+              setQuestionRetry((current) => current + 1);
+            }}
+            eventId={API_ENABLED ? event.id : undefined}
+          />
+        ) : (
+          <p role="status" className="border-t border-border px-5 py-6 text-center text-sm text-muted sm:px-8">
+            {t("result.REGISTRATION_CLOSED")}
+          </p>
+        )}
       </motion.div>
     </div>
   );

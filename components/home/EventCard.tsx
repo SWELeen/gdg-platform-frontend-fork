@@ -18,6 +18,8 @@ export type HomeEvent = {
   description?: string;
   registrationQuestions?: RegistrationQuestion[];
   requiredRegistrantFields?: string[];
+  // false once the deadline passes; demo events leave it unset and stay open.
+  registrationOpen?: boolean;
 };
 
 type EventCardProps = {
@@ -48,6 +50,7 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
   const locale = useLocale();
   const isRtl = dir === "rtl";
   const dateParts = getDateParts(event.date, locale);
+  const registrationClosed = event.registrationOpen === false;
 
   const cut = (r: number, x: string, y: string) =>
     `radial-gradient(circle ${r}px at ${x} ${y}, transparent 97%, var(--black))`;
@@ -196,27 +199,33 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
               </div>
 
               {/* Register Button */}
-              <button
-                type="button"
-                onClick={() => onRegister(event)}
-                className="flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 text-xs font-medium leading-none text-background"
-              >
-                <span dir={dir}>{t("register")}</span>
-                <svg
-                  className="h-3.5 w-3.5 rtl:-scale-x-100"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              {registrationClosed ? (
+                <span className="flex h-8 shrink-0 items-center rounded-full border border-border px-4 text-xs font-medium leading-none text-muted">
+                  <span dir={dir}>{t("registrationClosed")}</span>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => onRegister(event)}
+                  className="flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 text-xs font-medium leading-none text-background"
                 >
-                  <path
-                    d="M5 12H19M19 12L12 5M19 12L12 19"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+                  <span dir={dir}>{t("register")}</span>
+                  <svg
+                    className="h-3.5 w-3.5 rtl:-scale-x-100"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 12H19M19 12L12 5M19 12L12 19"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
 

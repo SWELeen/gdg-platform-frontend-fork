@@ -4,6 +4,10 @@ import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
 import { RegistrationStatusBadge } from "./RegistrationStatusBadge";
 import type { UserRegistration } from "@/lib/user-registrations/types";
+import { useClientNow } from "@/lib/dashboard/use-client-now";
+
+// Cancelling a confirmed seat in the final two hours is recorded as late (backend rule).
+const LATE_CANCELLATION_MS = 2 * 60 * 60 * 1000;
 
 type RegistrationCardProps = {
   registration: UserRegistration;
@@ -36,6 +40,27 @@ export function RegistrationCard({
   const deadline = registration.confirmationDeadline
     ? new Date(registration.confirmationDeadline)
     : null;
+  // A confirmed seat can be given up until the event starts, and a waitlist
+  // place at any time; an offer still waiting for a reply has its own buttons.
+  const now = useClientNow();
+  const canWithdraw = now !== null && (
+    registration.status === "waitlisted" ||
+    (registration.status === "approved" && registration.checkInStatus !== "checked-in" && now < startsAt.getTime())
+  );
+  const lateCancellation = registration.status === "approved" && now !== null && now >= startsAt.getTime() - LATE_CANCELLATION_MS;
+  const feedback = actionFeedback && (
+    <p role={actionFeedback.state === "error" ? "alert" : "status"} className={`mt-3 text-xs ${actionFeedback.state === "error" ? "text-gdg-red" : "text-gdg-green"}`}>
+      {actionFeedback.state === "success"
+        ? t(actionFeedback.action === "confirm" ? "confirmSuccess" : "cancelSuccess")
+        : t(actionFeedback.code === "CONFIRMATION_EXPIRED"
+            ? "actionErrors.expired"
+            : actionFeedback.code === "INVALID_STATUS_TRANSITION"
+              ? "actionErrors.statusChanged"
+              : actionFeedback.code === "ATTENDANCE_QR_UNAVAILABLE"
+                ? "actionErrors.qrUnavailable"
+                : "actionErrors.generic")}
+    </p>
+  );
 
   return (
     <article className="flex h-full flex-col rounded-2xl border border-border bg-surface p-5 transition-shadow hover:shadow-md sm:p-6">
@@ -142,19 +167,22 @@ export function RegistrationCard({
               {t("cancelAction")}
             </button>
           </div>
-          {actionFeedback && (
-            <p role={actionFeedback.state === "error" ? "alert" : "status"} className={`mt-3 text-xs ${actionFeedback.state === "error" ? "text-gdg-red" : "text-gdg-green"}`}>
-              {actionFeedback.state === "success"
-                ? t(actionFeedback.action === "confirm" ? "confirmSuccess" : "cancelSuccess")
-                : t(actionFeedback.code === "CONFIRMATION_EXPIRED"
-                    ? "actionErrors.expired"
-                    : actionFeedback.code === "INVALID_STATUS_TRANSITION"
-                      ? "actionErrors.statusChanged"
-                      : actionFeedback.code === "ATTENDANCE_QR_UNAVAILABLE"
-                        ? "actionErrors.qrUnavailable"
-                        : "actionErrors.generic")}
-            </p>
+          {feedback}
+        </div>
+      )}
+      {canWithdraw && (
+        <div className="mt-5 border-t border-border pt-4">
+          {lateCancellation && (
+            <p className="mb-3 text-xs leading-5 text-amber-700 dark:text-amber-300">{t("lateCancelWarning")}</p>
           )}
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg border border-border px-4 py-2.5 text-sm font-semibold text-foreground/75 transition hover:bg-foreground/5"
+          >
+            {t(registration.status === "waitlisted" ? "leaveWaitlistAction" : "cancelAction")}
+          </button>
+          {feedback}
         </div>
       )}
     </article>

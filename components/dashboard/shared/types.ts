@@ -145,6 +145,8 @@ export interface EventRegistration {
   registeredAt: string;
   status: RegistrationStatus;
   confirmationStatus?: RegistrationConfirmationStatus;
+  // A confirmed seat given up in the final two hours before the event.
+  lateCancellation?: boolean;
   attendanceConfirmedAt?: string;
   checkInStatus?: "NotCheckedIn" | "CheckedIn" | "NoShow";
   checkedInAt?: string;

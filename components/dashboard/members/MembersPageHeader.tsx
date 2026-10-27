@@ -8,6 +8,7 @@ import {
   sidebarPrimaryItems,
   sidebarSecondaryItems,
 } from "@/components/dashboard/mock-data";
+import { WorkspaceSwitcher } from "@/components/dashboard/shared/WorkspaceSwitcher";
 import { MembersUserInfo } from "./MembersUserInfo";
 import { isSidebarItemActive } from "./nav-utils";
 
@@ -27,7 +28,8 @@ export function MembersPageHeader(): ReactElement {
           {t(`items.${activeItem.id}`)}
         </h1>
       )}
-      <div className="ms-auto shrink-0">
+      <div className="ms-auto flex shrink-0 items-center gap-3">
+        <WorkspaceSwitcher />
         <MembersUserInfo />
       </div>
     </header>

@@ -3,19 +3,14 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
-  BookOpen,
-  Building2,
-  Hash,
   ArrowDown,
   ArrowUp,
   GripVertical,
   ImagePlus,
   Link2,
-  Mail,
   MapPin,
   Plus,
   Trash2,
-  UserRound,
   X,
 } from "lucide-react";
 import type { CommitteeEvent, EventType } from "../shared/types";
@@ -30,6 +25,7 @@ import {
   choiceQuestionTypes,
   questionTypeKeys,
   questionTypes,
+  accountRegistrantFields,
   requiredRegistrantFields,
   type DraftQuestion,
 } from "./event-form-config";
@@ -761,66 +757,13 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
           <h2 className={styles.sectionTitle}>{t("sections.registrationInfo")}</h2>
           <p className="-mt-2 mb-4 text-sm text-muted">{t("registration.description")}</p>
 
-          <fieldset disabled className="mb-6 rounded-2xl border border-border bg-surface-muted/30 p-4 sm:p-6">
-            <legend className="sr-only">{t("sections.registrationInfo")}</legend>
-            <div className={styles.field}>
-              <span className={styles.label}>{t("registration.fields.fullName")} *</span>
-              <div className="relative">
-                <UserRound className={styles.iconInput} aria-hidden="true" />
-                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.fullName")} aria-label={t("registration.fields.fullName")} />
-              </div>
-            </div>
-            <div className={styles.row}>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.universityId")} *</span>
-                <div className="relative">
-                  <Hash className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.universityId")} aria-label={t("registration.fields.universityId")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.college")} *</span>
-                <div className="relative">
-                  <Building2 className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.college")} aria-label={t("registration.fields.college")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.major")} *</span>
-                <div className="relative">
-                  <BookOpen className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.major")} aria-label={t("registration.fields.major")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.phone")} *</span>
-                <div className="flex gap-2" dir="ltr">
-                  <span className="flex min-h-[44px] items-center rounded-[10px] border border-border bg-surface px-3 text-sm font-semibold text-foreground">
-                    +966
-                  </span>
-                  <input className={`${styles.input} ${styles.inputOk}`} placeholder={t("registration.placeholders.phone")} aria-label={t("registration.fields.phone")} />
-                </div>
-              </div>
-            </div>
-            <div className={styles.field}>
-              <span className={styles.label}>{t("registration.fields.email")} *</span>
-              <div className="relative">
-                <Mail className={styles.iconInput} aria-hidden="true" />
-                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.email")} aria-label={t("registration.fields.email")} />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className={styles.label}>{t("registration.fields.membership")} *</span>
-              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-foreground/80">
-                <label className="flex items-center gap-2">
-                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberYes")}
-                </label>
-                <label className="flex items-center gap-2">
-                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberNo")}
-                </label>
-              </div>
-            </div>
-          </fieldset>
+          <ul className="mb-6 flex flex-wrap gap-2" aria-label={t("sections.registrationInfo")}>
+            {accountRegistrantFields.map((field) => (
+              <li key={field} className="rounded-full border border-border bg-surface-muted/60 px-3 py-1 text-xs text-foreground/80">
+                {t(`registration.fields.${field}`)}
+              </li>
+            ))}
+          </ul>
 
           {questions.length > 0 && (
             <section aria-labelledby="create-event-questions" className="mb-4 flex flex-col gap-3">

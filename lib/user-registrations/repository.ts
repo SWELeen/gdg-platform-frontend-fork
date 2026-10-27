@@ -63,9 +63,8 @@ function toUserRegistration(item: ApiMyRegistration): UserRegistration {
 export async function getCurrentUserRegistrations(): Promise<UserRegistrationsResult> {
   if (!API_ENABLED) return { state: "ready", registrations: userRegistrationsMock };
   const result = await apiRequest<ApiMyRegistration[]>("/my/registrations");
-  return result.ok
-    ? { state: "ready", registrations: result.data.map(toUserRegistration) }
-    : { state: "not-configured" };
+  if (result.ok) return { state: "ready", registrations: result.data.map(toUserRegistration) };
+  return { state: result.status === 401 ? "signed-out" : "error" };
 }
 
 export type MyRegistrationAction = "confirm" | "decline";

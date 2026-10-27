@@ -26,6 +26,8 @@
   "confirmBefore": "يرجى تأكيد الحضور قبل {date}.",
   "confirmAction": "تأكيد الحضور",
   "cancelAction": "إلغاء التسجيل",
+  "leaveWaitlistAction": "الانسحاب من قائمة الانتظار",
+  "lateCancelWarning": "باقي على الإيفنت أقل من ساعتين. الإلغاء الحين ينحسب إلغاء متأخر.",
   "confirmationUnavailable": "سيصبح تأكيد الحضور متاحًا عند ربط خدمة التسجيلات.",
   "cancellationUnavailable": "سيصبح إلغاء التسجيل متاحًا عند ربط خدمة التسجيلات.",
   "attendance": {
@@ -48,11 +50,12 @@
     "cancelButton": "نعم، ألغِ التسجيل",
     "submitting": "يرجى الانتظار..."
   },
-  "unavailableTitle": "التسجيلات غير متصلة حاليًا",
-  "unavailableDescription": "ستظهر تسجيلاتك للفعاليات والرحلات هنا بعد ربط خدمة التسجيلات.",
+  "loadErrorTitle": "ما قدرنا نحمّل تسجيلاتك",
+  "loadErrorDescription": "تأكد من الاتصال وحاول مرة ثانية.",
+  "retry": "حاول مرة ثانية",
   "emptyTitle": "لا توجد تسجيلات حتى الآن",
   "emptyDescription": "عند التسجيل في فعالية أو رحلة، يمكنك متابعة حالتها من هنا.",
-  "loading": "???? ????? ????????...",
+  "loading": "جارٍ تحميل تسجيلاتك...",
   "confirmSuccess": "تم تأكيد حضورك. رمز الباركود ظاهر هنا وتم إرساله إلى بريدك الإلكتروني.",
   "cancelSuccess": "تم إلغاء تسجيلك.",
   "actionErrors": {
