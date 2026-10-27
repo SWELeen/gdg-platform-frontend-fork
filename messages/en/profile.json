@@ -3,15 +3,41 @@
     "memberSince": "Member since {date}"
   },
   "badge": {
-    "label": "Member badge: {name}, {role}, {committee}"
+    "label": "Member badge: {name}, {role}, {committee}",
+    "globalRoles": {
+      "clubLeader": "Club Leader",
+      "clubCoLeader": "Club Co-Leader",
+      "clubLeadership": "Club Leadership",
+      "developerCommitteesLeader": "Developer Committees Leader",
+      "developerCommittees": "Developer Committees"
+    }
   },
   "bio": {
     "title": "Short Bio",
-    "placeholder": "",
-    "empty": "No bio added yet."
+    "placeholder": "Tell the GDG Community about yourself, your interests, or what you're learning.",
+    "empty": "No bio added yet.",
+    "edit": "Edit",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "saved": "Bio saved.",
+    "saveError": "Could not save your bio. Please try again."
   },
   "tabs": {
-    "personal": "Personal & Academic"
+    "label": "Profile sections",
+    "personal": "Personal & Academic",
+    "social": "Social Links"
+  },
+  "social": {
+    "title": "Links",
+    "notAdded": "Not added",
+    "saveError": "Could not save your links. Please try again.",
+    "saved": "Links saved.",
+    "platforms": {
+      "github": "GitHub",
+      "portfolio": "Portfolio",
+      "x": "X"
+    }
   },
   "cards": {
     "personal": "Personal Information",

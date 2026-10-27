@@ -41,7 +41,7 @@
   "urlInvalid": "Enter a full URL, e.g. https://example.com",
   "urlProtocol": "URL must start with http:// or https://",
   "githubDomain": "Must be a github.com link",
-  "linkedinDomain": "Must be a linkedin.com link",
+  "xDomain": "Must be an x.com link",
   "apiRequired": "The secure service is unavailable in this environment. Please try again later.",
   "invalidCredentials": "Incorrect email or password.",
   "authRequestFailed": "We could not complete that request. Check your details and try again.",

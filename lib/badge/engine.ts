@@ -218,7 +218,7 @@ export async function createBadgeEngine(
     for (let j = i + 1; j < body.length; j++) L.push({ a: body[i], b: body[j], r: dist(body[i], body[j]), slack: false });
   for (const s of [-1, 1]) {
     const A = pt(s * 0.75, 7, 0, 0);
-    const n = 16, seg = dist(A, K) / (n + 1), rope = [A];
+    const n = 16, ropeLength = dist(A, K) * 0.9, seg = ropeLength / (n + 1), rope = [A];
     let prev = A;
     for (let i = 1; i <= n; i++) {
       const t = i / (n + 1);
@@ -230,7 +230,7 @@ export async function createBadgeEngine(
     L.push({ a: prev, b: K, r: seg, slack: true });
     rope.push(K);
     ropes.push(rope);
-    straps.push(makeStrap(dist(A, K)));
+    straps.push(makeStrap(ropeLength));
   }
 
   // tuned so the entrance settles, and the loop sleeps, about five seconds later

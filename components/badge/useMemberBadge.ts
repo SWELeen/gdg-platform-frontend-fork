@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { committees, defaultTheme } from "@/lib/badge/themes";
+import { clubLeadershipTheme, committees, defaultTheme, developerLeadershipTheme } from "@/lib/badge/themes";
 import { committeeRoles, type BadgeData, type CommitteeCode, type CommitteeRole, type Gender } from "@/lib/badge/types";
 
 // Loosely typed on purpose: these come straight from /me, so anything that
@@ -13,29 +13,38 @@ type MemberBadgeInput = {
   photoUrl?: string | null;
   /** "male" (any case) gets the male silhouette; anything else, or nothing, the female one. */
   gender?: string | null;
-  /** The member's committees from /me. None: they get no badge. */
-  committees?: Array<{ code: string; position: string }> | null;
+  /** Committee assignments, including the committee's database name. */
+  committees?: Array<{ code: string; name?: string; position: string }> | null;
+  /** Global leadership roles from /me. */
+  roles?: string[] | null;
 };
 
 const isCommitteeCode = (code: string): code is CommitteeCode => Object.hasOwn(committees, code);
 const rank = (position: string) => committeeRoles.indexOf(position as CommitteeRole);
 
-// TEMPORARY: until every committee code and position is confirmed, a committee
-// or position that doesn't match (or a missing name) shows this all-placeholder
-// card instead of a wrong one.
-const placeholder = { role: "Role", committee: "Committee name", name: "Member name" };
-
 // Builds a member's badge from their profile and committees. Someone in several
 // committees gets the one where they hold the highest position.
-export function useMemberBadge({ name, university, photoUrl, gender, committees: memberships }: MemberBadgeInput) {
+export function useMemberBadge({ name, university, photoUrl, gender, committees: memberships, roles }: MemberBadgeInput) {
   const t = useTranslations("profile.badge");
   const membership = memberships?.length
     ? [...memberships].sort((a, b) => rank(b.position) - rank(a.position))[0]
     : null;
+  const globalBadge = roles?.includes("GROUP_LEADER")
+    ? { role: t("globalRoles.clubLeader"), committee: t("globalRoles.clubLeadership"), theme: clubLeadershipTheme }
+    : roles?.includes("GROUP_CO_LEADER")
+      ? { role: t("globalRoles.clubCoLeader"), committee: t("globalRoles.clubLeadership"), theme: clubLeadershipTheme }
+      : roles?.includes("DEVELOPER_COMMITTEES_LEADER")
+        ? { role: t("globalRoles.developerCommitteesLeader"), committee: t("globalRoles.developerCommittees"), theme: developerLeadershipTheme }
+        : null;
+  const useCommitteeBadge = Boolean(membership && !globalBadge);
   const code = membership?.code ?? "";
   const role = membership?.position ?? "";
-  const matched = isCommitteeCode(code) && rank(role) >= 0 && Boolean(name?.trim());
+  const matched = useCommitteeBadge && isCommitteeCode(code);
   const silhouette: Gender = gender?.toLowerCase() === "male" ? "male" : "female";
+  const badgeRole = globalBadge && !useCommitteeBadge ? globalBadge.role : role;
+  const badgeCommittee = globalBadge && !useCommitteeBadge
+    ? globalBadge.committee
+    : membership?.name?.trim() ?? "";
 
   const data = useMemo<BadgeData>(() => {
     const shared = {
@@ -43,20 +52,23 @@ export function useMemberBadge({ name, university, photoUrl, gender, committees:
       university: university?.trim() || "University of Jeddah",
       gender: silhouette,
     };
-    if (!matched) return { ...shared, ...placeholder, photoUrl: null };
     return {
       ...shared,
-      name: name!.trim(),
-      role,
-      committee: committees[code as CommitteeCode].shortName,
+      name: name?.trim() ?? "",
+      role: badgeRole,
+      committee: badgeCommittee,
       photoUrl: photoUrl ?? null,
     };
-  }, [matched, name, role, code, university, photoUrl, silhouette]);
+  }, [name, badgeRole, badgeCommittee, university, photoUrl, silhouette]);
 
-  if (!membership) return null;
+  if ((!membership && !globalBadge) || !name?.trim() || !badgeRole || !badgeCommittee) return null;
   return {
     data,
-    theme: matched ? committees[code as CommitteeCode].theme : defaultTheme,
+    theme: globalBadge && !useCommitteeBadge
+      ? globalBadge.theme
+      : matched && useCommitteeBadge
+        ? committees[code as CommitteeCode].theme
+        : defaultTheme,
     label: t("label", { name: data.name, role: data.role, committee: data.committee }),
   };
 }

@@ -3,13 +3,13 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { GithubMark, LinkedInGlyph } from "@/components/layout/BrandMarks";
+import { GithubMark, XMark } from "@/components/layout/BrandMarks";
 import type { SocialLink } from "@/data/profile";
 
 const iconBadgeByPlatform = {
   github: { icon: GithubMark, className: "bg-[var(--black)] text-[var(--white)]" },
-  linkedin: { icon: LinkedInGlyph, className: "bg-navy text-[var(--white)] p-2" },
-  website: {
+  x: { icon: XMark, className: "bg-[var(--black)] text-[var(--white)]" },
+  portfolio: {
     icon: Globe,
     className: "bg-surface text-website-green ring-1 ring-gray-350",
   },
@@ -17,8 +17,8 @@ const iconBadgeByPlatform = {
 
 const placeholderByPlatform = {
   github: "https://github.com/your-username",
-  linkedin: "https://linkedin.com/in/your-username",
-  website: "https://your-site.com",
+  x: "https://x.com/your-username",
+  portfolio: "https://your-portfolio.com",
 } as const;
 
 type SocialLinkRowProps = {
@@ -67,6 +67,7 @@ export function SocialLinkRow({
           <>
             <input
               type="url"
+              maxLength={2048}
               // URLs read left to right in every language.
               dir="ltr"
               value={value}

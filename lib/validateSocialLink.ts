@@ -2,7 +2,7 @@ import type { SocialLink } from "@/data/profile";
 
 const requiredDomain: Partial<Record<SocialLink["platform"], string>> = {
   github: "github.com",
-  linkedin: "linkedin.com",
+  x: "x.com",
 };
 
 // Empty values are allowed (renders as "Not added yet") — only non-empty values
@@ -26,7 +26,7 @@ export function validateSocialLink(
   }
 
   const domain = requiredDomain[platform];
-  if (domain && !url.hostname.endsWith(domain)) {
+  if (domain && url.hostname !== domain && !url.hostname.endsWith(`.${domain}`)) {
     return `${platform}Domain`;
   }
 

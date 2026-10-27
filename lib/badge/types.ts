@@ -10,6 +10,7 @@ export type Gender = "female" | "male";
 /** Colours for one committee's badge; see themes.ts. */
 export type BadgeTheme = {
   bg: string;
+  backgroundColors?: string[];
   ink: string;
   photoBg: string;
   photoFrame: string;
