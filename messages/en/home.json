@@ -118,11 +118,15 @@
     "title": "What's",
     "description": "Find the next opportunity to learn, connect, and take part in meaningful experiences with our community.",
     "register": "Register",
+    "registrationClosed": "Registration closed",
     "previous": "Previous event",
     "next": "Next event",
     "label": "Upcoming Events",
     "highlight": "Happening?",
-    "subtitle": "Join our upcoming events, gain new skills, meet amazing people, and be part of the GDG community."
+    "subtitle": "Join our upcoming events, gain new skills, meet amazing people, and be part of the GDG community.",
+    "empty": "Stay informed…",
+    "loading": "Loading events…",
+    "loadError": "Could not load events. Please try again later."
 
   },
   "sponsors": {
@@ -258,7 +262,8 @@
     "title": "Latest updates &",
     "highlight": "Announcements",
     "description": "Stay informed with the latest news, events, opportunities, and updates from GDG on Campus — University of Jeddah.",
-    "viewAll": "View all announcements"
+    "viewAll": "View all announcements",
+    "empty": "Stay tuned…"
   },
   "joinCommunity": {
     "title": "Ready to Be Part of the Community?",

@@ -32,16 +32,14 @@ import {
 import type { Tone } from "@/components/dashboard/members/task-styles";
 
 import {
-  currentUser,
-  dashboardTasks,
   myEventTiles,
   sidebarPrimaryItems,
 } from "@/components/dashboard/mock-data";
 import type {
   DashboardTask,
-  DashboardUser,
   TaskStatus,
 } from "@/components/dashboard/mock-data";
+import { useMemberWorkspace } from "@/components/dashboard/members/MemberWorkspaceContext";
 
 // Entrance animation shared by the main dashboard sections. `MotionConfig
 // reducedMotion="user"` (in the members-dashboard layout) automatically strips the transform-based
@@ -184,12 +182,10 @@ function SearchField({
 // Desktop (lg+): search at the start, account group at the end — achieved by flipping
 // `order` at `lg` rather than duplicating markup.
 function UtilityRow({
-  user,
   today,
   searchQuery,
   onSearchChange,
 }: {
-  user: DashboardUser;
   today: string;
   searchQuery: string;
   onSearchChange: (value: string) => void;
@@ -199,7 +195,7 @@ function UtilityRow({
   return (
     <motion.div variants={itemVariants} className="flex items-center justify-between gap-3">
       <div className="order-1 flex w-full items-center gap-2 lg:w-auto lg:order-2">
-        <MembersUserInfo user={user} />
+        <MembersUserInfo />
 
         <button
           type="button"
@@ -239,9 +235,9 @@ function WelcomeSection({ firstName }: { firstName: string }): ReactElement {
 
 type FilterId = "all" | TaskStatus;
 
-const taskFilters: FilterId[] = ["all", "In Progress", "To Do", "Complete"];
+const taskFilters: FilterId[] = ["all", "In Progress", "To Do", "Pending Review", "Complete"];
 
-const filterKeys: Record<FilterId, "all" | "inProgress" | "toDo" | "complete"> = {
+const filterKeys: Record<FilterId, "all" | "inProgress" | "toDo" | "pendingReview" | "complete"> = {
   all: "all",
   ...statusKeys,
 };
@@ -253,6 +249,7 @@ const filterTones: Record<FilterId, Tone> = {
   all: "red",
   "In Progress": statusTones["In Progress"],
   "To Do": statusTones["To Do"],
+  "Pending Review": statusTones["Pending Review"],
   Complete: statusTones.Complete,
 };
 
@@ -264,6 +261,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
     all: tasks.length,
     "In Progress": tasks.filter((task) => task.status === "In Progress").length,
     "To Do": tasks.filter((task) => task.status === "To Do").length,
+    "Pending Review": tasks.filter((task) => task.status === "Pending Review").length,
     Complete: tasks.filter((task) => task.status === "Complete").length,
   };
 
@@ -424,6 +422,7 @@ function TasksPanel({ tasks, searchQuery }: { tasks: DashboardTask[]; searchQuer
 
 export default function DashboardPage(): ReactElement {
   const [searchQuery, setSearchQuery] = useState("");
+  const { user, tasks } = useMemberWorkspace();
   const [leaderAccess, setLeaderAccess] = useState<ReturnType<typeof getElevatedAccess>>(null);
   const today = useTodayLabel();
   const accessProfile = leaderAccess && leaderDashboardMockData[leaderAccess.committee];
@@ -453,8 +452,8 @@ export default function DashboardPage(): ReactElement {
 
   return (
       <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-4 lg:space-y-6">
-      <UtilityRow user={currentUser} today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-      <WelcomeSection firstName={currentUser.name.split(" ")[0]} />
+      <UtilityRow today={today} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <WelcomeSection firstName={user.name.split(" ")[0]} />
 
       {/* Leader Workspace Banner: Only shown when Leader explicitly granted elevated access */}
       {leaderAccess && accessProfile && accessHref && (
@@ -491,7 +490,7 @@ export default function DashboardPage(): ReactElement {
         <DashboardUpcomingEvents />
         <MemberCalendarCard />
       </div>
-      <TasksPanel tasks={dashboardTasks} searchQuery={searchQuery} />
+      <TasksPanel tasks={tasks} searchQuery={searchQuery} />
     </motion.div>
   );
 }

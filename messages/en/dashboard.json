@@ -1,4 +1,31 @@
 {
+  "leadershipDashboard": {
+    "clubTitle": "Club Leadership Dashboard",
+    "clubLeaderRole": "Club Leader",
+    "clubCoLeaderRole": "Club Co-Leader",
+    "clubLeaderDescription": "Reviews club-wide leadership and advisor applications.",
+    "clubCoLeaderDescription": "Shares the club-wide leadership review queue and permissions.",
+    "developerTitle": "Developer Committees Leader Dashboard",
+    "developerDescription": "Oversight for Automation, Data Analysis, Web Development, AI, IoT, and Cybersecurity committees.",
+    "overviewTitle": "Developer committees overview",
+    "approvalNavigation": "Leadership requests",
+    "overviewLoading": "Loading committee information…",
+    "overviewError": "Committee information could not be loaded.",
+    "committeeMembers": "Members",
+    "committeeLeaders": "Leaders",
+    "activeTasks": "Active tasks"
+  },
+  "leadershipApprovals": {
+    "title": "Leadership registration requests",
+    "loading": "Loading requests…",
+    "empty": "There are no pending leadership requests.",
+    "error": "Requests could not be loaded. Please try again.",
+    "notAllowed": "You can't decide this request. Requests you submitted yourself go to club leadership.",
+    "alreadyHandled": "This request was already decided or moved to another approver. The list has been refreshed.",
+    "decisionFailed": "The decision was not saved. Please try again.",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
   "nav": {
     "sectionsLabel": "Dashboard sections",
     "accountLabel": "Account",
@@ -73,7 +100,8 @@
       "all": "All",
       "inProgress": "In progress",
       "toDo": "To Do",
-      "complete": "Complete"
+      "complete": "Complete",
+      "pendingReview": "Awaiting confirmation"
     },
     "columns": {
       "task": "Task",
@@ -84,7 +112,8 @@
     "status": {
       "inProgress": "In Progress",
       "toDo": "To Do",
-      "complete": "Complete"
+      "complete": "Complete",
+      "pendingReview": "Awaiting confirmation"
     },
     "priority": {
       "high": "High",
@@ -108,7 +137,13 @@
     "listView": "List view",
     "done": "Done",
     "progress": "{done} of {total} completed",
-    "progressLabel": "Task completion"
+    "progressLabel": "Task completion",
+    "actions": {
+      "markDone": "Done (send for confirmation)",
+      "changeStatus": "Change status of {title}",
+      "waitingForLeader": "Waiting for your committee leader to confirm.",
+      "updateFailed": "Could not update the task. Try again."
+    }
   },
   "memberEvents": {
     "title": "My Events",
@@ -259,6 +294,7 @@
       "email": "Email address",
       "committee": "Committee",
       "role": "Role",
+      "loading": "Loading profile…",
       "notAvailable": "Not available yet",
       "managedByLeadership": "Committee details are managed by your committee's leadership. Contact your committee leader if something needs to change.",
       "demoNote": "Shown from demo data until sign-in is connected."
@@ -469,10 +505,25 @@
       "closeMenu": "Close menu",
       "openSidebar": "Open sidebar",
       "committeeData": "Data Analysis Committee",
-      "committeePR": "Public Relations Committee"
+      "committeePR": "Public Relations Committee",
+      "committeeProjectManagement": "Project Management Committee",
+      "committeeContentWriting": "Content Writing Committee",
+      "committeeWebDevelopment": "Web and Development Committee",
+      "committeeAutomation": "Automation Committee",
+      "committeeAI": "Artificial Intelligence Committee",
+      "committeeRoboticsIot": "Robotics & IoT Committee",
+      "committeeCybersecurity": "Cybersecurity Committee",
+      "committeeDigitalMediaDesign": "Digital Media and Design Committee"
+    },
+    "dataState": {
+      "loading": "Loading committee data…",
+      "unauthorized": "Sign in to view this committee dashboard.",
+      "forbidden": "Your account does not have access to this committee dashboard.",
+      "failed": "Committee data could not be loaded. Check the API connection and try again.",
+      "retry": "Try again"
     },
     "greeting": {
-      "title": "Good morning, {name}",
+      "title": "Good morning",
       "dateFallback": "Today"
     },
     "metrics": {
@@ -510,7 +561,8 @@
       "low": "Low",
       "completed": "Completed",
       "inProgress": "In Progress",
-      "toDo": "To Do"
+      "toDo": "To Do",
+      "pendingReview": "Awaiting confirmation"
     },
     "members": {
       "temporaryTitle": "Temporary Elevated Permissions System",
@@ -550,6 +602,7 @@
       "statusLabel": "Status",
       "namePlaceholder": "e.g. Layla Al-Ghamdi",
       "emailPlaceholder": "e.g. layla@uj.edu.sa",
+      "newMemberRole": "The new member will be added as a committee Member.",
       "cancel": "Cancel",
       "requiredName": "Member full name is required.",
       "nameMin": "Name must be at least 3 characters.",
@@ -560,6 +613,7 @@
       "emailInvalid": "Please enter a valid email address (e.g. user@uj.edu.sa).",
       "duplicateEmail": "A committee member with this email already exists.",
       "formError": "Please correct the errors in the form before submitting.",
+      "requestFailed": "Could not add the member. Please try again.",
       "roles": {
         "leader": "Leader",
         "dataAnalyst": "Data Analyst",
@@ -594,7 +648,27 @@
       "actions": "Actions",
       "emptyMembers": "No committee members are available.",
       "emptyHistory": "No point changes have been recorded yet.",
-      "history": "Point History Log"
+      "history": "Point History Log",
+      "modalTitle": "Update member points",
+      "current": "Current points: {count}",
+      "permission": "You do not have permission to update points in this committee.",
+      "award": "Award points",
+      "deduct": "Deduct points",
+      "amount": "Amount",
+      "wholeNumbers": "Whole numbers only",
+      "reason": "Reason",
+      "reasonPlaceholder": "Describe the contribution or adjustment",
+      "cancel": "Cancel",
+      "fixErrors": "Please correct the highlighted fields before saving.",
+      "requestFailed": "Could not update points. Please try again.",
+      "required": "Enter a points amount.",
+      "integer": "Points must be a whole number.",
+      "positive": "Points must be greater than zero.",
+      "max": "You can change up to 2,000 points at a time.",
+      "tooMany": "Cannot deduct {requested} points. This member has only {available}.",
+      "reasonRequired": "Enter a reason for this points change.",
+      "reasonMin": "The reason must be at least 5 characters.",
+      "reasonMax": "The reason cannot exceed 150 characters."
     },
     "registrations": {
       "pendingTitle": "Pending registrations",
@@ -623,11 +697,19 @@
       "reviewDescription": "Review submitted information and event-specific answers.",
       "applicantInfo": "Applicant information",
       "emptyProfile": "No additional profile information was included with this registration.",
-      "emailNotice": "Confirmation messages and response deadlines require backend support; this dashboard does not send email.",
       "questionsAnswers": "Registration questions & answers",
       "emptyAnswers": "No event-specific questions or answers are available in the current registration data.",
       "waitlist": "Add to waitlist",
       "reject": "Reject",
+      "seatsLabel": "Seats taken",
+      "capacityFull": "This event is full ({taken} of {capacity} seats). Add new applicants to the waitlist: when someone declines or misses the confirmation deadline, the first person on the waitlist gets the seat automatically.",
+      "acceptDisabledFull": "The event is full. Add this applicant to the waitlist instead.",
+      "notes": {
+        "awaitingConfirmation": "The applicant was emailed a link to confirm their place before the deadline.",
+        "confirmed": "The applicant confirmed and received their attendance QR code by email.",
+        "seatFreed": "The seat was freed. If anyone is on the waitlist, the first person was offered it automatically and emailed.",
+        "lateCancellation": "The applicant cancelled less than two hours before the event, so it is recorded as a late cancellation. The seat went to the waitlist if there is one."
+      },
       "accept": "Accept",
       "close": "Close",
       "placeWaitlist": "Place {name} on the waitlist?",
@@ -658,13 +740,9 @@
       "recordsNotice": "Registration records and submitted answers will appear here when provided by the platform.",
       "closeApplicant": "Close applicant details",
       "registeredAt": "Registered",
-      "confirmation": "Confirmation: {status}",
-      "automaticPromotionNotice": "The backend should promote the first eligible waitlisted applicant after a decline or expired confirmation. Automatic promotion is not performed in the frontend.",
       "acceptRegistration": "Accept registration",
       "rejectRegistration": "Reject registration",
       "confirmDecision": "Confirm {decision} for {name}?",
-      "sendConfirmationUnavailable": "Send confirmation request (unavailable)",
-      "sendConfirmationTitle": "Available when backend confirmation delivery is implemented",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "statuses": {
@@ -676,6 +754,7 @@
         "confirmationNeeded": "Confirmation needed",
         "awaitingConfirmation": "Awaiting confirmation",
         "confirmed": "Confirmed",
+        "lateCancellation": "Late cancellation",
         "confirmationDeclined": "Confirmation declined",
         "confirmationExpired": "Confirmation expired"
       },
@@ -741,7 +820,13 @@
       "deleteTitle": "Delete Task",
       "deleteMessage": "Are you sure you want to delete {name}? This will remove it from the committee board.",
       "deleteConfirm": "Delete Task",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "pendingReview": "Awaiting confirmation",
+      "pendingReviewTitle": "Awaiting your confirmation ({count})",
+      "pendingReviewHelp": "Members marked these tasks done. Confirm to complete them, or return them to the member.",
+      "confirmDone": "Confirm completed",
+      "returnToMember": "Return to member",
+      "reviewFailed": "Could not update the task. Try again."
     },
     "taskForm": {
       "editTitle": "Edit Task",
@@ -766,7 +851,8 @@
       "titleMax": "Task title cannot exceed 150 characters.",
       "selectMember": "Please select a member to assign this task.",
       "dateRequired": "Due date is required.",
-      "formError": "Please resolve the required fields before saving."
+      "formError": "Please resolve the required fields before saving.",
+      "requestFailed": "Could not save the task. Please try again."
     },
     "eventFilters": {
       "search": "Search events by name or location",
@@ -825,10 +911,17 @@
       "deleteMessage": "Are you sure you want to delete {name}? This will permanently remove it from the committee schedule.",
       "pageTitle": "Committee Events Management",
       "unpublished": "Unpublished Drafts ({count})",
-      "draftsDescription": "These events are saved locally and are NOT visible on the public platform until published.",
+      "draftsDescription": "These events are saved but NOT visible on the public platform until published.",
       "pagination": "Events pagination",
       "pageLabel": "Page {page}",
-      "openDetails": "Open details page"
+      "openDetails": "Open details page",
+      "publishFailed": "Could not publish the draft. Try again.",
+      "previewDraft": "Preview this draft",
+      "previewFailed": "Could not open the draft. Try again.",
+      "closePreview": "Close",
+      "deleteDraft": "Delete draft",
+      "deleteDraftConfirm": "Delete the draft \"{title}\"? This cannot be undone.",
+      "deleteDraftFailed": "Could not delete the draft. Try again."
     },
     "eventReports": {
       "eyebrow": "Event reports",
@@ -922,7 +1015,8 @@
         "capacity": "Capacity",
         "deadline": "Registration deadline",
         "requirements": "Requirements",
-        "image": "Event image"
+        "image": "Event image",
+        "status": "Status"
       },
       "placeholders": {
         "name": "Enter event name",
@@ -941,10 +1035,9 @@
         "previewAlt": "Selected event image"
       },
       "registration": {
-        "description": "Every attendee fills in these fields when registering. They are shown here as a read-only preview.",
+        "description": "These details come from each attendee's account, so they don't type them again. Add any event-specific details as questions below.",
         "fields": {
           "fullName": "Full name",
-          "universityId": "University ID",
           "college": "College",
           "major": "Major",
           "phone": "Phone number",
@@ -953,7 +1046,6 @@
         },
         "placeholders": {
           "fullName": "Enter your full name",
-          "universityId": "e.g. 2286291",
           "college": "e.g. Computer Science and Engineering",
           "major": "e.g. Software Engineering",
           "phone": "5xxxxxxxx",
@@ -964,7 +1056,7 @@
       },
       "questions": {
         "title": "Custom questions",
-        "help": "Attendees must answer these questions when they register.",
+        "help": "Drag questions to reorder them. Attendees must answer the required ones when they register.",
         "add": "Add more questions",
         "formTitle": "Add a registration question",
         "type": "Question type",
@@ -992,13 +1084,19 @@
         "errors": {
           "type": "Select a question type.",
           "text": "Enter the question text.",
-          "options": "Add at least two options."
-        }
+          "options": "Add at least two options.",
+          "duplicateOptions": "Each option must be different."
+        },
+        "optionalBadge": "Optional",
+        "requiredToggle": "Required question",
+        "moveUp": "Move question {number} up",
+        "moveDown": "Move question {number} down"
       },
       "actions": {
         "cancel": "Cancel",
         "preview": "Preview",
-        "publish": "Publish Event"
+        "publish": "Publish Event",
+        "saveDraft": "Save Draft"
       },
       "errors": {
         "summary": "{count, plural, one {# field needs} other {# fields need}} your attention. Fix the highlighted fields to continue.",
@@ -1010,7 +1108,8 @@
         "deadlinePast": "Registration deadline cannot be in the past.",
         "deadlineAfterEvent": "Registration deadline cannot be after the event date.",
         "imageRequired": "Event image is required.",
-        "imageType": "Choose an image file (for example PNG, JPG, or WebP)."
+        "imageType": "Choose an image file (for example PNG, JPG, or WebP).",
+        "saveFailed": "Could not save the event. Try again."
       },
       "discard": {
         "title": "Discard this event?",
@@ -1044,6 +1143,10 @@
         "demoNote": "Demo data: events are kept for this browser session until the events service is connected.",
         "viewEvent": "View Event",
         "close": "Close"
+      },
+      "statusOptions": {
+        "publish": "Publish",
+        "draft": "Draft"
       }
     },
     "eventDetails": {
@@ -1089,6 +1192,69 @@
         "durationMin": "Duration must be at least 5 minutes.",
         "durationMax": "Duration cannot exceed 10,080 minutes (7 days)."
       }
+    },
+    "clubFilters": {
+      "allCommittees": "All committees",
+      "noCommittee": "No committee",
+      "committee": "Committee",
+      "committees": "Committees",
+      "allRoles": "All roles",
+      "roleLeader": "Leader",
+      "roleCoLeader": "Co-Leader",
+      "roleMember": "Member",
+      "roleClubLeadership": "Club leadership",
+      "roleAdvisor": "Advisor",
+      "searchMember": "Search by member...",
+      "clearFilters": "Clear filters",
+      "noMembers": "No members match these filters.",
+      "noHistory": "No point changes match these filters.",
+      "pointsIn": "Points in {committee}",
+      "addToCommittee": "Add to committee",
+      "addToCommitteeTitle": "Add a member to a committee",
+      "addToCommitteeDescription": "Choose an existing club member and the committee to add them to. They join as a Member.",
+      "selectMember": "Member",
+      "selectMemberPlaceholder": "Choose a member",
+      "selectCommittee": "Committee",
+      "selectCommitteePlaceholder": "Choose a committee",
+      "alreadyInAll": "This member is already in every committee.",
+      "requiredSelection": "Choose a member and a committee.",
+      "requestFailed": "Could not add the member. Try again."
     }
+  },
+  "membershipRequests": {
+    "title": "Membership requests",
+    "description": "Review applications for your committee. Each committee records its decision separately.",
+    "loading": "Loading requests...",
+    "empty": "There are no membership requests for this committee yet.",
+    "apiDisabled": "Connect the authenticated API to review real membership requests.",
+    "unauthorized": "Sign in with an authorized leader account to review requests.",
+    "forbidden": "You do not have permission to review this committee’s requests.",
+    "loadError": "Membership requests could not be loaded.",
+    "decisionError": "Your decision could not be saved. Refresh and try again.",
+    "submitted": "Submitted {date}",
+    "requestedRole": "Requested role: {role}",
+    "selectedCommittees": "Selected committees",
+    "approve": "Approve",
+    "reject": "Reject",
+    "saving": "Saving...",
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "universityEmail": "University email",
+      "university": "University",
+      "branch": "Branch",
+      "college": "College",
+      "major": "Major",
+      "level": "Level",
+      "gender": "Gender"
+    }
+  },
+  "committeeSwitcher": {
+    "label": "Choose a committee"
   }
 }

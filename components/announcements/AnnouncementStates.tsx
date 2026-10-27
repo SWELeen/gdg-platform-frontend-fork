@@ -78,15 +78,15 @@ export function AnnouncementsEmptyState({
       description={
         categoryLabel ? t.rich("inCategory", { category: categoryLabel, strong }) : t("all")
       }
-      actions={
+      actions={categoryLabel || onBrowseAll ? (
         <>
           {onBrowseAll && <PillAction onClick={onBrowseAll}>{t("browseAll")}</PillAction>}
           <PillAction href="/#events" variant="light">
             {t("goToEvents")}
           </PillAction>
         </>
-      }
-      hint={t.rich("hint", {
+      ) : undefined}
+      hint={categoryLabel ? t.rich("hint", {
         link: (chunks) => (
           <a
             href={LINKEDIN_URL}
@@ -97,7 +97,7 @@ export function AnnouncementsEmptyState({
             {chunks}
           </a>
         ),
-      })}
+      }) : undefined}
     />
   );
 }

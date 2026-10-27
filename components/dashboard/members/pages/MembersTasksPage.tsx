@@ -10,7 +10,7 @@ import { MembersTasksList } from "@/components/dashboard/members/MembersTasksLis
 import { TaskProgress } from "@/components/dashboard/members/TaskProgress";
 import { DASHBOARD_CARD } from "@/components/dashboard/members/card-styles";
 import { priorityKeys } from "@/components/dashboard/members/task-styles";
-import { dashboardTasks } from "@/components/dashboard/mock-data";
+import { useMemberWorkspace } from "@/components/dashboard/members/MemberWorkspaceContext";
 import type { TaskPriority } from "@/components/dashboard/mock-data";
 
 type PriorityFilter = "all" | TaskPriority;
@@ -30,18 +30,19 @@ export function MembersTasksPage(): ReactElement {
   const selectId = useId();
   const [priority, setPriority] = useState<PriorityFilter>("all");
   const [view, setView] = useState<TasksView>("board");
+  const { tasks } = useMemberWorkspace();
 
   const visibleTasks =
-    priority === "all" ? dashboardTasks : dashboardTasks.filter((task) => task.priority === priority);
+    priority === "all" ? tasks : tasks.filter((task) => task.priority === priority);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-base font-bold text-foreground">
-          {t("filterWithCount", { label: t("title"), count: dashboardTasks.length })}
+          {t("filterWithCount", { label: t("title"), count: tasks.length })}
         </h2>
 
-        {dashboardTasks.length > 0 && (
+        {tasks.length > 0 && (
           <div className="flex items-center gap-2">
             <label htmlFor={selectId} className="sr-only">
               {t("priorityFilterLabel")}
@@ -90,20 +91,20 @@ export function MembersTasksPage(): ReactElement {
         )}
       </div>
 
-      {dashboardTasks.length > 0 && (
+      {tasks.length > 0 && (
         <div className={DASHBOARD_CARD}>
-          <TaskProgress tasks={dashboardTasks} />
+          <TaskProgress tasks={tasks} />
         </div>
       )}
 
-      {dashboardTasks.length > 0 && visibleTasks.length === 0 ? (
+      {tasks.length > 0 && visibleTasks.length === 0 ? (
         <div
           role="status"
           className="rounded-2xl border border-dashed border-border bg-surface-muted/50 px-5 py-12 text-center text-sm text-muted"
         >
           {t("empty")}
         </div>
-      ) : view === "board" || dashboardTasks.length === 0 ? (
+      ) : view === "board" || tasks.length === 0 ? (
         <MembersTasksBoard tasks={visibleTasks} />
       ) : (
         <MembersTasksList tasks={visibleTasks} />

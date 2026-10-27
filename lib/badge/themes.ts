@@ -1,6 +1,6 @@
-import type { BadgeTheme, CommitteeId } from "./types";
+import type { BadgeTheme, CommitteeCode } from "./types";
 
-// Badge colours per committee. Ids match the committees in data/home.ts.
+// Badge colours per committee, keyed by the backend's committee codes.
 
 const pattern = "/badge/gdg-pattern.png";
 
@@ -27,23 +27,23 @@ const solid = (bg: string, ink: string): BadgeTheme => ({
   photoFrame: ink === "#ffffff" ? "rgba(255, 255, 255, 0.9)" : "rgba(32, 33, 36, 0.55)",
 });
 
-export const committees: Record<CommitteeId, { shortName: string; theme: BadgeTheme }> = {
-  "web-development": { shortName: "Web Development", theme: webDevelopment },
+export const committees: Record<CommitteeCode, { shortName: string; theme: BadgeTheme }> = {
+  WEB: { shortName: "Web Development", theme: webDevelopment },
 
   // ── DEVELOPER COMMITTEE COLOURS ─────────────────────────────
   // TODO: this is where the developer committees' colours go. just swap
   // `webDevelopment` on a committee's line for something like
   // solid("#0b8043", "#ffffff") (background, then text colour)
-  "data-analysis": { shortName: "Data Analysis", theme: webDevelopment },
-  cybersecurity: { shortName: "Cybersecurity", theme: webDevelopment },
-  "artificial-intelligence": { shortName: "AIML", theme: webDevelopment },
-  automation: { shortName: "Automation", theme: webDevelopment },
-  "robotics-iot": { shortName: "IoT & Robotics", theme: webDevelopment },
+  DATA: { shortName: "Data Analysis", theme: webDevelopment },
+  CYBER: { shortName: "Cybersecurity", theme: webDevelopment },
+  AI: { shortName: "AIML", theme: webDevelopment },
+  AUTOMATION: { shortName: "Automation", theme: webDevelopment },
+  ROBOTICS: { shortName: "IoT & Robotics", theme: webDevelopment },
 
   // ── Regular committees: one Google colour each ──────────────
-  "public-relations": { shortName: "Public Relations", theme: solid("#34a853", "#ffffff") },
+  PR: { shortName: "Public Relations", theme: solid("#34a853", "#ffffff") },
   // Google yellow is too light for white text, so its card takes dark ink
-  "content-writing": { shortName: "Content Writing", theme: solid("#fbbc04", "#202124") },
-  "project-management": { shortName: "Project Management", theme: solid("#4285f4", "#ffffff") },
-  "digital-media": { shortName: "Digital Media & Design", theme: solid("#ea4335", "#ffffff") },
+  CONTENT: { shortName: "Content Writing", theme: solid("#fbbc04", "#202124") },
+  PM: { shortName: "Project Management", theme: solid("#4285f4", "#ffffff") },
+  DMD: { shortName: "Digital Media & Design", theme: solid("#ea4335", "#ffffff") },
 };

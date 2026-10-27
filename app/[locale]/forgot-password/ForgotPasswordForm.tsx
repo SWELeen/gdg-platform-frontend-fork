@@ -1,9 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { type FormEvent, useState } from "react"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import { EMAIL_MAX_LENGTH, validateEmail } from "@/app/lib/validation/email"
+import { apiRequest } from "@/lib/api/client"
 
 function normalizeText(value: string) {
   return value.trim();
@@ -11,9 +12,12 @@ function normalizeText(value: string) {
 
 export default function ForgotPasswordForm() {
   const t = useTranslations("auth.forgotPassword")
+  const locale = useLocale()
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [requestMessage, setRequestMessage] = useState("")
+  const [requestSucceeded, setRequestSucceeded] = useState(false)
 
   const handleChange = (value: string) => {
     setEmail(value.trimStart());
@@ -30,7 +34,7 @@ export default function ForgotPasswordForm() {
     setEmailError(validateEmail(email));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isSubmitting) {
@@ -46,12 +50,15 @@ export default function ForgotPasswordForm() {
 
     setEmail(normalizeText(email));
     setIsSubmitting(true);
-
-    // No password-reset request API is documented/available yet;
-    // simulate the request the same way the other auth flows do.
-    window.setTimeout(() => {
-      setIsSubmitting(false);
-    }, 800);
+    setRequestMessage("");
+    setRequestSucceeded(false);
+    const result = await apiRequest<null>("/auth/setup-password/request", {
+      method: "POST",
+      body: { email: normalizeText(email), locale },
+    });
+    setIsSubmitting(false);
+    setRequestSucceeded(result.ok);
+    setRequestMessage(result.ok ? t("requestSent") : t("requestFailed"));
   };
 
   return (
@@ -86,6 +93,12 @@ export default function ForgotPasswordForm() {
           className="absolute start-0 top-full mt-1"
         />
       </label>
+
+      {requestMessage ? (
+        <p role="status" className={`mt-3 text-sm ${requestSucceeded ? "text-green-500" : "text-gdg-red"}`}>
+          {requestMessage}
+        </p>
+      ) : null}
 
       <button
         type="submit"

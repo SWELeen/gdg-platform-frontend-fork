@@ -30,6 +30,8 @@ export function TasksPreview() {
         return <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{t("tasksPreview.completed")}</span>;
       case "In Progress":
         return <span className="text-blue-600 dark:text-blue-400 font-semibold">{t("tasksPreview.inProgress")}</span>;
+      case "Pending Review":
+        return <span className="text-violet-600 dark:text-violet-400 font-semibold">{t("tasksPreview.pendingReview")}</span>;
       default:
         return <span className="text-slate-500 font-semibold">{t("tasksPreview.toDo")}</span>;
     }

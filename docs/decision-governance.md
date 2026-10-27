@@ -48,7 +48,8 @@ Do not silently choose one source when sources conflict. First identify the conf
 - **Layout:** Chosen from three built options (badge view, side column, header). The badge hangs in a column beside the profile cards and stays in view while scrolling; on phones it sits between the header and the cards. Members without a committee see the page without a badge.
 - **Badge content:** The headline is the committee role (Member, Co-Leader, Leader) and the line under it is the committee's short name. The member's uploaded photo replaces the silhouette when there is one; otherwise a female or male silhouette is chosen by the member's gender.
 - **Colours:** Public Relations, Content Writing, Project Management and Digital Media & Design take Google green, yellow, blue and red. Web Development's dark slate GDG card is the default, and the other developer committees (Data Analysis, Cybersecurity, AIML, Automation, IoT & Robotics) use it until their colours are decided (`TBD`; marked "DEVELOPER COMMITTEE COLOURS" in `lib/badge/themes.ts`).
-- **Open (`TBD`):** Committee, role and gender come from demo data (`data/demo-member.ts`) until the profile API publishes them; see "Profile badge" in `docs/api-integration.md`. Badge text is English in both locales.
+- **Data:** Name, photo, gender and committees come from `GET /me`, keyed by the backend's committee codes; see "Profile badge status" in `docs/api-integration.md`.
+- **Open (`TBD`):** `/me` position values beyond Leader and Co-Leader (and positions like Advisor) are unconfirmed. Badge text is English in both locales.
 
 ## Decision record minimum
 

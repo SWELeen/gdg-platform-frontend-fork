@@ -6,7 +6,14 @@
     "projects": "Projects",
     "events": "Events",
     "announcements": "Announcements",
-    "community": "Community"
+    "community": "Community",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "signOut": "Sign out"
+  },
+  "workspaces": {
+    "label": "Switch dashboard",
+    "memberDashboard": "Member Dashboard"
   },
   "language": {
     "label": "Language",

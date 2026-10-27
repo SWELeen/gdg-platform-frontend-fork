@@ -49,7 +49,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
   const pointsError = touched.points ? validatePoints(pointsAmount) : "";
   const reasonError = touched.reason ? validateReason(reason) : "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ points: true, reason: true });
 
@@ -62,13 +62,16 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
     }
 
     const delta = mode === "add" ? Number(pointsAmount) : -Number(pointsAmount);
-    updateMemberPoints(member.id, delta, reason.trim());
-
-    setPointsAmount(50);
-    setReason("");
-    setTouched({});
-    setGeneralError("");
-    onClose();
+    try {
+      await updateMemberPoints(member.id, delta, reason.trim());
+      setPointsAmount(50);
+      setReason("");
+      setTouched({});
+      setGeneralError("");
+      onClose();
+    } catch (error) {
+      setGeneralError(error instanceof Error ? error.message : t("points.requestFailed"));
+    }
   };
 
   return (

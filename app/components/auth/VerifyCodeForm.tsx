@@ -3,6 +3,9 @@
 import { type ClipboardEvent, type FormEvent, useRef, useState } from "react"
 import { useTranslations } from "next-intl"
 import AuthErrorMessage from "./AuthErrorMessage"
+import { API_ENABLED, apiRequest } from "@/lib/api/client"
+import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { useRouter } from "@/i18n/navigation"
 
 const CODE_LENGTH = 6
 
@@ -22,11 +25,14 @@ function validateCode(code: string[]) {
 
 export default function VerifyCodeForm() {
   const t = useTranslations("auth.verifyCode")
+  const router = useRouter()
   const [code, setCode] = useState<string[]>(() =>
     Array.from({ length: CODE_LENGTH }, () => "")
   )
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isResending, setIsResending] = useState(false)
+  const [resendMessage, setResendMessage] = useState("")
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   function updateCode(index: number, value: string) {
@@ -72,7 +78,25 @@ export default function VerifyCodeForm() {
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleResend() {
+    if (isResending || !API_ENABLED) return
+    let pending: { email?: string } = {}
+    try {
+      pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
+    } catch { pending = {} }
+    if (!pending.email) {
+      setError("authRequestFailed")
+      return
+    }
+    setIsResending(true)
+    setResendMessage("")
+    const result = await apiRequest<{ sent: true }>("/auth/resend-personal-verification", { method: "POST", body: { email: pending.email } })
+    if (result.ok) setResendMessage(t("resent"))
+    else setError("authRequestFailed")
+    setIsResending(false)
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (isSubmitting) {
@@ -87,12 +111,47 @@ export default function VerifyCodeForm() {
 
     setError("")
     setIsSubmitting(true)
-
-    // No verification API is documented/available yet; simulate the request
-    // the same way the other auth flows do until one is wired up.
-    window.setTimeout(() => {
+    if (!API_ENABLED) {
+      setError("apiRequired")
       setIsSubmitting(false)
-    }, 800)
+      return
+    }
+
+    let pending: { email?: string } = {}
+    try {
+      pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
+    } catch {
+      pending = {}
+    }
+    if (!pending.email) {
+      setError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+
+    const verified = await apiRequest<AuthSession & { authenticated?: true; registrationPendingApproval?: boolean } | { authenticated: false; registrationPendingApproval: boolean }>("/auth/verify-email", {
+        method: "POST",
+        body: { email: pending.email, token: code.join("") },
+      })
+    if (!verified.ok) {
+      setError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+    if (verified.data.authenticated === false) {
+      window.sessionStorage.removeItem("gdg.pending-signup")
+      router.replace(verified.data.registrationPendingApproval ? "/signup/pending" : "/login")
+      setIsSubmitting(false)
+      return
+    }
+    storeAuthSession(verified.data)
+    if (verified.data.registrationPendingApproval === false) {
+      window.sessionStorage.removeItem("gdg.pending-signup")
+      router.replace("/")
+      return
+    }
+    window.sessionStorage.removeItem("gdg.pending-signup")
+    router.replace("/signup/pending")
   }
 
   return (
@@ -145,6 +204,9 @@ export default function VerifyCodeForm() {
         />
       </div>
 
+      <p className="mt-3 text-center text-sm text-foreground/60">{t("personalEmailCode")}</p>
+      {resendMessage ? <p role="status" className="mt-2 text-center text-sm text-green-700">{resendMessage}</p> : null}
+
       <button
         type="submit"
         disabled={isSubmitting}
@@ -157,9 +219,11 @@ export default function VerifyCodeForm() {
         {t("noCode")}{" "}
         <button
           type="button"
+          disabled={isResending}
+          onClick={handleResend}
           className="cursor-pointer text-sm font-medium text-gdg-blue hover:text-gdg-blue/90 active:text-gdg-blue/80"
         >
-          {t("resend")}
+          {isResending ? t("verifying") : t("resend")}
         </button>
       </p>
     </form>

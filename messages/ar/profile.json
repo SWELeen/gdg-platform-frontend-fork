@@ -1,25 +1,17 @@
 {
   "hero": {
-    "edit": "تعديل الملف الشخصي",
-    "save": "حفظ التغييرات",
-    "cancel": "إلغاء",
-    "changePhoto": "تغيير صورة الملف الشخصي",
-    "changeCover": "تغيير صورة الغلاف",
     "memberSince": "عضو منذ {date}"
-  },
-  "chips": {
-    "studentId": "الرقم الجامعي: {id}"
   },
   "badge": {
     "label": "بطاقة العضوية: {name}، {role}، {committee}"
   },
   "bio": {
     "title": "نبذة مختصرة",
-    "placeholder": "عرّف مجتمع GDG بنفسك واهتماماتك ومشاريعك أو ما تتعلمه حاليًا"
+    "placeholder": "",
+    "empty": "لا توجد نبذة حتى الآن."
   },
   "tabs": {
-    "personal": "المعلومات الشخصية والأكاديمية",
-    "social": "روابط التواصل"
+    "personal": "المعلومات الشخصية والأكاديمية"
   },
   "cards": {
     "personal": "المعلومات الشخصية",
@@ -28,28 +20,17 @@
   "fields": {
     "fullName": "الاسم الكامل",
     "email": "البريد الإلكتروني",
+    "universityEmail": "البريد الجامعي",
     "phone": "الجوال",
-    "studentId": "الرقم الجامعي",
     "university": "الجامعة",
+    "branch": "الفرع",
+    "college": "الكلية",
     "major": "التخصص",
-    "academicYear": "السنة الدراسية"
+    "level": "المستوى الدراسي",
+    "gender": "الجنس"
   },
-  
-  "academicValues": {
-  "universityOfJeddah": "جامعة جدة",
-  "softwareEngineering": "هندسة البرمجيات",
-  "thirdYear": "السنة الثالثة",
-  "janaAlshaikh": "جنى الشيخ"
-},
-
   "universityPlaceholder": "اختر الجامعة",
   "registrationsLink": "تسجيلاتي",
-  "social": {
-    "platforms": {
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "website": "الموقع الشخصي"
-    },
-    "notAdded": "لم يُضف بعد"
-  }
+  "loading": "جارٍ تحميل ملفك الشخصي…",
+  "loadError": "تعذر تحميل ملفك الشخصي. حاول مرة أخرى."
 }

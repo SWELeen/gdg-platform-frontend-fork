@@ -3,81 +3,71 @@ export const projects = [
     {
       id: "gdg-gaming-platform",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-web-development)",
       detailsImg: "/images/GDG-game-project.png",
       detailsImages: [
         "/images/GDG-game2-project.png",
-        "/images/GDG-game3-project.png",
       ],
     },
     {
       id: "bracket-click",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-artificial-intelligence)",
+      detailsImages: [
+        "/images/BracketClick1.png",
+      ],
     },
     {
       id: "gdg-air-hockey",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-artificial-intelligence)",
+      detailsImages: ["/images/GDG%20Air%20Hockey1.png"],
     },
     {
       id: "gdg-prompt-pilot",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-artificial-intelligence)",
+      detailsImages: ["/images/GDG%20Prompt%20Pilot1.jpg"],
     },
     {
       id: "gdg-face-retrieval",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-artificial-intelligence)",
+      detailsImages: ["/images/GDG%20Face%20Retrieval1.png"],
     },
     {
       id: "applicant-evaluation-system",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-automation)",
+      detailsImages: ["/images/Applicant%20Evaluation%20System1.png"],
     },
     {
       id: "integrated-data-visualization-system",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-data-analysis)",
+      detailsImages: ["/images/integrated%20data%20management%20and%20visualization%20system.png"],
     },
     {
       id: "internal-phishing-simulation",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-cybersecurity)",
+      detailsImages: ["/images/Internal%20Phishing%20Simulation.png"],
     },
     {
       id: "website-security-assessment",
       img: "/images/project-placeholder.png",
+      committeeColor: "var(--committee-cybersecurity)",
+      detailsImages: ["/images/website%20security%20assesment.png"],
     },
   ];
     
-//   Mock data, The actual data will be retrieved from database 
-export const events = [
-    {
-      id: "1",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-    {
-      id: "2",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-    {
-      id: "3",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-  ];
-
 export const teamMembers = [
   {
     id: "1",
     type: "leader",
     image: "/images/abdullah-leader.png",
-    imageScaleClass: "scale-[1.08]",
-    imagePositionClass: "translate-x-1 translate-y-3",
+    imageScaleClass: "scale-[1.15]",
+    imagePositionClass: "translate-x-2 translate-y-4",
     role: "Lead",
     name: "Abdullah Misar",
     linkedin: "#", // حطي الرابط الحقيقي
@@ -87,7 +77,8 @@ export const teamMembers = [
     id: "2",
     type: "leader",
     image: "/images/jumanah-coleader.png",
-    imageScaleClass: "scale-[1.08]",
+    imageScaleClass: "scale-[1.15]",
+    imagePositionClass: "translate-y-1",
     role: "Co-Lead",
     name: "Jumanah Alshaibi",
     linkedin: "#",
@@ -128,7 +119,7 @@ const allCommittees = [
     },
     coLeader:{
       name: "Sameera Radwan",
-      image: "/images/unknown.png",
+      image: "/images/sameerah-preview.png",
     },
   },
 
@@ -201,7 +192,7 @@ const allCommittees = [
           name: "Leen Alghamdi",
           image: "/images/web-lead.png",
           imageScaleClass: "scale-125",
-          imagePositionClass: "translate-y-4",
+          imagePositionClass: "translate-y-6",
         },
     },
 

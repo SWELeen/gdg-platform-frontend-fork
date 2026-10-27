@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
+import { PASSWORD_MAX_LENGTH } from "@/app/lib/validation/password"
 
 type LoginPasswordProps = {
   value: string;
@@ -29,7 +30,7 @@ export default function LoginPassword({
       <form className="mt-12 w-full" onSubmit={onSubmit} noValidate>
         <label htmlFor="login-password" className="block text-sm font-medium">
           {t("passwordLabel")} <span className="text-gdg-red">*</span>
-          <div className="relative">
+          <div className="w-full">
             <PasswordInput
               id="login-password"
               name="password"
@@ -39,7 +40,7 @@ export default function LoginPassword({
               placeholder={t("passwordPlaceholder")}
               autoComplete="current-password"
               minLength={8}
-              maxLength={128}
+              maxLength={PASSWORD_MAX_LENGTH}
               aria-invalid={Boolean(error)}
               aria-describedby={
                 error ? "login-password-error" : undefined
@@ -50,7 +51,7 @@ export default function LoginPassword({
             <AuthErrorMessage
               id="login-password-error"
               message={error}
-              className="absolute inset-s-0 top-full mt-1"
+              className="mt-1 block"
             />
           </div>
         </label>

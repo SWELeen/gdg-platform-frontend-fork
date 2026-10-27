@@ -55,9 +55,9 @@
     "page": "Page {page}"
   },
   "empty": {
-    "title": "No announcements published yet",
+    "title": "Stay tuned…",
     "inCategory": "There is nothing under <strong>{category}</strong> right now. Once the committee publishes an announcement, it appears here first — before it goes out on social media.",
-    "all": "There is nothing here right now. Once the committee publishes an announcement, it appears here first — before it goes out on social media.",
+    "all": "New announcements will appear here.",
     "browseAll": "Browse all announcements",
     "goToEvents": "Go to Events",
     "hint": "Try clearing the filters, or <link>follow us on LinkedIn</link> to get notified when something new is published."

@@ -20,6 +20,10 @@ export type ApiEvent = {
   location: string | null;
   imageUrl: string | null;
   requirements: string | null;
+  eventType: string | null;
+  speakers: string | null;
+  mapsLink: string | null;
+  requiredRegistrantFields: string[];
   capacity: number;
   seatsTaken: number;
   registrationDeadline: string;
@@ -54,8 +58,8 @@ export function toPlatformEvent(event: ApiEvent): PlatformEvent {
   return {
     id: String(event.eventId),
     title: event.name,
-    // The backend has no event type yet; every event shows as a workshop.
-    type: "Workshop",
+    // Events created before event types existed show as workshops.
+    type: (event.eventType as PlatformEvent["type"] | null) ?? "Workshop",
     date: formatDate(event.startsAt),
     time: formatTime(event.startsAt),
     location: event.location ?? "",
@@ -86,7 +90,9 @@ export async function fetchEventDetails(id: string): Promise<ApiEventDetails | u
 // a control character never appears inside an option's text.
 export const CHOICE_SEPARATOR = "\u001f";
 
-export type RegisterResult = { ok: true } | { ok: false; code: string };
+export type RegisterResult =
+  | { ok: true }
+  | { ok: false; code: string; details: readonly { pointer: string; message: string }[] };
 
 // Checkbox answers travel as a list of the chosen options.
 export async function registerForEvent(
@@ -106,5 +112,7 @@ export async function registerForEvent(
       })),
   };
   const result = await apiRequest(`/events/${eventId}/registrations`, { method: "POST", body });
-  return result.ok ? { ok: true } : { ok: false, code: result.code };
+  return result.ok
+    ? { ok: true }
+    : { ok: false, code: result.code, details: result.details };
 }

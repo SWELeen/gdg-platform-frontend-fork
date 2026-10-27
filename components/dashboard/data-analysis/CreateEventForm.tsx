@@ -3,28 +3,29 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
-  BookOpen,
-  Building2,
-  Hash,
+  ArrowDown,
+  ArrowUp,
+  GripVertical,
   ImagePlus,
   Link2,
-  Mail,
   MapPin,
   Plus,
   Trash2,
-  UserRound,
   X,
 } from "lucide-react";
 import type { CommitteeEvent, EventType } from "../shared/types";
 import { ConfirmModal } from "../shared/ConfirmModal";
 import { useDialog } from "../shared/useDialog";
 import { formatEventDate, formatEventTime, toIsoDate } from "@/lib/dashboard/event-format";
+import { API_ENABLED } from "@/lib/api/client";
+import type { EventSchedule } from "@/lib/committee-dashboard/api";
 import { EventPreviewModal } from "./EventPreviewModal";
 import { EventPublishedModal } from "./EventPublishedModal";
 import {
   choiceQuestionTypes,
   questionTypeKeys,
   questionTypes,
+  accountRegistrantFields,
   requiredRegistrantFields,
   type DraftQuestion,
 } from "./event-form-config";
@@ -112,9 +113,25 @@ const fieldId = (name: string) => `create-event-${name}`;
 interface CreateEventFormProps {
   isModal?: boolean;
   onClose?: () => void;
-  /** Adds the event; returning its id enables the "View Event" action. */
-  onCreate?: (event: CreateEventInput) => string | void;
+  /** Adds the event; returning its id enables the "View Event" action. A rejected promise shows its message. */
+  onCreate?: CreateEventHandler;
   onViewEvent?: (eventId: string) => void;
+}
+
+type CreateEventHandler = (event: CreateEventInput, schedule: EventSchedule) => string | void | Promise<string | void>;
+
+// The form has no end time yet, so events last two hours.
+const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000;
+
+/** Local date and time inputs → the exact instants the backend stores. Registration closes at the end of the chosen day, never after the start. */
+function toSchedule(values: FormValues): EventSchedule {
+  const startsAt = new Date(`${values.date}T${values.time}`);
+  const deadlineEnd = new Date(`${values.registrationDeadline}T23:59:59`);
+  return {
+    startsAt: startsAt.toISOString(),
+    endsAt: new Date(startsAt.getTime() + DEFAULT_DURATION_MS).toISOString(),
+    registrationDeadline: new Date(Math.min(deadlineEnd.getTime(), startsAt.getTime())).toISOString(),
+  };
 }
 
 export function CreateEventModal({
@@ -125,7 +142,7 @@ export function CreateEventModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (event: CreateEventInput) => string | void;
+  onCreate: CreateEventHandler;
   onViewEvent?: (eventId: string) => void;
 }) {
   if (!isOpen) return null;
@@ -181,6 +198,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
   const [questionType, setQuestionType] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [questionOptions, setQuestionOptions] = useState<string[]>(["", ""]);
+  const [questionRequired, setQuestionRequired] = useState(true);
+  const [draggedQuestion, setDraggedQuestion] = useState<number | null>(null);
   const [questionError, setQuestionError] = useState("");
 
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -188,6 +207,9 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
   const [showPreview, setShowPreview] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [publishedEvent, setPublishedEvent] = useState<{ id: string | null; title: string } | null>(null);
+  const [publishStatus, setPublishStatus] = useState<"publish" | "draft">("publish");
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [today] = useState(() => toIsoDate(new Date()));
 
   // The selected image's blob URL is revoked when replaced or when the form unmounts,
@@ -269,7 +291,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
       next.registrationDeadline = t("errors.deadlineAfterEvent");
     }
 
-    if (!currentImage) next.image = t("errors.imageRequired");
+    // Images are not uploaded to the backend yet, so they are optional there.
+    if (!currentImage && !API_ENABLED) next.image = t("errors.imageRequired");
     return next;
   };
 
@@ -317,8 +340,23 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     setQuestionType("");
     setQuestionText("");
     setQuestionOptions(["", ""]);
+    setQuestionRequired(true);
     setQuestionError("");
     setShowQuestionForm(false);
+  };
+
+  const setQuestionRequiredAt = (id: string, required: boolean) =>
+    setQuestions((current) => current.map((item) => (item.id === id ? { ...item, required } : item)));
+
+  // Moves a question to a new position, by drag and drop or the up/down buttons.
+  const moveQuestion = (from: number, to: number) => {
+    setQuestions((current) => {
+      if (to < 0 || to >= current.length || from === to) return current;
+      const next = [...current];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      return next;
+    });
   };
 
   const handleAddQuestion = () => {
@@ -340,6 +378,10 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
         setQuestionError(t("questions.errors.options"));
         return;
       }
+      if (new Set(options.map((option) => option.toLowerCase())).size !== options.length) {
+        setQuestionError(t("questions.errors.duplicateOptions"));
+        return;
+      }
     }
 
     setQuestions((current) => [
@@ -348,7 +390,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
         id: `registration-question-${Date.now()}`,
         type: questionType,
         text: questionText.trim(),
-        required: true,
+        required: questionRequired,
         ...(options ? { options } : {}),
       },
     ]);
@@ -359,13 +401,14 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     if (validateAndFocus()) setShowPreview(true);
   };
 
-  const handlePublish = () => {
-    if (publishedEvent) return;
+  const handlePublish = async () => {
+    if (publishedEvent || saving) return;
     if (!validateAndFocus()) {
       setShowPreview(false);
       return;
     }
 
+    const isDraft = publishStatus === "draft";
     const eventData: CreateEventInput = {
       title: values.title.trim(),
       description: values.description.trim(),
@@ -380,16 +423,27 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
       requirements: values.requirements.trim(),
       imageUrl: image?.url,
       registered: 0,
-      status: "Upcoming",
-      isDraft: false,
+      status: isDraft ? "Draft" : "Upcoming",
+      isDraft,
       requiredRegistrantFields,
       registrationQuestions: questions,
     };
 
-    const createdId = onCreate?.(eventData);
-    handedOffImageUrlRef.current = image?.url ?? null;
-    setShowPreview(false);
-    setPublishedEvent({ id: typeof createdId === "string" ? createdId : null, title: eventData.title });
+    setSaving(true);
+    setSaveError("");
+    try {
+      const createdId = await onCreate?.(eventData, toSchedule(values));
+      handedOffImageUrlRef.current = image?.url ?? null;
+      setShowPreview(false);
+      // A draft is not published, so the "published" dialog would be wrong.
+      if (isDraft) onClose?.();
+      else setPublishedEvent({ id: typeof createdId === "string" ? createdId : null, title: eventData.title });
+    } catch (error) {
+      setShowPreview(false);
+      setSaveError(error instanceof Error && error.message ? error.message : t("errors.saveFailed"));
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inputClass = (name: FieldName) =>
@@ -431,7 +485,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
           noValidate
           onSubmit={(event) => {
             event.preventDefault();
-            handlePublish();
+            void handlePublish();
           }}
         >
           <h2 className={styles.sectionTitle}>{t("sections.eventInfo")}</h2>
@@ -703,66 +757,13 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
           <h2 className={styles.sectionTitle}>{t("sections.registrationInfo")}</h2>
           <p className="-mt-2 mb-4 text-sm text-muted">{t("registration.description")}</p>
 
-          <fieldset disabled className="mb-6 rounded-2xl border border-border bg-surface-muted/30 p-4 sm:p-6">
-            <legend className="sr-only">{t("sections.registrationInfo")}</legend>
-            <div className={styles.field}>
-              <span className={styles.label}>{t("registration.fields.fullName")} *</span>
-              <div className="relative">
-                <UserRound className={styles.iconInput} aria-hidden="true" />
-                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.fullName")} aria-label={t("registration.fields.fullName")} />
-              </div>
-            </div>
-            <div className={styles.row}>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.universityId")} *</span>
-                <div className="relative">
-                  <Hash className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.universityId")} aria-label={t("registration.fields.universityId")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.college")} *</span>
-                <div className="relative">
-                  <Building2 className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.college")} aria-label={t("registration.fields.college")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.major")} *</span>
-                <div className="relative">
-                  <BookOpen className={styles.iconInput} aria-hidden="true" />
-                  <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.major")} aria-label={t("registration.fields.major")} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <span className={styles.label}>{t("registration.fields.phone")} *</span>
-                <div className="flex gap-2" dir="ltr">
-                  <span className="flex min-h-[44px] items-center rounded-[10px] border border-border bg-surface px-3 text-sm font-semibold text-foreground">
-                    +966
-                  </span>
-                  <input className={`${styles.input} ${styles.inputOk}`} placeholder={t("registration.placeholders.phone")} aria-label={t("registration.fields.phone")} />
-                </div>
-              </div>
-            </div>
-            <div className={styles.field}>
-              <span className={styles.label}>{t("registration.fields.email")} *</span>
-              <div className="relative">
-                <Mail className={styles.iconInput} aria-hidden="true" />
-                <input className={`${styles.input} ${styles.inputOk} ps-9`} placeholder={t("registration.placeholders.email")} aria-label={t("registration.fields.email")} />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className={styles.label}>{t("registration.fields.membership")} *</span>
-              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-foreground/80">
-                <label className="flex items-center gap-2">
-                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberYes")}
-                </label>
-                <label className="flex items-center gap-2">
-                  <input type="radio" name="create-event-membership-preview" /> {t("registration.memberNo")}
-                </label>
-              </div>
-            </div>
-          </fieldset>
+          <ul className="mb-6 flex flex-wrap gap-2" aria-label={t("sections.registrationInfo")}>
+            {accountRegistrantFields.map((field) => (
+              <li key={field} className="rounded-full border border-border bg-surface-muted/60 px-3 py-1 text-xs text-foreground/80">
+                {t(`registration.fields.${field}`)}
+              </li>
+            ))}
+          </ul>
 
           {questions.length > 0 && (
             <section aria-labelledby="create-event-questions" className="mb-4 flex flex-col gap-3">
@@ -771,23 +772,84 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
               </h3>
               <p className="-mt-2 text-sm text-muted">{t("questions.help")}</p>
               {questions.map((question, index) => (
-                <div key={question.id} className="rounded-xl border border-border bg-surface p-4">
+                <div
+                  key={question.id}
+                  draggable
+                  onDragStart={(event) => {
+                    setDraggedQuestion(index);
+                    event.dataTransfer.effectAllowed = "move";
+                  }}
+                  onDragOver={(event) => {
+                    if (draggedQuestion === null) return;
+                    event.preventDefault();
+                    if (draggedQuestion !== index) {
+                      moveQuestion(draggedQuestion, index);
+                      setDraggedQuestion(index);
+                    }
+                  }}
+                  onDragEnd={() => setDraggedQuestion(null)}
+                  onDrop={(event) => event.preventDefault()}
+                  className={`rounded-xl border bg-surface p-4 transition ${
+                    draggedQuestion === index ? "border-gdg-blue opacity-60" : "border-border"
+                  }`}
+                >
                   <div className="flex items-start justify-between gap-3">
-                    <p className="text-sm font-semibold text-foreground">
-                      {index + 1}. {question.text}
-                      <span className="ms-2 inline-block rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-700 dark:bg-red-950/50 dark:text-red-300">
-                        {t("questions.requiredBadge")}
-                      </span>
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setQuestions((current) => current.filter((item) => item.id !== question.id))}
-                      aria-label={t("questions.remove", { number: index + 1 })}
-                      className="shrink-0 rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"
-                    >
-                      <Trash2 className="size-4" />
-                    </button>
+                    <div className="flex min-w-0 items-start gap-2">
+                      <GripVertical
+                        className="mt-0.5 size-4 shrink-0 cursor-grab text-muted active:cursor-grabbing"
+                        aria-hidden="true"
+                      />
+                      <p className="text-sm font-semibold text-foreground">
+                        {index + 1}. {question.text}
+                        <span
+                          className={`ms-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${
+                            question.required
+                              ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
+                              : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          }`}
+                        >
+                          {question.required ? t("questions.requiredBadge") : t("questions.optionalBadge")}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => moveQuestion(index, index - 1)}
+                        disabled={index === 0}
+                        aria-label={t("questions.moveUp", { number: index + 1 })}
+                        className="rounded-lg p-1.5 text-muted transition hover:bg-surface-muted hover:text-foreground disabled:opacity-30"
+                      >
+                        <ArrowUp className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveQuestion(index, index + 1)}
+                        disabled={index === questions.length - 1}
+                        aria-label={t("questions.moveDown", { number: index + 1 })}
+                        className="rounded-lg p-1.5 text-muted transition hover:bg-surface-muted hover:text-foreground disabled:opacity-30"
+                      >
+                        <ArrowDown className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setQuestions((current) => current.filter((item) => item.id !== question.id))}
+                        aria-label={t("questions.remove", { number: index + 1 })}
+                        className="rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
                   </div>
+                  <label className="mt-2 flex w-fit cursor-pointer items-center gap-2 text-xs font-medium text-foreground/80">
+                    <input
+                      type="checkbox"
+                      checked={question.required}
+                      onChange={(event) => setQuestionRequiredAt(question.id, event.target.checked)}
+                      className="size-3.5 accent-gdg-blue"
+                    />
+                    {t("questions.requiredToggle")}
+                  </label>
                   <p className="mt-1 text-xs text-muted">
                     {t(`questions.types.${questionTypeKeys[question.type]}`)}
                   </p>
@@ -886,6 +948,16 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
                 </fieldset>
               )}
 
+              <label className="mb-4 flex w-fit cursor-pointer items-center gap-2 text-sm font-medium text-foreground">
+                <input
+                  type="checkbox"
+                  checked={questionRequired}
+                  onChange={(event) => setQuestionRequired(event.target.checked)}
+                  className="size-4 accent-gdg-blue"
+                />
+                {t("questions.requiredToggle")}
+              </label>
+
               {questionError && (
                 <p role="alert" className={`${styles.error} mb-3`}>
                   {questionError}
@@ -922,7 +994,25 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
             </p>
           )}
 
+          {saveError && (
+            <p role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200">
+              {saveError}
+            </p>
+          )}
+
           <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-end">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground/85 sm:me-auto">
+              {t("fields.status")}
+              <select
+                id={fieldId("status")}
+                value={publishStatus}
+                onChange={(event) => setPublishStatus(event.target.value === "draft" ? "draft" : "publish")}
+                className="min-h-[44px] rounded-[10px] border border-border bg-surface px-3 text-sm text-foreground focus:border-gdg-blue focus:outline-none"
+              >
+                <option value="publish">{t("statusOptions.publish")}</option>
+                <option value="draft">{t("statusOptions.draft")}</option>
+              </select>
+            </label>
             <button
               type="button"
               onClick={requestClose}
@@ -937,8 +1027,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
             >
               {t("actions.preview")}
             </button>
-            <button type="submit" className={styles.primaryButton}>
-              {t("actions.publish")}
+            <button type="submit" disabled={saving} className={`${styles.primaryButton} disabled:opacity-60`}>
+              {publishStatus === "draft" ? t("actions.saveDraft") : t("actions.publish")}
             </button>
           </div>
         </form>

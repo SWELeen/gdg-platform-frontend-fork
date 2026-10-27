@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { Announcement } from "@/lib/announcements/types";
 import AnnouncementCard from "./AnnouncementCard";
 
+const MotionLink = motion.create(Link);
+
 type AnnouncementsSectionProps = {
   announcements: Announcement[];
-  announcementsHref?: string;
+  announcementsHref?: "/announcements";
 };
 
 const ITEMS_PER_PAGE = 4;
@@ -107,7 +110,7 @@ export default function AnnouncementsSection({
           <div className="max-w-[700px]">
       <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
         {t("title")}{" "}
-        <span className="bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pe-1 italic text-transparent rtl:not-italic">
+        <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("highlight")}
         </span>
       </h2>
@@ -115,7 +118,7 @@ export default function AnnouncementsSection({
 
           {/* View all */}
 
-          <motion.a
+          <MotionLink
             href={announcementsHref}
             whileHover={{
               scale: 1.03,
@@ -158,11 +161,16 @@ export default function AnnouncementsSection({
                 strokeLinejoin="round"
               />
             </svg>
-          </motion.a>
+          </MotionLink>
         </div>
 
         {/* Cards */}
 
+        {announcements.length === 0 ? (
+          <p role="status" className="py-12 text-center text-lg text-muted">
+            {t("empty")}
+          </p>
+        ) : (
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
@@ -198,6 +206,7 @@ export default function AnnouncementsSection({
             ))}
           </motion.div>
         </AnimatePresence>
+        )}
 
         {/* Navigation */}
 

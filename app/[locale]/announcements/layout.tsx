@@ -16,7 +16,7 @@ export default async function AnnouncementsLayout({
 
   return (
     <>
-      <Navbar variant="light" />
+      <Navbar />
       <main className="flex w-full flex-1 flex-col pt-[var(--home-nav-height)]">
         {children}
         <AnnouncementsCTA />

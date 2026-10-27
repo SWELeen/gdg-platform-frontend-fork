@@ -47,20 +47,21 @@ function AdvisorCard({ title, advisors, description, number }: AdvisorCardProps)
     <article
       className="group relative flex h-[550px] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-3 shadow-sm sm:h-[460px] sm:p-4"
       style={{
-        borderTopColor: "var(--gdg-blue)",
+        borderTopColor: "transparent",
         borderTopWidth: 3,
         "--committee-accent": "var(--gdg-blue)",
       } as CSSProperties}
     >
-      <div className="relative flex min-w-0 flex-1 flex-col">
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 z-20 h-[3px] bg-[image:var(--google-gradient)]" />
+      <div className="relative flex min-w-0 flex-none flex-col sm:flex-1">
         <div className="relative z-10 flex items-start justify-between gap-3">
           <h3
             dir={dir}
-            className="text-balance break-words text-lg font-semibold leading-snug text-[var(--committee-accent)] sm:text-xl"
+            className="text-balance break-words bg-[image:var(--google-gradient)] bg-clip-text text-lg font-semibold leading-snug text-transparent sm:text-xl"
           >
             {title}
           </h3>
-          <span className="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--committee-accent)_12%,transparent)] px-2.5 py-1 text-[10px] font-semibold tabular-nums text-[var(--committee-accent)]">
+          <span className="shrink-0 rounded-full bg-[image:var(--google-gradient)] px-2.5 py-1 text-[10px] font-semibold tabular-nums text-white">
             {String(number).padStart(2, "0")}
           </span>
         </div>
@@ -85,6 +86,7 @@ function AdvisorCard({ title, advisors, description, number }: AdvisorCardProps)
               index={index}
               linkedin={advisor.linkedin}
               x={advisor.x}
+              googleAccent
               layoutClass="w-[calc(50%-0.375rem)] min-w-[140px] max-w-[220px]"
             />
           ))}
@@ -114,7 +116,7 @@ export default function Committees() {
         <div className="max-w-2xl pb-8 sm:pb-10">
           <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
             {t("title")}{" "}
-            <span className="bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pe-1 italic text-transparent rtl:not-italic">
+            <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
               {t("highlight")}
             </span>
           </h2>
@@ -232,6 +234,7 @@ export default function Committees() {
               }
 
               const isSelected = item.key === selectedId;
+              const isAdvisorsItem = item.key === "advisors";
               return (
                 <button
                   key={item.key}
@@ -242,18 +245,23 @@ export default function Committees() {
                     setSelectedSubCommitteeId(undefined);
                     setExpandedId(null);
                   }}
-                  className={`flex min-h-14 items-center gap-3 rounded-xl border px-3 py-3 text-start transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-4 ${
+                  className={`relative flex min-h-14 items-center gap-3 rounded-xl border px-3 py-3 text-start transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-4 ${
                     isSelected
                       ? "border-transparent bg-foreground text-background shadow-sm"
                       : "border-foreground/10 bg-[var(--committee-card-surface)] text-foreground hover:border-foreground/25 hover:bg-foreground/5"
                   }`}
-                  style={isSelected ? { borderInlineStartColor: "#4285F4", borderInlineStartWidth: 4 } : undefined}
+                  style={isSelected && !isAdvisorsItem ? { borderInlineStartColor: "#4285F4", borderInlineStartWidth: 4 } : undefined}
                 >
                   <span
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums text-white"
-                    style={{ backgroundColor: "#4285F4" }}
+                    className={`relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums text-white ${isAdvisorsItem ? "bg-[conic-gradient(from_0deg,#4285F4_0deg,#34A853_90deg,#FBBC04_180deg,#EA4335_270deg,#4285F4_360deg)]" : ""}`}
+                    style={isAdvisorsItem ? undefined : { backgroundColor: "#4285F4" }}
                   >
-                    {String(item.number).padStart(2, "0")}
+                    <span
+                      className={isAdvisorsItem ? "relative z-10" : ""}
+                      style={isAdvisorsItem ? { textShadow: "0 1px 2px rgb(0 0 0 / 75%)" } : undefined}
+                    >
+                      {String(item.number).padStart(2, "0")}
+                    </span>
                   </span>
                   <span className="text-sm font-medium leading-snug sm:text-base">
                     {t("advisorsLabel")}

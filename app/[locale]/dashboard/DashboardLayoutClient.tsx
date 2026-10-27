@@ -6,14 +6,20 @@ import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { LeaderSidebar } from "@/components/dashboard/shared/LeaderSidebar";
 import { LeaderHeader } from "@/components/dashboard/shared/LeaderHeader";
+import { LeaderDashboardStatus } from "@/components/dashboard/shared/LeaderDashboardStatus";
 import type { LeaderCommittee, LeaderDashboardSeed } from "@/components/dashboard/shared/types";
+import { DashboardAccessGate } from "@/components/dashboard/shared/DashboardAccessGate";
 
 function LeaderLayoutShell({
   children,
   committee,
+  developerCommitteesLeader,
+  clubLeadership,
 }: {
   children: ReactNode;
   committee: LeaderCommittee;
+  developerCommitteesLeader: boolean;
+  clubLeadership: boolean;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -29,6 +35,8 @@ function LeaderLayoutShell({
           mobileOpen={mobileMenuOpen}
           onCloseMobile={() => setMobileMenuOpen(false)}
           committee={committee}
+          developerCommitteesLeader={developerCommitteesLeader}
+          clubLeadership={clubLeadership}
         />
 
         {/* Main Content Area */}
@@ -37,11 +45,14 @@ function LeaderLayoutShell({
           <LeaderHeader
             onOpenMobileMenu={() => setMobileMenuOpen(true)}
             committee={committee}
+            developerCommitteesLeader={developerCommitteesLeader}
+            clubLeadership={clubLeadership}
           />
 
           {/* Content Body */}
           <main className="flex-1 p-4 sm:p-6 lg:p-8">
             <div className="mx-auto max-w-7xl">
+              <LeaderDashboardStatus />
               {children}
             </div>
           </main>
@@ -58,14 +69,25 @@ export function LeaderLayoutClient({
   children,
   committee = "data-analysis",
   seed,
+  developerCommitteesLeader = false,
+  clubLeadership = false,
 }: {
   children: ReactNode;
   committee?: LeaderCommittee;
   seed?: LeaderDashboardSeed;
+  developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
 }) {
+  const requirement = developerCommitteesLeader
+    ? { kind: "global-role" as const, roles: ["DEVELOPER_COMMITTEES_LEADER"] }
+    : clubLeadership
+      ? { kind: "global-role" as const, roles: ["GROUP_LEADER", "GROUP_CO_LEADER"] }
+    : { kind: "committee-leader" as const, committee };
   return (
-    <LeaderDashboardProvider committee={committee} seed={seed}>
-      <LeaderLayoutShell committee={committee}>{children}</LeaderLayoutShell>
-    </LeaderDashboardProvider>
+    <DashboardAccessGate requirement={requirement}>
+      <LeaderDashboardProvider committee={committee} seed={seed} developerCommitteesLeader={developerCommitteesLeader} clubLeadership={clubLeadership}>
+        <LeaderLayoutShell committee={committee} developerCommitteesLeader={developerCommitteesLeader} clubLeadership={clubLeadership}>{children}</LeaderLayoutShell>
+      </LeaderDashboardProvider>
+    </DashboardAccessGate>
   );
 }

@@ -3,35 +3,39 @@
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { committees, defaultTheme } from "@/lib/badge/themes";
-import { committeeRoles, type BadgeData, type CommitteeId, type CommitteeRole, type Gender } from "@/lib/badge/types";
+import { committeeRoles, type BadgeData, type CommitteeCode, type CommitteeRole, type Gender } from "@/lib/badge/types";
 
-// Loosely typed on purpose: these may come straight from an API response, so
-// anything that doesn't match is caught here instead of breaking the card.
+// Loosely typed on purpose: these come straight from /me, so anything that
+// doesn't match is caught here instead of breaking the card.
 type MemberBadgeInput = {
   name?: string | null;
   university?: string | null;
   photoUrl?: string | null;
-  /** "male" gets the male silhouette; anything else, or nothing, the female one. */
+  /** "male" (any case) gets the male silhouette; anything else, or nothing, the female one. */
   gender?: string | null;
-  /** null for someone who isn't in a committee: they get no badge. */
-  membership: { committeeId?: string | null; role?: string | null } | null;
+  /** The member's committees from /me. None: they get no badge. */
+  committees?: Array<{ code: string; position: string }> | null;
 };
 
-const isCommitteeId = (id: unknown): id is CommitteeId => typeof id === "string" && Object.hasOwn(committees, id);
-const isRole = (role: unknown): role is CommitteeRole => committeeRoles.includes(role as CommitteeRole);
+const isCommitteeCode = (code: string): code is CommitteeCode => Object.hasOwn(committees, code);
+const rank = (position: string) => committeeRoles.indexOf(position as CommitteeRole);
 
-// TEMPORARY: until the profile API's values are confirmed, a committee or role
-// that doesn't match (or a missing name) shows this all-placeholder card
-// instead of a wrong one.
+// TEMPORARY: until every committee code and position is confirmed, a committee
+// or position that doesn't match (or a missing name) shows this all-placeholder
+// card instead of a wrong one.
 const placeholder = { role: "Role", committee: "Committee name", name: "Member name" };
 
-// Builds a member's badge from their profile and committee membership.
-export function useMemberBadge({ name, university, photoUrl, gender, membership }: MemberBadgeInput) {
+// Builds a member's badge from their profile and committees. Someone in several
+// committees gets the one where they hold the highest position.
+export function useMemberBadge({ name, university, photoUrl, gender, committees: memberships }: MemberBadgeInput) {
   const t = useTranslations("profile.badge");
-  const committeeId = membership?.committeeId;
-  const role = membership?.role;
-  const matched = isCommitteeId(committeeId) && isRole(role) && Boolean(name?.trim());
-  const silhouette: Gender = gender === "male" ? "male" : "female";
+  const membership = memberships?.length
+    ? [...memberships].sort((a, b) => rank(b.position) - rank(a.position))[0]
+    : null;
+  const code = membership?.code ?? "";
+  const role = membership?.position ?? "";
+  const matched = isCommitteeCode(code) && rank(role) >= 0 && Boolean(name?.trim());
+  const silhouette: Gender = gender?.toLowerCase() === "male" ? "male" : "female";
 
   const data = useMemo<BadgeData>(() => {
     const shared = {
@@ -43,16 +47,16 @@ export function useMemberBadge({ name, university, photoUrl, gender, membership 
     return {
       ...shared,
       name: name!.trim(),
-      role: role as CommitteeRole,
-      committee: committees[committeeId as CommitteeId].shortName,
+      role,
+      committee: committees[code as CommitteeCode].shortName,
       photoUrl: photoUrl ?? null,
     };
-  }, [matched, name, role, committeeId, university, photoUrl, silhouette]);
+  }, [matched, name, role, code, university, photoUrl, silhouette]);
 
   if (!membership) return null;
   return {
     data,
-    theme: matched ? committees[committeeId as CommitteeId].theme : defaultTheme,
+    theme: matched ? committees[code as CommitteeCode].theme : defaultTheme,
     label: t("label", { name: data.name, role: data.role, committee: data.committee }),
   };
 }

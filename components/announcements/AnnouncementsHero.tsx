@@ -1,4 +1,3 @@
-import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { announcementsContainer } from "./styles";
 
@@ -34,10 +33,6 @@ export function AnnouncementsHero() {
 
         <p className="mt-5 text-base text-gray-500 lg:text-lg">{t("description")}</p>
 
-        <p className="mt-5 inline-flex items-start gap-2 rounded-2xl bg-gdg-blue/10 px-3.5 py-2 text-xs font-medium text-[var(--dashboard-blue-text)] sm:rounded-full">
-          <Info aria-hidden="true" className="mt-px h-3.5 w-3.5 shrink-0" />
-          {t("sourcePill")}
-        </p>
       </div>
 
       <div aria-hidden="true" className="hidden shrink-0 flex-col items-end gap-2.5 pt-2 md:flex">

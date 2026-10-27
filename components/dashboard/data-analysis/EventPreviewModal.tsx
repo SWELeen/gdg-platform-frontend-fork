@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { parseEventDate } from "@/lib/dashboard/event-format";
+import type { CommitteeEventDetails } from "@/lib/committee-dashboard/api";
 import { useDialog } from "../shared/useDialog";
 import { registrantFieldKeys, questionTypeKeys, type DraftQuestion } from "./event-form-config";
 
@@ -30,6 +31,41 @@ export interface EventPreviewData {
   requirements: string;
   imageUrl: string | null;
   questions: DraftQuestion[];
+}
+
+const RIYADH = "Asia/Riyadh";
+const QUESTION_TYPES_FROM_API: Record<string, string> = {
+  TEXT: "short-answer",
+  RADIO: "single-choice",
+  SELECT: "single-choice",
+  CHECKBOX: "checkboxes",
+};
+
+/** A saved event (for example a draft) in the shape the preview shows, with times in the club's time zone. */
+export function toEventPreviewData(event: CommitteeEventDetails): EventPreviewData {
+  const date = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: RIYADH }).format(new Date(iso));
+  const time = new Intl.DateTimeFormat("en-GB", { timeZone: RIYADH, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .format(new Date(event.startsAt));
+  return {
+    title: event.name,
+    description: event.description ?? "",
+    date: date(event.startsAt),
+    time,
+    location: event.location ?? "",
+    mapsLink: event.mapsLink ?? "",
+    speakers: event.speakers ?? "",
+    capacity: String(event.capacity),
+    registrationDeadline: date(event.registrationDeadline),
+    requirements: event.requirements ?? "",
+    imageUrl: event.imageUrl,
+    questions: event.questions.map((question) => ({
+      id: String(question.questionId),
+      type: QUESTION_TYPES_FROM_API[question.questionType] ?? "short-answer",
+      text: question.questionText,
+      required: question.isRequired,
+      ...(question.options ? { options: question.options } : {}),
+    })),
+  };
 }
 
 function PreviewDetail({
@@ -59,10 +95,13 @@ export function EventPreviewModal({
   data,
   onEdit,
   onPublish,
+  editLabel,
 }: {
   data: EventPreviewData;
   onEdit: () => void;
   onPublish: () => void;
+  /** Replaces "Edit" when the preview is opened outside the form, e.g. for a saved draft. */
+  editLabel?: string;
 }) {
   const t = useTranslations("dashboard.leader.createEvent");
   const format = useFormatter();
@@ -191,7 +230,8 @@ export function EventPreviewModal({
                       <p className="font-medium">
                         {index + 1}. {question.text}
                         <span className="ms-2 text-xs font-normal text-muted">
-                          ({t(`questions.types.${questionTypeKeys[question.type]}`)})
+                          ({t(`questions.types.${questionTypeKeys[question.type]}`)} ·{" "}
+                          {question.required ? t("questions.requiredBadge") : t("questions.optionalBadge")})
                         </span>
                       </p>
                       {question.options && (
@@ -219,7 +259,7 @@ export function EventPreviewModal({
             onClick={onEdit}
             className="min-w-[110px] rounded-lg border border-gdg-blue px-5 py-2.5 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5"
           >
-            {t("preview.edit")}
+            {editLabel ?? t("preview.edit")}
           </button>
           <button
             type="button"

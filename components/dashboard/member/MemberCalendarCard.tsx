@@ -209,7 +209,7 @@ export function MemberCalendarCard() {
               {selectedEvents.map((registration) => (
                 <li key={registration.id}>
                   <Link
-                    href={`${MEMBER_EVENTS_PATH}/${registration.id}`}
+                    href={MEMBER_EVENTS_PATH}
                     className="flex flex-col gap-1 rounded-lg bg-surface px-2.5 py-2 text-xs transition hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"
                   >
                     <span className="line-clamp-2 font-semibold text-foreground">{registration.title}</span>

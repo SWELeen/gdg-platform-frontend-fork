@@ -38,7 +38,7 @@ function EventCard({ registration, accent }: { registration: UserRegistration; a
   const tr = useTranslations("userRegistrations");
   const format = useFormatter();
   const startsAt = new Date(registration.startsAt);
-  const href = `${MEMBER_EVENTS_PATH}/${registration.id}`;
+  const href = MEMBER_EVENTS_PATH;
 
   return (
     <motion.article
@@ -162,10 +162,10 @@ export function MemberEventsPage({ result }: { result: UserRegistrationsResult }
           <p className="mt-1 max-w-2xl text-sm text-muted sm:text-base">{t("description")}</p>
         </header>
 
-        {result.state === "not-configured" ? (
-          <section className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
-            <h2 className="text-lg font-semibold">{tr("unavailableTitle")}</h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">{tr("unavailableDescription")}</p>
+        {result.state !== "ready" ? (
+          <section role="alert" className="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
+            <h2 className="text-lg font-semibold">{tr("loadErrorTitle")}</h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">{tr("loadErrorDescription")}</p>
           </section>
         ) : clientNow === null ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true">

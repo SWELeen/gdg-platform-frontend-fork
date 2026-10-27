@@ -1,26 +1,11 @@
-export type CommitteeId =
-  | "web-development"
-  | "data-analysis"
-  | "cybersecurity"
-  | "artificial-intelligence"
-  | "automation"
-  | "robotics-iot"
-  | "public-relations"
-  | "content-writing"
-  | "project-management"
-  | "digital-media";
+/** The backend's committee codes, as returned by /me (see committeeCode in components/dashboard/shared/committee-config.ts). */
+export type CommitteeCode = "WEB" | "DATA" | "CYBER" | "AI" | "AUTOMATION" | "ROBOTICS" | "PR" | "CONTENT" | "PM" | "DMD";
 
+/** The committee positions /me returns that have a badge, lowest first. */
 export const committeeRoles = ["Member", "Co-Leader", "Leader"] as const;
 export type CommitteeRole = (typeof committeeRoles)[number];
 
-/** Same values as the signup form's gender field (data/signup.ts). */
 export type Gender = "female" | "male";
-
-/** A member's place in a committee, which decides their badge. */
-export type Membership = {
-  committeeId: CommitteeId;
-  role: CommitteeRole;
-};
 
 /** Colours for one committee's badge; see themes.ts. */
 export type BadgeTheme = {

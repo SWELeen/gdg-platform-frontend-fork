@@ -5,11 +5,13 @@ import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
 import { validateEmail } from "@/app/lib/validation/email"
-import { validateConfirmPassword, validatePassword } from "@/app/lib/validation/password"
+import { PASSWORD_MAX_LENGTH, validateConfirmPassword, validatePassword } from "@/app/lib/validation/password"
 import {
   branchOptions,
   collegeOptions,
+  committeeCodes,
   committeeOptions,
+  type CommitteeOption,
   genderOptions,
   levelOptions,
   majorOptions,
@@ -18,6 +20,9 @@ import {
 } from "@/data/signup"
 import { useTranslations } from "next-intl"
 import SignupProgress from "./SignupProgress"
+import { useRouter } from "@/i18n/navigation"
+import { API_ENABLED, apiRequest } from "@/lib/api/client"
+
 
 type FieldName =
   | "fullName" | "phone" | "personalEmail" | "universityEmail" | "password" | "confirmPassword" | "gender"
@@ -26,6 +31,8 @@ type FieldName =
 type FormValues = Record<Exclude<FieldName, "committees">, string> & {
   committees: string[]
   committeeRoles: Record<string, string>
+  developerCommitteesLeader: boolean
+  advisor: boolean
 }
 type FieldErrors = Partial<Record<FieldName, string>> & Record<string, string | undefined>
 
@@ -48,6 +55,8 @@ const initialValues: FormValues = {
   level: "",
   committees: [],
   committeeRoles: {},
+  developerCommitteesLeader: false,
+  advisor: false,
 }
 
 const selectOptions: Partial<Record<FieldName, readonly string[]>> = {
@@ -78,20 +87,21 @@ function validateChoice(field: FieldName, value: string) {
   return selectOptions[field]?.includes(value) ? "" : "fieldInvalid"
 }
 
-function validateField(field: FieldName, values: FormValues, membership: "member" | "nonMember" | "") {
+function validateField(field: FieldName, values: FormValues) {
   const value = field === "committees" ? "" : values[field] as string
   switch (field) {
     case "fullName": return validateName(value)
     case "personalEmail": return validateEmail(value)
     case "universityEmail":
-      if (membership === "nonMember" && !value.trim()) return ""
+      if (!value.trim()) return ""
+      if (value.trim().toLowerCase() === values.personalEmail.trim().toLowerCase()) return "signupEmailsMustDiffer"
       return validateEmail(value)
     case "password": return validatePassword(value)
     case "confirmPassword": return validateConfirmPassword(value, values.password)
     case "phone": return validatePhone(value)
     case "committees":
-      if (!values.committees.length) return "committeeRequired"
-      return values.committees.every((item) => committeeOptions.includes(item as typeof committeeOptions[number]))
+      if (!values.committees.length && !values.developerCommitteesLeader && !values.advisor) return "committeeRequired"
+      return values.committees.every((item) => committeeOptions.includes(item as CommitteeOption))
         ? ""
         : "fieldInvalid"
     default: return validateChoice(field, value)
@@ -172,7 +182,7 @@ function PasswordField({
         placeholder={placeholder}
         autoComplete="new-password"
         minLength={8}
-        maxLength={128}
+        maxLength={PASSWORD_MAX_LENGTH}
         required
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
@@ -223,12 +233,15 @@ function ChoiceField({
 
 export default function SignupForm() {
   const t = useTranslations("auth.signup")
+  const router = useRouter()
   const [step, setStep] = useState<0 | 1 | 2>(0)
   const [membership, setMembership] = useState<"member" | "nonMember" | "">("")
   const [membershipError, setMembershipError] = useState("")
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+  const [submitErrorDetails, setSubmitErrorDetails] = useState("")
 
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
@@ -236,7 +249,7 @@ export default function SignupForm() {
     if (hideBranch) next.branch = ""
     setValues(next)
     if (errors[field]) {
-      const error = validateField(field, next, membership)
+      const error = validateField(field, next)
       setErrors((current) => ({ ...current, [field]: error || undefined }))
     }
     if (hideBranch) {
@@ -249,7 +262,7 @@ export default function SignupForm() {
   }
 
   const blur = (field: FieldName) => {
-    const error = validateField(field, values, membership)
+    const error = validateField(field, values)
     setErrors((current) => ({ ...current, [field]: error || undefined }))
   }
 
@@ -268,7 +281,7 @@ export default function SignupForm() {
       ]
       : ["university", "college", "major", "level"]
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (isSubmitting) return
     if (step === 0) {
@@ -282,7 +295,7 @@ export default function SignupForm() {
     }
     const nextErrors: FieldErrors = {}
     fields.forEach((field) => {
-      const error = validateField(field, values, membership)
+      const error = validateField(field, values)
       if (error) nextErrors[field] = error
     })
     if (step === 2 && membership === "member") {
@@ -304,9 +317,77 @@ export default function SignupForm() {
       return
     }
 
-    // No registration endpoint is published in this frontend's API contract yet.
+    setSubmitError("")
+    setSubmitErrorDetails("")
     setIsSubmitting(true)
-    window.setTimeout(() => setIsSubmitting(false), 800)
+    if (!API_ENABLED) {
+      setSubmitError("apiRequired")
+      setIsSubmitting(false)
+      return
+    }
+
+    const applicationData = {
+            phoneNumber: `+966${values.phone}`,
+            ...(values.universityEmail ? { universityEmail: values.universityEmail } : {}),
+            university: values.university,
+            ...(values.branch ? { branch: values.branch } : {}),
+            college: values.college,
+            major: values.major,
+            level: values.level,
+            gender: values.gender,
+          }
+
+    const result = await apiRequest<{
+      accessToken?: string;
+      refreshToken?: string;
+      expiresAt?: number;
+      emailVerificationRequired?: boolean;
+    }>("/auth/signup", {
+      method: "POST",
+      body: {
+        fullName: values.fullName,
+        email: values.personalEmail,
+        universityEmail: values.universityEmail || undefined,
+        password: values.password,
+        registrationType: membership === "member" ? "MEMBER" : "NON_MEMBER",
+        applicationData,
+        committees: membership === "member" ? values.committees.map((committee) => ({
+          committeeCode: committeeCodes[committee as CommitteeOption],
+          requestedRole: values.committeeRoles[committee],
+        })) : [],
+        requestedGlobalRoles: membership === "member" ? [
+          ...(values.developerCommitteesLeader ? ["DEVELOPER_COMMITTEES_LEADER"] : []),
+          ...(values.advisor ? ["ADVISOR"] : []),
+        ] : [],
+      },
+    })
+    if (!result.ok) {
+      if (result.code === "EMAIL_ALREADY_EXISTS") {
+        setSubmitError("emailAlreadyExists")
+      } else if (result.code === "EMAILS_MUST_DIFFER") {
+        setSubmitError("signupEmailsMustDiffer")
+      } else if (result.code === "SIGNUP_WEAK_PASSWORD") {
+        setSubmitError("signupWeakPassword")
+      } else if (result.code === "EMAIL_ADDRESS_NOT_AUTHORIZED") {
+        setSubmitError("signupEmailNotAuthorized")
+      } else if (result.code === "VALIDATION_ERROR" && result.details.length > 0) {
+        setSubmitError("authRequestFailed")
+        setSubmitErrorDetails(result.details.map(({ pointer, message }) => `${pointer || "form"}: ${message}`).join("; "))
+      } else if (result.status === 429) {
+        setSubmitError("emailRateLimited")
+      } else if (result.status === 0 || result.status >= 500) {
+        setSubmitError("signupServiceUnavailable")
+      } else {
+        setSubmitError("authRequestFailed")
+      }
+      setIsSubmitting(false)
+      return
+    }
+
+    const pending = { email: values.personalEmail, universityEmail: values.universityEmail || null }
+    window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify(pending))
+    router.push("/signup/verify")
+    setIsSubmitting(false)
   }
 
   const handleBack = () => {
@@ -327,6 +408,7 @@ export default function SignupForm() {
         branch: "",
         committees: [],
         committeeRoles: {},
+        advisor: false,
       }))
     }
   }
@@ -381,7 +463,7 @@ export default function SignupForm() {
       <TextField id="fullName" label={t("fields.fullName.label")} value={values.fullName} onChange={(value) => update("fullName", value)} onBlur={() => blur("fullName")} error={errors.fullName} placeholder={t("fields.fullName.placeholder")} autoComplete="name" />
       <TextField id="phone" label={t("fields.phone.label")} type="tel" inputMode="tel" value={values.phone} onChange={(value) => update("phone", value)} onBlur={() => blur("phone")} error={errors.phone} placeholder={t("fields.phone.placeholder")} maxLength={9} autoComplete="tel-national" />
       <TextField id="personalEmail" label={personalEmail} type="email" inputMode="email" value={values.personalEmail} onChange={(value) => update("personalEmail", value)} onBlur={() => blur("personalEmail")} error={errors.personalEmail} placeholder={t("fields.personalEmail.placeholder")} maxLength={254} autoComplete="email" />
-      <TextField id="universityEmail" label={universityEmail} type="email" inputMode="email" value={values.universityEmail} onChange={(value) => update("universityEmail", value)} onBlur={() => blur("universityEmail")} error={errors.universityEmail} placeholder={t("fields.universityEmail.placeholder")} maxLength={254} autoComplete="email" />
+      <TextField id="universityEmail" label={`${universityEmail} (${t("optional")})`} type="email" inputMode="email" value={values.universityEmail} onChange={(value) => update("universityEmail", value)} onBlur={() => blur("universityEmail")} error={errors.universityEmail} placeholder={t("fields.universityEmail.placeholder")} maxLength={254} autoComplete="email" required={false} />
       <PasswordField id="password" label={t("fields.password.label")} value={values.password} onChange={(value) => update("password", value)} onBlur={() => blur("password")} error={errors.password} placeholder={t("fields.password.placeholder")} />
       <PasswordField id="confirmPassword" label={t("fields.confirmPassword.label")} value={values.confirmPassword} onChange={(value) => update("confirmPassword", value)} onBlur={() => blur("confirmPassword")} error={errors.confirmPassword} placeholder={t("fields.confirmPassword.placeholder")} />
       {field("gender", t("fields.gender.label"), t("fields.gender.placeholder"), genderOptions.map(({ value, labelKey }) => ({
@@ -415,6 +497,7 @@ export default function SignupForm() {
         </h1>
       )}
       <form onSubmit={handleSubmit} noValidate className={`${step === 0 ? "mt-8" : "mt-6"} flex w-full flex-col`}>
+        <AuthErrorMessage message={submitError} detailText={submitErrorDetails} className="mb-3" />
         <AuthStepTransition stepKey={step} className="grid w-full grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
           {step === 0 ? (
             <fieldset data-membership-choice className="col-span-full" aria-describedby={membershipError ? "membership-error" : undefined}>
@@ -422,7 +505,7 @@ export default function SignupForm() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {(["member", "nonMember"] as const).map((option) => (
                   <label key={option} className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-3 text-sm ${membership === option ? "border-blue bg-blue/5" : "border-foreground/15"}`}>
-                    <input type="radio" name="membership" value={option} checked={membership === option} onChange={() => chooseMembership(option)} aria-invalid={Boolean(membershipError)} />
+                    <input type="radio" name="membership" value={option} checked={membership === option} onChange={() => chooseMembership(option)} />
                     {t(option === "member" ? "memberChoice" : "nonMemberChoice")}
                   </label>
                 ))}
@@ -468,6 +551,22 @@ export default function SignupForm() {
                       {committee}
                     </label>
                   ))}
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(values.developerCommitteesLeader)}
+                      onChange={(event) => setValues((current) => ({ ...current, developerCommitteesLeader: event.target.checked }))}
+                    />
+                    Developer Committees Leader
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(values.advisor)}
+                      onChange={(event) => setValues((current) => ({ ...current, advisor: event.target.checked }))}
+                    />
+                    Advisor
+                  </label>
                 </div>
                 <AuthErrorMessage id="committees-error" message={errors.committees ?? ""} className="mt-1" />
                 {values.committees.length > 0 && (
@@ -479,13 +578,13 @@ export default function SignupForm() {
                       const errorKey = committeeRoleErrorKey(committee)
                       const error = errors[errorKey]
                       return (
+                        <div key={committee} className="space-y-2">
                         <ChoiceField
-                          key={committee}
                           id={`committee-role-${index}`}
                           label={`${t("fields.role.label")}: ${committee.replace(/ Committee$/, "")}`}
                           placeholder={t("fields.role.placeholder")}
                           options={roleOptions}
-                          value={values.committeeRoles[committee] ?? ""}
+                          value={values.committeeRoles[committee] === "Advisor" ? "" : values.committeeRoles[committee] ?? ""}
                           error={error}
                           onChange={(role) => updateCommitteeRole(committee, role)}
                           onBlur={() => {
@@ -496,6 +595,7 @@ export default function SignupForm() {
                             }))
                           }}
                         />
+                        </div>
                       )
                     })}
                   </div>

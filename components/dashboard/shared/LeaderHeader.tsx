@@ -1,25 +1,44 @@
 "use client";
 
 import { usePathname } from "@/i18n/navigation";
+import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { leaderCommitteeConfig } from "./committee-config";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
 import type { LeaderCommittee } from "./types";
+import { useLeaderDashboard } from "./LeaderDashboardContext";
+import { apiRequest } from "@/lib/api/client";
 
 interface LeaderHeaderProps {
   onOpenMobileMenu?: () => void;
   committee?: LeaderCommittee;
+  developerCommitteesLeader?: boolean;
+  clubLeadership?: boolean;
 }
 
 export function LeaderHeader({
   onOpenMobileMenu,
   committee = "data-analysis",
+  developerCommitteesLeader = false,
+  clubLeadership = false,
 }: LeaderHeaderProps) {
   const pathname = usePathname();
   const t = useTranslations("dashboard.leader");
+  const leadershipT = useTranslations("dashboard.leadershipDashboard");
   const config = leaderCommitteeConfig[committee];
-  const routeRoot = config.routeBase;
-  const leaderInitials = config.leaderDisplayName
+  const { currentMember } = useLeaderDashboard();
+  const [identityName, setIdentityName] = useState("");
+  useEffect(() => {
+    if (!developerCommitteesLeader || currentMember?.name) return;
+    let active = true;
+    void apiRequest<{ fullName: string }>("/me").then((result) => {
+      if (active && result.ok) setIdentityName(result.data.fullName);
+    });
+    return () => { active = false; };
+  }, [currentMember?.name, developerCommitteesLeader]);
+  const routeRoot = developerCommitteesLeader ? "/dashboard/developer-committees-dashboard" : clubLeadership ? "/dashboard/club-leadership-dashboard" : config.routeBase;
+  const displayName = currentMember?.name ?? identityName;
+  const leaderInitials = displayName
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -28,7 +47,7 @@ export function LeaderHeader({
     .toUpperCase();
 
   // Determine current section title based on pathname
-  let pageTitle = t("nav.overview");
+  let pageTitle = developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t("nav.overview");
   if (pathname.startsWith(`${routeRoot}/events`)) {
     pageTitle = t(committee === "pr" ? "nav.eventRegistrations" : "nav.events");
   } else if (pathname.startsWith(`${routeRoot}/members`)) pageTitle = t("nav.members");
@@ -66,10 +85,10 @@ export function LeaderHeader({
             </div>
             <div className="text-start">
               <span className="block text-xs font-semibold text-foreground leading-tight">
-                {config.leaderDisplayName}
+                {displayName}
               </span>
               <span className="block text-[10px] text-muted leading-tight">
-                {config.headerSubtitle}
+                {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
               </span>
             </div>
           </div>

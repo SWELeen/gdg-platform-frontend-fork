@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import type { CommitteeTask, TaskPriority, TaskStatus } from "./types";
 import { ConfirmModal } from "./ConfirmModal";
+import { ALL, CommitteeFilterSelect, CommitteeTag } from "./ClubFilters";
 import {
   Plus,
   Calendar,
@@ -22,20 +23,44 @@ interface TasksSectionProps {
   onEditTask: (task: CommitteeTask) => void;
 }
 
+const taskStatusKeys: Record<TaskStatus, string> = {
+  "To Do": "tasks.toDo",
+  "In Progress": "tasks.inProgress",
+  "Pending Review": "tasks.pendingReview",
+  Completed: "tasks.complete",
+};
+
 export function TasksSection({
   onOpenCreateTask,
   onEditTask,
 }: TasksSectionProps) {
-  const { tasks, updateTask, deleteTask, canManageTasks } =
+  const { tasks, updateTask, deleteTask, reviewTask, canManageTasks, clubLeadership } =
     useLeaderDashboard();
   const t = useTranslations("dashboard.leader");
 
   const [viewMode, setViewMode] = useState<"board" | "table">("board");
   const [filterPriority, setFilterPriority] = useState<string>("all");
+  const [filterCommittee, setFilterCommittee] = useState(ALL);
   const [taskToDelete, setTaskToDelete] = useState<CommitteeTask | null>(null);
+  const [reviewing, setReviewing] = useState<string | null>(null);
+  const [reviewError, setReviewError] = useState("");
+  const pendingReviewTasks = tasks.filter((task) => task.status === "Pending Review");
+
+  const review = async (task: CommitteeTask, decision: "APPROVE" | "RETURN") => {
+    setReviewing(task.id);
+    setReviewError("");
+    try {
+      await reviewTask(task.id, decision);
+    } catch (error) {
+      setReviewError(error instanceof Error && error.message ? error.message : t("tasks.reviewFailed"));
+    } finally {
+      setReviewing(null);
+    }
+  };
 
   const filteredTasks = tasks.filter((t) => {
     if (filterPriority !== "all" && t.priority !== filterPriority) return false;
+    if (filterCommittee !== ALL && t.committeeCode !== filterCommittee) return false;
     return true;
   });
 
@@ -66,8 +91,8 @@ export function TasksSection({
     }
   };
 
-  const handleStatusChange = (task: CommitteeTask, newStatus: TaskStatus) => {
-    updateTask(task.id, { status: newStatus });
+  const handleStatusChange = async (task: CommitteeTask, newStatus: TaskStatus) => {
+    await updateTask(task.id, { status: newStatus }).catch(() => undefined);
   };
 
   return (
@@ -81,6 +106,8 @@ export function TasksSection({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {clubLeadership && <CommitteeFilterSelect value={filterCommittee} onChange={setFilterCommittee} />}
+
           {/* Priority filter */}
           <select
             value={filterPriority}
@@ -134,6 +161,53 @@ export function TasksSection({
         </div>
       </div>
 
+      {/* Tasks members marked done, waiting for a leader to confirm them */}
+      {pendingReviewTasks.length > 0 && (
+        <section
+          aria-labelledby="tasks-pending-review"
+          className="rounded-2xl border border-violet-300 bg-violet-50/60 p-4 dark:border-violet-800/60 dark:bg-violet-950/20"
+        >
+          <h3 id="tasks-pending-review" className="text-sm font-bold text-foreground">
+            {t("tasks.pendingReviewTitle", { count: pendingReviewTasks.length })}
+          </h3>
+          <p className="mt-1 text-xs text-muted">{t("tasks.pendingReviewHelp")}</p>
+          {reviewError && (
+            <p role="alert" className="mt-2 text-xs font-medium text-rose-600 dark:text-rose-400">{reviewError}</p>
+          )}
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+            {pendingReviewTasks.map((task) => (
+              <li key={task.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-foreground">{task.title}</p>
+                  <p className="text-[11px] text-muted">{task.assignedMemberName}</p>
+                </div>
+                {canManageTasks && (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      disabled={reviewing === task.id}
+                      onClick={() => void review(task, "APPROVE")}
+                      className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                    >
+                      <CheckCircle2 className="size-3.5" />
+                      {t("tasks.confirmDone")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={reviewing === task.id}
+                      onClick={() => void review(task, "RETURN")}
+                      className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-surface-muted disabled:opacity-60"
+                    >
+                      {t("tasks.returnToMember")}
+                    </button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* Notion-Style Kanban Board View */}
       {viewMode === "board" ? (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -171,8 +245,9 @@ export function TasksSection({
                   )}
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="size-3" />
@@ -250,8 +325,9 @@ export function TasksSection({
                   )}
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="size-3" />
@@ -323,8 +399,9 @@ export function TasksSection({
                   </div>
 
                   <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px] text-muted">
-                    <span className="font-semibold text-foreground">
+                    <span className="flex items-center gap-1.5 font-semibold text-foreground">
                       {task.assignedMemberName}
+                      {clubLeadership && <CommitteeTag code={task.committeeCode} name={task.committeeName} />}
                     </span>
                     <span className="flex items-center gap-1 text-emerald-600">
                       ✓ Done
@@ -366,6 +443,7 @@ export function TasksSection({
             <thead>
               <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3.5 text-start">{t("tasks.task")}</th>
+                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("clubFilters.committee")}</th>}
                 <th className="px-4 py-3.5 text-start">{t("tasks.assignedTo")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.dueDate")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.priority")}</th>
@@ -379,10 +457,11 @@ export function TasksSection({
                   <td className="px-5 py-3.5 font-bold text-foreground">
                     {task.title}
                   </td>
+                  {clubLeadership && <td className="px-4 py-3.5"><CommitteeTag code={task.committeeCode} name={task.committeeName} /></td>}
                   <td className="px-4 py-3.5 text-muted">{task.assignedMemberName}</td>
                   <td className="px-4 py-3.5 text-muted">{task.dueDate}</td>
                   <td className="px-4 py-3.5">{getPriorityBadge(task.priority)}</td>
-                  <td className="px-4 py-3.5 font-semibold text-foreground/80">{task.status === "To Do" ? t("tasks.toDo") : task.status === "In Progress" ? t("tasks.inProgress") : t("tasks.complete")}</td>
+                  <td className="px-4 py-3.5 font-semibold text-foreground/80">{t(taskStatusKeys[task.status])}</td>
                   <td className="px-5 py-3.5 text-end">
                     {canManageTasks && (
                       <div className="inline-flex items-center gap-1">

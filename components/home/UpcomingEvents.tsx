@@ -1,61 +1,95 @@
 "use client";
 
-import { events } from "@/data/home";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { getPublishedHomeEventsSnapshot, readPublishedHomeEvents, subscribeToPublishedHomeEvents } from "@/lib/events/published-home-events";
+import { useEffect, useRef, useState } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import EventCard from "./EventCard";
 import type { HomeEvent } from "./EventCard";
 import EventRegistrationModal from "@/components/event-registration/EventRegistrationModal";
-import { API_ENABLED } from "@/lib/api/client";
-import { fetchPublishedEvents, formatDate, formatTime } from "@/lib/events/api";
+import { API_ENABLED, apiRequest } from "@/lib/api/client";
+import { formatDate, formatTime, type ApiEvent } from "@/lib/events/api";
+import { useRouter, usePathname } from "@/i18n/navigation";
 
 const GAP = 24;
 
 export default function UpcomingEvents() {
   const t = useTranslations("home.events");
   const dir = useTextDirection();
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeEvent, setActiveEvent] = useState(0);
   const [perView, setPerView] = useState(1);
   const [eventToRegister, setEventToRegister] = useState<HomeEvent | null>(null);
-  const publishedEventsSnapshot = useSyncExternalStore(
-    subscribeToPublishedHomeEvents,
-    getPublishedHomeEventsSnapshot,
-    () => "[]",
-  );
   const [apiEvents, setApiEvents] = useState<HomeEvent[]>([]);
+  const [eventsStatus, setEventsStatus] = useState<"loading" | "loaded" | "error">(
+    API_ENABLED ? "loading" : "loaded",
+  );
   useEffect(() => {
     if (!API_ENABLED) return;
-    fetchPublishedEvents().then((list) =>
-      setApiEvents(
-        list.map((event) => ({
-          id: String(event.eventId),
-          image: event.imageUrl || "/images/event-placeholder.png",
-          name: event.name,
-          date: formatDate(event.startsAt),
-          time: formatTime(event.startsAt),
-          location: event.location ?? "",
-          description: event.description ?? undefined,
-        })),
-      ),
-    );
+    let active = true;
+    void apiRequest<ApiEvent[]>("/events")
+      .then((result) => {
+        if (!active) return;
+        if (!result.ok) {
+          setEventsStatus("error");
+          return;
+        }
+        setApiEvents(
+          result.data.map((event) => ({
+            id: String(event.eventId),
+            image: event.imageUrl || "/images/event-placeholder.png",
+            name: event.name,
+            date: formatDate(event.startsAt),
+            time: formatTime(event.startsAt),
+            location: event.location ?? "",
+            description: event.description ?? undefined,
+            registrationOpen: event.registrationOpen,
+          })),
+        );
+        setEventsStatus("loaded");
+      })
+      .catch(() => {
+        if (active) setEventsStatus("error");
+      });
+    return () => { active = false; };
   }, []);
-  const homepageEvents = useMemo<HomeEvent[]>(() => {
-    if (API_ENABLED) return apiEvents;
-    try {
-      const published = JSON.parse(publishedEventsSnapshot) as HomeEvent[];
-      return [...published, ...events];
-    } catch {
-      return [...readPublishedHomeEvents(), ...events];
-    }
-  }, [publishedEventsSnapshot, apiEvents]);
+  const homepageEvents = apiEvents;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const maxIndex = Math.max(0, homepageEvents.length - perView);
+
+  useEffect(() => {
+    if (!API_ENABLED || homepageEvents.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get("registerEvent");
+    if (!eventId) return;
+    const event = homepageEvents.find((item) => item.id === eventId);
+    if (!event) return;
+    window.history.replaceState(null, "", `${pathname}#events`);
+    if (event.registrationOpen === false) return;
+    const openModal = window.setTimeout(() => setEventToRegister(event), 0);
+    return () => window.clearTimeout(openModal);
+  }, [homepageEvents, pathname]);
+
+  const handleRegister = async (event: HomeEvent) => {
+    if (event.registrationOpen === false) return;
+    if (!API_ENABLED) {
+      setEventToRegister(event);
+      return;
+    }
+
+    const identity = await apiRequest<{ fullName: string }>("/me");
+    if (identity.ok) {
+      setEventToRegister(event);
+      return;
+    }
+
+    const returnTo = `${pathname}?registerEvent=${encodeURIComponent(event.id)}#events`;
+    router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+  };
 
   // كم كارد يظهر في نفس الوقت (1 على الجوال، 2 على الشاشات الكبيرة)
   useEffect(() => {
@@ -110,7 +144,7 @@ export default function UpcomingEvents() {
           className="text-4xl font-bold leading-snug text-foreground md:text-5xl"
         >
           {t("title")}{" "}
-          <span className="bg-gradient-to-r from-gdg-blue to-gdg-red bg-clip-text pe-1 italic text-transparent rtl:not-italic">
+          <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
             {t("highlight")}
           </span>
         </h2>
@@ -121,7 +155,15 @@ export default function UpcomingEvents() {
       </div>
 
       <div className="mt-10">
-        <div
+        {eventsStatus === "loading" ? (
+          <p role="status" className="py-12 text-center text-muted">{t("loading")}</p>
+        ) : eventsStatus === "error" ? (
+          <p role="alert" className="py-12 text-center text-gdg-red">{t("loadError")}</p>
+        ) : homepageEvents.length === 0 ? (
+          <p role="status" className="rounded-2xl border border-border bg-surface/50 px-6 py-12 text-center text-lg text-muted">
+            {t("empty")}
+          </p>
+        ) : <div
           ref={trackRef}
           onScroll={handleScroll}
           style={{ gap: GAP }}
@@ -135,10 +177,10 @@ export default function UpcomingEvents() {
               }}
               className="w-full shrink-0 snap-start lg:w-[calc((100%-24px)/2)]"
             >
-              <EventCard event={event} onRegister={setEventToRegister} />
+              <EventCard event={event} onRegister={handleRegister} />
             </div>
           ))}
-        </div>
+        </div>}
       </div>
 
       {maxIndex > 0 && (

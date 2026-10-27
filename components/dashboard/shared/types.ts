@@ -9,6 +9,8 @@ export interface CommitteeEvent {
   time: string; // e.g. "4:00 PM"
   location: string;
   registered: number;
+  confirmed?: number;
+  checkedIn?: number;
   capacity: number;
   status: EventStatus;
   created: string; // e.g. "Sep 18"
@@ -33,19 +35,18 @@ export interface RegistrationQuestion {
 }
 
 export type MemberStatus = "Active" | "Away";
-export type MemberRole =
-  | "Member"
-  | "Leader"
-  | "Database Co-Lead"
-  | "Data Coordinator"
-  | "Event Data Member"
-  | "Database Member"
-  | "Data Analyst"
-  | "Research Member"
-  | "Public Relations Co-Lead"
-  | "Outreach Coordinator"
-  | "Communications Member"
-  | "Partnerships Member";
+export type MemberRole = string;
+
+export interface CommitteeOption {
+  code: string;
+  name: string;
+}
+
+/** Club leadership view: one committee a member belongs to, with their points there. */
+export interface MemberCommitteeInfo extends CommitteeOption {
+  role: string;
+  points: number;
+}
 
 export interface CommitteeMember {
   id: string;
@@ -61,10 +62,13 @@ export interface CommitteeMember {
   points: number;
   tasksCompleted: number;
   lastActivity: string;
+  committees?: MemberCommitteeInfo[];
+  globalRoles?: string[];
 }
 
 export type TaskPriority = "High" | "Medium" | "Low";
-export type TaskStatus = "To Do" | "In Progress" | "Completed";
+// "Pending Review": the member marked it done; a committee leader confirms it as Completed.
+export type TaskStatus = "To Do" | "In Progress" | "Pending Review" | "Completed";
 
 export interface CommitteeTask {
   id: string;
@@ -76,6 +80,8 @@ export interface CommitteeTask {
   dueDate: string;
   priority: TaskPriority;
   status: TaskStatus;
+  committeeCode?: string;
+  committeeName?: string;
 }
 
 export interface PointHistoryItem {
@@ -85,6 +91,8 @@ export interface PointHistoryItem {
   pointsDelta: number;
   reason: string;
   timestamp: string;
+  committeeCode?: string;
+  committeeName?: string;
 }
 
 export interface RecentActivityItem {
@@ -95,7 +103,17 @@ export interface RecentActivityItem {
   timeAgo: string;
 }
 
-export type LeaderCommittee = "data-analysis" | "pr";
+export type LeaderCommittee =
+  | "data-analysis"
+  | "pr"
+  | "project-management"
+  | "content-writing"
+  | "web-development"
+  | "automation"
+  | "artificial-intelligence"
+  | "robotics-iot"
+  | "cybersecurity"
+  | "digital-media-design";
 export type RegistrationStatus = "Pending" | "Accepted" | "Rejected" | "Waitlisted";
 export type RegistrationConfirmationStatus =
   | "NotSent"
@@ -127,6 +145,8 @@ export interface EventRegistration {
   registeredAt: string;
   status: RegistrationStatus;
   confirmationStatus?: RegistrationConfirmationStatus;
+  // A confirmed seat given up in the final two hours before the event.
+  lateCancellation?: boolean;
   attendanceConfirmedAt?: string;
   checkInStatus?: "NotCheckedIn" | "CheckedIn" | "NoShow";
   checkedInAt?: string;

@@ -58,18 +58,26 @@ export function EventInfo({ event }: EventInfoProps) {
           </div>
         </div>
 
-        <div className="mt-6">
-          <p className="mb-2 text-start text-sm font-semibold text-foreground">
-            {t("speaker")}
-          </p>
+        {(event.speaker || event.speakersText) && (
+          <div className="mt-6">
+            <p className="mb-2 text-start text-sm font-semibold text-foreground">
+              {t("speaker")}
+            </p>
 
-          <SpeakerCard
-            name={event.speaker.name}
-            title={event.speaker.title}
-            bio={event.speaker.bio}
-            imageSrc={event.speaker.imageSrc}
-          />
-        </div>
+            {event.speaker ? (
+              <SpeakerCard
+                name={event.speaker.name}
+                title={event.speaker.title}
+                bio={event.speaker.bio}
+                imageSrc={event.speaker.imageSrc}
+              />
+            ) : (
+              <p className="whitespace-pre-line rounded-lg border border-border bg-surface p-3 text-start text-sm text-foreground/80">
+                {event.speakersText}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

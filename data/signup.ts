@@ -91,6 +91,21 @@ export const committeeOptions = [
   "Web design and development",
 ] as const;
 
-export const roleOptions = ["Leader", "Co-Leader", "Advisor", "Member"] as const;
+export type CommitteeOption = (typeof committeeOptions)[number];
 
-export const eventRegistrationMembershipValues = ["yes", "no"] as const;
+// Committee codes from the backend committee table.
+export const committeeCodes: Record<CommitteeOption, string> = {
+  "Project Management Committee": "PM",
+  "Public Relations Committee": "PR",
+  "Digital Media and Design Committee": "DMD",
+  "Content Writing Committee": "CONTENT",
+  "Artificial Intelligence Committee": "AI",
+  "Data Analytics Committee": "DATA",
+  "Cybersecurity Committee": "CYBER",
+  "Robotics Committee": "ROBOTICS",
+  "Automation Committee": "AUTOMATION",
+  "Web design and development": "WEB",
+};
+
+export const roleOptions = ["Leader", "Co-Leader", "Member"] as const;
+

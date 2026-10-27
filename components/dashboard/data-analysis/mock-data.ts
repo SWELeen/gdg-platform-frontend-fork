@@ -175,7 +175,7 @@ export const initialCommitteeTasks: CommitteeTask[] = [
   {
     id: "task-1",
     title: "Clean and validate attendance CSV for Study Jam",
-    description: "Deduplicate registration entries and verify student ID formatting.",
+    description: "Deduplicate registration entries and check formatting.",
     assignedMemberId: "mem-3",
     assignedMemberName: "Rama Nasser",
     createdBy: "Shahad",

@@ -12,6 +12,7 @@ type ApiRegistrant = {
   registrationId: number;
   name: string;
   email: string | null;
+  profile: { membership: boolean; phone?: string | null; major?: string | null };
   status: string;
   registeredAt: string;
   waitlistPosition: number | null;
@@ -56,10 +57,16 @@ function toEventRegistration(eventId: string, item: ApiRegistrant): EventRegistr
     email: item.email ?? "",
     registeredAt: item.registeredAt,
     ...toDashboardStatus(item.status),
+    lateCancellation: item.status === "LATE_CANCELLATION",
     checkInStatus: item.checkedInAt ? "CheckedIn" : item.status === "NO_CHECK_IN" ? "NoShow" : "NotCheckedIn",
     checkedInAt: item.checkedInAt ?? undefined,
     waitlistPosition: item.waitlistPosition ?? undefined,
-    profile: {},
+    // Keys are registrant field keys; the dashboard translates them for display.
+    profile: Object.fromEntries(
+      Object.entries(item.profile)
+        .filter(([, value]) => value !== null && value !== undefined && value !== "")
+        .map(([key, value]) => [key, String(value)]),
+    ),
     answers: item.answers.map((answer) => ({
       questionId: String(answer.questionId),
       question: answer.question,

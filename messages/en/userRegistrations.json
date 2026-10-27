@@ -20,6 +20,16 @@
   "confirmBefore": "Please confirm by {date}.",
   "confirmAction": "Confirm attendance",
   "cancelAction": "Cancel registration",
+  "leaveWaitlistAction": "Leave the waitlist",
+  "lateCancelWarning": "The event starts in less than two hours. Cancelling now is recorded as a late cancellation.",
+  "confirmSuccess": "Attendance confirmed. Your QR code is shown here and sent by email.",
+  "cancelSuccess": "Your registration was cancelled.",
+  "actionErrors": {
+    "generic": "We couldn't complete that action. Please try again.",
+    "expired": "The confirmation deadline has passed. Contact the PR team if you need help.",
+    "statusChanged": "This registration is no longer waiting for confirmation. Refresh the page.",
+    "qrUnavailable": "The attendance QR service is not configured. Please contact the PR team."
+  },
   "confirmationUnavailable": "Confirmation will be available when the registration service is connected.",
   "cancellationUnavailable": "Cancellation will be available when the registration service is connected.",
   "attendance": {
@@ -39,10 +49,13 @@
     "cancelMessage": "Are you sure you want to cancel your place for this event?",
     "backButton": "Go back",
     "confirmButton": "Yes, confirm attendance",
-    "cancelButton": "Yes, cancel registration"
+    "cancelButton": "Yes, cancel registration",
+    "submitting": "Please wait..."
   },
-  "unavailableTitle": "Registrations are not connected yet",
-  "unavailableDescription": "Your event and trip registrations will appear here after the registration service is connected.",
+  "loadErrorTitle": "We couldn't load your registrations",
+  "loadErrorDescription": "Check your connection and try again.",
+  "retry": "Try again",
   "emptyTitle": "No registrations yet",
-  "emptyDescription": "When you register for an event or trip, you can follow its status here."
+  "emptyDescription": "When you register for an event or trip, you can follow its status here.",
+  "loading": "Loading your registrations..."
 }

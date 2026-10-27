@@ -37,15 +37,15 @@ Do not put secrets in `NEXT_PUBLIC_*` variables. The browser must not be trusted
 
 ## Profile badge status
 
-`/profile` reads demo data (`data/demo-member.ts`) because no authenticated profile operation is published yet. The page gets everything from three values, so connecting it means replacing those imports with the signed-in member's data:
+`/profile` builds the member badge from the same `GET /me` response the page already loads:
 
-| Demo value | What the badge needs | Notes |
+| `/me` field | Badge use | Notes |
 | --- | --- | --- |
-| `demoMemberProfile` | Name, university and photo URL (plus the rest of the profile page's fields) | No photo URL: the card shows a silhouette. |
-| `demoMemberGender` | `"female"` or `"male"` | Same values as the signup form. Picks the silhouette; anything else or nothing falls back to the female one. |
-| `demoMembership` | Committee and role, or `null` for no committee | `null`: the page shows no badge. |
+| `fullName`, `university`, `profileImageUrl` | Name, chapter line, photo | No photo URL: the card shows a silhouette. |
+| `gender` | Picks the silhouette | `"male"` in any case gets the male one; anything else, or nothing, the female one. |
+| `committees[]` (`code`, `position`) | Committee colours and short name, role headline | Empty or missing: no badge. Several: the highest position wins. |
 
-The committee must map to an id in `lib/badge/themes.ts` (for example `public-relations`, `web-development`), and the role must be Member, Co-Leader or Leader. If either doesn't match, or the name is missing, the badge shows an all-placeholder card ("Role", "Committee name", "Member name") on the default card instead of wrong data. Map backend values to these ids in one function where the response is read. The signup form also offers Advisor, which has no badge treatment yet (`TBD`). How the backend names committees and roles is `TBD` until the contract publishes them.
+`lib/badge/themes.ts` is keyed by the committee codes the dashboards already use (`WEB`, `DATA`, `CYBER`, `AI`, `AUTOMATION`, `ROBOTICS`, `PR`, `CONTENT`, `PM`, `DMD`), and the badge knows the positions Member, Co-Leader and Leader. If the code or position doesn't match, or the name is missing, the badge shows an all-placeholder card ("Role", "Committee name", "Member name") on the default card instead of wrong data. `/me`'s exact position values beyond Leader and Co-Leader, and positions such as Advisor, are `TBD` until the contract confirms them.
 
 ## PR registration dashboard status
 

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { LeaderLayoutClient } from "../DashboardLayoutClient";
-import { dataAnalysisDashboardSeed } from "@/components/dashboard/data-analysis/mock-data";
 import { leaderDashboardMockData } from "@/data/leader-dashboard";
 
 const committee = leaderDashboardMockData["data-analysis"];
@@ -12,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function LeaderLayout({ children }: { children: ReactNode }) {
-  return <LeaderLayoutClient seed={dataAnalysisDashboardSeed}>{children}</LeaderLayoutClient>;
+  return <LeaderLayoutClient>{children}</LeaderLayoutClient>;
 }
