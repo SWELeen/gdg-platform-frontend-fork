@@ -35,6 +35,18 @@ The technical guide shows the frontend running at `http://localhost:3000` and th
 
 Do not put secrets in `NEXT_PUBLIC_*` variables. The browser must not be trusted to enforce roles or protect data. The frontend may use backend-provided identity/permission information to shape the interface, while the backend remains the enforcement point.
 
+## Profile badge status
+
+`/profile` builds the member badge from the same `GET /me` response the page already loads:
+
+| `/me` field | Badge use | Notes |
+| --- | --- | --- |
+| `fullName`, `university`, `profileImageUrl` | Name, chapter line, photo | No photo URL: the card shows a silhouette. |
+| `gender` | Picks the silhouette | `"male"` in any case gets the male one; anything else, or nothing, the female one. |
+| `committees[]` (`code`, `position`) | Committee colours and short name, role headline | Empty or missing: no badge. Several: the highest position wins. |
+
+`lib/badge/themes.ts` is keyed by the committee codes the dashboards already use (`WEB`, `DATA`, `CYBER`, `AI`, `AUTOMATION`, `ROBOTICS`, `PR`, `CONTENT`, `PM`, `DMD`), and the badge knows the positions Member, Co-Leader and Leader. If the code or position doesn't match, or the name is missing, the badge shows an all-placeholder card ("Role", "Committee name", "Member name") on the default card instead of wrong data. `/me`'s exact position values beyond Leader and Co-Leader, and positions such as Advisor, are `TBD` until the contract confirms them.
+
 ## PR registration dashboard status
 
 The current backend schema contains no event or registration models, and the available NestJS controller exposes no registration operations. The PR dashboard therefore renders an honest empty registration state and does not invent applicant records, event questions, API routes, registration-open permissions, or backend authorization rules.

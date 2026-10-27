@@ -10,9 +10,11 @@ type ProfileHeroProps = {
   email: string;
   memberSince: string | null;
   avatarUrl: string | null;
+  /** Classes for the block under the cover, e.g. to leave room beside it. */
+  contentClassName?: string;
 };
 
-export function ProfileHero({ initials, name, email, memberSince, avatarUrl }: ProfileHeroProps) {
+export function ProfileHero({ initials, name, email, memberSince, avatarUrl, contentClassName = "" }: ProfileHeroProps) {
   const t = useTranslations("profile.hero");
   return (
     <motion.section
@@ -22,7 +24,7 @@ export function ProfileHero({ initials, name, email, memberSince, avatarUrl }: P
     >
       <div className="h-32 bg-gradient-to-r from-[#4285F4] via-[#C3ECF6] to-[#EA4335] sm:h-36 md:h-40 dark:bg-[linear-gradient(90deg,#356FC4_0%,#6FAFC4_50%,#D9786D_100%)]" />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10 lg:px-16">
-        <div className="relative -mt-10 flex flex-col items-center text-center sm:-mt-12 md:items-start md:text-start">
+        <div className={`relative -mt-10 flex flex-col items-center text-center sm:-mt-12 md:items-start md:text-start ${contentClassName}`}>
           <Avatar initials={initials} imageUrl={avatarUrl} size="lg" />
           <div className="mt-3 flex w-full flex-col gap-1">
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#243b64] dark:text-slate-100 md:text-4xl">

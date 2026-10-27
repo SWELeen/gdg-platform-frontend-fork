@@ -2,6 +2,9 @@
   "hero": {
     "memberSince": "Member since {date}"
   },
+  "badge": {
+    "label": "Member badge: {name}, {role}, {committee}"
+  },
   "bio": {
     "title": "Short Bio",
     "placeholder": "",

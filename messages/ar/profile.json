@@ -2,6 +2,9 @@
   "hero": {
     "memberSince": "عضو منذ {date}"
   },
+  "badge": {
+    "label": "بطاقة العضوية: {name}، {role}، {committee}"
+  },
   "bio": {
     "title": "نبذة مختصرة",
     "placeholder": "",

@@ -28,6 +28,7 @@ Do not silently choose one source when sources conflict. First identify the conf
 | Authentication uses NestJS Auth, JWT, Google OAuth, and backend-enforced RBAC | Approved direction |
 | Swagger/OpenAPI is the authoritative frontend-backend contract | Approved |
 | Arabic uses a full RTL layout (`dir="rtl"` on `<html>`), not text-only direction | Proposed (2026-09-28) |
+| three.js renders the 3D member badge on profile pages | Approved (2026-10-24) |
 
 ### 2026-09-28: Full RTL layout for Arabic
 
@@ -36,6 +37,19 @@ Do not silently choose one source when sources conflict. First identify the conf
 - **Decision:** The locale layout sets `dir` from `i18n/locale-metadata.ts`, so Arabic pages mirror entirely. Components use logical utilities and flip physical animation offsets via `useTextDirection()`.
 - **Affected:** frontend only.
 - **Migration:** Pages built with physical classes (`left-`, `pl-`, `text-left`, …) must be reviewed in Arabic. Rollback is restoring `dir="ltr"` in `app/[locale]/layout.tsx`.
+
+### 2026-10-24: three.js for the 3D member badge
+
+- **Owner:** Shumokh (member badges task); approval reported by Shumokh as granted by the team.
+- **Context:** Committee members' profiles get a 3D badge, a hanging lanyard card that swings and can be dragged, ported from the mukhaverse portfolio. The approved stack (Next.js, React, Tailwind, Framer Motion, GSAP) has no 3D renderer.
+- **Decision:** Add `three` (with `@types/three`) as a dependency. It's imported dynamically from `lib/badge/engine.ts` only when a badge mounts, so pages without a badge don't load it. When WebGL is unavailable the same card is painted flat on a 2D canvas.
+- **Affected:** frontend only.
+- **Migration:** Rollback is removing `three`, `lib/badge/engine.ts` and `components/badge/`. The card painter (`lib/badge/paint.ts`) has no three.js dependency.
+- **Layout:** Chosen from three built options (badge view, side column, header). The badge hangs in a column beside the profile cards and stays in view while scrolling; on phones it sits between the header and the cards. Members without a committee see the page without a badge.
+- **Badge content:** The headline is the committee role (Member, Co-Leader, Leader) and the line under it is the committee's short name. The member's uploaded photo replaces the silhouette when there is one; otherwise a female or male silhouette is chosen by the member's gender.
+- **Colours:** Public Relations, Content Writing, Project Management and Digital Media & Design take Google green, yellow, blue and red. Web Development's dark slate GDG card is the default, and the other developer committees (Data Analysis, Cybersecurity, AIML, Automation, IoT & Robotics) use it until their colours are decided (`TBD`; marked "DEVELOPER COMMITTEE COLOURS" in `lib/badge/themes.ts`).
+- **Data:** Name, photo, gender and committees come from `GET /me`, keyed by the backend's committee codes; see "Profile badge status" in `docs/api-integration.md`.
+- **Open (`TBD`):** `/me` position values beyond Leader and Co-Leader (and positions like Advisor) are unconfirmed. Badge text is English in both locales.
 
 ## Decision record minimum
 
