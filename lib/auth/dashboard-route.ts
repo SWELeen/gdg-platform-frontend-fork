@@ -4,7 +4,7 @@ import type { LeaderCommittee } from "@/components/dashboard/shared/types";
 export type AuthenticatedIdentity = {
   memberId: number | null;
   roles: string[];
-  committees: Array<{ code: string; position: string }>;
+  committees: Array<{ code: string; name?: string; position: string }>;
   membershipRequestPending?: boolean;
 };
 

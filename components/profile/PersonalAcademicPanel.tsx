@@ -28,14 +28,14 @@ export function PersonalAcademicPanel({
       variants={{
         visible: { transition: { staggerChildren: 0.08 } },
       }}
-      className="flex flex-col gap-4 md:flex-row"
+      className="flex flex-col gap-4"
     >
       <motion.div
         variants={{
           hidden: { opacity: 0, y: 8 },
           visible: { opacity: 1, y: 0 },
         }}
-        className="flex min-w-0 flex-1"
+        className="flex w-full min-w-0"
       >
         <InfoCard
           data={personalInfo}
@@ -50,7 +50,7 @@ export function PersonalAcademicPanel({
           hidden: { opacity: 0, y: 8 },
           visible: { opacity: 1, y: 0 },
         }}
-        className="flex min-w-0 flex-1"
+        className="flex w-full min-w-0"
       >
         <InfoCard
           data={academicInfo}

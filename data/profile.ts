@@ -6,6 +6,6 @@ export type InfoCardData = {
 };
 
 export type SocialLink = {
-  platform: "github" | "linkedin" | "website";
+  platform: "github" | "portfolio" | "x";
   value: string | null;
 };

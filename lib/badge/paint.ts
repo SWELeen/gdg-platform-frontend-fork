@@ -58,6 +58,19 @@ function begin(cv: HTMLCanvasElement) {
   return ctx;
 }
 
+function paintBackground(ctx: CanvasRenderingContext2D, theme: BadgeTheme) {
+  if (theme.backgroundColors?.length) {
+    const gradient = ctx.createLinearGradient(0, 0, CARD_W, CARD_H);
+    theme.backgroundColors.forEach((color, index, colors) => {
+      gradient.addColorStop(index / Math.max(1, colors.length - 1), color);
+    });
+    ctx.fillStyle = gradient;
+  } else {
+    ctx.fillStyle = theme.bg;
+  }
+  ctx.fillRect(0, 0, CARD_W, CARD_H);
+}
+
 // the slot is a real hole, so the ring can pass through it; cut last
 function finish(ctx: CanvasRenderingContext2D) {
   ctx.globalCompositeOperation = "destination-out";
@@ -113,8 +126,7 @@ function strokeMark(ctx: CanvasRenderingContext2D, ink: string) {
 export function paintFront(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme, assets: BadgeAssets) {
   const { font } = assets;
   const ctx = begin(cv);
-  ctx.fillStyle = t.bg;
-  ctx.fillRect(0, 0, CARD_W, CARD_H);
+  paintBackground(ctx, t);
   ctx.textAlign = "center";
   ctx.fillStyle = t.ink;
   // the committee line breaks into two even lines when it's long
@@ -155,7 +167,7 @@ export function paintFront(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme
   ctx.font = `700 21px ${font}`;
   ctx.fillText(data.name, CARD_W / 2, 330, CARD_W - 32);
 
-  // the brackets and the chapter's two lines, centred as one group
+  // Preserve the GDG chapter mark and school details at the bottom of the card.
   ctx.font = `400 10.5px ${font}`;
   const w1 = ctx.measureText(data.chapter).width;
   ctx.font = `400 8.5px ${font}`;
@@ -177,8 +189,7 @@ export function paintFront(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme
 export function paintBack(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme, assets: BadgeAssets) {
   const { font } = assets;
   const ctx = begin(cv);
-  ctx.fillStyle = t.bg;
-  ctx.fillRect(0, 0, CARD_W, CARD_H);
+  paintBackground(ctx, t);
   ctx.save();
   ctx.translate(CARD_W / 2 - 51, 160);
   ctx.scale(3, 3);

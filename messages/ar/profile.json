@@ -3,15 +3,41 @@
     "memberSince": "عضو منذ {date}"
   },
   "badge": {
-    "label": "بطاقة العضوية: {name}، {role}، {committee}"
+    "label": "بطاقة العضوية: {name}، {role}، {committee}",
+    "globalRoles": {
+      "clubLeader": "قائد النادي",
+      "clubCoLeader": "نائب قائد النادي",
+      "clubLeadership": "قيادة النادي",
+      "developerCommitteesLeader": "قائد لجنة المطورين",
+      "developerCommittees": "لجنة المطورين"
+    }
   },
   "bio": {
     "title": "نبذة مختصرة",
-    "placeholder": "",
-    "empty": "لا توجد نبذة حتى الآن."
+    "placeholder": "عرّف مجتمع GDG بنفسك واهتماماتك أو ما تتعلمه حاليًا.",
+    "empty": "لا توجد نبذة حتى الآن.",
+    "edit": "تعديل",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ...",
+    "cancel": "إلغاء",
+    "saved": "تم حفظ النبذة.",
+    "saveError": "تعذر حفظ النبذة. حاول مرة أخرى."
   },
   "tabs": {
-    "personal": "المعلومات الشخصية والأكاديمية"
+    "label": "أقسام الملف الشخصي",
+    "personal": "المعلومات الشخصية والأكاديمية",
+    "social": "روابط التواصل"
+  },
+  "social": {
+    "title": "الروابط",
+    "notAdded": "غير مضاف",
+    "saveError": "تعذر حفظ الروابط. حاول مرة أخرى.",
+    "saved": "تم حفظ الروابط.",
+    "platforms": {
+      "github": "GitHub",
+      "portfolio": "المعرض الشخصي",
+      "x": "X"
+    }
   },
   "cards": {
     "personal": "المعلومات الشخصية",
