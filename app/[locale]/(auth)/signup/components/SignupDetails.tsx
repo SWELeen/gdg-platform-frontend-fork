@@ -58,38 +58,6 @@ export default function SignupDetails({
         />
       </label>
 
-      <label
-        htmlFor="university-id"
-        className="relative block text-sm font-medium"
-      >
-        {t("fields.universityId.label")} <span className="text-gdg-red">*</span>
-        <input
-          id="university-id"
-          name="universityId"
-          type="text"
-          value={values.universityId}
-          onChange={(event) => onChange("universityId", event.target.value)}
-          onBlur={() => onBlur("universityId")}
-          placeholder={t("fields.universityId.placeholder")}
-          maxLength={255}
-          aria-invalid={Boolean(errors.universityId)}
-          aria-describedby={
-            errors.universityId ? "university-id-error" : undefined
-          }
-          className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-base font-normal outline-none placeholder:text-foreground/40 ${
-            errors.universityId
-              ? "border-gdg-red"
-              : "border-foreground/15"
-          }`}
-        />
-
-        <AuthErrorMessage
-          id="university-id-error"
-          message={errors.universityId ?? ""}
-          className="absolute start-0 top-full mt-0.5"
-        />
-      </label>
-
       <SelectField
         id="college"
         label={t("fields.college.label")}

@@ -1,110 +1,109 @@
 {
   "meta": {
-    "title": "Announcements | GDG on Campus — University of Jeddah",
-    "description": "Every official update from GDG on Campus — University of Jeddah, in one place."
+    "title": "الإعلانات | GDG on Campus — جامعة جدة",
+    "description": "كل المستجدات الرسمية من GDG on Campus — جامعة جدة في مكان واحد."
   },
   "hero": {
     "eyebrow": "GDG on Campus · UJ",
-    "title": "Announcements",
-    "description": "Every official update from GDG on Campus — University of Jeddah, in one place. Event openings, recruitment calls, results and community news, published and dated by the committee.",
-    "sourcePill": "Official source of truth — published by authorized committee members only"
+    "title": "الإعلانات",
+    "description": "تابعوا كل اخبارنا و مستجداتنا و فرص الانضمام الينا"
   },
   "categories": {
-    "all": "All",
-    "events": "Events",
-    "recruitment": "Recruitment",
-    "workshops": "Workshops",
-    "results": "Results",
-    "community": "Community"
+    "all": "الكل",
+    "events": "الفعاليات",
+    "recruitment": "الانضمام",
+    "workshops": "ورش العمل",
+    "results": "النتائج",
+    "community": "المجتمع"
   },
   "controls": {
-    "searchLabel": "Search announcements",
-    "searchPlaceholder": "Search announcements",
-    "filterLabel": "Filter by category",
-    "sortLabel": "Sort announcements",
+    "searchLabel": "ابحث في الإعلانات",
+    "searchPlaceholder": "ابحث في الإعلانات",
+    "filterLabel": "تصفية حسب التصنيف",
+    "sortLabel": "ترتيب الإعلانات",
     "sort": {
-      "newest": "Newest first",
-      "oldest": "Oldest first"
+      "newest": "الأحدث أولًا",
+      "oldest": "الأقدم أولًا"
     },
-    "publishedCount": "{count} published"
+    "publishedCount": "عدد الإعلانات المنشورة: {count}"
   },
   "pinned": {
-    "heading": "Pinned announcement",
-    "badge": "Pinned",
-    "viewDetails": "View Details"
+    "heading": "الإعلان المثبّت",
+    "badge": "مثبّت",
+    "viewDetails": "عرض التفاصيل"
   },
   "list": {
-    "heading": "All announcements",
-    "showing": "Showing {shown} of {total} published announcements",
-    "count": "{total} published announcements"
+    "heading": "كل الإعلانات",
+    "showing": "يعرض {shown} من أصل {total} إعلانًا منشورًا",
+    "count": "عدد الإعلانات المنشورة: {total}"
   },
   "card": {
-    "published": "Published {date}",
-    "readTime": "{minutes} min read",
-    "readMore": "Read More"
+    "published": "نُشر في {date}",
+    "readTime": "مدة القراءة {minutes} دقيقة",
+    "readMore": "اقرأ المزيد"
   },
   "carousel": {
-    "label": "Announcements",
-    "previous": "Previous announcement",
-    "next": "Next announcement"
+    "label": "الإعلانات",
+    "previous": "الإعلان السابق",
+    "next": "الإعلان التالي"
   },
   "pagination": {
-    "label": "Announcements pages",
-    "previous": "Previous page",
-    "next": "Next page",
-    "page": "Page {page}"
+    "label": "صفحات الإعلانات",
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية",
+    "page": "الصفحة {page}"
   },
   "empty": {
-    "title": "No announcements published yet",
-    "inCategory": "There is nothing under <strong>{category}</strong> right now. Once the committee publishes an announcement, it appears here first — before it goes out on social media.",
-    "all": "There is nothing here right now. Once the committee publishes an announcement, it appears here first — before it goes out on social media.",
-    "browseAll": "Browse all announcements",
-    "goToEvents": "Go to Events",
-    "hint": "Try clearing the filters, or <link>follow us on LinkedIn</link> to get notified when something new is published."
+    "title": "ترقبونا ..",
+    "inCategory": "ما فيه إعلانات ضمن تصنيف <strong>{category}</strong> حاليًا. بتظهر هنا أول ما تنشرها اللجنة.",
+    "all": "ستظهر الإعلانات الجديدة هنا.",
+    "browseAll": "تصفح كل الإعلانات",
+    "goToEvents": "الفعاليات",
+    "hint": "امسح عوامل التصفية أو <link>تابعنا على LinkedIn</link> لمعرفة جديدنا."
   },
   "noResults": {
-    "title": "No matching announcements",
-    "description": "Nothing matches <strong>“{query}”</strong>. Try a different keyword, pick another category, or browse all announcements.",
-    "clearSearch": "Clear search"
+    "title": "ما لقينا إعلانات مطابقة",
+    "description": "ما فيه نتائج تطابق <strong>“{query}”</strong>. جرّبوا كلمة ثانية أو اختاروا تصنيفًا مختلفًا.",
+    "clearSearch": "مسح البحث"
   },
   "error": {
-    "title": "We couldn’t load announcements",
-    "description": "Something went wrong while loading the latest announcements. Check your connection and try again.",
-    "retry": "Try again",
-    "browseAll": "Back to announcements"
+    "title": "تعذر تحميل الإعلانات",
+    "description": "حدثت مشكلة أثناء تحميل الإعلانات. تحققوا من الاتصال وحاولوا مرة أخرى.",
+    "retry": "حاول مرة أخرى",
+    "browseAll": "العودة إلى الإعلانات"
   },
   "loading": {
-    "label": "Loading announcements"
+    "label": "جارٍ تحميل الإعلانات"
   },
   "details": {
-    "breadcrumb": "Breadcrumb",
-    "home": "Home",
-    "announcements": "Announcements",
-    "share": "Share",
-    "shareOnX": "Share on X",
-    "shareOnLinkedIn": "Share on LinkedIn",
-    "shareLink": "Share link",
-    "linkCopied": "Link copied",
+    "breadcrumb": "مسار التنقل",
+    "home": "الرئيسية",
+    "announcements": "الإعلانات",
+    "share": "مشاركة",
+    "shareOnX": "مشاركة على X",
+    "shareOnLinkedIn": "مشاركة على LinkedIn",
+    "shareLink": "مشاركة الرابط",
+    "linkCopied": "تم نسخ الرابط",
     "info": {
-      "title": "Announcement info",
-      "published": "Published",
-      "category": "Category",
-      "publishedBy": "Published by",
-      "status": "Status"
+      "title": "معلومات الإعلان",
+      "published": "تاريخ النشر",
+      "category": "التصنيف",
+      "publishedBy": "نشره",
+      "status": "الحالة"
     },
     "status": {
-      "open": "Open",
-      "closed": "Closed"
+      "open": "مفتوح",
+      "closed": "مغلق"
     },
-    "addToCalendar": "Add to calendar",
+    "addToCalendar": "أضف إلى التقويم",
     "more": {
-      "title": "More announcements",
-      "viewAll": "View all"
+      "title": "إعلانات أخرى",
+      "viewAll": "عرض الكل"
     }
   },
   "cta": {
-    "title": "Never miss an official announcement",
-    "description": "Follow us on social media for the highlights — but everything published here is verified, dated and maintained by the GDG on Campus UJ committee.",
-    "button": "Join Our Community"
+    "title": "لا تفوّتوا أي إعلان رسمي",
+    "description": "تابعونا على منصات التواصل لمعرفة أبرز المستجدات. كل ما يُنشر هنا إعلان رسمي تحدّثه لجنة GDG on Campus بجامعة جدة.",
+    "button": "انضموا إلى مجتمعنا"
   }
 }

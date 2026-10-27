@@ -1,4 +1,3 @@
-import Image from "next/image";
 import HeroSection from "@/components/home/HeroSection";
 import AboutSection from "@/components/home/AboutSection";
 import WhatWeOffer from "@/components/home/WhatWeOffer"
@@ -10,9 +9,11 @@ import LeadershipTeam from "@/components/home/LeadershipTeam"
 import Committees from "@/components/home/Committees"
 import Footer from "@/components/Footer"
 import AnnouncementsSection from "@/components/home/AnnouncementsSection";
-import { announcementFixtures } from "@/data/announcements";
+import { getAnnouncements } from "@/lib/announcements/provider";
 
-export default function Home() {
+export default async function Home() {
+  const announcements = await getAnnouncements();
+
   return (
     <>
       
@@ -22,7 +23,7 @@ export default function Home() {
         <WhatWeOffer/>
         <LeadershipTeam/>
         <FeaturedProjects/>
-        <AnnouncementsSection announcements={announcementFixtures} />
+        <AnnouncementsSection announcements={announcements} />
         <UpcomingEvents/>
         <SponsorSection/>
         {/* <LeadershipTeam/> */}

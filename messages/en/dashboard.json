@@ -1035,10 +1035,9 @@
         "previewAlt": "Selected event image"
       },
       "registration": {
-        "description": "These details come from each attendee's account, so they don't type them again. Need a university ID or college? Add it as a question below.",
+        "description": "These details come from each attendee's account, so they don't type them again. Add any event-specific details as questions below.",
         "fields": {
           "fullName": "Full name",
-          "universityId": "University ID",
           "college": "College",
           "major": "Major",
           "phone": "Phone number",
@@ -1047,7 +1046,6 @@
         },
         "placeholders": {
           "fullName": "Enter your full name",
-          "universityId": "e.g. 2286291",
           "college": "e.g. Computer Science and Engineering",
           "major": "e.g. Software Engineering",
           "phone": "5xxxxxxxx",

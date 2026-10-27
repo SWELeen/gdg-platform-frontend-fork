@@ -51,7 +51,7 @@ function ProfileAccountMenu({
   return (
     <div
       ref={menuRef}
-      className={`relative min-w-0 ${variant === "mobile" ? "w-full" : "max-w-36"}`}
+      className={`relative min-w-0 ${variant === "mobile" ? "w-full" : "max-w-32"}`}
     >
       <button
         type="button"
@@ -59,10 +59,10 @@ function ProfileAccountMenu({
         aria-expanded={open}
         title={name}
         onClick={() => setOpen((current) => !current)}
-        className={`flex min-w-0 items-center gap-2 font-medium ${variant === "mobile" ? "w-full text-sm" : "max-w-full text-sm"}`}
+        className="flex w-full min-w-0 items-center gap-2 text-sm font-medium"
       >
         <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <span className="block w-[10ch] shrink-0 truncate">{name}</span>
+        <span className="min-w-0 flex-1 truncate">{name}</span>
         <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
       {open && (
@@ -179,7 +179,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   // --home-nav-height (globals.css) is the space it takes at the top; sticky sections offset by it.
   return (
     <nav
-      className={`fixed inset-x-4 top-4 z-[200] mx-auto flex h-14 items-center justify-between gap-8 rounded-full border ps-5 pe-3 shadow-lg backdrop-blur-xl backdrop-saturate-150 lg:w-fit lg:gap-10 lg:ps-12 lg:pe-8 ${
+      className={`fixed inset-x-4 top-4 z-[200] mx-auto flex h-14 items-center justify-between gap-8 rounded-full border ps-5 pe-3 shadow-lg backdrop-blur-xl backdrop-saturate-150 lg:gap-8 lg:ps-12 lg:pe-8 ${
         variant === "light"
           ? "border-border bg-surface/85 text-foreground shadow-black/5"
           : "border-white/20 bg-gdg-dark/35 text-[var(--white)] shadow-black/25"
@@ -205,7 +205,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
         )}
       </div>
 
-      <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-6">
+      <div className="hidden min-w-0 items-center gap-4 whitespace-nowrap lg:flex xl:gap-5">
         <motion.a
           href={sectionHref("#home")}
           whileHover={{ scale: 1.05 }}

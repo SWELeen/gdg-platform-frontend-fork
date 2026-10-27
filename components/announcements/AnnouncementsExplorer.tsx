@@ -146,15 +146,17 @@ export function AnnouncementsExplorer({ announcements }: { announcements: Announ
 
   return (
     <div className="flex flex-col gap-8">
-      <AnnouncementControls
-        query={query}
-        onQueryChange={updateQuery}
-        category={category}
-        onCategoryChange={updateCategory}
-        sort={sort}
-        onSortChange={updateSort}
-        publishedCount={visible.length}
-      />
+      {announcements.length > 0 && (
+        <AnnouncementControls
+          query={query}
+          onQueryChange={updateQuery}
+          category={category}
+          onCategoryChange={updateCategory}
+          sort={sort}
+          onSortChange={updateSort}
+          publishedCount={visible.length}
+        />
+      )}
 
       <div>{renderContent()}</div>
     </div>
