@@ -62,12 +62,15 @@ function refreshAuthSession(): Promise<boolean> {
 
 export async function apiRequest<T>(
   path: string,
-  init: { method?: string; body?: unknown } = {},
+  init: { method?: string; body?: unknown; accessToken?: string } = {},
 ): Promise<ApiResult<T>> {
   clearApiSession();
   const makeRequest = () => fetch(`${API_URL}${path}`, {
     method: init.method ?? "GET",
-    headers: requestHeaders(init.body),
+    headers: {
+      ...requestHeaders(init.body),
+      ...(init.accessToken ? { Authorization: `Bearer ${init.accessToken}` } : {}),
+    },
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
     credentials: "include",
     cache: "no-store",
@@ -76,7 +79,7 @@ export async function apiRequest<T>(
   let response: Response;
   try {
     response = await makeRequest();
-    if (response.status === 401 && !["/auth/refresh", "/auth/login", "/auth/logout"].includes(path) && await refreshAuthSession()) {
+    if (response.status === 401 && !["/auth/refresh", "/auth/login", "/auth/logout", "/auth/setup-password", "/auth/setup-password/complete"].includes(path) && await refreshAuthSession()) {
       response = await makeRequest();
     }
   } catch {

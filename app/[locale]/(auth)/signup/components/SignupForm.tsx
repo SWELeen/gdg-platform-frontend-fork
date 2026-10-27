@@ -94,6 +94,7 @@ function validateField(field: FieldName, values: FormValues) {
     case "personalEmail": return validateEmail(value)
     case "universityEmail":
       if (!value.trim()) return ""
+      if (value.trim().toLowerCase() === values.personalEmail.trim().toLowerCase()) return "signupEmailsMustDiffer"
       return validateEmail(value)
     case "password": return validatePassword(value)
     case "confirmPassword": return validateConfirmPassword(value, values.password)
@@ -363,16 +364,12 @@ export default function SignupForm() {
     if (!result.ok) {
       if (result.code === "EMAIL_ALREADY_EXISTS") {
         setSubmitError("emailAlreadyExists")
-      } else if (result.code === "UNIVERSITY_EMAIL_MISMATCH") {
-        setSubmitError("signupUniversityEmailMismatch")
       } else if (result.code === "EMAILS_MUST_DIFFER") {
         setSubmitError("signupEmailsMustDiffer")
       } else if (result.code === "SIGNUP_WEAK_PASSWORD") {
         setSubmitError("signupWeakPassword")
       } else if (result.code === "EMAIL_ADDRESS_NOT_AUTHORIZED") {
         setSubmitError("signupEmailNotAuthorized")
-      } else if (result.code === "UNIVERSITY_EMAIL_VERIFICATION_NOT_CONFIGURED") {
-        setSubmitError("signupUniversityEmailNotConfigured")
       } else if (result.code === "VALIDATION_ERROR" && result.details.length > 0) {
         setSubmitError("authRequestFailed")
         setSubmitErrorDetails(result.details.map(({ pointer, message }) => `${pointer || "form"}: ${message}`).join("; "))

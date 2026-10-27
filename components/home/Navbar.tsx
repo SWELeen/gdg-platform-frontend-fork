@@ -49,16 +49,20 @@ function ProfileAccountMenu({
   }, []);
 
   return (
-    <div ref={menuRef} className={`relative ${variant === "mobile" ? "w-full" : ""}`}>
+    <div
+      ref={menuRef}
+      className={`relative min-w-0 ${variant === "mobile" ? "w-full" : "max-w-36"}`}
+    >
       <button
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
+        title={name}
         onClick={() => setOpen((current) => !current)}
-        className={`flex items-center gap-2 font-medium ${variant === "mobile" ? "w-full text-sm" : "text-sm"}`}
+        className={`flex min-w-0 items-center gap-2 font-medium ${variant === "mobile" ? "w-full text-sm" : "max-w-full text-sm"}`}
       >
         <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <span className="truncate">{name}</span>
+        <span className="block w-[10ch] shrink-0 truncate">{name}</span>
         <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
       {open && (

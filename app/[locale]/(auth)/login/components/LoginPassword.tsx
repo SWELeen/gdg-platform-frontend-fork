@@ -29,7 +29,7 @@ export default function LoginPassword({
       <form className="mt-12 w-full" onSubmit={onSubmit} noValidate>
         <label htmlFor="login-password" className="block text-sm font-medium">
           {t("passwordLabel")} <span className="text-gdg-red">*</span>
-          <div className="relative">
+          <div className="w-full">
             <PasswordInput
               id="login-password"
               name="password"
@@ -50,7 +50,7 @@ export default function LoginPassword({
             <AuthErrorMessage
               id="login-password-error"
               message={error}
-              className="absolute inset-s-0 top-full mt-1"
+              className="mt-1 block"
             />
           </div>
         </label>
