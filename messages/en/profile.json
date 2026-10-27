@@ -10,6 +10,9 @@
   "chips": {
     "studentId": "ID: {id}"
   },
+  "badge": {
+    "label": "Member badge: {name}, {role}, {committee}"
+  },
   "bio": {
     "title": "Short Bio",
     "placeholder": "Tell the GDG Community about yourself, your interests, your projects, or what you're learning"

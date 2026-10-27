@@ -10,6 +10,9 @@
   "chips": {
     "studentId": "الرقم الجامعي: {id}"
   },
+  "badge": {
+    "label": "بطاقة العضوية: {name}، {role}، {committee}"
+  },
   "bio": {
     "title": "نبذة مختصرة",
     "placeholder": "عرّف مجتمع GDG بنفسك واهتماماتك ومشاريعك أو ما تتعلمه حاليًا"

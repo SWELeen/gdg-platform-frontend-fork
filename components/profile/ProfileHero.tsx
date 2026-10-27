@@ -23,6 +23,8 @@ type ProfileHeroProps = {
   onCancel: () => void;
   onAvatarSelect: (file: File) => void;
   onHeaderImageSelect: (file: File) => void;
+  /** Classes for the block under the cover, e.g. to leave room beside it. */
+  contentClassName?: string;
 };
 
 export function ProfileHero({
@@ -39,6 +41,7 @@ export function ProfileHero({
   onCancel,
   onAvatarSelect,
   onHeaderImageSelect,
+  contentClassName = "",
 }: ProfileHeroProps) {
   const t = useTranslations("profile.hero");
  const editControls = isEditing ? (
@@ -113,7 +116,7 @@ return (
 
     {/* Profile information below cover */}
     <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10 lg:px-16">
-      <div className="relative -mt-10 flex flex-col items-center text-center sm:-mt-12 md:items-start md:text-start">
+      <div className={`relative -mt-10 flex flex-col items-center text-center sm:-mt-12 md:items-start md:text-start ${contentClassName}`}>
 
         {/* Avatar overlapping the cover */}
         <div className="relative z-10">
