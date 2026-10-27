@@ -10,7 +10,11 @@ export type CommitteeId =
   | "project-management"
   | "digital-media";
 
-export type CommitteeRole = "Member" | "Co-Leader" | "Leader";
+export const committeeRoles = ["Member", "Co-Leader", "Leader"] as const;
+export type CommitteeRole = (typeof committeeRoles)[number];
+
+/** Same values as the signup form's gender field (data/signup.ts). */
+export type Gender = "female" | "male";
 
 /** A member's place in a committee, which decides their badge. */
 export type Membership = {
@@ -34,11 +38,14 @@ export type BadgeTheme = {
 /** What a member's badge shows. Built from profile data, never fetched on its own. */
 export type BadgeData = {
   name: string;
-  role: CommitteeRole;
+  /** A CommitteeRole, or "Role" on the placeholder card. */
+  role: string;
   /** The committee's short name, e.g. "Web Development". */
   committee: string;
   chapter: string;
   university: string;
   /** The member's uploaded photo; without one the card shows a silhouette. */
   photoUrl: string | null;
+  /** Picks the silhouette when there's no photo. */
+  gender: Gender;
 };

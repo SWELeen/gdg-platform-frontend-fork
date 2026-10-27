@@ -8,18 +8,21 @@ import { ProfileBio } from "@/components/profile/ProfileBio";
 import { ProfileHero } from "@/components/profile/ProfileHero";
 import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import { RegistrationsLink } from "@/components/profile/RegistrationsLink";
-import { demoMemberProfile, demoMembership } from "@/data/demo-member";
+import { demoMemberGender, demoMemberProfile, demoMembership } from "@/data/demo-member";
 import { findRowValue, useProfileEditor } from "@/lib/useProfileEditor";
 
 // Committee members get a 3D badge in a column beside the cards, hanging from
 // the cover and staying in view while the page scrolls; on phones it sits
 // between the header and the cards. Anyone else gets the page without it.
+// To connect the backend, replace the three demo imports with the signed-in
+// member's profile, gender and committee membership.
 export default function ProfilePage({ }: PageProps<"/[locale]/profile">) {
   const { hero, bio, tabs, saved } = useProfileEditor(demoMemberProfile);
   const badge = useMemberBadge({
     name: findRowValue(saved.personalData, "fullName") || demoMemberProfile.profile.name,
     university: findRowValue(saved.academicData, "university"),
     photoUrl: saved.avatarUrl,
+    gender: demoMemberGender,
     membership: demoMembership,
   });
 

@@ -1,4 +1,4 @@
-import type { BadgeData, BadgeTheme } from "./types";
+import type { BadgeData, BadgeTheme, Gender } from "./types";
 
 // The badge faces, painted on a canvas. One painter feeds both the 3D badge (as
 // its texture) and the flat fallback, so the two never drift apart. Cards are
@@ -36,8 +36,12 @@ export async function loadBadgeAssets(data: BadgeData, theme: BadgeTheme, font: 
 
 // ─── Helpers ───────────────────────────────────────────────
 
-// a silhouette until there's a real photo, in a 100×125 box
-const PERSON = "M50 16C31 16 22 30 22 48C22 58 24 66 21 75C28 79 36 80 42 78L42 84C24 87 10 96 8 125L92 125C90 96 76 87 58 84L58 78C64 80 72 79 79 75C76 66 78 58 78 48C78 30 69 16 50 16Z";
+// silhouettes until there's a real photo, in a 100×125 box: a bob and
+// shoulders, or short hair, ears and broader shoulders
+const PERSON: Record<Gender, string> = {
+  female: "M50 16C31 16 22 30 22 48C22 58 24 66 21 75C28 79 36 80 42 78L42 84C24 87 10 96 8 125L92 125C90 96 76 87 58 84L58 78C64 80 72 79 79 75C76 66 78 58 78 48C78 30 69 16 50 16Z",
+  male: "M47 15C55 12 66 16 69 26C71 32 70 38 69 44C72 44 73 48 72 52C71 56 69 58 67 57C65 64 61 69 58 71L58 79C63 82 72 85 82 88C89 91 92 97 92 104L92 125L8 125L8 104C8 97 11 91 18 88C28 85 37 82 42 79L42 71C39 69 35 64 33 57C31 58 29 56 28 52C27 48 28 44 31 44C30 37 30 30 33 25C36 19 41 16 47 15Z",
+};
 // the chapter mark: the GDG brackets
 const GDG_MARK = "M14 3 4 10l10 7M20 3l10 7-10 7";
 
@@ -64,13 +68,13 @@ function finish(ctx: CanvasRenderingContext2D) {
   ctx.restore();
 }
 
-function drawPerson(ctx: CanvasRenderingContext2D, x: number, bottom: number, width: number, color: string) {
+function drawPerson(ctx: CanvasRenderingContext2D, gender: Gender, x: number, bottom: number, width: number, color: string) {
   const s = width / 100;
   ctx.save();
   ctx.translate(x, bottom - 125 * s);
   ctx.scale(s, s);
   ctx.fillStyle = color;
-  ctx.fill(new Path2D(PERSON));
+  ctx.fill(new Path2D(PERSON[gender] ?? PERSON.female));
   ctx.restore();
 }
 
@@ -139,7 +143,7 @@ export function paintFront(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme
   ctx.fill();
   ctx.clip();
   if (assets.photo) drawCover(ctx, assets.photo, px, top, pw, ph);
-  else drawPerson(ctx, px + pw * 0.1, top + ph - 18, pw * 0.8, t.bg);
+  else drawPerson(ctx, data.gender, px + pw * 0.1, top + ph - 18, pw * 0.8, t.bg);
   ctx.restore();
   ctx.strokeStyle = t.photoFrame;
   ctx.lineWidth = 2;

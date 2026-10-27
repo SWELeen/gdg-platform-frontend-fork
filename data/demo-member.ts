@@ -1,4 +1,4 @@
-import type { Membership } from "@/lib/badge/types";
+import type { Gender, Membership } from "@/lib/badge/types";
 import type { ProfileSeed } from "@/lib/useProfileEditor";
 
 // TEMPORARY: the member shown on /profile until the authenticated profile API
@@ -36,9 +36,11 @@ export const demoMemberProfile: ProfileSeed = {
   ],
 };
 
-// The demo member's committee and role, which decide the badge. Try any
-// committee id from lib/badge/themes.ts and any role ("Member", "Co-Leader",
-// "Leader"); set it to null to see the profile of someone without a committee.
+// The badge also needs these, which the profile API has to provide: the
+// member's gender (for the silhouette when there's no photo) and their
+// committee and role (null for someone not in a committee: no badge).
+export const demoMemberGender: Gender = "female";
+
 export const demoMembership: Membership | null = {
   committeeId: "web-development",
   role: "Member",

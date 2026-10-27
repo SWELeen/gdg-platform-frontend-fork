@@ -35,6 +35,18 @@ The technical guide shows the frontend running at `http://localhost:3000` and th
 
 Do not put secrets in `NEXT_PUBLIC_*` variables. The browser must not be trusted to enforce roles or protect data. The frontend may use backend-provided identity/permission information to shape the interface, while the backend remains the enforcement point.
 
+## Profile badge status
+
+`/profile` reads demo data (`data/demo-member.ts`) because no authenticated profile operation is published yet. The page gets everything from three values, so connecting it means replacing those imports with the signed-in member's data:
+
+| Demo value | What the badge needs | Notes |
+| --- | --- | --- |
+| `demoMemberProfile` | Name, university and photo URL (plus the rest of the profile page's fields) | No photo URL: the card shows a silhouette. |
+| `demoMemberGender` | `"female"` or `"male"` | Same values as the signup form. Picks the silhouette; anything else or nothing falls back to the female one. |
+| `demoMembership` | Committee and role, or `null` for no committee | `null`: the page shows no badge. |
+
+The committee must map to an id in `lib/badge/themes.ts` (for example `public-relations`, `web-development`), and the role must be Member, Co-Leader or Leader. If either doesn't match, or the name is missing, the badge shows an all-placeholder card ("Role", "Committee name", "Member name") on the default card instead of wrong data. Map backend values to these ids in one function where the response is read. The signup form also offers Advisor, which has no badge treatment yet (`TBD`). How the backend names committees and roles is `TBD` until the contract publishes them.
+
 ## PR registration dashboard status
 
 The current backend schema contains no event or registration models, and the available NestJS controller exposes no registration operations. The PR dashboard therefore renders an honest empty registration state and does not invent applicant records, event questions, API routes, registration-open permissions, or backend authorization rules.
