@@ -34,7 +34,7 @@ export function ProfileBio({
             bio ? "text-foreground" : "text-gray-300 dark:text-white"
           }`}
         >
-          {bio || placeholder}
+          {bio || t("empty")}
         </p>
       )}
     </div>

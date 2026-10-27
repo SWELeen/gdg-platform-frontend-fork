@@ -1,22 +1,14 @@
 {
   "hero": {
-    "edit": "Edit profile",
-    "save": "Save changes",
-    "cancel": "Cancel",
-    "changePhoto": "Change profile photo",
-    "changeCover": "Change cover photo",
     "memberSince": "Member since {date}"
-  },
-  "chips": {
-    "studentId": "ID: {id}"
   },
   "bio": {
     "title": "Short Bio",
-    "placeholder": "Tell the GDG Community about yourself, your interests, your projects, or what you're learning"
+    "placeholder": "",
+    "empty": "No bio added yet."
   },
   "tabs": {
-    "personal": "Personal & Academic",
-    "social": "Social Links"
+    "personal": "Personal & Academic"
   },
   "cards": {
     "personal": "Personal Information",
@@ -25,28 +17,18 @@
   "fields": {
     "fullName": "Full name",
     "email": "Email",
+    "universityEmail": "University email",
     "phone": "Phone",
-    "studentId": "Student ID",
     "university": "University",
+    "branch": "Branch",
+    "college": "College",
     "major": "Major",
-    "academicYear": "Academic year"
+    "level": "Academic level",
+    "gender": "Gender"
   },
-  "academicValues": {
-  "universityOfJeddah": "University of Jeddah",
-  "softwareEngineering": "Software Engineering",
-  "thirdYear": "Third Year",
-  "janaAlshaikh": "Jana Alshaikh"
-},
-
   "universityPlaceholder": "Select a university",
   "registrationsLink": "My registrations",
-  "social": {
-    "platforms": {
-      "github": "GitHub",
-      "linkedin": "Linkedin",
-      "website": "Personal Website"
-    },
-    "notAdded": "Not added yet"
-  }
+  "loading": "Loading your profile…",
+  "loadError": "Could not load your profile. Please try again."
 }
 

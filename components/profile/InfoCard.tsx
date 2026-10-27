@@ -25,25 +25,8 @@ export function InfoCard({
 }: InfoCardProps) {
   const t = useTranslations("profile");
   const tv = useTranslations("validation");
-  const academicTranslations: Record<string, string> = {
-    "University of Jeddah": "universityOfJeddah",
-    "Software Engineering": "softwareEngineering",
-    "Third Year": "thirdYear",
-    "Jana Alshaikh": "janaAlshaikh",
-  };
-
   const getDisplayValue = (value: string) => {
-    const translationKey = academicTranslations[value];
-
-    if (!translationKey) return value;
-
-    return t(
-      `academicValues.${translationKey}` as
-    | "academicValues.universityOfJeddah"
-    | "academicValues.softwareEngineering"
-    | "academicValues.thirdYear"
-    | "academicValues.janaAlshaikh"
-);
+    return value;
   };
 
   const isPersonal = data.id === "personal";
@@ -145,9 +128,7 @@ export function InfoCard({
                 ) : (
                   <dd className="min-w-0 break-words text-end text-sm font-semibold text-gray-800 dark:text-gray-100">
                     {isPhone ? (
-                      <span dir="ltr">
-                        {`+966 ${formatPhone(row.value)}`}
-                      </span>
+                      <span dir="ltr">{row.value}</span>
                     ) : (
                       row.value
                     )}

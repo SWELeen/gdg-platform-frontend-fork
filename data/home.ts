@@ -61,34 +61,6 @@ export const projects = [
     },
   ];
     
-//   Mock data, The actual data will be retrieved from database 
-export const events = [
-    {
-      id: "1",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-    {
-      id: "2",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-    {
-      id: "3",
-      image: "/images/event-placeholder.png",
-      name: "Event Name",
-      date: "Sunday, September 20, 2026",
-      time: "7:00 PM - 9:30 PM",
-      location: "COCON Tree",
-    },
-  ];
-
 export const teamMembers = [
   {
     id: "1",

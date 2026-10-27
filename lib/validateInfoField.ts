@@ -1,7 +1,6 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Saudi mobile numbers: 9 digits after the fixed +966 prefix, starting with 5.
 const PHONE_PATTERN = /^5\d{8}$/;
-const NUMERIC_PATTERN = /^\d+$/;
 const NAME_PATTERN = /^[\p{L}][\p{L}\s.'-]{1,}$/u;
 
 // Returns a key from messages/*/validation.json, or null when valid.
@@ -16,8 +15,6 @@ export function validateInfoField(key: string, value: string): string | null {
       return EMAIL_PATTERN.test(trimmed) ? null : "profileEmailInvalid";
     case "phone":
       return PHONE_PATTERN.test(trimmed) ? null : "profilePhoneInvalid";
-    case "studentId":
-      return NUMERIC_PATTERN.test(trimmed) ? null : "studentIdNumeric";
     default:
       return null;
   }

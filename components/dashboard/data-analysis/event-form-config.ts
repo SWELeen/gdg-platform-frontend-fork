@@ -3,7 +3,6 @@
 /** Attendee fields every registration collects, in display order (translation keys). */
 export const registrantFieldKeys = [
   "fullName",
-  "universityId",
   "college",
   "major",
   "phone",
@@ -22,13 +21,12 @@ export const requiredRegistrantFields: string[] = [
   "GDG on Campus membership",
 ];
 
-/** Attendee details read from each account; university ID and college are asked as event questions. */
+/** Attendee details read from each account; additional event-specific details use custom questions. */
 export const accountRegistrantFields: RegistrantFieldKey[] = ["fullName", "email", "phone", "major", "membership"];
 
 /** Stored value → translation key, so stored English values render in either locale. */
 export const registrantFieldKeyByValue: Record<string, RegistrantFieldKey> = {
   "Full name": "fullName",
-  "University ID": "universityId",
   College: "college",
   Major: "major",
   "Phone number": "phone",
