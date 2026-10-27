@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
+import { PASSWORD_MAX_LENGTH } from "@/app/lib/validation/password"
 
 type LoginPasswordProps = {
   value: string;
@@ -39,7 +40,7 @@ export default function LoginPassword({
               placeholder={t("passwordPlaceholder")}
               autoComplete="current-password"
               minLength={8}
-              maxLength={128}
+              maxLength={PASSWORD_MAX_LENGTH}
               aria-invalid={Boolean(error)}
               aria-describedby={
                 error ? "login-password-error" : undefined
