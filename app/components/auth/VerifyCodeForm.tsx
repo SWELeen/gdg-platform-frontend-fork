@@ -4,7 +4,7 @@ import { type ClipboardEvent, type FormEvent, useRef, useState } from "react"
 import { useTranslations } from "next-intl"
 import AuthErrorMessage from "./AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
-import { readAuthSession, storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
 import { useRouter } from "@/i18n/navigation"
 
 const CODE_LENGTH = 6
@@ -33,12 +33,6 @@ export default function VerifyCodeForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isResending, setIsResending] = useState(false)
   const [resendMessage, setResendMessage] = useState("")
-  const [phase, setPhase] = useState<"personal" | "university">(() => {
-    try {
-      const pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}") as { awaitingUniversityVerification?: boolean }
-      return readAuthSession() && pending.awaitingUniversityVerification ? "university" : "personal"
-    } catch { return "personal" }
-  })
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   function updateCode(index: number, value: string) {
@@ -90,15 +84,13 @@ export default function VerifyCodeForm() {
     try {
       pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
     } catch { pending = {} }
-    if (phase === "personal" && !pending.email) {
+    if (!pending.email) {
       setError("authRequestFailed")
       return
     }
     setIsResending(true)
     setResendMessage("")
-    const result = phase === "personal"
-      ? await apiRequest<{ sent: true }>("/auth/resend-personal-verification", { method: "POST", body: { email: pending.email } })
-      : await apiRequest<{ sent: true }>("/auth/resend-university-verification", { method: "POST" })
+    const result = await apiRequest<{ sent: true }>("/auth/resend-personal-verification", { method: "POST", body: { email: pending.email } })
     if (result.ok) setResendMessage(t("resent"))
     else setError("authRequestFailed")
     setIsResending(false)
@@ -125,7 +117,7 @@ export default function VerifyCodeForm() {
       return
     }
 
-    let pending: { email?: string; awaitingUniversityVerification?: boolean } = {}
+    let pending: { email?: string } = {}
     try {
       pending = JSON.parse(window.sessionStorage.getItem("gdg.pending-signup") ?? "{}")
     } catch {
@@ -137,47 +129,26 @@ export default function VerifyCodeForm() {
       return
     }
 
-    if (phase === "personal") {
-      const verified = await apiRequest<AuthSession & { authenticated?: true; universityEmailVerificationRequired?: boolean; registrationPendingApproval?: boolean } | { authenticated: false; registrationPendingApproval: true }>("/auth/verify-email", {
+    const verified = await apiRequest<AuthSession & { authenticated?: true; registrationPendingApproval?: boolean } | { authenticated: false; registrationPendingApproval: boolean }>("/auth/verify-email", {
         method: "POST",
         body: { email: pending.email, token: code.join("") },
       })
-      if (!verified.ok) {
-        setError("authRequestFailed")
-        setIsSubmitting(false)
-        return
-      }
-      if (verified.data.authenticated === false) {
-        window.sessionStorage.removeItem("gdg.pending-signup")
-        // Shared-code signups get no session here, so a ready non-member signs in next.
-        router.replace(verified.data.registrationPendingApproval ? "/signup/pending" : "/login")
-        setIsSubmitting(false)
-        return
-      }
-      storeAuthSession(verified.data)
-      if (verified.data.universityEmailVerificationRequired) {
-        pending.awaitingUniversityVerification = true
-        window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify(pending))
-        setPhase("university")
-        setCode(Array.from({ length: CODE_LENGTH }, () => ""))
-        setIsSubmitting(false)
-        return
-      }
-      if (verified.data.registrationPendingApproval === false) {
-        window.sessionStorage.removeItem("gdg.pending-signup")
-        router.replace("/")
-        return
-      }
-    } else {
-      const verified = await apiRequest<{ registrationPendingApproval: true }>("/auth/verify-university-email", {
-        method: "POST",
-        body: { code: code.join("") },
-      })
-      if (!verified.ok) {
-        setError("authRequestFailed")
-        setIsSubmitting(false)
-        return
-      }
+    if (!verified.ok) {
+      setError("authRequestFailed")
+      setIsSubmitting(false)
+      return
+    }
+    if (verified.data.authenticated === false) {
+      window.sessionStorage.removeItem("gdg.pending-signup")
+      router.replace(verified.data.registrationPendingApproval ? "/signup/pending" : "/login")
+      setIsSubmitting(false)
+      return
+    }
+    storeAuthSession(verified.data)
+    if (verified.data.registrationPendingApproval === false) {
+      window.sessionStorage.removeItem("gdg.pending-signup")
+      router.replace("/")
+      return
     }
     window.sessionStorage.removeItem("gdg.pending-signup")
     router.replace("/signup/pending")
@@ -233,7 +204,7 @@ export default function VerifyCodeForm() {
         />
       </div>
 
-      <p className="mt-3 text-center text-sm text-foreground/60">{phase === "personal" ? t("personalEmailCode") : t("universityEmailCode")}</p>
+      <p className="mt-3 text-center text-sm text-foreground/60">{t("personalEmailCode")}</p>
       {resendMessage ? <p role="status" className="mt-2 text-center text-sm text-green-700">{resendMessage}</p> : null}
 
       <button

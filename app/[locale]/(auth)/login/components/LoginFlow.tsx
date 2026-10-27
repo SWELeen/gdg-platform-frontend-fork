@@ -105,7 +105,17 @@ export default function LoginFlow() {
       body: { email: normalizeText(email), password: nextPassword },
     })
     if (!result.ok) {
-      setSubmitError(result.status === 401 ? "invalidCredentials" : "authRequestFailed")
+      if (result.code === "EMAIL_NOT_VERIFIED") {
+        window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify({ email: normalizeText(email) }))
+        router.push("/signup/verify")
+        setIsSubmitting(false)
+        return
+      }
+      if (result.status === 401) {
+        setPasswordError("invalidCredentials")
+      } else {
+        setSubmitError("authRequestFailed")
+      }
       setIsSubmitting(false)
       return
     }
