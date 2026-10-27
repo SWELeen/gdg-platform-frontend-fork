@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
+import { PASSWORD_MAX_LENGTH } from "@/app/lib/validation/password"
 import { genderOptions, phoneCountryCodeOptions } from "@/data/signup"
 import SelectField from "./SelectField"
 
@@ -122,7 +123,7 @@ export default function SignupCredentials({
           placeholder={t("fields.password.placeholder")}
           autoComplete="new-password"
           minLength={8}
-          maxLength={128}
+          maxLength={PASSWORD_MAX_LENGTH}
           aria-invalid={Boolean(passwordError)}
           aria-describedby={passwordError ? "password-error" : undefined}
           className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-base font-normal outline-none placeholder:text-foreground/40 ${
@@ -189,7 +190,7 @@ export default function SignupCredentials({
           placeholder={t("fields.confirmPassword.placeholder")}
           autoComplete="new-password"
           minLength={8}
-          maxLength={128}
+          maxLength={PASSWORD_MAX_LENGTH}
           aria-invalid={Boolean(confirmPasswordError)}
           aria-describedby={
             confirmPasswordError ? "confirm-password-error" : undefined

@@ -22,12 +22,6 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
   useEffect(() => {
     if (!cameraActive) return;
 
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setCameraError(t("scanner.cameraDenied"));
-      setCameraActive(false);
-      return;
-    }
-
     let disposed = false;
     let tokenHandled = false;
     let scanner: import("html5-qrcode").Html5Qrcode | undefined;
@@ -95,6 +89,10 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
           type="button"
           onClick={() => {
             setCameraError(null);
+            if (!cameraActive && !navigator.mediaDevices?.getUserMedia) {
+              setCameraError(t("scanner.cameraDenied"));
+              return;
+            }
             setCameraActive((active) => !active);
           }}
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-surface-muted"

@@ -565,13 +565,12 @@ export default function HeroSection() {
   const reduceMotion = useReducedMotion();
   const introSpread = useMotionValue(LOGO_W * 0.65);
   const [introComplete, setIntroComplete] = useState(false);
-  const activeLogoSpread = introComplete ? logoSpread : introSpread;
+  const activeLogoSpread = introComplete || reduceMotion ? logoSpread : introSpread;
   const leftLogoSpread = useTransform(activeLogoSpread, (value) => -value);
 
   useEffect(() => {
     if (reduceMotion) {
       introSpread.set(0);
-      setIntroComplete(true);
       return;
     }
 

@@ -5,7 +5,7 @@ import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
 import { validateEmail } from "@/app/lib/validation/email"
-import { validateConfirmPassword, validatePassword } from "@/app/lib/validation/password"
+import { PASSWORD_MAX_LENGTH, validateConfirmPassword, validatePassword } from "@/app/lib/validation/password"
 import {
   branchOptions,
   collegeOptions,
@@ -182,7 +182,7 @@ function PasswordField({
         placeholder={placeholder}
         autoComplete="new-password"
         minLength={8}
-        maxLength={128}
+        maxLength={PASSWORD_MAX_LENGTH}
         required
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}

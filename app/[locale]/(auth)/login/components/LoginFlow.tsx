@@ -66,15 +66,14 @@ export default function LoginFlow() {
   }
 
   const handlePasswordChange = (value: string) => {
-    const nextValue = value.trimStart()
-    setPassword(nextValue)
+    setPassword(value)
     if (passwordError) {
       setPasswordError("")
     }
   }
 
   const handlePasswordBlur = () => {
-    if (!normalizeText(password)) {
+    if (!password.trim()) {
       setPasswordError("")
       return
     }
@@ -91,8 +90,7 @@ export default function LoginFlow() {
       return
     }
 
-    const nextPassword = normalizeText(password)
-    setPassword(nextPassword)
+    const nextPassword = password
     setSubmitError("")
     setIsSubmitting(true)
     if (!API_ENABLED) {
