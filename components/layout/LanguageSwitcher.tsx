@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Languages } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { localeMetadata } from "@/i18n/locale-metadata";
 import type { Locale } from "@/i18n/routing";
@@ -32,9 +33,10 @@ export default function LanguageSwitcher({ className = "" }: LanguageSwitcherPro
       disabled={isPending}
       aria-busy={isPending}
       aria-label={t("switchTo", { language: localeMetadata[nextLocale].label })}
-      className={`flex h-9 w-[70px] shrink-0 items-center justify-center rounded-full border-2 border-current px-2 text-xs font-bold uppercase leading-none tracking-tight transition-colors hover:bg-current/10 disabled:cursor-wait disabled:opacity-60 ${className}`}
+      className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border-current/30 px-3 text-sm font-medium leading-none transition-colors hover:bg-current/3 disabled:cursor-wait disabled:opacity-60 ${className}`}
     >
-      EN / AR
+      <Languages className="h-4 w-4" aria-hidden="true" />
+      <span>{localeMetadata[nextLocale].label}</span>
     </button>
   );
 }

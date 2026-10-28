@@ -29,6 +29,7 @@
   "roleRequired": "Please select your role.",
   "committeeRequired": "Please select at least one committee.",
   "committeeRoleRequired": "Please select a role.",
+  "committeeSkillRequired": "Please select at least one skill for this committee.",
   "formIncomplete": "Please complete all required fields.",
   "codeRequired": "Please enter the verification code.",
   "codeIncomplete": "Please enter all 6 digits of the verification code.",

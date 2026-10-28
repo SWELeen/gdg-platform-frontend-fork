@@ -107,5 +107,78 @@ export const committeeCodes: Record<CommitteeOption, string> = {
   "Web design and development": "WEB",
 };
 
+export const committeeSkillOptions: Record<CommitteeOption, readonly string[]> = {
+  "Project Management Committee": [
+    "Roadmaps",
+    "Planning",
+    "Documentation",
+    "Risk Tracking",
+    "Stakeholder Communication",
+  ],
+  "Public Relations Committee": [
+    "Branding",
+    "Event Promotion",
+    "Community Outreach",
+    "Content Strategy",
+    "Media Relations",
+  ],
+  "Digital Media and Design Committee": [
+    "Brand Design",
+    "Social Media Design",
+    "Video Editing",
+    "Poster Design",
+    "UX/UI Basics",
+  ],
+  "Content Writing Committee": [
+    "Technical Writing",
+    "Copywriting",
+    "Campaign Messaging",
+    "Blog Editing",
+    "Storytelling",
+  ],
+  "Artificial Intelligence Committee": [
+    "AI Research",
+    "Prompt Design",
+    "Model Evaluation",
+    "Machine Learning",
+    "Automation Workflows",
+  ],
+  "Data Analytics Committee": [
+    "SQL",
+    "Python",
+    "Excel",
+    "Dashboarding",
+    "Data Cleaning",
+  ],
+  "Cybersecurity Committee": [
+    "Security Testing",
+    "Threat Analysis",
+    "Linux",
+    "Network Basics",
+    "Documentation",
+  ],
+  "Robotics Committee": [
+    "Arduino",
+    "Sensors",
+    "Circuit Basics",
+    "Robotics Prototyping",
+    "Automation",
+  ],
+  "Automation Committee": [
+    "Workflow Automation",
+    "No-Code Tools",
+    "Process Mapping",
+    "System Integration",
+    "Optimization",
+  ],
+  "Web design and development": [
+    "HTML/CSS",
+    "React",
+    "Next.js",
+    "UI Implementation",
+    "Accessibility",
+  ],
+};
+
 export const roleOptions = ["Leader", "Co-Leader", "Member"] as const;
 
