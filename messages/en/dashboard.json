@@ -277,10 +277,7 @@
       "time": "Time",
       "location": "Location",
       "openMap": "Open in Google Maps",
-      "speakers": "Speakers",
       "capacity": "Availability",
-      "deadline": "Registration deadline",
-      "requirements": "Requirements",
       "registrationNote": "Registering from the dashboard will be available once the registration service is connected.",
       "addToCalendar": "Add to Google Calendar"
     }
@@ -871,6 +868,7 @@
       "talk": "Talk",
       "panel": "Panel",
       "hackathon": "Hackathon",
+      "trip": "Trip",
       "statusLabel": "Filter by status",
       "dateLabel": "Filter by date",
       "typeLabel": "Filter by event type",
@@ -921,7 +919,9 @@
       "closePreview": "Close",
       "deleteDraft": "Delete draft",
       "deleteDraftConfirm": "Delete the draft \"{title}\"? This cannot be undone.",
-      "deleteDraftFailed": "Could not delete the draft. Try again."
+      "deleteDraftFailed": "Could not delete the draft. Try again.",
+      "editFailed": "Could not save the event changes. Try again.",
+      "imageUploadFailed": "Could not upload the event image. Try again."
     },
     "eventReports": {
       "eyebrow": "Event reports",
@@ -952,14 +952,37 @@
       "capacity": "Capacity *",
       "location": "Location *",
       "optionalDescription": "Description (Optional)",
+      "deadline": "Registration deadline",
+      "speakers": "Speakers",
+      "mapsLink": "Maps link",
+      "requirements": "Requirements",
+      "imageUrl": "Event image URL",
+      "registrationQuestions": "Registration questions",
+      "addQuestion": "Add question",
+      "noQuestions": "No custom questions have been added.",
+      "questionText": "Question {number}",
+      "removeQuestion": "Remove question {number}",
+      "questionOptions": "Options for question {number}",
+      "optionsPlaceholder": "Enter options separated by commas",
+      "questionRequired": "Required",
+      "questionTypes": {
+        "shortAnswer": "Short answer",
+        "longAnswer": "Long answer",
+        "singleChoice": "Single choice",
+        "multipleChoice": "Multiple choice",
+        "checkboxes": "Checkboxes",
+        "yesNo": "Yes / No"
+      },
       "saveChanges": "Save Changes",
+      "saving": "Saving...",
       "cancel": "Cancel",
       "types": {
         "workshop": "Workshop",
         "conference": "Conference",
         "talk": "Talk",
         "panel": "Panel",
-        "hackathon": "Hackathon"
+        "hackathon": "Hackathon",
+        "trip": "Trip"
       },
       "statuses": {
         "upcoming": "Upcoming (Published)",
@@ -1006,7 +1029,6 @@
       "fields": {
         "name": "Event name",
         "description": "Description",
-        "speakers": "Speakers",
         "type": "Event type",
         "date": "Date",
         "time": "Time",
@@ -1014,6 +1036,7 @@
         "mapsLink": "Google Maps link",
         "capacity": "Capacity",
         "deadline": "Registration deadline",
+        "speakers": "Speakers",
         "requirements": "Requirements",
         "image": "Event image",
         "status": "Status"
@@ -1032,6 +1055,7 @@
         "hint": "Drag and drop files here, or click to browse",
         "replace": "Replace image",
         "remove": "Remove image",
+        "currentImage": "Current event image",
         "previewAlt": "Selected event image"
       },
       "registration": {
@@ -1109,6 +1133,7 @@
         "deadlineAfterEvent": "Registration deadline cannot be after the event date.",
         "imageRequired": "Event image is required.",
         "imageType": "Choose an image file (for example PNG, JPG, or WebP).",
+        "imageSize": "Choose an image smaller than 5 MB.",
         "saveFailed": "Could not save the event. Try again."
       },
       "discard": {
@@ -1124,11 +1149,8 @@
         "date": "Date",
         "time": "Time",
         "location": "Location",
-        "speakers": "Speakers",
         "capacity": "Capacity",
         "capacityValue": "{count, plural, one {# attendee} other {# attendees}}",
-        "deadline": "Registration deadline",
-        "requirements": "Requirements",
         "noRequirements": "No requirements",
         "openMap": "Open in Google Maps",
         "registrationInfo": "Registration information",

@@ -67,7 +67,7 @@ type ApiTask = {
 
 type RawCommitteeDashboardData = Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
   members: ApiMember[];
-  events: { id: string; title: string; date: string; eventType?: string | null; endsAt: string; location: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
+  events: { id: string; title: string; date: string; eventType?: string | null; endsAt: string; location: string | null; imageUrl?: string | null; status: string; registered: number; confirmed: number; checkedIn: number; capacity: number; createdAt: string }[];
   tasks: ApiTask[];
   pointHistory: (Omit<PointHistoryItem, "timestamp"> & { createdAt: string })[];
   recentActivities: (Omit<RecentActivityItem, "timeAgo"> & { createdAt: string })[];
@@ -104,6 +104,7 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
         date: formatDate(event.date),
         time: formatTime(event.date),
         location: event.location ?? "",
+        imageUrl: event.imageUrl ?? undefined,
         registered: event.registered,
         confirmed: event.confirmed,
         checkedIn: event.checkedIn,
@@ -223,6 +224,7 @@ export async function createCommitteeEvent(
       location: event.location,
       ...(event.mapsLink ? { mapsLink: event.mapsLink } : {}),
       capacity: event.capacity,
+      ...(event.imageUrl ? { imageUrl: event.imageUrl } : {}),
       ...(event.speakers ? { speakers: event.speakers } : {}),
       ...(event.requirements ? { requirements: event.requirements } : {}),
       requiredRegistrantFields: (event.requiredRegistrantFields ?? [])
@@ -236,6 +238,15 @@ export async function createCommitteeEvent(
         ...(question.options ? { options: question.options } : {}),
       })),
     },
+  });
+}
+
+export async function uploadCommitteeEventImage(code: string, file: File) {
+  const form = new FormData();
+  form.append("file", file);
+  return apiRequest<{ imageUrl: string }>(`/committees/${encodeURIComponent(code)}/events/images`, {
+    method: "POST",
+    body: form,
   });
 }
 
@@ -255,11 +266,25 @@ export interface CommitteeEventDetails {
   speakers: string | null;
   requirements: string | null;
   imageUrl: string | null;
+  requiredRegistrantFields: string[];
   questions: { questionId: number; questionText: string; questionType: string; isRequired: boolean; options: string[] | null }[];
 }
 
 export function fetchCommitteeEvent(code: string, eventId: string) {
   return apiRequest<CommitteeEventDetails>(`/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}`);
+}
+
+export function updateCommitteeEvent(
+  code: string,
+  eventId: string,
+  updates: Partial<Pick<CommitteeEventDetails, "name" | "description" | "eventType" | "startsAt" | "endsAt" | "registrationDeadline" | "location" | "capacity" | "mapsLink" | "speakers" | "requirements" | "imageUrl">> & {
+    questions?: { text: string; type: "TEXT" | "RADIO" | "CHECKBOX"; required: boolean; options?: string[] }[];
+  },
+) {
+  return apiRequest<{ id: string; updatedAt: string }>(
+    `/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}`,
+    { method: "PATCH", body: updates },
+  );
 }
 
 /** Deletes a draft; the backend refuses published events. */

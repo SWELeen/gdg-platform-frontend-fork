@@ -30,6 +30,7 @@ const typeLabelKeys: Record<string, string> = {
   Talk: "talk",
   Panel: "panel",
   Hackathon: "hackathon",
+  Trip: "trip",
 };
 
 export function EventsFilterBar() {

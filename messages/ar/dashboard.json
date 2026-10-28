@@ -277,10 +277,7 @@
       "time": "الوقت",
       "location": "الموقع",
       "openMap": "فتح في خرائط Google",
-      "speakers": "المتحدثون",
       "capacity": "المقاعد المتاحة",
-      "deadline": "آخر موعد للتسجيل",
-      "requirements": "المتطلبات",
       "registrationNote": "سيتاح التسجيل من لوحة التحكم عند ربط خدمة التسجيل.",
       "addToCalendar": "أضف إلى تقويم Google"
     }
@@ -871,6 +868,7 @@
       "talk": "محاضرة",
       "panel": "جلسة حوارية",
       "hackathon": "هاكاثون",
+      "trip": "رحلة",
       "statusLabel": "التصفية حسب الحالة",
       "dateLabel": "التصفية حسب التاريخ",
       "typeLabel": "التصفية حسب نوع الفعالية",
@@ -921,7 +919,9 @@
       "closePreview": "إغلاق",
       "deleteDraft": "حذف المسودة",
       "deleteDraftConfirm": "تبي تحذف المسودة \"{title}\"؟ ما تقدر ترجعها بعد الحذف.",
-      "deleteDraftFailed": "ما قدرنا نحذف المسودة. حاول مرة ثانية."
+      "deleteDraftFailed": "ما قدرنا نحذف المسودة. حاول مرة ثانية.",
+      "editFailed": "تعذر حفظ تعديلات الحدث. حاول مرة أخرى.",
+      "imageUploadFailed": "تعذر رفع صورة الفعالية. حاول مرة أخرى."
     },
     "eventReports": {
       "eyebrow": "تقارير الفعاليات",
@@ -952,14 +952,37 @@
       "capacity": "السعة *",
       "location": "الموقع *",
       "optionalDescription": "الوصف (اختياري)",
+      "deadline": "آخر موعد للتسجيل",
+      "speakers": "المتحدثون",
+      "mapsLink": "رابط الموقع على الخرائط",
+      "requirements": "المتطلبات",
+      "imageUrl": "رابط صورة الفعالية",
+      "registrationQuestions": "أسئلة التسجيل",
+      "addQuestion": "إضافة سؤال",
+      "noQuestions": "لم تتم إضافة أسئلة مخصصة.",
+      "questionText": "السؤال {number}",
+      "removeQuestion": "حذف السؤال {number}",
+      "questionOptions": "خيارات السؤال {number}",
+      "optionsPlaceholder": "أدخل الخيارات وافصل بينها بفواصل",
+      "questionRequired": "مطلوب",
+      "questionTypes": {
+        "shortAnswer": "إجابة قصيرة",
+        "longAnswer": "إجابة طويلة",
+        "singleChoice": "اختيار واحد",
+        "multipleChoice": "اختيارات متعددة",
+        "checkboxes": "مربعات اختيار",
+        "yesNo": "نعم / لا"
+      },
       "saveChanges": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ...",
       "cancel": "إلغاء",
       "types": {
         "workshop": "ورشة عمل",
         "conference": "مؤتمر",
         "talk": "محاضرة",
         "panel": "جلسة حوارية",
-        "hackathon": "هاكاثون"
+        "hackathon": "هاكاثون",
+        "trip": "رحلة"
       },
       "statuses": {
         "upcoming": "قادمة (منشورة)",
@@ -1006,7 +1029,6 @@
       "fields": {
         "name": "اسم الفعالية",
         "description": "الوصف",
-        "speakers": "المتحدثون",
         "type": "نوع الفعالية",
         "date": "التاريخ",
         "time": "الوقت",
@@ -1014,6 +1036,7 @@
         "mapsLink": "رابط خرائط Google",
         "capacity": "السعة",
         "deadline": "آخر موعد للتسجيل",
+        "speakers": "المتحدثون",
         "requirements": "المتطلبات",
         "image": "صورة الفعالية",
         "status": "الحالة"
@@ -1032,6 +1055,7 @@
         "hint": "اسحب الملفات وأفلتها هنا، أو انقر للاستعراض",
         "replace": "استبدال الصورة",
         "remove": "إزالة الصورة",
+        "currentImage": "صورة الفعالية الحالية",
         "previewAlt": "صورة الفعالية المختارة"
       },
       "registration": {
@@ -1109,6 +1133,7 @@
         "deadlineAfterEvent": "لا يمكن أن يكون آخر موعد للتسجيل بعد تاريخ الفعالية.",
         "imageRequired": "صورة الفعالية مطلوبة.",
         "imageType": "اختر ملف صورة (مثل PNG أو JPG أو WebP).",
+        "imageSize": "اختر صورة حجمها أقل من 5 ميجابايت.",
         "saveFailed": "ما قدرنا نحفظ الفعالية. حاول مرة ثانية."
       },
       "discard": {
@@ -1124,11 +1149,8 @@
         "date": "التاريخ",
         "time": "الوقت",
         "location": "الموقع",
-        "speakers": "المتحدثون",
         "capacity": "السعة",
         "capacityValue": "{count, plural, one {مشارك واحد} two {مشاركان} few {# مشاركين} many {# مشاركًا} other {# مشارك}}",
-        "deadline": "آخر موعد للتسجيل",
-        "requirements": "المتطلبات",
         "noRequirements": "لا توجد متطلبات",
         "openMap": "فتح في خرائط Google",
         "registrationInfo": "معلومات التسجيل",
