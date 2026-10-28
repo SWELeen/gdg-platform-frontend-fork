@@ -5,9 +5,9 @@
   "badge": {
     "label": "Member badge: {name}, {role}, {committee}",
     "globalRoles": {
-      "clubLeader": "Club Leader",
-      "clubCoLeader": "Club Co-Leader",
-      "clubLeadership": "Club Leadership",
+      "groupLeader": "Group Leader",
+      "groupCoLeader": "Group Co-Leader",
+      "groupLeadership": "Group Leadership",
       "developerCommitteesLeader": "Developer Committees Leader",
       "developerCommittees": "Developer Committees"
     }

@@ -123,7 +123,7 @@ export function LeaderDashboardProvider({
   const t = useTranslations("dashboard.leader");
   const leadershipT = useTranslations("dashboard.leadershipDashboard");
   const committeeConfig = leaderCommitteeConfig[committee];
-  const committeeName = clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`);
+  const committeeName = clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`);
   const committeeDescription = committeeConfig.description;
   const [events, setEvents] = useState<CommitteeEvent[]>(seed?.events ?? []);
   const [members, setMembers] = useState<CommitteeMember[]>(seed?.members ?? []);

@@ -53,7 +53,7 @@ export interface CommitteeDashboardData extends LeaderDashboardSeed {
     canAddMembers: boolean;
     canCreateEvents?: boolean;
   };
-  /** Club leadership only: every committee, for the filters. */
+  /** Group leadership only: every committee, for the filters. */
   committees?: CommitteeOption[];
 }
 
@@ -296,7 +296,7 @@ export async function publishCommitteeEvent(code: string, eventId: string) {
   return apiRequest(`/committees/${encodeURIComponent(code)}/events/${encodeURIComponent(eventId)}/publish`, { method: "POST" });
 }
 
-/** Club leadership: adds an existing member to another committee as a Member. */
+/** Group leadership: adds an existing member to another committee as a Member. */
 export async function addClubMemberToCommittee(memberId: string, committeeCode: string) {
   return apiRequest(`/club-leadership/members/${encodeURIComponent(memberId)}/committees`, {
     method: "POST",

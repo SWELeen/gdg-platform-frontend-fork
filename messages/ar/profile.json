@@ -5,9 +5,9 @@
   "badge": {
     "label": "بطاقة العضوية: {name}، {role}، {committee}",
     "globalRoles": {
-      "clubLeader": "قائد النادي",
-      "clubCoLeader": "نائب قائد النادي",
-      "clubLeadership": "قيادة النادي",
+      "groupLeader": "قائد المجموعة",
+      "groupCoLeader": "نائب قائد المجموعة",
+      "groupLeadership": "قيادة المجموعة",
       "developerCommitteesLeader": "قائد لجنة المطورين",
       "developerCommittees": "لجنة المطورين"
     }

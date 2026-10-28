@@ -41,7 +41,7 @@ const QUESTION_TYPES_FROM_API: Record<string, string> = {
   CHECKBOX: "checkboxes",
 };
 
-/** A saved event (for example a draft) in the shape the preview shows, with times in the club's time zone. */
+/** A saved event (for example a draft) in the shape the preview shows, with times in the group's time zone. */
 export function toEventPreviewData(event: CommitteeEventDetails): EventPreviewData {
   const date = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: RIYADH }).format(new Date(iso));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: RIYADH, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })

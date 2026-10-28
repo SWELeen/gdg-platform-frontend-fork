@@ -6,7 +6,7 @@ import { LeadershipApprovalsPanel } from "@/components/dashboard/shared/Leadersh
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "dashboard.leadershipDashboard" });
-  return { title: t("clubTitle") };
+  return { title: t("groupTitle") };
 }
 
 export default async function ClubLeadershipDashboardPage({ params }: { params: Promise<{ locale: string }> }) {

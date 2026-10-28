@@ -28,7 +28,7 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
   if (workspaces.length < 2) return fallback;
 
   const label = (workspace: DashboardWorkspace) => {
-    if (workspace.kind === "club") return leadershipT("clubTitle");
+    if (workspace.kind === "club") return leadershipT("groupTitle");
     if (workspace.kind === "developer") return leadershipT("developerTitle");
     if (workspace.kind === "committee") return leaderT(`nav.${committeeTranslationKeys[workspace.committee]}`);
     return t("memberDashboard");

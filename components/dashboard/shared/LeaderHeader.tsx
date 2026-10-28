@@ -47,7 +47,7 @@ export function LeaderHeader({
     .toUpperCase();
 
   // Determine current section title based on pathname
-  let pageTitle = developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t("nav.overview");
+  let pageTitle = developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t("nav.overview");
   if (pathname.startsWith(`${routeRoot}/events`)) {
     pageTitle = t(committee === "pr" ? "nav.eventRegistrations" : "nav.events");
   } else if (pathname.startsWith(`${routeRoot}/members`)) pageTitle = t("nav.members");
@@ -88,7 +88,7 @@ export function LeaderHeader({
                 {displayName}
               </span>
               <span className="block text-[10px] text-muted leading-tight">
-                {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
+                {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
               </span>
             </div>
           </div>

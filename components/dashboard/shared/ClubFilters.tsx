@@ -43,7 +43,7 @@ const SELECT_CLASS =
   "h-9 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground outline-none focus:border-blue-500 cursor-pointer";
 
 export function CommitteeFilterSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  const t = useTranslations("dashboard.leader.clubFilters");
+  const t = useTranslations("dashboard.leader.groupFilters");
   const committees = useClubCommittees();
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={t("committee")} className={SELECT_CLASS}>
@@ -58,12 +58,12 @@ export function CommitteeFilterSelect({ value, onChange }: { value: string; onCh
 export const ROLE_FILTERS = ["Leader", "Co-Leader", "Member", "CLUB_LEADERSHIP", "ADVISOR"] as const;
 
 export function RoleFilterSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  const t = useTranslations("dashboard.leader.clubFilters");
+  const t = useTranslations("dashboard.leader.groupFilters");
   const labels: Record<(typeof ROLE_FILTERS)[number], string> = {
     Leader: t("roleLeader"),
     "Co-Leader": t("roleCoLeader"),
     Member: t("roleMember"),
-    CLUB_LEADERSHIP: t("roleClubLeadership"),
+    CLUB_LEADERSHIP: t("roleGroupLeadership"),
     ADVISOR: t("roleAdvisor"),
   };
   return (
@@ -99,7 +99,7 @@ export function pointsFor(member: CommitteeMember, committee: string) {
 }
 
 export function CommitteeBadges({ member }: { member: CommitteeMember }) {
-  const t = useTranslations("dashboard.leader.clubFilters");
+  const t = useTranslations("dashboard.leader.groupFilters");
   const committeeName = useCommitteeName();
   const memberCommittees = member.committees ?? [];
   if (memberCommittees.length === 0) return <span className="text-muted">{t("noCommittee")}</span>;
