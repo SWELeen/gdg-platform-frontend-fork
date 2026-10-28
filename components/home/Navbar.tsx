@@ -51,7 +51,7 @@ function ProfileAccountMenu({
   return (
     <div
       ref={menuRef}
-      className={`relative min-w-0 ${variant === "mobile" ? "w-full" : "max-w-32"}`}
+      className={`relative min-w-0 ${variant === "mobile" ? "w-full" : "max-w-44"}`}
     >
       <button
         type="button"
@@ -59,7 +59,7 @@ function ProfileAccountMenu({
         aria-expanded={open}
         title={name}
         onClick={() => setOpen((current) => !current)}
-        className="flex w-full min-w-0 items-center gap-2 text-sm font-medium"
+        className={`flex w-full min-w-0 items-center gap-2 border border-current/30 px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${variant === "mobile" ? "rounded-xl" : "rounded-full"}`}
       >
         <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
         <span className="min-w-0 flex-1 truncate">{name}</span>
@@ -273,6 +273,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
 
           <span className="mt-1 h-[2px] w-0 rounded-full bg-[image:var(--google-gradient)] transition-all duration-300 group-hover:w-full" />
         </motion.a>
+        <LanguageSwitcher />
         <ThemeToggle />
         {profileName ? (
           <ProfileAccountMenu name={profileName} dashboardHref={dashboardHref} onSignOut={handleSignOut} variant="desktop" />
@@ -281,13 +282,12 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             href={profileHref}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 rounded-full border border-current/30 px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10"
           >
             <UserRound className="h-4 w-4" aria-hidden="true" />
             <span>{t("profile")}</span>
           </MotionLink>
         )}
-        <LanguageSwitcher />
       </div>
 
       <button
@@ -371,9 +371,13 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             >
               <span dir={dir}>{t("community")}</span>
             </motion.a>
-            <motion.div variants={itemVariants} className="flex items-center">
-              <ThemeToggle />
+            <motion.div variants={itemVariants} className="flex flex-col items-start gap-2">
+              <ThemeToggle />              
+              <LanguageSwitcher className="justify-start" />
+
             </motion.div>
+
+            <motion.div variants={itemVariants} aria-hidden="true" className="h-px w-full bg-current/15" />
 
             {profileName ? (
               <motion.div variants={itemVariants} className="w-full">
@@ -386,14 +390,13 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
                 transition={{ duration: 0.2 }}
                 href={profileHref}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 text-sm font-medium leading-none hover:underline"
+                className="flex items-center gap-2 rounded-full border border-current/30 px-3 py-2 text-sm font-medium leading-none transition-colors hover:bg-current/10"
               >
                 <UserRound className="h-4 w-4" aria-hidden="true" />
                 <span>{t("profile")}</span>
               </MotionLink>
             )}
 
-            <LanguageSwitcher className="mt-2" />
           </motion.div>
         )}
       </AnimatePresence>

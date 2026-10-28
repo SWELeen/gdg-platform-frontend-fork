@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, type FormEvent, type ReactNode } from "react"
+import { FaChevronDown } from "react-icons/fa6";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
@@ -11,6 +12,7 @@ import {
   collegeOptions,
   committeeCodes,
   committeeOptions,
+  committeeSkillOptions,
   type CommitteeOption,
   genderOptions,
   levelOptions,
@@ -31,6 +33,8 @@ type FieldName =
 type FormValues = Record<Exclude<FieldName, "committees">, string> & {
   committees: string[]
   committeeRoles: Record<string, string>
+  committeeSkills: Record<string, string[]>
+  globalRoleSkills: Record<string, string[]>
   developerCommitteesLeader: boolean
   advisor: boolean
 }
@@ -39,6 +43,27 @@ type FieldErrors = Partial<Record<FieldName, string>> & Record<string, string | 
 function committeeRoleErrorKey(committee: string) {
   return `committeeRole:${committee}`
 }
+
+function committeeSkillErrorKey(committee: string) {
+  return `committeeSkill:${committee}`
+}
+
+const globalRoleSkillOptions = {
+  DEVELOPER_COMMITTEES_LEADER: [
+    "Workflow Automation",
+    "No-Code Tools",
+    "Process Mapping",
+    "System Integration",
+    "Optimization",
+  ],
+  ADVISOR: [
+    "Leadership",
+    "Mentorship",
+    "Planning",
+    "Strategy",
+    "Community Support",
+  ],
+} as const
 
 const initialValues: FormValues = {
   fullName: "",
@@ -55,6 +80,8 @@ const initialValues: FormValues = {
   level: "",
   committees: [],
   committeeRoles: {},
+  committeeSkills: {},
+  globalRoleSkills: {},
   developerCommitteesLeader: false,
   advisor: false,
 }
@@ -231,6 +258,119 @@ function ChoiceField({
   )
 }
 
+function CommitteeSkillsPicker({
+  label,
+  options,
+  value,
+  error,
+  onChange,
+}: {
+  label: string
+  options: readonly string[]
+  value: string[]
+  error?: string
+  onChange: (skills: string[]) => void
+}) {
+  const t = useTranslations("auth.signup")
+  const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown)
+    return () => document.removeEventListener("mousedown", handlePointerDown)
+  }, [])
+
+  const removeSkill = (skill: string) => {
+    onChange(value.filter((item) => item !== skill))
+  }
+
+  const toggleSkill = (skill: string, checked: boolean) => {
+    const next = checked ? [...value, skill] : value.filter((item) => item !== skill)
+    onChange(next)
+  }
+
+  return (
+    <div ref={containerRef} className="relative block text-sm font-medium">
+      <label className="block">
+        {label} <span className="text-gdg-red" aria-hidden="true">*</span>
+      </label>
+
+      <div className="relative mt-1.5">
+        <div
+          className={`flex min-h-8 w-full flex-col justify-center rounded-md border bg-surface px-2.75 py-1.5 transition ${error ? "border-gdg-red" : "border-foreground/15"}`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex max-h-[80px] min-w-0 flex-1 items-center gap-1.5 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-1">
+              {value.length === 0 ? (
+                <span className="text-sm text-foreground/40">{t("fields.skills.placeholder")}</span>
+              ) : (
+                value.map((skill) => (
+                  <span
+                    key={skill}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-foreground/15 bg-foreground/5 px-1.5 py-0.5 text-[11px] text-foreground"
+                  >
+                    <span className="truncate">{skill}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(skill)}
+                      className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[9px] text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
+                      aria-label={t("fields.skills.remove", { skill })}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsOpen((current) => !current)}
+              className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded text-xs text-foreground/70 outline-none"
+              aria-expanded={isOpen}
+              aria-label={isOpen ? t("fields.skills.close") : t("fields.skills.open")}
+            >
+              <span className="pointer-events-none"><FaChevronDown /></span>
+            </button>
+          </div>
+        </div>
+
+        {isOpen && (
+          <div className="mt-1 rounded-md border border-foreground/15 bg-[var(--surface)] p-2 shadow-lg shadow-black/20">
+            <div className="max-h-[220px] overflow-y-auto pr-1">
+              {options.map((skill) => {
+                const checked = value.includes(skill)
+                return (
+                  <label
+                    key={skill}
+                    className="flex cursor-pointer items-center gap-3 rounded px-2 py-2 text-sm text-foreground transition hover:bg-white/5"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(event) => toggleSkill(skill, event.target.checked)}
+                      className="h-4 w-4 accent-foreground"
+                    />
+                    <span>{skill}</span>
+                  </label>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <AuthErrorMessage id={`${label}-skill-error`} message={error ?? ""} className="mt-1" />
+    </div>
+  )
+}
+
 export default function SignupForm() {
   const t = useTranslations("auth.signup")
   const router = useRouter()
@@ -306,7 +446,20 @@ export default function SignupForm() {
         } else if (!roleOptions.includes(role as typeof roleOptions[number])) {
           nextErrors[committeeRoleErrorKey(committee)] = "fieldInvalid"
         }
+
+        const selectedSkills = values.committeeSkills[committee] ?? []
+        if (!selectedSkills.length) {
+          nextErrors[committeeSkillErrorKey(committee)] = "committeeSkillRequired"
+        }
       })
+
+      if (values.developerCommitteesLeader && !(values.globalRoleSkills.DEVELOPER_COMMITTEES_LEADER ?? []).length) {
+        nextErrors.developerCommitteesLeaderSkills = "committeeSkillRequired"
+      }
+
+      if (values.advisor && !(values.globalRoleSkills.ADVISOR ?? []).length) {
+        nextErrors.advisorSkills = "committeeSkillRequired"
+      }
     }
     setErrors((current) => ({ ...current, ...nextErrors }))
     if (Object.keys(nextErrors).length) return
@@ -326,16 +479,33 @@ export default function SignupForm() {
       return
     }
 
+    const skillsByCommittee = values.committees.reduce<Record<string, string[]>>((accumulator, committee) => {
+      const selected = values.committeeSkills[committee] ?? []
+      if (selected.length) {
+        accumulator[committeeCodes[committee as CommitteeOption]] = selected
+      }
+      return accumulator
+    }, {})
+
+    if (values.developerCommitteesLeader && values.globalRoleSkills.DEVELOPER_COMMITTEES_LEADER?.length) {
+      skillsByCommittee.DEVELOPER_COMMITTEES_LEADER = values.globalRoleSkills.DEVELOPER_COMMITTEES_LEADER
+    }
+
+    if (values.advisor && values.globalRoleSkills.ADVISOR?.length) {
+      skillsByCommittee.ADVISOR = values.globalRoleSkills.ADVISOR
+    }
+
     const applicationData = {
-            phoneNumber: `+966${values.phone}`,
-            ...(values.universityEmail ? { universityEmail: values.universityEmail } : {}),
-            university: values.university,
-            ...(values.branch ? { branch: values.branch } : {}),
-            college: values.college,
-            major: values.major,
-            level: values.level,
-            gender: values.gender,
-          }
+      phoneNumber: `+966${values.phone}`,
+      ...(values.universityEmail ? { universityEmail: values.universityEmail } : {}),
+      university: values.university,
+      ...(values.branch ? { branch: values.branch } : {}),
+      college: values.college,
+      major: values.major,
+      level: values.level,
+      gender: values.gender,
+      ...(Object.keys(skillsByCommittee).length ? { skillsByCommittee } : {}),
+    }
 
     const result = await apiRequest<{
       accessToken?: string;
@@ -408,6 +578,7 @@ export default function SignupForm() {
         branch: "",
         committees: [],
         committeeRoles: {},
+        committeeSkills: {},
         advisor: false,
       }))
     }
@@ -431,16 +602,52 @@ export default function SignupForm() {
         ? [...current.committees, committee]
         : current.committees.filter((item) => item !== committee)
       const committeeRoles = { ...current.committeeRoles }
-      if (!checked) delete committeeRoles[committee]
-      return { ...current, committees, committeeRoles }
+      const committeeSkills = { ...current.committeeSkills }
+      if (!checked) {
+        delete committeeRoles[committee]
+        delete committeeSkills[committee]
+      }
+      return { ...current, committees, committeeRoles, committeeSkills }
     })
 
     setErrors((current) => {
       const next = { ...current }
       delete next[committeeRoleErrorKey(committee)]
+      delete next[committeeSkillErrorKey(committee)]
       if (checked && next.committees === "committeeRequired") delete next.committees
       return next
     })
+  }
+
+  const updateCommitteeSkills = (committee: string, skills: string[]) => {
+    setValues((current) => ({
+      ...current,
+      committeeSkills: { ...current.committeeSkills, [committee]: skills },
+    }))
+
+    setErrors((current) => ({
+      ...current,
+      [committeeSkillErrorKey(committee)]: skills.length ? undefined : current[committeeSkillErrorKey(committee)] ? "committeeSkillRequired" : undefined,
+    }))
+  }
+
+  const updateGlobalRoleSkills = (role: "DEVELOPER_COMMITTEES_LEADER" | "ADVISOR", skills: string[]) => {
+    setValues((current) => ({
+      ...current,
+      globalRoleSkills: { ...current.globalRoleSkills, [role]: skills },
+    }))
+
+    setErrors((current) => ({
+      ...current,
+      [role === "DEVELOPER_COMMITTEES_LEADER" ? "developerCommitteesLeaderSkills" : "advisorSkills"]: skills.length ? undefined : current[role === "DEVELOPER_COMMITTEES_LEADER" ? "developerCommitteesLeaderSkills" : "advisorSkills"] ? "committeeSkillRequired" : undefined,
+    }))
+  }
+
+  const toggleCommitteeSkill = (committee: string, skill: string, checked: boolean) => {
+    const selected = new Set(values.committeeSkills[committee] ?? [])
+    if (checked) selected.add(skill)
+    else selected.delete(skill)
+    updateCommitteeSkills(committee, [...selected])
   }
 
   const field = (id: FieldName, label: string, placeholder: string, options: readonly (string | { value: string; label: string })[]) => (
@@ -575,29 +782,67 @@ export default function SignupForm() {
                       {t("fields.committeeRolesInstruction")}
                     </p>
                     {values.committees.map((committee, index) => {
-                      const errorKey = committeeRoleErrorKey(committee)
-                      const error = errors[errorKey]
+                      const roleErrorKey = committeeRoleErrorKey(committee)
+                      const skillErrorKey = committeeSkillErrorKey(committee)
+                      const roleError = errors[roleErrorKey]
+                      const skillOptions = committeeSkillOptions[committee as CommitteeOption] ?? []
+                      const selectedSkills = values.committeeSkills[committee] ?? []
                       return (
-                        <div key={committee} className="space-y-2">
-                        <ChoiceField
-                          id={`committee-role-${index}`}
-                          label={`${t("fields.role.label")}: ${committee.replace(/ Committee$/, "")}`}
-                          placeholder={t("fields.role.placeholder")}
-                          options={roleOptions}
-                          value={values.committeeRoles[committee] === "Advisor" ? "" : values.committeeRoles[committee] ?? ""}
-                          error={error}
-                          onChange={(role) => updateCommitteeRole(committee, role)}
-                          onBlur={() => {
-                            const role = values.committeeRoles[committee]
-                            setErrors((current) => ({
-                              ...current,
-                              [errorKey]: role ? undefined : "committeeRoleRequired",
-                            }))
-                          }}
-                        />
+                        <div key={committee} className="space-y-3">
+                          <ChoiceField
+                            id={`committee-role-${index}`}
+                            label={`${t("fields.role.label")}: ${committee.replace(/ Committee$/, "")}`}
+                            placeholder={t("fields.role.placeholder")}
+                            options={roleOptions}
+                            value={values.committeeRoles[committee] === "Advisor" ? "" : values.committeeRoles[committee] ?? ""}
+                            error={roleError}
+                            onChange={(role) => updateCommitteeRole(committee, role)}
+                            onBlur={() => {
+                              const role = values.committeeRoles[committee]
+                              setErrors((current) => ({
+                                ...current,
+                                [roleErrorKey]: role ? undefined : "committeeRoleRequired",
+                              }))
+                            }}
+                          />
+                          <CommitteeSkillsPicker
+                            label={t("fields.skills.label")}
+                            options={skillOptions}
+                            value={selectedSkills}
+                            error={errors[skillErrorKey]}
+                            onChange={(nextSkills) => updateCommitteeSkills(committee, nextSkills)}
+                          />
                         </div>
                       )
                     })}
+                  </div>
+                )}
+
+                {(values.developerCommitteesLeader || values.advisor) && (
+                  <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2">
+                    {values.developerCommitteesLeader && (
+                      <div className="space-y-3">
+                        <CommitteeSkillsPicker
+                          label={t("fields.developerCommitteesLeader.label")}
+                          options={globalRoleSkillOptions.DEVELOPER_COMMITTEES_LEADER}
+                          value={values.globalRoleSkills.DEVELOPER_COMMITTEES_LEADER ?? []}
+                          error={errors.developerCommitteesLeaderSkills}
+                          onChange={(nextSkills) => updateGlobalRoleSkills("DEVELOPER_COMMITTEES_LEADER", nextSkills)}
+                        />
+                      </div>
+                    )}
+
+                    {values.advisor && (
+                      <div className="space-y-3">
+                        <CommitteeSkillsPicker
+                          label={t("fields.role.advisor")}
+                          options={globalRoleSkillOptions.ADVISOR}
+                          value={values.globalRoleSkills.ADVISOR ?? []}
+                          error={errors.advisorSkills}
+                          onChange={(nextSkills) => updateGlobalRoleSkills("ADVISOR", nextSkills)}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </fieldset>}
