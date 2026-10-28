@@ -17,12 +17,12 @@ export default function AboutSection() {
     communities: 0,
   });
 
-  const stats = [
-    { key: "members", target: 500 },
-    { key: "events", target: 30 },
-    { key: "projects", target: 20 },
-    { key: "communities", target: 10 },
-  ] as const;
+  const statTargets = {
+    members: 165,
+    events: 10,
+    projects: 9,
+    communities: 10,
+  } as const;
 
   const statsRef = useRef(null);
   const isInView = useInView(statsRef, {
@@ -44,10 +44,10 @@ export default function AboutSection() {
       const easedProgress = 1 - Math.pow(1 - progress, 3);
 
       setCounts({
-        members: Math.floor(500 * easedProgress),
-        events: Math.floor(30 * easedProgress),
-        projects: Math.floor(20 * easedProgress),
-        communities: Math.floor(10 * easedProgress),
+        members: Math.floor(statTargets.members * easedProgress),
+        events: Math.floor(statTargets.events * easedProgress),
+        projects: Math.floor(statTargets.projects * easedProgress),
+        communities: Math.floor(statTargets.communities * easedProgress),
       });
 
       if (progress < 1) {
@@ -78,7 +78,7 @@ export default function AboutSection() {
 
           <motion.p
             dir={dir}
-            className="mt-6 text-justify text-lg font-normal leading-normal"
+            className="mt-6 whitespace-pre-line text-justify text-lg font-normal leading-normal"
             initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -160,7 +160,7 @@ export default function AboutSection() {
 
         <div>
           <h3 className="text-2xl font-bold text-gdg-green lg:text-4xl">
-            +{counts.communities}
+            {counts.communities}
           </h3>
           <p dir={dir} className="mt-1 text-lg font-medium leading-normal">{t("stats.communities")}</p>
         </div>
