@@ -10,9 +10,10 @@ export type TeamMember = {
   image: string;
   role: string;
   name: string;
-  linkedin: string;
-  x: string;
+  linkedin?: string;
+  x?: string;
   imageScaleClass?: string;
+  imageHoverScaleClass?: string;
   imagePositionClass?: string;
 };
 
@@ -55,7 +56,7 @@ export default function TeamCard({ member }: TeamCardProps) {
           src={member.image}
           alt={t(`team.${member.id}.name`)}
           loading="lazy"
-          className={`relative z-10 h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} group-hover:scale-[1.2]`}
+          className={`relative z-10 h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} ${member.imageHoverScaleClass ?? "group-hover:scale-[1.2]"}`}
         />
       </div>
 
@@ -94,26 +95,40 @@ export default function TeamCard({ member }: TeamCardProps) {
 
           {/* Socials */}
           <div className="mt-3 flex items-center gap-2">
-            {socials.map((s) => (
-              <motion.a
-                key={s.key}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${t(`team.${member.id}.name`)} - ${s.label}`}
-                whileHover={reduce ? undefined : { scale: 1.2, rotate: 8 }}
-                whileTap={{ scale: 0.9 }}
-                className={`flex h-6 w-6 items-center justify-center rounded-full ${s.style}`}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-3 w-3 fill-current"
-                  aria-hidden="true"
-                >
+            {socials.map((s) => {
+              const icon = (
+                <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current" aria-hidden="true">
                   <path d={s.path} />
                 </svg>
-              </motion.a>
-            ))}
+              );
+              const ariaLabel = `${t(`team.${member.id}.name`)} - ${s.label}`;
+              const className = `flex h-6 w-6 items-center justify-center rounded-full ${s.style}`;
+
+              return s.href ? (
+                <motion.a
+                  key={s.key}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={ariaLabel}
+                  whileHover={reduce ? undefined : { scale: 1.2, rotate: 8 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={className}
+                >
+                  {icon}
+                </motion.a>
+              ) : (
+                <button
+                  key={s.key}
+                  type="button"
+                  disabled
+                  aria-label={ariaLabel}
+                  className={`${className} cursor-not-allowed opacity-50`}
+                >
+                  {icon}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

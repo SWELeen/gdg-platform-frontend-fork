@@ -5,7 +5,7 @@ import FeaturedProjects from "@/components/home/FeaturedProjects";
 import UpcomingEvents from "@/components/home/UpcomingEvents";
 import SponsorSection from "@/components/home/SponsorsSection";
 import JoinCommunity from "@/components/home/JoinCommunity";
-import LeadershipTeam from "@/components/home/LeadershipTeam"
+import LeadershipTeam, { AdvisorsTeam } from "@/components/home/LeadershipTeam"
 import Committees from "@/components/home/Committees"
 import Footer from "@/components/Footer"
 import AnnouncementsSection from "@/components/home/AnnouncementsSection";
@@ -28,6 +28,7 @@ export default async function Home() {
         <SponsorSection/>
         {/* <LeadershipTeam/> */}
         <Committees/>
+        <AdvisorsTeam />
         <JoinCommunity/>
         <Footer/>
       </main>

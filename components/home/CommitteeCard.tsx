@@ -16,6 +16,8 @@ const darkDeveloperAccent = [
 type Person = {
   name: string;
   image: string;
+  linkedin?: string;
+  x?: string;
   imageScaleClass?: string;
   imagePositionClass?: string;
 };
@@ -41,7 +43,6 @@ type Committee = {
 
 type CommitteeCardProps = {
   committee: Committee;
-  number: number;
   initialSubCommitteeId?: string;
 };
 
@@ -49,7 +50,6 @@ type CommitteeCardProps = {
 
 export default function CommitteeCard({
   committee,
-  number,
   initialSubCommitteeId,
 }: CommitteeCardProps) {
   const t = useTranslations("home.committees");
@@ -85,6 +85,8 @@ export default function CommitteeCard({
       image: activeCommittee.lead.image,
       imageScaleClass: activeCommittee.lead.imageScaleClass,
       imagePositionClass: activeCommittee.lead.imagePositionClass,
+      linkedin: activeCommittee.lead.linkedin,
+      x: activeCommittee.lead.x,
       name: activeLeadName,
       label: t("leadLabel", { name: activeName }),
     },
@@ -95,6 +97,8 @@ export default function CommitteeCard({
             image: activeCommittee.coLeader.image,
             imageScaleClass: activeCommittee.coLeader.imageScaleClass,
             imagePositionClass: activeCommittee.coLeader.imagePositionClass,
+            linkedin: activeCommittee.coLeader.linkedin,
+            x: activeCommittee.coLeader.x,
             name: activeCoLeaderName,
             label: t("coLeaderLabel", { name: activeName }),
           },
@@ -104,7 +108,7 @@ export default function CommitteeCard({
 
   return (
     <article
-      className="group relative flex h-[550px] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-3 shadow-sm transition-shadow duration-200 hover:shadow-md motion-safe:transition-transform motion-safe:hover:-translate-y-0.5 sm:h-[460px] sm:p-4"
+      className="group relative flex h-[520px] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-3 shadow-sm transition-shadow duration-200 hover:shadow-md motion-safe:transition-transform motion-safe:hover:-translate-y-0.5 sm:p-4"
       style={{
         borderTopColor: activeCommittee.color,
         borderTopWidth: 3,
@@ -121,32 +125,26 @@ export default function CommitteeCard({
             duration: reduceMotion ? 0.01 : 0.35,
             ease: "easeInOut",
           }}
-          className="relative z-10 flex h-full flex-col gap-3"
+          className="relative z-10 flex h-full min-h-0 flex-col gap-3"
         >
           {/* Start Side */}
-          <div className="relative min-w-0 flex-none sm:flex-1">
+          <div className="relative h-[150px] min-h-0 min-w-0 flex-none overflow-hidden">
             <div className="relative z-10">
             {/* Committee Name */}
-            <div className="flex items-start justify-between gap-3">
+            <div className="text-center">
               <h3
                 dir={dir}
-                className={`text-balance break-words text-lg font-semibold leading-snug text-[var(--committee-accent)] sm:text-xl ${useDarkAccent ? `w-fit max-w-full rounded-lg px-3 py-2 ${darkDeveloperAccent}` : ""}`}
+                className={`mx-auto text-balance break-words text-center text-base font-semibold leading-snug text-[var(--committee-accent)] sm:text-lg ${useDarkAccent ? `w-fit max-w-full rounded-lg px-3 py-2 ${darkDeveloperAccent}` : ""}`}
               >
                 {activeName}
               </h3>
-              <span
-                aria-hidden="true"
-                className={`shrink-0 rounded-full bg-[color-mix(in_srgb,var(--committee-accent)_12%,transparent)] px-2.5 py-1 text-[10px] font-semibold tabular-nums text-[var(--committee-accent)] ${useDarkAccent ? darkDeveloperAccent : ""}`}
-              >
-                {String(number).padStart(2, "0")}
-              </span>
             </div>
 
             {/* Description */}
             <div className="mt-2">
               <p
                 dir={dir}
-                className="max-w-full text-start text-sm leading-relaxed text-foreground/75 sm:text-base"
+                className="line-clamp-4 max-w-full text-start text-xs leading-relaxed text-foreground/75 sm:text-sm"
               >
                 {activeDescription}
               </p>
@@ -157,7 +155,7 @@ export default function CommitteeCard({
 
           {/* End / Bottom Side */}
           <div className="mt-3 border-t border-foreground/10 pt-3">
-            <div className="flex w-full flex-wrap items-stretch justify-center gap-3">
+            <div className="grid w-full grid-cols-2 items-stretch justify-items-center gap-3">
               {leaders.map((leader, index) => (
                 <CommitteePersonCard
                   key={`${activeCommittee.id}-${leader.key}`}
@@ -169,15 +167,11 @@ export default function CommitteeCard({
                   accentColor={activeCommittee.color}
                   index={index}
                   darkAccent={useDarkAccent}
-                  linkedin="#"
-                  x="#"
+                  linkedin={leader.linkedin}
+                  x={leader.x}
                   imageScaleClass={leader.imageScaleClass}
                   imagePositionClass={leader.imagePositionClass}
-                  layoutClass={
-                    leaders.length === 1
-                      ? "w-full max-w-[220px]"
-                      : "w-[calc(50%-0.375rem)] min-w-[140px] max-w-[220px]"
-                  }
+                  layoutClass={leaders.length === 1 ? "col-span-2 w-[calc(50%-0.375rem)]" : "w-full"}
                 />
               ))}
             </div>

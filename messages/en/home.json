@@ -158,6 +158,8 @@
   },
   "committees": {
     "advisorsLabel": "Advisors",
+    "developerCommitteesLabel": "Developer Committees",
+    "mainCommitteesLabel": "Administrative Committees",
     "title": "Meet",
     "highlight": "Our Committees",
     "subtitle": "Explore the teams driving ideas, activities, and collaboration across our community.",
