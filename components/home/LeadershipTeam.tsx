@@ -137,3 +137,22 @@ export default function LeadershipTeam() {
     </section>
   );
 }
+
+export function AdvisorsTeam() {
+  const t = useTranslations("home.leadership");
+  const advisors = teamMembers.filter((member) => member.type === "advisor");
+
+  return (
+    <section id="advisors" className="bg-sponsor-gray px-6 py-16 lg:px-10 lg:py-24">
+      <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:gap-15">
+        <TeamGroup
+          members={advisors}
+          eyebrow={t("advisors.eyebrow")}
+          title={t("advisors.title")}
+          description={t("advisors.description")}
+          reverse
+        />
+      </div>
+    </section>
+  );
+}

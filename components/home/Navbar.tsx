@@ -205,7 +205,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
         )}
       </div>
 
-      <div className="hidden min-w-0 items-center gap-4 whitespace-nowrap lg:flex xl:gap-5">
+      <div className="hidden min-w-0 items-center gap-4 whitespace-nowrap xl:flex xl:gap-5">
         <motion.a
           href={sectionHref("#home")}
           whileHover={{ scale: 1.05 }}
@@ -293,7 +293,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative z-50 text-3xl lg:hidden ${variant === "light" ? "text-foreground" : "text-[var(--white)]"}`}
+        className={`relative z-50 text-3xl xl:hidden ${variant === "light" ? "text-foreground" : "text-[var(--white)]"}`}
         aria-label={isOpen ? tCommon("menu.close") : tCommon("menu.open")}
         aria-expanded={isOpen}
       >
@@ -304,7 +304,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="absolute end-0 top-full z-40 mt-2 flex w-56 flex-col gap-5 rounded-2xl bg-surface px-6 py-6 text-foreground shadow-lg backdrop-blur-md lg:hidden"
+            className="absolute end-0 top-full z-40 mt-2 flex w-56 flex-col gap-5 rounded-2xl bg-surface px-6 py-6 text-foreground shadow-lg backdrop-blur-md xl:hidden"
             initial="closed"
             animate="open"
             exit="closed"
