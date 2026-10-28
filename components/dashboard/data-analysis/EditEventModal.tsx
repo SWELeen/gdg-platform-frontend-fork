@@ -4,20 +4,26 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 import type { CommitteeEvent, EventStatus, EventType } from "../shared/types";
-import { X, Calendar, MapPin, Clock, Users } from "lucide-react";
+import { X, Calendar, MapPin, Clock, Users, Plus, Trash2 } from "lucide-react";
 
 interface EditEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   event: CommitteeEvent | null;
+  onSave?: (updates: Partial<CommitteeEvent>) => Promise<void>;
+  hideStatus?: boolean;
+  showDraftDetails?: boolean;
 }
 
 interface EditEventFormProps {
   event: CommitteeEvent;
   onClose: () => void;
+  onSave?: (updates: Partial<CommitteeEvent>) => Promise<void>;
+  hideStatus: boolean;
+  showDraftDetails: boolean;
 }
 
-function EditEventForm({ event, onClose }: EditEventFormProps) {
+function EditEventForm({ event, onClose, onSave, hideStatus, showDraftDetails }: EditEventFormProps) {
   const t = useTranslations("dashboard.leader");
   const { updateEvent, canManageEvents } = useLeaderDashboard();
 
@@ -29,6 +35,12 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
   const [capacity, setCapacity] = useState<number | string>(event.capacity);
   const [status, setStatus] = useState<EventStatus>(event.status);
   const [description, setDescription] = useState(event.description ?? "");
+  const [registrationDeadline, setRegistrationDeadline] = useState(event.registrationDeadline ?? "");
+  const [speakers, setSpeakers] = useState(event.speakers ?? "");
+  const [mapsLink, setMapsLink] = useState(event.mapsLink ?? "");
+  const [requirements, setRequirements] = useState(event.requirements ?? "");
+  const [imageUrl, setImageUrl] = useState(event.imageUrl ?? "");
+  const [questions, setQuestions] = useState(event.registrationQuestions ?? []);
 
   const [touched, setTouched] = useState<{
     title?: boolean;
@@ -38,6 +50,7 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
     time?: boolean;
   }>({});
   const [generalError, setGeneralError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const validateTitle = (val: string) => {
     const trimmed = val.trim();
@@ -88,7 +101,7 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
   const dateError = touched.date ? validateDate(date) : "";
   const timeError = touched.time ? validateTime(time) : "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({
       title: true,
@@ -109,7 +122,7 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
       return;
     }
 
-    updateEvent(event.id, {
+    const updates: Partial<CommitteeEvent> = {
       title: title.trim(),
       type,
       date: date.trim(),
@@ -118,10 +131,27 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
       capacity: Number(capacity),
       status,
       description: description.trim(),
+      ...(showDraftDetails ? {
+        registrationDeadline,
+        speakers: speakers.trim(),
+        mapsLink: mapsLink.trim(),
+        requirements: requirements.trim(),
+        imageUrl: imageUrl.trim(),
+        registrationQuestions: questions,
+      } : {}),
       isDraft: status === "Draft",
-    });
-
-    onClose();
+    };
+    setSaving(true);
+    setGeneralError("");
+    try {
+      if (onSave) await onSave(updates);
+      else updateEvent(event.id, updates);
+      onClose();
+    } catch (error) {
+      setGeneralError(error instanceof Error ? error.message : t("eventManagement.editFailed"));
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -184,7 +214,7 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
         </div>
 
         {/* Type & Status */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className={`grid gap-4 ${hideStatus ? "grid-cols-1" : "grid-cols-2"}`}>
           <div>
             <label className="block text-xs font-semibold text-foreground">
               {t("eventForm.type")}
@@ -199,9 +229,10 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
               <option value="Talk">{t("eventForm.types.talk")}</option>
               <option value="Panel">{t("eventForm.types.panel")}</option>
               <option value="Hackathon">{t("eventForm.types.hackathon")}</option>
+              <option value="Trip">{t("eventForm.types.trip")}</option>
             </select>
           </div>
-          <div>
+          {!hideStatus && <div>
             <label className="block text-xs font-semibold text-foreground">
               {t("eventForm.status")}
             </label>
@@ -215,7 +246,7 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
               <option value="Needs Update">{t("eventForm.statuses.needsUpdate")}</option>
               <option value="Draft">{t("eventForm.statuses.draft")}</option>
             </select>
-          </div>
+          </div>}
         </div>
 
         {/* Date, Time & Capacity */}
@@ -360,6 +391,58 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
             className="mt-1 w-full rounded-xl border border-border bg-surface-muted/30 p-3 text-sm text-foreground outline-none focus:border-blue-500"
           />
         </div>
+
+        {showDraftDetails && <>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-xs font-semibold text-foreground">{t("eventForm.deadline")}</label>
+              <input type="date" value={registrationDeadline} onChange={(e) => setRegistrationDeadline(e.target.value)} className="mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-foreground">{t("eventForm.speakers")}</label>
+              <input type="text" value={speakers} maxLength={2000} onChange={(e) => setSpeakers(e.target.value)} className="mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-foreground">{t("eventForm.mapsLink")}</label>
+            <input type="url" dir="ltr" value={mapsLink} maxLength={500} onChange={(e) => setMapsLink(e.target.value)} className="mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-foreground">{t("eventForm.requirements")}</label>
+            <textarea rows={3} value={requirements} maxLength={5000} onChange={(e) => setRequirements(e.target.value)} className="mt-1 w-full rounded-xl border border-border bg-surface-muted/30 p-3 text-sm text-foreground outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-foreground">{t("eventForm.imageUrl")}</label>
+            <input type="url" dir="ltr" value={imageUrl} maxLength={2000} onChange={(e) => setImageUrl(e.target.value)} className="mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+          </div>
+          <section className="space-y-3 border-t border-border pt-4">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-bold text-foreground">{t("eventForm.registrationQuestions")}</h3>
+              <button type="button" onClick={() => setQuestions((current) => [...current, { id: `draft-question-${Date.now()}`, type: "short-answer", text: "", required: false }])} className="inline-flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-xs font-semibold text-foreground hover:bg-surface-muted"><Plus className="size-3.5" />{t("eventForm.addQuestion")}</button>
+            </div>
+            {questions.length === 0 && <p className="text-xs text-muted">{t("eventForm.noQuestions")}</p>}
+            {questions.map((question, index) => (
+              <div key={question.id} className="space-y-2 rounded-xl border border-border p-3">
+                <div className="flex gap-2">
+                  <input value={question.text} maxLength={500} aria-label={t("eventForm.questionText", { number: index + 1 })} onChange={(e) => setQuestions((current) => current.map((item) => item.id === question.id ? { ...item, text: e.target.value } : item))} className="h-10 min-w-0 flex-1 rounded-lg border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+                  <button type="button" onClick={() => setQuestions((current) => current.filter((item) => item.id !== question.id))} aria-label={t("eventForm.removeQuestion", { number: index + 1 })} className="rounded-lg p-2 text-muted hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"><Trash2 className="size-4" /></button>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <select value={question.type} onChange={(e) => setQuestions((current) => current.map((item) => item.id === question.id ? { ...item, type: e.target.value } : item))} className="h-9 rounded-lg border border-border bg-surface-muted/30 px-2 text-xs text-foreground">
+                    <option value="short-answer">{t("eventForm.questionTypes.shortAnswer")}</option>
+                    <option value="long-answer">{t("eventForm.questionTypes.longAnswer")}</option>
+                    <option value="single-choice">{t("eventForm.questionTypes.singleChoice")}</option>
+                    <option value="multiple-choice">{t("eventForm.questionTypes.multipleChoice")}</option>
+                    <option value="checkboxes">{t("eventForm.questionTypes.checkboxes")}</option>
+                    <option value="yes-no">{t("eventForm.questionTypes.yesNo")}</option>
+                  </select>
+                  <label className="flex items-center gap-2 text-xs text-foreground"><input type="checkbox" checked={question.required} onChange={(e) => setQuestions((current) => current.map((item) => item.id === question.id ? { ...item, required: e.target.checked } : item))} />{t("eventForm.questionRequired")}</label>
+                </div>
+                {["single-choice", "multiple-choice", "checkboxes"].includes(question.type) && <input value={(question.options ?? []).join(", ")} aria-label={t("eventForm.questionOptions", { number: index + 1 })} onChange={(e) => setQuestions((current) => current.map((item) => item.id === question.id ? { ...item, options: e.target.value.split(",").map((option) => option.trim()).filter(Boolean) } : item))} placeholder={t("eventForm.optionsPlaceholder")} className="h-9 w-full rounded-lg border border-border bg-surface-muted/30 px-3 text-xs text-foreground outline-none focus:border-blue-500" />}
+              </div>
+            ))}
+          </section>
+        </>}
       </div>
 
       <div className="mt-6 flex justify-end gap-2 border-t border-border pt-4">
@@ -372,17 +455,17 @@ function EditEventForm({ event, onClose }: EditEventFormProps) {
         </button>
         <button
           type="submit"
-          disabled={!canManageEvents}
+          disabled={!canManageEvents || saving}
           className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 disabled:opacity-50 transition"
         >
-          {t("eventForm.saveChanges")}
+          {saving ? t("eventForm.saving") : t("eventForm.saveChanges")}
         </button>
       </div>
     </form>
   );
 }
 
-export function EditEventModal({ isOpen, onClose, event }: EditEventModalProps) {
+export function EditEventModal({ isOpen, onClose, event, onSave, hideStatus = false, showDraftDetails = false }: EditEventModalProps) {
   if (!isOpen || !event) return null;
 
   return (
@@ -392,7 +475,7 @@ export function EditEventModal({ isOpen, onClose, event }: EditEventModalProps) 
         onClick={onClose}
       />
       <div className="relative z-10 w-full max-w-xl rounded-2xl border border-border bg-surface p-6 shadow-2xl">
-        <EditEventForm key={event.id} event={event} onClose={onClose} />
+        <EditEventForm key={event.id} event={event} onClose={onClose} onSave={onSave} hideStatus={hideStatus} showDraftDetails={showDraftDetails} />
       </div>
     </div>
   );

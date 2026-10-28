@@ -11,7 +11,7 @@ import { isUpcomingEventDate, parseEventDate, parseEventDateTime } from "@/lib/d
 import type { PlatformEvent } from "@/lib/events/types";
 import { MEMBER_EVENTS_PATH, UPCOMING_EVENTS_PATH, memberEventAccents } from "./member-events";
 
-const eventTypes: EventType[] = ["Workshop", "Conference", "Talk", "Panel", "Hackathon"];
+const eventTypes: EventType[] = ["Workshop", "Conference", "Talk", "Panel", "Hackathon", "Trip"];
 const dateOptions = { numberingSystem: "latn" } as const;
 
 function UpcomingEventCard({ event, accent }: { event: PlatformEvent; accent: string }) {

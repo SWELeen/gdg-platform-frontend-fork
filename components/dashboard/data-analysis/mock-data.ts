@@ -329,6 +329,7 @@ export const eventTypeFilterOptions = [
   { value: "Talk", label: "Talk" },
   { value: "Panel", label: "Panel" },
   { value: "Hackathon", label: "Hackathon" },
+  { value: "Trip", label: "Trip" },
 ];
 
 export const dataAnalysisDashboardSeed = {

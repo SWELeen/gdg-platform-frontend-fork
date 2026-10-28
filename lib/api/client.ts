@@ -31,6 +31,7 @@ type ApiEnvelope<T> = {
 } | null;
 
 function requestHeaders(body: unknown): Record<string, string> {
+  if (typeof FormData !== "undefined" && body instanceof FormData) return {};
   const headers: Record<string, string> = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
   return headers;
@@ -71,7 +72,11 @@ export async function apiRequest<T>(
       ...requestHeaders(init.body),
       ...(init.accessToken ? { Authorization: `Bearer ${init.accessToken}` } : {}),
     },
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+    body: init.body === undefined
+      ? undefined
+      : typeof FormData !== "undefined" && init.body instanceof FormData
+        ? init.body
+        : JSON.stringify(init.body),
     credentials: "include",
     cache: "no-store",
   });

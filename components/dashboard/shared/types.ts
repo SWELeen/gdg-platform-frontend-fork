@@ -1,5 +1,5 @@
 export type EventStatus = "Upcoming" | "Completed" | "Draft" | "Needs Update";
-export type EventType = "Workshop" | "Conference" | "Talk" | "Panel" | "Hackathon";
+export type EventType = "Workshop" | "Conference" | "Talk" | "Panel" | "Hackathon" | "Trip";
 
 export interface CommitteeEvent {
   id: string;

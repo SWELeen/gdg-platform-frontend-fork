@@ -19,6 +19,7 @@ import { useDialog } from "../shared/useDialog";
 import { formatEventDate, formatEventTime, toIsoDate } from "@/lib/dashboard/event-format";
 import { API_ENABLED } from "@/lib/api/client";
 import type { EventSchedule } from "@/lib/committee-dashboard/api";
+import type { CommitteeEventDetails } from "@/lib/committee-dashboard/api";
 import { EventPreviewModal } from "./EventPreviewModal";
 import { EventPublishedModal } from "./EventPublishedModal";
 import {
@@ -52,7 +53,7 @@ const styles = {
   primaryButton: "min-w-[120px] rounded-[10px] bg-gdg-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gdg-blue/90 max-sm:w-full",
 } as const;
 
-type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated">;
+export type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated">;
 
 type FieldName =
   | "title"
@@ -78,7 +79,7 @@ const fieldOrder: FieldName[] = [
   "image",
 ];
 
-const eventTypes: EventType[] = ["Workshop", "Conference", "Talk", "Panel", "Hackathon"];
+const eventTypes: EventType[] = ["Workshop", "Conference", "Talk", "Panel", "Hackathon", "Trip"];
 
 interface FormValues {
   title: string;
@@ -116,6 +117,9 @@ interface CreateEventFormProps {
   /** Adds the event; returning its id enables the "View Event" action. A rejected promise shows its message. */
   onCreate?: CreateEventHandler;
   onViewEvent?: (eventId: string) => void;
+  onUploadImage?: (file: File) => Promise<string>;
+  initialDetails?: CommitteeEventDetails;
+  onUpdate?: (event: CreateEventInput, schedule: EventSchedule, imageUrl: string | null) => Promise<void>;
 }
 
 type CreateEventHandler = (event: CreateEventInput, schedule: EventSchedule) => string | void | Promise<string | void>;
@@ -124,14 +128,57 @@ type CreateEventHandler = (event: CreateEventInput, schedule: EventSchedule) => 
 const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000;
 
 /** Local date and time inputs → the exact instants the backend stores. Registration closes at the end of the chosen day, never after the start. */
-function toSchedule(values: FormValues): EventSchedule {
-  const startsAt = new Date(`${values.date}T${values.time}`);
-  const deadlineEnd = new Date(`${values.registrationDeadline}T23:59:59`);
+function toSchedule(values: FormValues, durationMs = DEFAULT_DURATION_MS): EventSchedule {
+  const startsAt = new Date(`${values.date}T${values.time}:00+03:00`);
+  const deadlineEnd = new Date(`${values.registrationDeadline}T23:59:59+03:00`);
   return {
     startsAt: startsAt.toISOString(),
-    endsAt: new Date(startsAt.getTime() + DEFAULT_DURATION_MS).toISOString(),
+    endsAt: new Date(startsAt.getTime() + durationMs).toISOString(),
     registrationDeadline: new Date(Math.min(deadlineEnd.getTime(), startsAt.getTime())).toISOString(),
   };
+}
+
+function dateTimeInput(value: string) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+  }).formatToParts(new Date(value));
+  const part = (name: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === name)?.value ?? "00";
+  return {
+    date: `${part("year")}-${part("month")}-${part("day")}`,
+    time: `${part("hour")}:${part("minute")}`,
+  };
+}
+
+function eventFormValues(details?: CommitteeEventDetails): FormValues {
+  if (!details) return emptyValues;
+  const start = dateTimeInput(details.startsAt);
+  return {
+    title: details.name,
+    type: (details.eventType as EventType | null) ?? "Workshop",
+    description: details.description ?? "",
+    speakers: details.speakers ?? "",
+    date: start.date,
+    time: start.time,
+    location: details.location ?? "",
+    mapsLink: details.mapsLink ?? "",
+    capacity: String(details.capacity),
+    registrationDeadline: dateTimeInput(details.registrationDeadline).date,
+    requirements: details.requirements ?? "",
+  };
+}
+
+function eventQuestions(details?: CommitteeEventDetails): DraftQuestion[] {
+  return (details?.questions ?? []).map((question) => ({
+    id: String(question.questionId),
+    text: question.questionText,
+    type: question.questionType === "CHECKBOX" ? "checkboxes"
+      : question.questionType === "RADIO" || question.questionType === "SELECT"
+        ? question.options?.length === 2 && question.options[0] === "Yes" && question.options[1] === "No" ? "yes-no" : "single-choice"
+        : "short-answer",
+    required: question.isRequired,
+    ...(question.options ? { options: question.options } : {}),
+  }));
 }
 
 export function CreateEventModal({
@@ -139,14 +186,33 @@ export function CreateEventModal({
   onClose,
   onCreate,
   onViewEvent,
+  onUploadImage,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onCreate: CreateEventHandler;
   onViewEvent?: (eventId: string) => void;
+  onUploadImage?: (file: File) => Promise<string>;
 }) {
   if (!isOpen) return null;
-  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} onViewEvent={onViewEvent} />;
+  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} onViewEvent={onViewEvent} onUploadImage={onUploadImage} />;
+}
+
+export function EditDraftEventModal({
+  isOpen,
+  onClose,
+  details,
+  onUpdate,
+  onUploadImage,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  details: CommitteeEventDetails | null;
+  onUpdate: NonNullable<CreateEventFormProps["onUpdate"]>;
+  onUploadImage?: (file: File) => Promise<string>;
+}) {
+  if (!isOpen || !details) return null;
+  return <CreateEventForm key={details.id} isModal onClose={onClose} initialDetails={details} onUpdate={onUpdate} onUploadImage={onUploadImage} />;
 }
 
 function Field({
@@ -185,14 +251,15 @@ function Field({
   );
 }
 
-function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: CreateEventFormProps) {
+function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUploadImage, initialDetails, onUpdate }: CreateEventFormProps) {
   const t = useTranslations("dashboard.leader.createEvent");
   const tf = useTranslations("dashboard.leader.eventForm");
 
-  const [values, setValues] = useState<FormValues>(emptyValues);
+  const [values, setValues] = useState<FormValues>(() => eventFormValues(initialDetails));
   const [image, setImage] = useState<{ file: File; url: string } | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(initialDetails?.imageUrl ?? null);
   const [isDraggingImage, setIsDraggingImage] = useState(false);
-  const [questions, setQuestions] = useState<DraftQuestion[]>([]);
+  const [questions, setQuestions] = useState<DraftQuestion[]>(() => eventQuestions(initialDetails));
 
   const [showQuestionForm, setShowQuestionForm] = useState(false);
   const [questionType, setQuestionType] = useState("");
@@ -207,7 +274,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
   const [showPreview, setShowPreview] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [publishedEvent, setPublishedEvent] = useState<{ id: string | null; title: string } | null>(null);
-  const [publishStatus, setPublishStatus] = useState<"publish" | "draft">("publish");
+  const [publishStatus, setPublishStatus] = useState<"publish" | "draft">(initialDetails ? "draft" : "publish");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [today] = useState(() => toIsoDate(new Date()));
@@ -215,11 +282,10 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
   // The selected image's blob URL is revoked when replaced or when the form unmounts,
   // except after publishing, when the stored event keeps using it for this session.
   const imageUrlRef = useRef<string | null>(null);
-  const handedOffImageUrlRef = useRef<string | null>(null);
   useEffect(() => {
     return () => {
       const url = imageUrlRef.current;
-      if (url && url !== handedOffImageUrlRef.current) URL.revokeObjectURL(url);
+      if (url) URL.revokeObjectURL(url);
     };
   }, []);
 
@@ -229,6 +295,10 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     (Object.keys(emptyValues) as (keyof FormValues)[]).some((key) => values[key] !== emptyValues[key]);
 
   const requestClose = () => {
+    if (initialDetails) {
+      onClose?.();
+      return;
+    }
     if (publishedEvent) {
       onClose?.();
     } else if (isDirty) {
@@ -255,7 +325,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     if (!current.description.trim()) next.description = t("errors.descriptionRequired");
 
     if (!current.date) next.date = tf("errors.dateRequired");
-    else if (current.date < today) next.date = t("errors.datePast");
+    else if (current.date < today && (!initialDetails || current.date !== eventFormValues(initialDetails).date)) next.date = t("errors.datePast");
 
     if (!current.time) next.time = tf("errors.timeRequired");
 
@@ -286,13 +356,12 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     }
 
     if (!current.registrationDeadline) next.registrationDeadline = t("errors.deadlineRequired");
-    else if (current.registrationDeadline < today) next.registrationDeadline = t("errors.deadlinePast");
+    else if (current.registrationDeadline < today && (!initialDetails || current.registrationDeadline !== eventFormValues(initialDetails).registrationDeadline)) next.registrationDeadline = t("errors.deadlinePast");
     else if (current.date && current.registrationDeadline > current.date) {
       next.registrationDeadline = t("errors.deadlineAfterEvent");
     }
 
-    // Images are not uploaded to the backend yet, so they are optional there.
-    if (!currentImage && !API_ENABLED) next.image = t("errors.imageRequired");
+    if (!currentImage && !existingImageUrl && !API_ENABLED) next.image = t("errors.imageRequired");
     return next;
   };
 
@@ -305,8 +374,12 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
 
   const selectImage = (file: File | undefined | null) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
       setErrors((current) => ({ ...current, image: t("errors.imageType") }));
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((current) => ({ ...current, image: t("errors.imageSize") }));
       return;
     }
     if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
@@ -321,6 +394,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
     imageUrlRef.current = null;
     setImage(null);
+    setExistingImageUrl(null);
     if (submitAttempted) setErrors(validate(values, null));
   };
 
@@ -409,6 +483,10 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
     }
 
     const isDraft = publishStatus === "draft";
+    setSaving(true);
+    setSaveError("");
+    try {
+    const uploadedImageUrl = image ? await onUploadImage?.(image.file) : null;
     const eventData: CreateEventInput = {
       title: values.title.trim(),
       description: values.description.trim(),
@@ -421,7 +499,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
       capacity: Number(values.capacity),
       registrationDeadline: formatEventDate(values.registrationDeadline),
       requirements: values.requirements.trim(),
-      imageUrl: image?.url,
+      imageUrl: uploadedImageUrl ?? (image ? image.url : existingImageUrl ?? undefined),
       registered: 0,
       status: isDraft ? "Draft" : "Upcoming",
       isDraft,
@@ -429,11 +507,17 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
       registrationQuestions: questions,
     };
 
-    setSaving(true);
-    setSaveError("");
-    try {
-      const createdId = await onCreate?.(eventData, toSchedule(values));
-      handedOffImageUrlRef.current = image?.url ?? null;
+      const duration = initialDetails
+        ? new Date(initialDetails.endsAt).getTime() - new Date(initialDetails.startsAt).getTime()
+        : DEFAULT_DURATION_MS;
+      const schedule = toSchedule(values, duration);
+      if (initialDetails && onUpdate) {
+        await onUpdate(eventData, schedule, eventData.imageUrl ?? null);
+        setShowPreview(false);
+        onClose?.();
+        return;
+      }
+      const createdId = await onCreate?.(eventData, schedule);
       setShowPreview(false);
       // A draft is not published, so the "published" dialog would be wrong.
       if (isDraft) onClose?.();
@@ -452,6 +536,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
   const describedBy = (name: FieldName) => (errors[name] ? `${fieldId(name)}-error` : undefined);
 
   const errorCount = fieldOrder.filter((name) => errors[name]).length;
+  const displayedImageUrl = image?.url ?? existingImageUrl;
 
   return (
     <div
@@ -470,9 +555,9 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
       >
         <header className={styles.header}>
           <h1 id="create-event-dialog-title" className="text-2xl font-bold sm:text-3xl">
-            {t("title")}
+            {initialDetails ? tf("edit") : t("title")}
           </h1>
-          <p className="mt-1 text-sm text-white/90">{t("subtitle")}</p>
+          <p className="mt-1 text-sm text-white/90">{initialDetails ? tf("description") : t("subtitle")}</p>
           {isModal && (
             <button type="button" className={styles.close} onClick={requestClose} aria-label={t("close")}>
               <X size={20} />
@@ -678,16 +763,16 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
                 </span>
               </span>
 
-              {image ? (
+              {displayedImageUrl ? (
                 <div className="flex flex-col gap-3 rounded-2xl border border-border p-3 sm:flex-row sm:items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element -- local blob: URL of the selected file; next/image cannot optimize it. */}
                   <img
-                    src={image.url}
+                    src={displayedImageUrl}
                     alt={t("upload.previewAlt")}
                     className="h-32 w-full rounded-xl object-cover sm:h-24 sm:w-40"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-foreground">{image.file.name}</p>
+                    <p className="truncate text-sm font-medium text-foreground">{image?.file.name ?? t("upload.currentImage")}</p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <label
                         htmlFor={fieldId("image")}
@@ -1001,7 +1086,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
           )}
 
           <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-end">
-            <label className="flex items-center gap-2 text-sm font-semibold text-foreground/85 sm:me-auto">
+            {!initialDetails && <label className="flex items-center gap-2 text-sm font-semibold text-foreground/85 sm:me-auto">
               {t("fields.status")}
               <select
                 id={fieldId("status")}
@@ -1012,7 +1097,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
                 <option value="publish">{t("statusOptions.publish")}</option>
                 <option value="draft">{t("statusOptions.draft")}</option>
               </select>
-            </label>
+            </label>}
             <button
               type="button"
               onClick={requestClose}
@@ -1020,15 +1105,15 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
             >
               {t("actions.cancel")}
             </button>
-            <button
+            {!initialDetails && <button
               type="button"
               onClick={handlePreview}
               className={`${styles.outlineButton} border-gdg-blue text-gdg-blue hover:bg-gdg-blue/5`}
             >
               {t("actions.preview")}
-            </button>
+            </button>}
             <button type="submit" disabled={saving} className={`${styles.primaryButton} disabled:opacity-60`}>
-              {publishStatus === "draft" ? t("actions.saveDraft") : t("actions.publish")}
+              {saving ? tf("saving") : initialDetails ? t("actions.saveDraft") : publishStatus === "draft" ? t("actions.saveDraft") : t("actions.publish")}
             </button>
           </div>
         </form>
@@ -1039,7 +1124,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent }: Cr
           data={{
             ...values,
             title: values.title.trim(),
-            imageUrl: image?.url ?? null,
+            imageUrl: displayedImageUrl,
             questions,
           }}
           onEdit={() => setShowPreview(false)}

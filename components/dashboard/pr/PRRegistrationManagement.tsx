@@ -16,10 +16,13 @@ import {
 } from "./mock-data";
 import { ConfirmModal } from "../shared/ConfirmModal";
 import { PRAttendancePanel } from "./PRAttendancePanel";
-import { CreateEventModal } from "../data-analysis/CreateEventForm";
+import { CreateEventModal, EditDraftEventModal, type CreateEventInput } from "../data-analysis/CreateEventForm";
 import { EventPreviewModal, toEventPreviewData, type EventPreviewData } from "../data-analysis/EventPreviewModal";
 import { API_ENABLED } from "@/lib/api/client";
 import { registrantFieldKeys, type RegistrantFieldKey } from "../data-analysis/event-form-config";
+import { updateCommitteeEvent, uploadCommitteeEventImage, type CommitteeEventDetails, type EventSchedule } from "@/lib/committee-dashboard/api";
+import { leaderCommitteeConfig } from "../shared/committee-config";
+import type { CommitteeEvent } from "../shared/types";
 
 const isRegistrantFieldKey = (key: string): key is RegistrantFieldKey =>
   (registrantFieldKeys as readonly string[]).includes(key);
@@ -39,7 +42,18 @@ import {
   Send,
   Sparkles,
   Trash2,
+  Pencil,
 } from "lucide-react";
+
+function riyadhDateTime(value: string) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+  }).formatToParts(new Date(value));
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "00";
+  return { date: `${part("year")}-${part("month")}-${part("day")}`, time: `${part("hour")}:${part("minute")}` };
+}
 
 function RegistrationStatusBadge({
   status,
@@ -226,7 +240,7 @@ export function PROverviewRegistrations() {
 }
 
 export function PREventsList() {
-  const { events, canManageEvents, canCreateEvents, addEvent, publishDraft, loadEventDetails, deleteDraft } = useLeaderDashboard();
+  const { events, canManageEvents, canCreateEvents, addEvent, updateEvent, publishDraft, loadEventDetails, deleteDraft, reloadDashboard } = useLeaderDashboard();
   const router = useRouter();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
@@ -234,6 +248,131 @@ export function PREventsList() {
   const [createEventOpen, setCreateEventOpen] = useState(false);
   const [publishError, setPublishError] = useState("");
   const [draftPreview, setDraftPreview] = useState<{ id: string; data: EventPreviewData } | null>(null);
+  const [eventError, setEventError] = useState("");
+  const [editingEvent, setEditingEvent] = useState<{ event: CommitteeEvent; details: CommitteeEventDetails | null } | null>(null);
+  const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
+  const [deadlineDate, setDeadlineDate] = useState("");
+  const uploadEventImage = async (file: File) => {
+    const result = await uploadCommitteeEventImage(leaderCommitteeConfig.pr.committeeCode, file);
+    if (!result.ok) throw new Error(result.message || t("eventManagement.imageUploadFailed"));
+    return result.data.imageUrl;
+  };
+  const openEdit = async (event: CommitteeEvent) => {
+    setEventError("");
+    if (!API_ENABLED) {
+      const startDate = new Date(`${event.date} ${event.time}`);
+      const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+      const deadline = event.registrationDeadline ? new Date(event.registrationDeadline) : startDate;
+      const details: CommitteeEventDetails = {
+        id: event.id,
+        name: event.title,
+        description: event.description ?? "",
+        eventType: event.type,
+        status: "DRAFT",
+        startsAt: startDate.toISOString(),
+        endsAt: endDate.toISOString(),
+        registrationDeadline: deadline.toISOString(),
+        location: event.location,
+        mapsLink: event.mapsLink ?? null,
+        capacity: event.capacity,
+        speakers: event.speakers ?? null,
+        requirements: event.requirements ?? null,
+        imageUrl: event.imageUrl ?? null,
+        requiredRegistrantFields: [],
+        questions: (event.registrationQuestions ?? []).map((question, index) => ({
+          questionId: Number(question.id) || -(index + 1),
+          questionText: question.text,
+          questionType: question.type === "checkboxes" || question.type === "multiple-choice" ? "CHECKBOX" : question.type === "short-answer" || question.type === "long-answer" ? "TEXT" : "RADIO",
+          isRequired: question.required,
+          options: question.options ?? null,
+        })),
+      };
+      setEditingEvent({ event, details });
+      return;
+    }
+    setLoadingEditId(event.id);
+    try {
+      const details = await loadEventDetails(event.id);
+      const { date, time } = riyadhDateTime(details.startsAt);
+      setDeadlineDate(riyadhDateTime(details.registrationDeadline).date);
+      setEditingEvent({
+        details,
+        event: {
+          ...event,
+          title: details.name,
+          type: (details.eventType as CommitteeEvent["type"] | null) ?? "Workshop",
+          date,
+          time,
+          registrationDeadline: riyadhDateTime(details.registrationDeadline).date,
+          location: details.location ?? "",
+          capacity: details.capacity,
+          description: details.description ?? "",
+          mapsLink: details.mapsLink ?? "",
+          speakers: details.speakers ?? "",
+          requirements: details.requirements ?? "",
+          imageUrl: details.imageUrl ?? "",
+          registrationQuestions: details.questions.map((question) => ({
+            id: String(question.questionId),
+            text: question.questionText,
+            type: question.questionType === "CHECKBOX" ? "checkboxes" : question.questionType === "RADIO" || question.questionType === "SELECT" ? "single-choice" : "short-answer",
+            required: question.isRequired,
+            ...(question.options ? { options: question.options } : {}),
+          })),
+        },
+      });
+    } catch (error) {
+      setEventError(error instanceof Error ? error.message : t("eventManagement.editFailed"));
+    } finally {
+      setLoadingEditId(null);
+    }
+  };
+  const saveDraftEvent = async (updates: CreateEventInput, schedule: EventSchedule, imageUrl: string | null) => {
+    if (!editingEvent) return;
+    if (!API_ENABLED || !editingEvent.details) {
+      updateEvent(editingEvent.event.id, { ...updates, imageUrl: imageUrl ?? undefined });
+      return;
+    }
+    const { event } = editingEvent;
+    const result = await updateCommitteeEvent(leaderCommitteeConfig.pr.committeeCode, event.id, {
+      name: updates.title,
+      description: updates.description ?? "",
+      eventType: updates.type,
+      ...schedule,
+      location: updates.location,
+      capacity: updates.capacity,
+      mapsLink: updates.mapsLink?.trim() || null,
+      speakers: updates.speakers ?? "",
+      requirements: updates.requirements ?? "",
+      imageUrl,
+      questions: (updates.registrationQuestions ?? []).map((question) => ({
+        text: question.text,
+        type: question.type === "short-answer" || question.type === "long-answer" ? "TEXT" as const : question.type === "yes-no" || question.type === "single-choice" ? "RADIO" as const : "CHECKBOX" as const,
+        required: question.required,
+        ...(question.type === "yes-no" ? { options: ["Yes", "No"] } : question.options ? { options: question.options } : {}),
+      })),
+    });
+    if (!result.ok) {
+      const detailMessage = result.details.map((item) => item.message).join(" ");
+      throw new Error(detailMessage || result.message || t("eventManagement.editFailed"));
+    }
+    await reloadDashboard();
+    updateEvent(event.id, {
+      ...updates,
+      imageUrl: imageUrl ?? undefined,
+    });
+  };
+  const savePublishedDeadline = async () => {
+    if (!editingEvent?.details || !deadlineDate) return;
+    const deadlineAtEndOfDay = new Date(`${deadlineDate}T23:59:59+03:00`).getTime();
+    const registrationDeadline = new Date(Math.min(deadlineAtEndOfDay, new Date(editingEvent.details.startsAt).getTime())).toISOString();
+    const result = await updateCommitteeEvent(leaderCommitteeConfig.pr.committeeCode, editingEvent.event.id, { registrationDeadline });
+    if (!result.ok) {
+      const detailMessage = result.details.map((item) => item.message).join(" ");
+      throw new Error(detailMessage || result.message || t("eventManagement.editFailed"));
+    }
+    await reloadDashboard();
+    setEditingEvent(null);
+  };
   const publish = (id: string) => {
     setPublishError("");
     publishDraft(id).catch((error: unknown) => {
@@ -272,11 +411,13 @@ export function PREventsList() {
         {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => setCreateEventOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><Plus className="size-4" />{t("eventForm.create")}</button>}
       </div>
 
+      {eventError && <p role="alert" className="rounded-xl border border-rose-500/20 bg-rose-50/30 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/20 dark:text-rose-300">{eventError}</p>}
+
       {draftEvents.length > 0 && <section className="rounded-2xl border border-border bg-surface-muted/40 p-4">
         <div className="flex items-center gap-2"><Sparkles className="size-4 text-blue-500" /><h3 className="text-sm font-bold text-foreground">{t("eventManagement.unpublished", { count: draftEvents.length })}</h3></div>
         <p className="mt-1 text-xs text-muted">{t("eventManagement.draftsDescription")}</p>
         {publishError && <p role="alert" className="mt-2 text-xs font-medium text-rose-600 dark:text-rose-400">{publishError}</p>}
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="min-w-0"><button type="button" onClick={() => openDraftPreview(draft.id)} title={t("eventManagement.previewDraft")} className="block max-w-full truncate text-start text-sm font-semibold text-foreground underline-offset-2 hover:text-blue-600 hover:underline">{draft.title}</button><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div><div className="flex shrink-0 items-center gap-1.5"><button type="button" onClick={() => setDraftToDelete({ id: draft.id, title: draft.title })} aria-label={t("eventManagement.deleteDraft")} title={t("eventManagement.deleteDraft")} className="rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"><Trash2 className="size-4" /></button><button type="button" onClick={() => publish(draft.id)} className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div></div>)}</div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="flex min-w-0 items-center gap-3">{draft.imageUrl ? <div aria-hidden="true" className="size-12 shrink-0 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${JSON.stringify(draft.imageUrl)})` }} /> : <div aria-hidden="true" className="size-12 shrink-0 rounded-lg bg-[image:var(--google-gradient)] opacity-70" />}<div className="min-w-0"><button type="button" onClick={() => openDraftPreview(draft.id)} title={t("eventManagement.previewDraft")} className="block max-w-full truncate text-start text-sm font-semibold text-foreground underline-offset-2 hover:text-blue-600 hover:underline">{draft.title}</button><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div></div><div className="flex shrink-0 items-center gap-1.5">{(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(draft)} disabled={loadingEditId === draft.id} aria-label={t("eventManagement.edit")} title={t("eventManagement.edit")} className="rounded-lg p-1.5 text-muted transition hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950/30"><Pencil className="size-4" /></button>}<button type="button" onClick={() => setDraftToDelete({ id: draft.id, title: draft.title })} aria-label={t("eventManagement.deleteDraft")} title={t("eventManagement.deleteDraft")} className="rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"><Trash2 className="size-4" /></button><button type="button" onClick={() => publish(draft.id)} className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div></div>)}</div>
       </section>}
 
       <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-3 shadow-2xs sm:flex-row sm:items-center">
@@ -326,8 +467,7 @@ export function PREventsList() {
                 {filteredEvents.map((event) => (
                   <tr key={event.id} className="hover:bg-surface-muted/30">
                     <td className="px-5 py-3.5">
-                      <span className="block font-semibold text-foreground">{event.title}</span>
-                      <span className="text-[11px] text-muted">{event.type}</span>
+                      <div className="flex items-center gap-3">{event.imageUrl ? <div aria-hidden="true" className="size-10 shrink-0 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${JSON.stringify(event.imageUrl)})` }} /> : <div aria-hidden="true" className="size-10 shrink-0 rounded-lg bg-[image:var(--google-gradient)] opacity-70" />}<div className="min-w-0"><span className="block truncate font-semibold text-foreground">{event.title}</span><span className="text-[11px] text-muted">{event.type}</span></div></div>
                     </td>
                     <td className="px-4 py-3.5 text-foreground/80">{event.date} · {event.time}</td>
                     <td className="px-4 py-3.5 text-foreground/80">{event.location}</td>
@@ -338,12 +478,17 @@ export function PREventsList() {
                     </td>
                     <td className="px-4 py-3.5"><RegistrationCounts eventId={event.id} /></td>
                     <td className="px-5 py-3.5 text-end">
-                      <Link
-                        href={`/dashboard/pr-dashboard/events/${event.id}`}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground transition hover:bg-surface-muted"
-                      >
-                        <ClipboardList className="size-3.5" /> {t("registrations.viewAllRegistrations")}
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(event)} disabled={loadingEditId === event.id} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground transition hover:bg-surface-muted disabled:opacity-50" aria-label={t("eventManagement.edit")}>
+                          <Pencil className="size-3.5" /> {t("eventManagement.edit")}
+                        </button>}
+                        <Link
+                          href={`/dashboard/pr-dashboard/events/${event.id}`}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground transition hover:bg-surface-muted"
+                        >
+                          <ClipboardList className="size-3.5" /> {t("registrations.viewAllRegistrations")}
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -354,7 +499,25 @@ export function PREventsList() {
       </div>
       <ConfirmModal isOpen={Boolean(draftToDelete)} onClose={() => setDraftToDelete(null)} onConfirm={() => { if (draftToDelete) removeDraft(draftToDelete.id); }} title={t("eventManagement.deleteDraft")} message={t("eventManagement.deleteDraftConfirm", { title: draftToDelete?.title ?? "" })} confirmText={t("eventManagement.deleteDraft")} cancelText={t("members.cancel")} danger />
       {draftPreview && <EventPreviewModal data={draftPreview.data} editLabel={t("eventManagement.closePreview")} onEdit={() => setDraftPreview(null)} onPublish={() => { const id = draftPreview.id; setDraftPreview(null); publish(id); }} />}
-      <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} />
+      <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} />
+      {editingEvent?.details?.status === "PUBLISHED" ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button type="button" aria-label={t("eventForm.cancel")} onClick={() => setEditingEvent(null)} className="fixed inset-0 bg-black/60 backdrop-blur-xs" />
+          <form onSubmit={(event) => { event.preventDefault(); savePublishedDeadline().catch((error: unknown) => setEventError(error instanceof Error ? error.message : t("eventManagement.editFailed"))); }} className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl">
+            <h2 className="text-lg font-bold text-foreground">{t("eventForm.edit")}</h2>
+            <p className="mt-1 text-sm text-muted">{editingEvent.event.title}</p>
+            <label htmlFor="published-event-deadline" className="mt-5 block text-sm font-semibold text-foreground">{t("eventForm.deadline")}</label>
+            <input id="published-event-deadline" type="date" value={deadlineDate} onChange={(event) => setDeadlineDate(event.target.value)} className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+            {eventError && <p role="alert" className="mt-2 text-xs text-rose-600">{eventError}</p>}
+            <div className="mt-5 flex justify-end gap-2 border-t border-border pt-4">
+              <button type="button" onClick={() => setEditingEvent(null)} className="rounded-xl border border-border px-4 py-2 text-xs font-medium text-foreground hover:bg-surface-muted">{t("eventForm.cancel")}</button>
+              <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700">{t("eventForm.saveChanges")}</button>
+            </div>
+          </form>
+        </div>
+      ) : (
+        <EditDraftEventModal isOpen={Boolean(editingEvent)} onClose={() => setEditingEvent(null)} details={editingEvent?.details ?? null} onUpdate={saveDraftEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} />
+      )}
     </div>
   );
 }
