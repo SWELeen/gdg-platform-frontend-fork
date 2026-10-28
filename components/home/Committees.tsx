@@ -84,7 +84,7 @@ export default function Committees() {
           dir="ltr"
           className={`mx-auto grid w-full items-start gap-y-12 xl:grid-cols-2 xl:gap-y-0 ${hasOpenDetails ? "xl:max-w-7xl xl:gap-x-8" : "xl:max-w-5xl xl:gap-x-4"}`}
         >
-          <section aria-label={t("developerCommitteesLabel")} dir={dir} className="order-2 xl:order-1">
+          <section aria-label={t("developerCommitteesLabel")} dir={dir} className="mx-auto w-full md:max-w-[460px] order-2 xl:mx-0 xl:max-w-none xl:order-1">
             <h3
               dir="ltr"
               style={selectedDeveloperSubCommitteeId ? { marginLeft: 196, marginRight: 0, width: "calc(100% - 196px)" } : undefined}
@@ -139,7 +139,7 @@ export default function Committees() {
                             animate={{ opacity: 1 }}
                             exit={reduceMotion ? undefined : { opacity: 0 }}
                             transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                            className="min-w-0 xl:hidden"
+                            className="mx-auto w-full min-w-0 sm:max-w-2xl xl:hidden"
                           >
                             <CommitteeCard committee={developersCommittee} initialSubCommitteeId={subCommittee.id} />
                           </motion.div>
@@ -166,7 +166,7 @@ export default function Committees() {
             </div>
           </section>
 
-          <section aria-label={t("mainCommitteesLabel")} dir={dir} className="order-1 xl:order-2">
+          <section aria-label={t("mainCommitteesLabel")} dir={dir} className="mx-auto w-full md:max-w-[460px] order-1 xl:mx-0 xl:max-w-none xl:order-2">
             <h3
               dir="ltr"
               style={selectedMainItem ? { marginLeft: 0, marginRight: 196, width: "calc(100% - 196px)" } : undefined}
@@ -240,7 +240,7 @@ export default function Committees() {
                             animate={{ opacity: 1 }}
                             exit={reduceMotion ? undefined : { opacity: 0 }}
                             transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                            className="min-w-0 xl:hidden"
+                            className="mx-auto w-full min-w-0 sm:max-w-2xl xl:hidden"
                           >
                             <CommitteeCard committee={committee} />
                           </motion.div>

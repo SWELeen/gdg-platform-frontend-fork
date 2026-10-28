@@ -91,6 +91,8 @@ export const teamMembers = [
     imagePositionClass: "translate-y-3",
     role: "Advisor",
     name: "Fahad Aljudaibi",
+        linkedin: "https://www.linkedin.com/in/fahd-aljudaibi?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    x: "https://x.com/fahadjud?s=11&t=pZ38eq32A3fxP2lOWdg4Fg",
   },
   {
     id: "4",
@@ -142,6 +144,8 @@ const allCommittees = [
     coLeader:{
       name: "Shahad Almazrui",
       image: "/images/PM-colead.png",
+      linkedin: "https://www.linkedin.com/in/shahad-almazrui-b50b882a0?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      x: "https://x.com/IT_ShahadA",
     },
   },
 
@@ -154,10 +158,14 @@ const allCommittees = [
     lead: {
       name: "Joud Abdullah",
       image: "/images/unknown.png",
+      x: "https://x.com/iiovull?s=11&t=pZ38eq32A3fxP2lOWdg4Fg",
     },
     coLeader:{
       name: "Linda Alminhali",
       image: "/images/DMD-colead.png",
+            linkedin: "https://www.linkedin.com/in/linda-alminhali-339745309",
+      x: "https://x.com/_33opp?s=11",
+      
     },
   },
 
