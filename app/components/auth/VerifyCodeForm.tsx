@@ -92,7 +92,7 @@ export default function VerifyCodeForm() {
     setResendMessage("")
     const result = await apiRequest<{ sent: true }>("/auth/resend-personal-verification", { method: "POST", body: { email: pending.email } })
     if (result.ok) setResendMessage(t("resent"))
-    else setError("authRequestFailed")
+    else setError(result.status === 429 ? "resendTooSoon" : "authRequestFailed")
     setIsResending(false)
   }
 
