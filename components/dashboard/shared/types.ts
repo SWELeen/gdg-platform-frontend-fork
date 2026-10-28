@@ -42,7 +42,7 @@ export interface CommitteeOption {
   name: string;
 }
 
-/** Club leadership view: one committee a member belongs to, with their points there. */
+/** Group leadership view: one committee a member belongs to, with their points there. */
 export interface MemberCommitteeInfo extends CommitteeOption {
   role: string;
   points: number;

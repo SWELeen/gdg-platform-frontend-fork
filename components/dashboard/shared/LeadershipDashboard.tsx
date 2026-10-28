@@ -18,7 +18,7 @@ function ClubLeadershipDashboard() {
       <TopNav />
       <main className="w-full flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl space-y-6">
-          <header><h1 className="text-3xl font-bold">{t("clubTitle")}</h1></header>
+          <header><h1 className="text-3xl font-bold">{t("groupTitle")}</h1></header>
           <LeadershipApprovalsPanel scope="CLUB" />
         </div>
       </main>

@@ -59,7 +59,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder={t("clubFilters.searchMember")}
+                  placeholder={t("groupFilters.searchMember")}
                   className="h-9 rounded-xl border border-border bg-surface-muted/40 ps-8 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
                 />
               </div>
@@ -75,7 +75,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                 <th className="px-5 py-3.5 text-start">{t("points.member")}</th>
                 <th className="px-4 py-3.5 text-start">{t("points.role")}</th>
                 <th className="px-4 py-3.5 text-start">
-                  {selectedCommitteeName ? t("clubFilters.pointsIn", { committee: selectedCommitteeName }) : t("points.currentPoints")}
+                  {selectedCommitteeName ? t("groupFilters.pointsIn", { committee: selectedCommitteeName }) : t("points.currentPoints")}
                 </th>
                 <th className="px-4 py-3.5 text-start">{t("points.tasksCompleted")}</th>
                 <th className="px-4 py-3.5 text-start">{t("points.lastUpdated")}</th>
@@ -86,7 +86,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
               {filteredMembers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-10 text-center text-sm text-muted">
-                    {filtersActive ? t("clubFilters.noMembers") : t("points.emptyMembers")}
+                    {filtersActive ? t("groupFilters.noMembers") : t("points.emptyMembers")}
                   </td>
                 </tr>
               ) : filteredMembers.map((member) => (
@@ -137,7 +137,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
 
         <div className="mt-3 divide-y divide-border/60 text-xs">
           {filteredHistory.length === 0 ? (
-            <p className="py-4 text-sm text-muted">{filtersActive ? t("clubFilters.noHistory") : t("points.emptyHistory")}</p>
+            <p className="py-4 text-sm text-muted">{filtersActive ? t("groupFilters.noHistory") : t("points.emptyHistory")}</p>
           ) : filteredHistory.map((item) => (
             <div
               key={item.id}

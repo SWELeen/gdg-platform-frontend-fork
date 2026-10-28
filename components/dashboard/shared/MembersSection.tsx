@@ -45,7 +45,7 @@ export function MembersSection({
   const filtersActive = Boolean(searchTerm) || committeeFilter !== ALL || roleFilter !== ALL;
   const columnCount = 5 + (showTemporaryAccess ? 1 : 0) + (clubLeadership ? 1 : 0);
   let emptyMessage = t("members.empty");
-  if (clubLeadership && filtersActive) emptyMessage = t("clubFilters.noMembers");
+  if (clubLeadership && filtersActive) emptyMessage = t("groupFilters.noMembers");
   else if (searchTerm) emptyMessage = t("members.noSearch");
   const filteredMembers = members.filter(
     (m) =>
@@ -116,7 +116,7 @@ export function MembersSection({
                 className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 transition"
               >
                 <Plus className="size-3.5" />
-                <span>{clubLeadership ? t("clubFilters.addToCommittee") : t("members.add")}</span>
+                <span>{clubLeadership ? t("groupFilters.addToCommittee") : t("members.add")}</span>
               </button>
             )}
           </div>
@@ -129,7 +129,7 @@ export function MembersSection({
               <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3.5 text-start">{t("members.member")}</th>
                 <th className="px-4 py-3.5 text-start">{t("members.role")}</th>
-                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("clubFilters.committees")}</th>}
+                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("groupFilters.committees")}</th>}
                 <th className="px-4 py-3.5 text-start">{t("members.status")}</th>
                 {showTemporaryAccess && <th className="px-4 py-3.5 text-start">{t("members.accessLevel")}</th>}
                 <th className="px-4 py-3.5 text-start">{t("members.points")}</th>

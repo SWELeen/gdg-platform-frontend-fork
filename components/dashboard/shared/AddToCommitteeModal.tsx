@@ -14,7 +14,7 @@ interface AddToCommitteeModalProps {
 const SELECT_CLASS =
   "mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none transition focus:border-blue-500 disabled:opacity-50";
 
-/** Club leadership: adds an existing member to another committee. New people still join through membership requests. */
+/** Group leadership: adds an existing member to another committee. New people still join through membership requests. */
 export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProps) {
   const t = useTranslations("dashboard.leader");
   const { members, committees, addMemberToCommittee, canAddMembers } = useLeaderDashboard();
@@ -40,7 +40,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!memberId || !committeeCode) {
-      setError(t("clubFilters.requiredSelection"));
+      setError(t("groupFilters.requiredSelection"));
       return;
     }
     setSubmitting(true);
@@ -48,7 +48,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
       await addMemberToCommittee(memberId, committeeCode);
       close();
     } catch (err) {
-      setError(err instanceof Error && err.message ? err.message : t("clubFilters.requestFailed"));
+      setError(err instanceof Error && err.message ? err.message : t("groupFilters.requestFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -65,8 +65,8 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
               <UserPlus className="size-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-foreground">{t("clubFilters.addToCommitteeTitle")}</h2>
-              <p className="text-xs text-muted">{t("clubFilters.addToCommitteeDescription")}</p>
+              <h2 className="text-lg font-bold text-foreground">{t("groupFilters.addToCommitteeTitle")}</h2>
+              <p className="text-xs text-muted">{t("groupFilters.addToCommitteeDescription")}</p>
             </div>
           </div>
           <button
@@ -93,7 +93,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div>
             <label htmlFor="add-to-committee-member" className="block text-xs font-semibold text-foreground">
-              {t("clubFilters.selectMember")} *
+              {t("groupFilters.selectMember")} *
             </label>
             <select
               id="add-to-committee-member"
@@ -105,7 +105,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
               }}
               className={SELECT_CLASS}
             >
-              <option value="">{t("clubFilters.selectMemberPlaceholder")}</option>
+              <option value="">{t("groupFilters.selectMemberPlaceholder")}</option>
               {members.map((item) => (
                 <option key={item.id} value={item.id}>{item.name}{item.email ? ` (${item.email})` : ""}</option>
               ))}
@@ -114,7 +114,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
 
           <div>
             <label htmlFor="add-to-committee-committee" className="block text-xs font-semibold text-foreground">
-              {t("clubFilters.selectCommittee")} *
+              {t("groupFilters.selectCommittee")} *
             </label>
             <select
               id="add-to-committee-committee"
@@ -126,13 +126,13 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
               }}
               className={SELECT_CLASS}
             >
-              <option value="">{t("clubFilters.selectCommitteePlaceholder")}</option>
+              <option value="">{t("groupFilters.selectCommitteePlaceholder")}</option>
               {availableCommittees.map((item) => (
                 <option key={item.code} value={item.code}>{committeeName(item.code, item.name)}</option>
               ))}
             </select>
             {member && availableCommittees.length === 0 && (
-              <p className="mt-1 text-[11px] font-medium text-muted">{t("clubFilters.alreadyInAll")}</p>
+              <p className="mt-1 text-[11px] font-medium text-muted">{t("groupFilters.alreadyInAll")}</p>
             )}
           </div>
 
@@ -153,7 +153,7 @@ export function AddToCommitteeModal({ isOpen, onClose }: AddToCommitteeModalProp
               disabled={!canAddMembers || submitting || !memberId || !committeeCode}
               className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:opacity-50"
             >
-              {t("clubFilters.addToCommittee")}
+              {t("groupFilters.addToCommittee")}
             </button>
           </div>
         </form>

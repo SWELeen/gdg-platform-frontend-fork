@@ -1,10 +1,10 @@
 {
   "leadershipDashboard": {
-    "clubTitle": "لوحة قيادة النادي",
-    "clubLeaderRole": "قائد النادي",
-    "clubCoLeaderRole": "نائب قائد النادي",
-    "clubLeaderDescription": "مراجعة طلبات قيادة لجان النادي والمستشارين.",
-    "clubCoLeaderDescription": "مشاركة صلاحيات وقائمة مراجعة طلبات قيادة النادي.",
+    "groupTitle": "لوحة قيادة المجموعة",
+    "groupLeaderRole": "قائد المجموعة",
+    "groupCoLeaderRole": "نائب قائد المجموعة",
+    "groupLeaderDescription": "مراجعة طلبات قيادة لجان المجموعة والمستشارين.",
+    "groupCoLeaderDescription": "مشاركة صلاحيات وقائمة مراجعة طلبات قيادة المجموعة.",
     "developerTitle": "لوحة قائد لجان التطوير",
     "developerDescription": "الإشراف على لجان الأتمتة وتحليل البيانات وتطوير الويب والذكاء الاصطناعي وإنترنت الأشياء والأمن السيبراني.",
     "overviewTitle": "نظرة عامة على لجان التطوير",
@@ -20,7 +20,7 @@
     "loading": "جارٍ تحميل الطلبات…",
     "empty": "لا توجد طلبات قيادة بانتظار الموافقة.",
     "error": "تعذر تحميل الطلبات. حاول مرة أخرى.",
-    "notAllowed": "ما تقدر تقرر في هذا الطلب. الطلبات اللي قدمتها أنت تروح لقيادة النادي.",
+    "notAllowed": "ما تقدر تقرر في هذا الطلب. الطلبات اللي قدمتها أنت تروح لقيادة المجموعة.",
     "alreadyHandled": "هذا الطلب انحسم أو انتقل لشخص ثاني يوافق عليه، وتحدّثت القائمة.",
     "decisionFailed": "ما انحفظ القرار. حاول مرة ثانية.",
     "approve": "موافقة",
@@ -1215,7 +1215,7 @@
         "durationMax": "يجب ألا تتجاوز المدة 10,080 دقيقة (7 أيام)."
       }
     },
-    "clubFilters": {
+    "groupFilters": {
       "allCommittees": "كل اللجان",
       "noCommittee": "بدون لجنة",
       "committee": "اللجنة",
@@ -1224,7 +1224,7 @@
       "roleLeader": "ليدر",
       "roleCoLeader": "كو-ليدر",
       "roleMember": "عضو",
-      "roleClubLeadership": "قيادة النادي",
+      "roleGroupLeadership": "قيادة المجموعة",
       "roleAdvisor": "مستشار",
       "searchMember": "ابحث باسم العضو...",
       "clearFilters": "مسح الفلاتر",
@@ -1233,7 +1233,7 @@
       "pointsIn": "النقاط في {committee}",
       "addToCommittee": "إضافة للجنة",
       "addToCommitteeTitle": "إضافة عضو للجنة",
-      "addToCommitteeDescription": "اختر عضو موجود في النادي واللجنة اللي تبي تضيفه لها. بينضاف بدور عضو.",
+      "addToCommitteeDescription": "اختر عضوًا في المجموعة واللجنة اللي تبي تضيفه لها. بينضاف بدور عضو.",
       "selectMember": "العضو",
       "selectMemberPlaceholder": "اختر عضو",
       "selectCommittee": "اللجنة",

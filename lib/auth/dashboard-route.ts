@@ -29,7 +29,9 @@ export function dashboardWorkspacesFor(identity: AuthenticatedIdentity): Dashboa
     const entry = Object.entries(leaderCommitteeConfig).find(([, config]) => config.committeeCode === code);
     if (entry) workspaces.push({ kind: "committee", path: entry[1].routeBase, committee: entry[0] as LeaderCommittee });
   }
-  workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
+  if (identity.committees.some(({ position }) => position === "Member")) {
+    workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
+  }
   return workspaces;
 }
 

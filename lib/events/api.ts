@@ -35,7 +35,7 @@ export type ApiEventDetails = ApiEvent & {
   myRegistration: { registrationId: number; status: string } | null;
 };
 
-// Display formats the existing components expect, in the club's time zone.
+// Display formats the existing components expect, in the group's time zone.
 const zone = { timeZone: "Asia/Riyadh" } as const;
 export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en-US", { ...zone, month: "short", day: "numeric", year: "numeric" }).format(new Date(iso));

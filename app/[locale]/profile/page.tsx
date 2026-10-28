@@ -233,15 +233,15 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
       <TopNav />
 
       <main
-        className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:pt-3 md:pb-8 lg:px-16"
+        className="flex w-full flex-1 flex-col px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:pt-3 md:pb-8 lg:px-16"
       >
         {loading ? (
           <p role="status" className="py-10 text-center text-foreground/70">{t("loading")}</p>
         ) : loadError || !account ? (
           <p role="alert" className="py-10 text-center text-gdg-red">{t("loadError")}</p>
         ) : (
-          <div className={`grid grid-cols-1 gap-4 ${badge ? "md:grid-cols-[minmax(0,1fr)_17rem] md:gap-x-8 lg:grid-cols-[minmax(0,1fr)_18rem]" : ""}`}>
-            <div className="flex min-w-0 flex-col gap-4 md:-translate-x-8 md:col-start-1">
+          <div className={`grid grid-cols-1 gap-4 ${badge ? "md:grid-cols-[minmax(0,1fr)_17rem] md:gap-x-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-x-8" : ""}`}>
+            <div className="flex min-w-0 flex-col gap-4 md:col-start-1">
               <Link
                 href="/registrations"
                 className="group flex w-full items-center gap-4 rounded-2xl border border-[#e5e7eb] bg-white px-5 py-3 shadow-sm transition-all duration-200 hover:border-[#4285f4]/50 hover:shadow-md dark:border-[#243b64]/70 dark:bg-surface sm:px-6"

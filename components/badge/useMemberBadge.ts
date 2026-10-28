@@ -30,9 +30,9 @@ export function useMemberBadge({ name, university, photoUrl, gender, committees:
     ? [...memberships].sort((a, b) => rank(b.position) - rank(a.position))[0]
     : null;
   const globalBadge = roles?.includes("GROUP_LEADER")
-    ? { role: t("globalRoles.clubLeader"), committee: t("globalRoles.clubLeadership"), theme: clubLeadershipTheme }
+    ? { role: t("globalRoles.groupLeader"), committee: t("globalRoles.groupLeadership"), theme: clubLeadershipTheme }
     : roles?.includes("GROUP_CO_LEADER")
-      ? { role: t("globalRoles.clubCoLeader"), committee: t("globalRoles.clubLeadership"), theme: clubLeadershipTheme }
+      ? { role: t("globalRoles.groupCoLeader"), committee: t("globalRoles.groupLeadership"), theme: clubLeadershipTheme }
       : roles?.includes("DEVELOPER_COMMITTEES_LEADER")
         ? { role: t("globalRoles.developerCommitteesLeader"), committee: t("globalRoles.developerCommittees"), theme: developerLeadershipTheme }
         : null;

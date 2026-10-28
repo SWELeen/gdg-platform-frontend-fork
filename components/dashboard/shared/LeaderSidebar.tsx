@@ -75,7 +75,7 @@ export function LeaderSidebar({
               className="mt-1 w-full"
               fallback={
                 <span className="mt-0.5 block text-sm font-semibold text-foreground">
-                  {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("clubTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
+                  {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
                 </span>
               }
             />

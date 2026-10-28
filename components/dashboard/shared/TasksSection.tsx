@@ -443,7 +443,7 @@ export function TasksSection({
             <thead>
               <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-muted">
                 <th className="px-5 py-3.5 text-start">{t("tasks.task")}</th>
-                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("clubFilters.committee")}</th>}
+                {clubLeadership && <th className="px-4 py-3.5 text-start">{t("groupFilters.committee")}</th>}
                 <th className="px-4 py-3.5 text-start">{t("tasks.assignedTo")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.dueDate")}</th>
                 <th className="px-4 py-3.5 text-start">{t("tasks.priority")}</th>
