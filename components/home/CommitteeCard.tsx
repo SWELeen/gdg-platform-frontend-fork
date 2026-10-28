@@ -134,7 +134,7 @@ export default function CommitteeCard({
             <div className="text-center">
               <h3
                 dir={dir}
-                className={`mx-auto text-balance break-words text-center text-base font-semibold leading-snug text-[var(--committee-accent)] sm:text-lg ${useDarkAccent ? `w-fit max-w-full rounded-lg px-3 py-2 ${darkDeveloperAccent}` : ""}`}
+                className={`mx-auto text-balance break-words text-center text-lg font-semibold leading-snug text-[var(--committee-accent)] sm:text-xl ${useDarkAccent ? `w-fit max-w-full rounded-lg px-3 py-2 ${darkDeveloperAccent}` : ""}`}
               >
                 {activeName}
               </h3>
@@ -144,7 +144,7 @@ export default function CommitteeCard({
             <div className="mt-2">
               <p
                 dir={dir}
-                className="line-clamp-4 max-w-full text-start text-xs leading-relaxed text-foreground/75 sm:text-sm"
+                className="line-clamp-4 max-w-full text-start text-sm leading-relaxed text-foreground/75 sm:text-base"
               >
                 {activeDescription}
               </p>

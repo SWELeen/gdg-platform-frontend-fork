@@ -213,12 +213,14 @@
           "web-development": {
             "name": "Web Design & Development",
             "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
-            "leadName": "Leen Alghamdi"
+            "leadName": "Leen Alghamdi",
+            "leadLabel": "{name} Committee Lead"
           },
           "artificial-intelligence": {
             "name": "Artificial Intelligence",
             "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
-            "leadName": "Atheer Alzahrani"
+            "leadName": "Atheer Alzahrani",
+            "leadLabel": "{name} Committee Lead"
           },
           "robotics-iot": {
             "name": "Robotics & IOT",
@@ -233,24 +235,28 @@
           "automation": {
             "name": "Automation",
             "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
-            "leadName": "Asma Aldossari"
+            "leadName": "Asma Aldossari",
+            "leadLabel": "{name} Committee Lead"
           },
           "data-analysis": {
             "name": "Data Analysis",
             "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
-            "leadName": "Shahad Almazrui"
+            "leadName": "Shahad Almazrui",
+            "leadLabel": "{name} Committee Lead"
           }
         }
       },
       "web-development": {
         "name": "Web Design & Development",
         "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
-        "leadName": "Leen Alghamdi"
+        "leadName": "Leen Alghamdi",
+        "leadLabel": "{name} Committee Lead"
       },
       "artificial-intelligence": {
         "name": "Artificial Intelligence",
         "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
-        "leadName": "Atheer Alzahrani"
+        "leadName": "Atheer Alzahrani",
+        "leadLabel": "{name} Committee Lead"
       },
       "robotics-iot": {
         "name": "Robotics & IOT",
@@ -265,12 +271,14 @@
       "automation": {
         "name": "Automation",
         "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
-        "leadName": "Asma Aldossari"
+        "leadName": "Asma Aldossari",
+        "leadLabel": "{name} Committee Lead"
       },
       "data-analysis": {
         "name": "Data Analysis",
         "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
-        "leadName": "Shahad Almazrui"
+        "leadName": "Shahad Almazrui",
+        "leadLabel": "{name} Committee Lead"
       }
     }
   },
