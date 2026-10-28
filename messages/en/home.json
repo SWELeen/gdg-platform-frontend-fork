@@ -5,40 +5,36 @@
     "joinUs": "Join Us"
   },
   "about": {
-    "title": "About Our Community",
-    "description": "We are a diverse and growing community of developers, technology enthusiasts, creatives, and aspiring professionals united by a passion for technology, innovation, and continuous learning. Our community brings together people with different backgrounds, skills, and interests to learn from one another, exchange ideas, and build meaningful connections. Through workshops, events, technical activities, and collaborative projects, we create opportunities for members to develop their skills, explore new technologies, share their knowledge, and turn ideas into real-world projects. Our platform brings the community's events, announcements, activities, and opportunities together in one place, making it easier for everyone to stay connected, get involved, and grow together.",
+    "title": "About Our Group",
+    "description": "We are Google Developer Group on Campus at the University of Jeddah, a student technology community that brings together people passionate about technology, innovation, and learning in a collaborative environment that encourages creativity and the exchange of knowledge and experience.\n\nThrough workshops, tech events, and hands-on projects, we empower our members to develop technical and leadership skills, explore new fields, and turn ideas into practical projects and solutions—helping build a generation of technologists ready to innovate and make an impact.",
     "stats": {
       "members": "Members",
       "events": "Events",
       "projects": "Projects",
-      "communities": "Communities"
+      "communities": "Committees"
     },
     "imageAlt": "GDG community photo {number}"
   },
   "offers": {
     "eyebrow": "What we do",
     "title": "What We Offer",
-    "description": "Discover the spaces, opportunities, and experiences that help our community learn, connect, and build together.",
+    "description": "What We Offer",
     "items": {
       "1": {
-        "title": "Learn & Grow",
-        "description": "Access workshops, talks, and learning opportunities."
+        "title": "Learn & Empower",
+        "description": "Workshops and events that build your skills and expand your knowledge."
       },
       "2": {
-        "title": "Connect",
-        "description": "Meet developers, members, and people who share your interests."
+        "title": "Connect & Belong",
+        "description": "A community that shares your interests and helps you build connections."
       },
       "3": {
-        "title": "Build Together",
-        "description": "Collaborate on projects and turn ideas into reality."
+        "title": "Take a Step, Explore",
+        "description": "Opportunities and experiences that open new technical and career paths."
       },
       "4": {
-        "title": "Join Events",
-        "description": "Discover upcoming events and register to participate."
-      },
-      "5": {
-        "title": "Show Your Work",
-        "description": "Share your projects and achievements with the community."
+        "title": "Knowledge into Impact",
+        "description": "Hands-on projects that turn your ideas into tangible impact."
       }
     }
   },
@@ -109,87 +105,105 @@
     "viewProject": "View Project",
     "previous": "Previous project",
     "next": "Next project",
-    "titleStart": "Built by",
-    "titleHighlight": "Our Community",
-    "subtitle": "Explore the projects our members created, from creative ideas to real products people use every day."
+    "titleStart": "Made by",
+    "titleHighlight": "Our Members",
+    "subtitle": "Explore our members’ projects, from innovative ideas to real achievements that turn knowledge into impact."
   },
   "events": {
     "eyebrow": "Community moments",
-    "title": "What's",
+    "title": "Discover",
     "description": "Find the next opportunity to learn, connect, and take part in meaningful experiences with our community.",
     "register": "Register",
     "registrationClosed": "Registration closed",
     "previous": "Previous event",
     "next": "Next event",
     "label": "Upcoming Events",
-    "highlight": "Happening?",
-    "subtitle": "Join our upcoming events, gain new skills, meet amazing people, and be part of the GDG community.",
+    "highlight": "What’s Next",
+    "subtitle": "Join our events, build your skills, grow your network, and explore new opportunities with Google Developer Group on Campus at the University of Jeddah.",
     "empty": "Stay informed…",
     "loading": "Loading events…",
     "loadError": "Could not load events. Please try again later."
-
   },
   "sponsors": {
     "eyebrow": "Supporters",
-    "subtitle": "We are grateful for the partners and organizations that help us create bigger opportunities for the community.",
-    "title": "Makers of ",
-    "highlight": "Our Events"
+    "subtitle": "Our sponsors support our vision and empower our journey of learning, innovation, and impact.",
+    "title": "Our",
+    "highlight": "Success Partners"
   },
   "leadership": {
-  "eyebrow": "Meet Our",
-  "title": "Leadership Team",
-  "description": "A dedicated team of leaders driving our vision forward and creating a lasting impact in our community",
-  "advisors": {
-    "eyebrow": "Meet Our",
-    "title": "Advisor",
-    "description": "Experienced mentors who guide our direction, share their expertise, and help us grow into a stronger, more impactful community"
-  },
-  "social": {
-    "linkedin": "LinkedIn profile",
-    "x": "X profile"
-  },
-  "team": {
-      
-      "1": { "name": "Abdullah Misar", "role": "Lead" },
-      "2": { "name": "Jumanah Alshaibi", "role": "Co-Lead" },
-      "3": { "name": "Fahad Aljudaibi", "role": "Advisor" },
-      "4": { "name": "Ahmed Bawazeer", "role": "Advisor" }
+    "eyebrow": "Meet the",
+    "title": "Group Leaders",
+    "description": "Leaders united by a passion for technology and innovation, working together to bring our vision to life and create lasting impact.",
+    "advisors": {
+      "eyebrow": "Meet Our",
+      "title": "Advisors",
+      "description": "Our advisors support the group’s goals and efforts by sharing guidance, experience, and knowledge to help us work more effectively."
+    },
+    "social": {
+      "linkedin": "LinkedIn profile",
+      "x": "X profile"
+    },
+    "team": {
+      "1": {
+        "name": "Abdullah Misar",
+        "role": "Lead"
+      },
+      "2": {
+        "name": "Jumanah Alshaibi",
+        "role": "Co-Lead"
+      },
+      "3": {
+        "name": "Fahad Aljudaibi",
+        "role": "Advisor"
+      },
+      "4": {
+        "name": "Ahmed Bawazeer",
+        "role": "Advisor"
+      }
     }
   },
   "committees": {
     "advisorsLabel": "Advisors",
     "developerCommitteesLabel": "Developer Committees",
     "mainCommitteesLabel": "Administrative Committees",
-    "title": "Meet",
-    "highlight": "Our Committees",
-    "subtitle": "Explore the teams driving ideas, activities, and collaboration across our community.",
+    "title": "Meet the Google Developer Group Committees",
+    "highlight": "",
+    "subtitle": "Our committees work together in different roles to develop ideas, empower talent, and create experiences that enrich our tech community and strengthen collaboration and innovation.",
     "backToDevelopers": "Back To Developers",
     "leadLabel": "{name} Committee Lead",
     "coLeaderLabel": "{name} Committee Co-Leader",
     "items": {
       "content-writing": {
         "name": "Content Writing",
-        "description": "Creates and manages the group's written and media content, ensuring content quality, consistency in style and identity, and clarity of messaging across various platforms.",
+        "description": "Creates, writes, and edits the group’s content, including technical, educational, and informational materials, ensuring accuracy, quality, and alignment with the group’s identity and goals.",
         "leadName": "Asma Alhasani",
-        "coLeaderName": "Sameera Radwan"
+        "coLeaderName": "Sameera Radwan",
+        "leadLabel": "{name} Committee Lead",
+        "coLeaderLabel": "{name} Committee Co-Leader"
       },
       "project-management": {
         "name": "Project Management",
-        "description": "Where ideas become structured plans with clear owners, clear deadlines, and clear outcomes. We bring together planning, coordination, and follow through to turn vision into execution, and execution into results.",
+        "description": "Plans projects, organizes tasks, assigns responsibilities, coordinates efforts, and tracks progress against timelines to deliver projects efficiently and meet their goals.",
         "leadName": "Mohammed Elkasabgy",
-        "coLeaderName": "Shahad Almazrui"
+        "coLeaderName": "Shahad Almazrui",
+        "leadLabel": "{name} Committee Lead",
+        "coLeaderLabel": "{name} Committee Co-Leader"
       },
       "digital-media": {
         "name": "Digital Media and Design",
-        "description": "A space where ideas transform into creativity through innovative designs, visual storytelling, and purposeful digital content. We bring together design, photography, video editing, and marketing to create content that reflects ideas and leaves an impact.",
+        "description": "Turns ideas into creative visual and digital content through marketing, design, photography, and video editing, producing engaging work that reflects the group’s identity and highlights its activities and events.",
         "leadName": "Joud Abdullah",
-        "coLeaderName": "Linda Alminhali"
+        "coLeaderName": "Linda Alminhali",
+        "leadLabel": "{name} Committee Lead",
+        "coLeaderLabel": "{name} Committee Co-Leader"
       },
       "public-relations": {
         "name": "Public Relations",
-        "description": "Representing the group externally, building strong relationships, and strengthening its image with partners, stakeholders, and the wider community.",
+        "description": "Represents the group externally, builds professional relationships, and strengthens partnerships to expand the group’s presence and deepen connections with partners and organizations.",
         "leadName": "Layan Mashraie",
-        "coLeaderName": "Abdullah Saif"
+        "coLeaderName": "Abdullah Saif",
+        "leadLabel": "{name} Committee Lead",
+        "coLeaderLabel": "{name} Committee Co-Leader"
       },
       "developers": {
         "name": "Developers",
@@ -198,64 +212,64 @@
         "subCommittees": {
           "web-development": {
             "name": "Web Design & Development",
-            "description": "A space for designing and building modern websites. Members explore frontend and backend development, responsive design, and deployment to turn ideas into functional digital experiences.",
+            "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
             "leadName": "Leen Alghamdi"
           },
           "artificial-intelligence": {
             "name": "Artificial Intelligence",
-            "description": "A space for exploring artificial intelligence and machine learning. Members experiment with AI tools and develop intelligent applications to solve real-world problems.",
+            "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
             "leadName": "Atheer Alzahrani"
           },
           "robotics-iot": {
             "name": "Robotics & IOT",
-            "description": "A hands-on space for building smart, connected systems. Members explore robotics, sensors, embedded systems, and IoT to develop practical solutions that connect the physical and digital worlds.",
+            "description": "Designs and develops smart systems using robotics, sensors, embedded systems, and the Internet of Things, turning technical knowledge into interactive projects that connect devices to the digital world.",
             "leadName": "Saeed Alghamdi"
           },
           "cybersecurity": {
             "name": "Cybersecurity",
-            "description": "A space for understanding how to protect systems, networks, and digital information. Members explore security practices, identify vulnerabilities, and learn to build safer digital solutions.",
+            "description": "Protects systems, networks, and data from digital threats by learning cybersecurity fundamentals, discovering and addressing vulnerabilities, and applying practices that strengthen digital security.",
             "leadName": "Shadi Alnajar"
           },
           "automation": {
             "name": "Automation",
-            "description": "A space for simplifying tasks through technology. Members explore automation tools, scripting, APIs, and workflow optimization to build practical solutions that save time and improve efficiency.",
+            "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
             "leadName": "Asma Aldossari"
           },
           "data-analysis": {
             "name": "Data Analysis",
-            "description": "A space for transforming raw data into meaningful insights. Members learn data cleaning, analysis, and visualization to discover patterns and support informed decisions.",
+            "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
             "leadName": "Shahad Almazrui"
           }
         }
       },
       "web-development": {
         "name": "Web Design & Development",
-        "description": "A creative space for developers passionate about building modern web experiences. Members explore frontend and backend development, from design to deployment. The committee works with modern technologies to create functional and responsive websites. It encourages collaboration, problem solving, and clean development practices. Members turn ideas into real digital experiences and practical projects.",
+        "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
         "leadName": "Leen Alghamdi"
       },
       "artificial-intelligence": {
         "name": "Artificial Intelligence",
-        "description": "A space for exploring the world of artificial intelligence and emerging technologies. Members learn about AI concepts, machine learning, and intelligent applications. The committee encourages experimentation with AI tools and real-world use cases. Members collaborate on innovative projects that use AI to solve meaningful problems. It aims to make AI more accessible, practical, and impactful.",
+        "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
         "leadName": "Atheer Alzahrani"
       },
       "robotics-iot": {
         "name": "Robotics & IOT",
-        "description": "A hands-on space for building smart systems that connect the physical and digital worlds. Members explore robotics, sensors, embedded systems, and Internet of Things technologies. The committee encourages experimentation, prototyping, and practical problem-solving. Members work together to design and build interactive and connected solutions. It turns ideas into real-world systems through technology and creativity.",
+        "description": "Designs and develops smart systems using robotics, sensors, embedded systems, and the Internet of Things, turning technical knowledge into interactive projects that connect devices to the digital world.",
         "leadName": "Saeed Alghamdi"
       },
       "cybersecurity": {
         "name": "Cybersecurity",
-        "description": "A space for learning how to protect systems, applications, networks, and digital information. Members explore cybersecurity concepts, security practices, and common digital threats. The committee promotes awareness of secure development and responsible technology use. Members practice identifying vulnerabilities and understanding how systems can be protected. It builds a strong foundation for creating safer and more secure digital environments.",
+        "description": "Protects systems, networks, and data from digital threats by learning cybersecurity fundamentals, discovering and addressing vulnerabilities, and applying practices that strengthen digital security.",
         "leadName": "Shadi Alnajar"
       },
       "automation": {
         "name": "Automation",
-        "description": "A space focused on using technology to simplify tasks and improve workflows. Members explore automation tools, scripting, APIs, and process optimization. The committee encourages finding repetitive tasks that can be transformed into efficient solutions. Members collaborate to build automated workflows and practical productivity tools. It helps turn time-consuming processes into smarter and more efficient systems.",
+        "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
         "leadName": "Asma Aldossari"
       },
       "data-analysis": {
         "name": "Data Analysis",
-        "description": "A space for turning raw data into meaningful insights and informed decisions. Members explore data collection, cleaning, analysis, visualization, and interpretation. The committee works with real-world datasets to understand patterns and trends. Members develop analytical thinking and learn how to communicate insights effectively. It connects data with practical solutions, helping transform information into knowledge.",
+        "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
         "leadName": "Shahad Almazrui"
       }
     }
@@ -268,8 +282,8 @@
     "empty": "Stay tuned…"
   },
   "joinCommunity": {
-    "title": "Ready to Be Part of the Community?",
-    "description": "Join our community, discover new opportunities, and build something meaningful with us",
+    "title": "Ready to Be Part of Our Group?",
+    "description": "Join our group, share your passion, grow your skills, and create experiences and impact with us that go beyond ideas.",
     "cta": "Join Our Community!",
     "phoneAlt": "GDG on Campus mobile application"
   }

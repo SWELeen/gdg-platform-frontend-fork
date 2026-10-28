@@ -429,11 +429,4 @@ export const offers = [
     description:
       "Discover upcoming events and register to participate.",
   },
-  {
-    number: 5,
-    color: "var(--gdg-blue)",
-    title: "Show Your Work",
-    description:
-      "Share your projects and achievements with the community.",
-  },
 ];

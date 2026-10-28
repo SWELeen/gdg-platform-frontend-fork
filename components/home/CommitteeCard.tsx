@@ -88,7 +88,7 @@ export default function CommitteeCard({
       linkedin: activeCommittee.lead.linkedin,
       x: activeCommittee.lead.x,
       name: activeLeadName,
-      label: t("leadLabel", { name: activeName }),
+      label: t.has(basePath + ".leadLabel") ? t(basePath + ".leadLabel", { name: activeName }) : t("leadLabel", { name: activeName }),
     },
     ...(activeCommittee.coLeader && activeCoLeaderName
       ? [
@@ -100,7 +100,7 @@ export default function CommitteeCard({
             linkedin: activeCommittee.coLeader.linkedin,
             x: activeCommittee.coLeader.x,
             name: activeCoLeaderName,
-            label: t("coLeaderLabel", { name: activeName }),
+            label: t.has(basePath + ".coLeaderLabel") ? t(basePath + ".coLeaderLabel", { name: activeName }) : t("coLeaderLabel", { name: activeName }),
           },
         ]
       : []),
