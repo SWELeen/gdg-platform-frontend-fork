@@ -27,6 +27,7 @@ Do not silently choose one source when sources conflict. First identify the conf
 | Persistence uses MySQL and Prisma | Approved |
 | Authentication uses NestJS Auth, JWT, Google OAuth, and backend-enforced RBAC | Approved direction |
 | Swagger/OpenAPI is the authoritative frontend-backend contract | Approved |
+| Hosted browser API traffic uses a same-origin Next.js `/api` rewrite to the NestJS backend; session cookies are scoped to `/api` paths and use `SameSite=Strict` | Approved (user request, 2026-10-29) |
 | Arabic uses a full RTL layout (`dir="rtl"` on `<html>`), not text-only direction | Proposed (2026-09-28) |
 | three.js renders the 3D member badge on profile pages | Approved (2026-10-24) |
 
@@ -50,6 +51,14 @@ Do not silently choose one source when sources conflict. First identify the conf
 - **Colours:** Public Relations, Content Writing, Project Management and Digital Media & Design take Google green, yellow, blue and red. Web Development's dark slate GDG card is the default, and the other developer committees (Data Analysis, Cybersecurity, AIML, Automation, IoT & Robotics) use it until their colours are decided (`TBD`; marked "DEVELOPER COMMITTEE COLOURS" in `lib/badge/themes.ts`).
 - **Data:** Name, photo, gender and committees come from `GET /me`, keyed by the backend's committee codes; see "Profile badge status" in `docs/api-integration.md`.
 - **Open (`TBD`):** `/me` position values beyond Leader and Co-Leader (and positions like Advisor) are unconfirmed. Badge text is English in both locales.
+
+### 2026-10-29: Same-origin API proxy for hosted browser sessions
+
+- **Owner/approver:** User approval in this conversation; task tracker reference was not provided.
+- **Context:** The hosted frontend and API use separate `onrender.com` sites. Cross-site `SameSite=None` cookies can be blocked by browser privacy controls.
+- **Decision:** Browser API requests use the frontend origin under `/api/*`; the Next.js external rewrite forwards the request to the configured NestJS backend origin with `/api` removed. Production session cookies remain `HttpOnly`, `Secure`, and `SameSite=Strict`, scoped to `/api` and `/api/auth`. The backend continues to enforce authentication, authorization, and exact `Origin` checks.
+- **Affected:** Frontend and backend repositories; frontend hosting must run the Next.js server/runtime and provide `API_PROXY_TARGET` and `NEXT_PUBLIC_USE_API=true`; backend `FRONTEND_URL` must match the frontend origin.
+- **Migration/rollback:** The backend temporarily emits both old and new cookie paths so it can deploy before the frontend. After the frontend proxy is live and verified, remove legacy `/` and `/auth` cookie issuance while retaining logout cleanup for those paths for one release. To roll back, set frontend API traffic back to the direct backend URL and restore legacy cookie issuance. Browser sessions must be renewed after changing cookie paths.
 
 ## Decision record minimum
 

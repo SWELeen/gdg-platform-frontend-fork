@@ -7,7 +7,9 @@ import { clearAuthSession } from "@/lib/auth/session";
 import { clearApiSession } from "./session";
 
 export const API_ENABLED = process.env.NEXT_PUBLIC_USE_API === "true";
-const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+const RAW_API_URL = API_ENABLED
+  ? "/api"
+  : process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 const API_URL = RAW_API_URL.endsWith("/") ? RAW_API_URL.slice(0, -1) : RAW_API_URL;
 
 export type ApiResult<T> =

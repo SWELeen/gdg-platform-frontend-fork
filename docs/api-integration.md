@@ -29,7 +29,13 @@ Do not consume a production-facing endpoint unless the published specification c
 
 ## Local configuration
 
-The technical guide shows the frontend running at `http://localhost:3000` and the backend API at `http://localhost:3001`, with `NEXT_PUBLIC_API_URL` pointing to the API. Treat these as initial local-development guidance. The final local ports and all non-local base URLs must be confirmed in the repositories’ environment templates.
+Run the frontend at `http://localhost:3000` and the backend API at `http://localhost:3001`. When `NEXT_PUBLIC_USE_API=true`, the browser uses the same-origin `/api/*` path and the Next.js rewrite targets `http://localhost:3001` by default. Set `API_PROXY_TARGET` locally only when the backend uses a different origin. `NEXT_PUBLIC_API_URL` is retained as a fallback for local demo-mode API calls when the integration toggle is off.
+
+## Hosted same-origin API proxy
+
+For hosted deployments without a custom domain, the browser calls the frontend origin at `/api/*`. The Next.js rewrite forwards `/api/<path>` to `API_PROXY_TARGET/<path>`; set `API_PROXY_TARGET` to the bare HTTPS backend origin (for example, `https://gdg-platform-backend.onrender.com`) on the frontend host. Set `NEXT_PUBLIC_USE_API=true` on the frontend before its production build. When the integration is enabled, the API client uses `/api`; `NEXT_PUBLIC_API_URL` is not required in the hosted frontend. `API_PROXY_TARGET` is server-side configuration and must not use the `NEXT_PUBLIC_` prefix. The frontend must run with the Next.js server/runtime so external rewrites are active; static export is not supported for this setup.
+
+The backend scopes its final HttpOnly session cookies to the proxy paths: `gdg_access` uses `/api`, and `gdg_refresh` uses `/api/auth`. During rollout, it also issues the legacy `/` and `/auth` cookies until the frontend proxy is deployed and verified; remove legacy issuance in a follow-up backend deploy. The rewrite removes `/api` before forwarding, so the backend continues to receive its existing route paths such as `/auth/refresh`. Keep `credentials: "include"` in frontend requests, `FRONTEND_URL` set to the exact public frontend origin, and the backend's exact Origin validation enabled. The proxy must forward the browser's `Origin` and `Cookie` request headers and pass `Set-Cookie` response headers through unchanged. Final production cookies use `SameSite=Strict; Secure`; logout clears both current and legacy paths during migration. The proxy adds a server hop for IP-based rate limits: set `TRUST_PROXY_HOPS` only to the verified trusted-proxy count for the actual Netlify/Render route, never to a blanket trust setting. An incorrect count can make users share an IP bucket or trust spoofed forwarded IPs.
 
 ## Security boundary
 

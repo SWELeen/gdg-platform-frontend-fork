@@ -5,7 +5,7 @@
 This repository delivers the web interface for the GDG Main Platform. It is a separate application from the backend and communicates with it over HTTP API calls.
 
 ```
-Browser -> Next.js frontend -> NestJS API -> Prisma -> MySQL
+Browser -> Next.js same-origin /api proxy -> NestJS API -> Prisma -> MySQL
 ```
 
 The frontend does not become an alternate backend. The NestJS API is the source of truth for server-side authentication, RBAC enforcement, validation, persistence, and domain decisions.
@@ -31,13 +31,13 @@ This list is product scope, not a release plan or route map. Exact pages, URL st
 
 ## Configuration
 
-The technical guide identifies `NEXT_PUBLIC_API_URL` as the frontend API endpoint configuration. Its actual value per environment, CORS policy, deployment target, and client/server data-fetching policy are **TBD**.
+When the API is enabled, the browser calls the frontend origin at `/api/*`; the Next.js rewrite strips `/api` and forwards to the server-only `API_PROXY_TARGET`. Enable the API with `NEXT_PUBLIC_USE_API=true` for production and local API development. Locally, the rewrite defaults to `http://localhost:3001`. `NEXT_PUBLIC_API_URL` remains a demo-mode fallback when the integration toggle is off. The backend's `FRONTEND_URL` must exactly match the public frontend origin.
 
 Only variables safe for browser exposure may use `NEXT_PUBLIC_`. Secrets, private API keys, database URLs, OAuth secrets, and JWT secrets must never be included in client bundles.
 
 ## Non-goals
 
 - Direct MySQL or Prisma use.
-- A Next.js API layer that duplicates the NestJS backend.
+- A Next.js API layer that duplicates NestJS routes or business logic. The `/api` rewrite is transport-only.
 - A parallel authorization system.
 - Rebuilding the existing games platform. Its future placement, identity integration, and data-sharing contract are **TBD** until explicitly approved.
