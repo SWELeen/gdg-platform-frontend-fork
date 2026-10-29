@@ -65,7 +65,7 @@ export const teamMembers = [
   {
     id: "1",
     type: "leader",
-    image: "/images/abdullah-leader.png",
+    image: "/images/Abdullah-leader.png",
     imageScaleClass: "scale-[1.15]",
     imagePositionClass: "translate-x-2 translate-y-4",
     role: "Lead",
@@ -76,7 +76,7 @@ export const teamMembers = [
   {
     id: "2",
     type: "leader",
-    image: "/images/jumanah-coleader.png",
+    image: "/images/Jumanah-coleader.png",
     imageScaleClass: "scale-[1.15]",
     imagePositionClass: "translate-y-1",
     role: "Co-Lead",
