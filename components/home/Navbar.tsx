@@ -198,7 +198,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           />
         ) : (
           <img
-            src="/images/gdg-white-logo.png"
+            src="/images/gdg-white-Logo.png"
             alt={tCommon("logoAlt")}
             className="h-14 w-auto lg:scale-x-[1.06] lg:origin-left"
           />
