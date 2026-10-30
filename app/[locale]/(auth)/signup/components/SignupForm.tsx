@@ -755,7 +755,7 @@ export default function SignupForm() {
                         checked={values.committees.includes(committee)}
                         onChange={(event) => toggleCommittee(committee, event.target.checked)}
                       />
-                      {committee}
+                      {committee.replace(/ Committee$/, "")}
                     </label>
                   ))}
                   <label className="flex items-center gap-2 text-sm">

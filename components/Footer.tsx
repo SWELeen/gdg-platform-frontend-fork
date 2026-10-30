@@ -62,7 +62,7 @@ export default function Footer() {
               className="w-56 max-w-full object-contain sm:w-70"
             />
           </Link>
-          <p dir={dir} className="max-w-md text-sm leading-6 text-white/65">
+          <p dir={dir} className="max-w-md whitespace-pre-line text-sm leading-6 text-white/65">
             {t("footer.tagline")}
           </p>
         </section>
