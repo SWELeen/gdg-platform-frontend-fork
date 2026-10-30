@@ -58,7 +58,7 @@ export function TopNav() {
             className="topnav-logo-light h-9 w-auto min-w-0 max-w-full object-contain object-left sm:h-10 lg:h-12 rtl:object-right -translate-x-3"
           />
           <Image
-            src="/images/gdg-white-logo.png"
+            src="/images/gdg-white-Logo.png"
             alt={t("logoAlt")}
             width={3612}
             height={347}
