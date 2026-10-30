@@ -32,7 +32,7 @@ export function InfoCard({
   const isPersonal = data.id === "personal";
 
   return (
-    <div className="flex min-w-0 flex-1 rounded-2xl border border-gray-200 bg-white text-gray-900 shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-[var(--navy)]/30 hover:shadow-lg dark:border-[#243b64]/70 dark:bg-surface dark:text-slate-100">
+    <div className="flex min-w-0 flex-1 rounded-2xl border border-border bg-surface text-foreground shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-[var(--navy)]/30 hover:shadow-lg">
 
       {/* Colored accent sidebar */}
       <div
@@ -54,7 +54,7 @@ export function InfoCard({
 
       {/* Card content */}
       <div className="min-w-0 flex-1 p-4 sm:p-6">
-        <h3 className="mb-5 text-lg font-semibold text-[var(--navy)] dark:text-slate-100">
+        <h3 className="mb-5 text-lg font-semibold text-foreground">
           {t(`cards.${data.id}`)}
         </h3>
 
@@ -67,12 +67,12 @@ export function InfoCard({
             return (
               <div
                 key={row.key}
-                className={`flex min-w-0 gap-3 border-b border-gray-100 pb-3 last:border-b-0 last:pb-0 dark:border-[#243b64]/50 ${isEditing
+                className={`flex min-w-0 gap-3 border-b border-border pb-3 last:border-b-0 last:pb-0 ${isEditing
                     ? "flex-col sm:flex-row sm:items-center sm:justify-between"
                     : "items-baseline justify-between"
                   }`}
               >
-                <dt className="shrink-0 text-sm text-gray-500 dark:text-slate-400">
+                <dt className="shrink-0 text-sm text-muted">
                   {t(`fields.${row.key}`)}
                 </dt>
 
@@ -126,7 +126,7 @@ export function InfoCard({
                     )}
                   </div>
                 ) : (
-                  <dd className="min-w-0 break-words text-end text-sm font-semibold text-gray-800 dark:text-gray-100">
+                  <dd className="min-w-0 break-words text-end text-sm font-semibold text-foreground">
                     {isPhone ? (
                       <span dir="ltr">{row.value}</span>
                     ) : (

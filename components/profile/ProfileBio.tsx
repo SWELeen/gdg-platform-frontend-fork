@@ -29,9 +29,9 @@ export function ProfileBio({
   const t = useTranslations("profile.bio");
 
   return (
-    <div className="w-full rounded-2xl border border-gray-200 bg-white p-4 text-gray-900 shadow-sm transition-colors duration-200 focus-within:border-[#243b64] focus-within:ring-2 focus-within:ring-[#243b64]/15 dark:border-[#243b64]/70 dark:bg-surface dark:text-slate-100 sm:p-5">
+    <div className="w-full rounded-2xl border border-border bg-surface p-4 text-foreground shadow-sm transition-colors duration-200 focus-within:border-gdg-blue focus-within:ring-2 focus-within:ring-gdg-blue/15 sm:p-5">
       <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-base font-semibold text-[#243b64] dark:text-slate-100">
+        <p className="text-base font-semibold text-foreground">
           {t("title")}
         </p>
         {!isEditing && (
