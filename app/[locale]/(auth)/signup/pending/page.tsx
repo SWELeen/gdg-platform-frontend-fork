@@ -53,13 +53,13 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
   return (
     <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background text-foreground lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount />
-      <section className="flex flex-1 items-center justify-center bg-background px-4 py-8 lg:h-full lg:px-0 lg:py-0">
+      <section className="flex flex-1 items-center justify-center bg-background px-4 py-12 lg:h-full lg:px-0 lg:py-0">
         <AuthCard
           size="sm"
           compact
           title={t("title")}
           description={t("description")}
-          className="signup-pending-card md:h-80!"
+          className="signup-pending-card max-w-[22rem] md:max-w-none md:h-80!"
         >
           <div className="signup-pending-visual">
             <div aria-hidden="true" className="signup-pending-decoration">
