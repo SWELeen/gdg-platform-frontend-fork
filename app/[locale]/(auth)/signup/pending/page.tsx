@@ -51,9 +51,9 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
   setRequestLocale(use(params).locale)
   const t = useTranslations("auth.signupPending")
   return (
-    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:flex-row">
+    <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background text-foreground lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount />
-      <section className="flex flex-1 items-center justify-center bg-background lg:h-full">
+      <section className="flex flex-1 items-center justify-center bg-background px-4 py-8 lg:h-full lg:px-0 lg:py-0">
         <AuthCard
           size="sm"
           compact
@@ -61,8 +61,9 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
           description={t("description")}
           className="signup-pending-card md:h-80!"
         >
-          <div aria-hidden="true" className="signup-pending-decoration">
-            {confetti.map((piece, index) => (
+          <div className="signup-pending-visual">
+            <div aria-hidden="true" className="signup-pending-decoration">
+              {confetti.map((piece, index) => (
               <span
                 key={index}
                 className={`signup-confetti-piece ${piece.shape === "circle" ? "rounded-full" : "rounded-sm"}`}
@@ -75,11 +76,12 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
                 } as ConfettiStyle}
               />
             ))}
-            <span className="signup-success-pop flex size-16 items-center justify-center rounded-full bg-[image:var(--google-gradient)] text-white">
+              <span className="signup-success-pop flex size-16 items-center justify-center rounded-full bg-[image:var(--google-gradient)] text-white">
               <svg viewBox="0 0 24 24" fill="none" className="size-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m5 12 4 4L19 6" />
               </svg>
-            </span>
+              </span>
+            </div>
           </div>
         </AuthCard>
       </section>
