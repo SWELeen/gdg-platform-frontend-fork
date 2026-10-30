@@ -348,11 +348,11 @@ const allCommittees = [
 ];
 
 const developerSubCommitteeIds = [
-  "automation",
-  "web-development",
-  "data-analysis",
   "artificial-intelligence",
   "robotics-iot",
+  "automation",
+  "data-analysis",
+  "web-development",
   "cybersecurity",
 ];
 

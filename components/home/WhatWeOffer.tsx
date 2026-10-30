@@ -171,7 +171,7 @@ export default function WhatWeOffer() {
           return (
             <div
               key={offer.number}
-              className="relative min-h-[70svh]"
+              className="relative min-h-[230px]"
             >
               <div
                 className="sticky"
