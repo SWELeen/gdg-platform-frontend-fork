@@ -815,7 +815,7 @@ export default function HeroSection() {
             ease: "easeOut",
           }}
         >
-          Google Developer Group
+          {locale === "ar" ? "مجموعة مطوّري جوجل" : "Google Developer Group"}
         </motion.h1>
 
         {/* SUBTITLE */}
@@ -840,7 +840,7 @@ export default function HeroSection() {
             delay: 0.35,
           }}
         >
-          {locale === "ar" ? "مجموعة مطوري جوجل" : "on Campus | University of Jeddah"}
+          {locale === "ar" ? "بجامعة جدة" : "on Campus | University of Jeddah"}
         </motion.p>
 
         {/* TAGLINE */}
