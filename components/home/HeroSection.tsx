@@ -822,7 +822,7 @@ export default function HeroSection() {
 
         <motion.p
           dir={dir}
-          className="mt-1 text-balance text-center text-[clamp(1.05rem,0.8rem+1.1vw,2.2rem)] font-normal leading-snug text-[var(--hero-white-muted)]"
+          className="mt-4 text-balance text-center text-[clamp(1.05rem,0.8rem+1.1vw,2.2rem)] font-normal leading-snug text-[var(--hero-white-muted)]"
           initial={{
             opacity: 0,
             y: 20,
