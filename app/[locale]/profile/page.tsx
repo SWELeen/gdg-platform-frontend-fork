@@ -300,7 +300,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
                   phone={{ fit: 0.8, fitW: 0.62 }}
                 />
                 {badges.length > 1 && (
-                  <div className="absolute inset-x-0 bottom-2 z-30 flex items-center justify-center gap-3">
+                  <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center gap-3">
                     <button
                       type="button"
                       aria-label="Previous committee badge"
