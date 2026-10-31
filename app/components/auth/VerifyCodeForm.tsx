@@ -156,7 +156,7 @@ export default function VerifyCodeForm() {
 
   return (
     <form
-      className="mt-19 w-full"
+      className="mt-8 w-full sm:mt-12 md:mt-19"
       onSubmit={handleSubmit}
       noValidate
     >

@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl"
 import { useState } from "react"
-import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
 import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
 import { canReturnTo, dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route"
@@ -70,6 +69,7 @@ export default function LoginFlow() {
     if (passwordError) {
       setPasswordError("")
     }
+    if (submitError) setSubmitError("")
   }
 
   const handlePasswordBlur = () => {
@@ -82,6 +82,7 @@ export default function LoginFlow() {
 
   const handlePasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setSubmitError("")
 
     const nextPasswordError = validatePassword(password)
     setPasswordError(nextPasswordError)
@@ -91,7 +92,6 @@ export default function LoginFlow() {
     }
 
     const nextPassword = password
-    setSubmitError("")
     setIsSubmitting(true)
     if (!API_ENABLED) {
       setSubmitError("apiRequired")
@@ -130,6 +130,7 @@ export default function LoginFlow() {
 
   const handleBack = () => {
     setPasswordError("")
+    setSubmitError("")
     setStep(1)
   }
 
@@ -145,7 +146,6 @@ export default function LoginFlow() {
           : t("passwordStep.description")
       }
     >
-      <AuthErrorMessage message={submitError} className="mb-3 w-full" />
       <AuthStepTransition
         stepKey={step}
         className="flex w-full flex-col items-center"
@@ -162,6 +162,7 @@ export default function LoginFlow() {
           <LoginPassword
             value={password}
             error={passwordError}
+            submitError={submitError}
             onChange={handlePasswordChange}
             onBlur={handlePasswordBlur}
             onBack={handleBack}

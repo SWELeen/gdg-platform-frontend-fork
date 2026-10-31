@@ -7,6 +7,7 @@ import { PASSWORD_MAX_LENGTH } from "@/app/lib/validation/password"
 type LoginPasswordProps = {
   value: string;
   error: string;
+  submitError: string;
   onChange: (value: string) => void;
   onBlur: () => void;
   onBack: () => void;
@@ -17,6 +18,7 @@ type LoginPasswordProps = {
 export default function LoginPassword({
   value,
   error,
+  submitError,
   onChange,
   onBlur,
   onBack,
@@ -30,32 +32,38 @@ export default function LoginPassword({
       <form className="mt-12 w-full" onSubmit={onSubmit} noValidate>
         <label htmlFor="login-password" className="block text-sm font-medium">
           {t("passwordLabel")} <span className="text-gdg-red">*</span>
-          <div className="w-full">
-            <PasswordInput
-              id="login-password"
-              name="password"
-              value={value}
-              onChange={(event) => onChange(event.target.value)}
-              onBlur={onBlur}
-              placeholder={t("passwordPlaceholder")}
-              autoComplete="current-password"
-              minLength={8}
-              maxLength={PASSWORD_MAX_LENGTH}
-              aria-invalid={Boolean(error)}
-              aria-describedby={
-                error ? "login-password-error" : undefined
-              }
-              className="mt-1.5 h-9 rounded-md border border-foreground/15 px-2.75 text-base outline-none placeholder:text-foreground/40"
-            />
-
-            <AuthErrorMessage
-              id="login-password-error"
-              message={error}
-              className="mt-1 block"
-            />
-          </div>
         </label>
-
+        <div className="w-full">
+          <PasswordInput
+            id="login-password"
+            name="password"
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            onBlur={onBlur}
+            placeholder={t("passwordPlaceholder")}
+            autoComplete="current-password"
+            minLength={8}
+            maxLength={PASSWORD_MAX_LENGTH}
+            aria-invalid={Boolean(error)}
+            aria-describedby={
+              [
+                error ? "login-password-error" : "",
+                submitError ? "login-password-request-error" : "",
+              ].filter(Boolean).join(" ") || undefined
+            }
+            className="mt-1.5 h-9 rounded-md border border-foreground/15 px-2.75 text-base outline-none placeholder:text-foreground/40"
+          />
+          <AuthErrorMessage
+            id="login-password-error"
+            message={error}
+            className="mt-1 block"
+          />
+          <AuthErrorMessage
+            id="login-password-request-error"
+            message={submitError}
+            className="mt-1 block"
+          />
+        </div>
         <div className="mt-2 flex justify-end">
           <Link href="/forgot-password" className="text-sm font-medium text-blue hover:text-blue/90 active:text-blue/80">
             {t("forgotPassword")}

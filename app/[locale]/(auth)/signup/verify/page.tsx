@@ -21,10 +21,10 @@ export default function VerifyCode({ params }: PageProps<"/[locale]/signup/verif
   const t = useTranslations("auth.verifyCode")
 
   return (
-    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
+    <main className="flex min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount={true} />
 
-      <section className="flex flex-1 items-center justify-center bg-background lg:h-full">
+      <section className="flex flex-1 items-center justify-center bg-background py-8 lg:h-full lg:py-0">
         <AuthCard
           size="sm"
           title={t("title")}
