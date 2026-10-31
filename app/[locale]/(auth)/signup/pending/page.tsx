@@ -51,7 +51,7 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
   setRequestLocale(use(params).locale)
   const t = useTranslations("auth.signupPending")
   return (
-    <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background text-foreground lg:flex-row">
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount />
       <section className="flex flex-1 items-center justify-center bg-background px-4 py-12 lg:h-full lg:px-0 lg:py-0">
         <AuthCard
