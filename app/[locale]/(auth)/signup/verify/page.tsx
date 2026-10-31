@@ -22,7 +22,7 @@ export default function VerifyCode({ params }: PageProps<"/[locale]/signup/verif
 
   return (
     <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background text-foreground lg:flex-row">
-      <AuthVisualPanel side="start" animateOnMount={true}/>
+      <AuthVisualPanel side="start" animateOnMount={true} stretchOnDesktop />
 
       <section className="flex flex-1 items-center justify-center bg-background lg:h-full">
         <AuthCard

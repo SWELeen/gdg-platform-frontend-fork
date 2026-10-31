@@ -9,6 +9,7 @@ type AuthVisualPanelProps = {
   // Logical side: "start" is left in English and right in Arabic.
   side: "start" | "end"
   animateOnMount?: boolean
+  stretchOnDesktop?: boolean
 }
 
 const contentGroupVariants: Variants = {
@@ -44,7 +45,8 @@ function getBarVariants(fromLeft: boolean): Variants {
 
 export default function AuthVisualPanel({
   side,
-  animateOnMount = false
+  animateOnMount = false,
+  stretchOnDesktop = false,
 }: AuthVisualPanelProps) {
   const t = useTranslations("auth.visualPanel")
   const dir = useTextDirection()
@@ -59,7 +61,7 @@ export default function AuthVisualPanel({
       layoutId={isDesktop ? "auth-visual-panel" : undefined}
       transition={isDesktop ? { duration: 0.6, ease: "easeInOut" } : undefined}
       className={`
-        relative z-20 hidden h-full w-full flex-col overflow-hidden bg-auth-visual-background text-gdg-dark px-8.5 pt-8.75 shadow-[0_0_15px_rgba(0,0,0,0.15)] lg:flex lg:h-[calc(100%-4rem)] lg:w-[48%] lg:self-start
+        relative z-20 hidden h-full w-full flex-col overflow-hidden bg-auth-visual-background text-gdg-dark px-8.5 pt-8.75 shadow-[0_0_15px_rgba(0,0,0,0.15)] lg:flex ${stretchOnDesktop ? "lg:h-auto lg:self-stretch" : "lg:h-[calc(100%-4rem)] lg:self-start"} lg:w-[48%]
         ${isStart ? "rounded-se-[30px] rounded-ee-[30px]" : "rounded-ss-[30px] rounded-es-[30px]"}`}
     >
       <motion.div
