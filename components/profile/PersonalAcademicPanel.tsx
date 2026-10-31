@@ -28,7 +28,7 @@ export function PersonalAcademicPanel({
       variants={{
         visible: { transition: { staggerChildren: 0.08 } },
       }}
-      className="flex flex-col gap-4"
+      className="grid grid-cols-1 items-stretch gap-4 xl:grid-cols-2"
     >
       <motion.div
         variants={{
