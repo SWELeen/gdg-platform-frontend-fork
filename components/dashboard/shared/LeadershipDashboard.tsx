@@ -8,14 +8,15 @@ import { LeadershipApprovalsPanel } from "./LeadershipApprovalsPanel";
 import { LeaderDashboardStatus } from "./LeaderDashboardStatus";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
+import { committees } from "@/lib/badge/themes";
 
 const developerCommitteeAccents: Record<string, string> = {
-  DATA: "#34A853",
-  CYBER: "#EA4335",
-  AI: "#9334E6",
-  AUTOMATION: "#00ACC1",
-  ROBOTICS: "#FB8C00",
-  WEB: "#4285F4",
+  DATA: committees.DATA.theme.bg,
+  CYBER: committees.CYBER.theme.bg,
+  AI: committees.AI.theme.bg,
+  AUTOMATION: committees.AUTOMATION.theme.bg,
+  ROBOTICS: committees.ROBOTICS.theme.bg,
+  WEB: committees.WEB.theme.bg,
 };
 
 export function LeadershipDashboard({ scope }: { scope: "CLUB" | "DEVELOPER_COMMITTEES" }) {
@@ -73,7 +74,7 @@ function DeveloperCommitteesDashboard() {
         {visibleCommittees.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {visibleCommittees.map((item) => {
-              const accent = developerCommitteeAccents[item.code] ?? "#4285F4";
+              const accent = developerCommitteeAccents[item.code] ?? "var(--gdg-blue)";
               const accentSurface = `color-mix(in srgb, ${accent} 7%, var(--surface))`;
               const accentBorder = `color-mix(in srgb, ${accent} 30%, var(--border))`;
 

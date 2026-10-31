@@ -11,6 +11,27 @@ const snPro = SN_Pro({ subsets: ["latin"] });
 
 type Fit = { fit: number; fitW: number };
 
+function resolveThemeColor(value: string) {
+  const styles = getComputedStyle(document.documentElement);
+  return value.replace(/var\((--[\w-]+)(?:,\s*([^)]*))?\)/g, (_match, name: string, fallback?: string) =>
+    styles.getPropertyValue(name).trim() || fallback || "transparent",
+  );
+}
+
+function resolveBadgeTheme(theme: BadgeTheme): BadgeTheme {
+  return {
+    ...theme,
+    bg: resolveThemeColor(theme.bg),
+    ink: resolveThemeColor(theme.ink),
+    photoBg: resolveThemeColor(theme.photoBg),
+    photoFrame: resolveThemeColor(theme.photoFrame),
+    patternBg: resolveThemeColor(theme.patternBg),
+    strap: resolveThemeColor(theme.strap),
+    stitch: resolveThemeColor(theme.stitch),
+    backgroundColors: theme.backgroundColors?.map(resolveThemeColor),
+  };
+}
+
 type HangingBadgeProps = {
   data: BadgeData;
   theme: BadgeTheme;
@@ -49,18 +70,19 @@ export function HangingBadge({
     let engine: Awaited<ReturnType<typeof createBadgeEngine>> = null;
 
     (async () => {
-      const assets = await loadBadgeAssets(data, theme, snPro.style.fontFamily);
+      const canvasTheme = resolveBadgeTheme(theme);
+      const assets = await loadBadgeAssets(data, canvasTheme, snPro.style.fontFamily);
       if (cancelled) return;
       const light = window.matchMedia("(max-width: 767px)").matches;
       engine = await createBadgeEngine(
         stage,
         column,
         {
-          paintFront: (cv) => paintFront(cv, data, theme, assets),
-          paintBack: (cv) => paintBack(cv, data, theme, assets),
-          edge: theme.bg,
-          strap: theme.strap,
-          stitch: theme.stitch,
+          paintFront: (cv) => paintFront(cv, data, canvasTheme, assets),
+          paintBack: (cv) => paintBack(cv, data, canvasTheme, assets),
+          edge: canvasTheme.bg,
+          strap: canvasTheme.strap,
+          stitch: canvasTheme.stitch,
         },
         { ...(light ? phone : desktop), light, spanViewport },
       );
@@ -89,12 +111,13 @@ export function HangingBadge({
     const cv = flatRef.current;
     if (!flat || !cv) return;
     let cancelled = false;
-    loadBadgeAssets(data, theme, snPro.style.fontFamily).then((assets) => {
+    const canvasTheme = resolveBadgeTheme(theme);
+    loadBadgeAssets(data, canvasTheme, snPro.style.fontFamily).then((assets) => {
       if (cancelled) return;
       const width = Math.round(cv.clientWidth * Math.min(window.devicePixelRatio || 1, 3));
       cv.width = width;
       cv.height = Math.round((width * CARD_H) / CARD_W);
-      paintFront(cv, data, theme, assets);
+      paintFront(cv, data, canvasTheme, assets);
     });
     return () => {
       cancelled = true;

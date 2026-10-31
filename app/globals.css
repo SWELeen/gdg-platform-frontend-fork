@@ -225,12 +225,28 @@ html[data-theme="dark"] .topnav-logo-dark {
   /* Committees / Leadership */
   --committee-blue: #4967a4;
   --committee-red: #b85d55;
+  --committee-developers: #000000;
   --committee-cybersecurity: #20212b;
   --committee-web-development: #1b2832;
   --committee-automation: #2d4354;
   --committee-robotics-iot: #534145;
   --committee-data-analysis: #3c3d36;
   --committee-artificial-intelligence: #73766a;
+  --committee-public-relations: var(--gdg-green);
+  --committee-project-management: var(--gdg-blue);
+  --committee-content-writing: var(--gdg-yellow);
+  --committee-digital-media-design: var(--gdg-red);
+
+  /* Badge surfaces and ink, shared by the canvas cards and regular UI. */
+  --badge-ink-light: #ffffff;
+  --badge-ink-dark: #202124;
+  --badge-photo-bg: #ffffff;
+  --badge-photo-frame: #5f6368;
+  --badge-photo-frame-light: rgb(255 255 255 / 90%);
+  --badge-photo-frame-dark: rgb(32 33 36 / 55%);
+  --badge-pattern-bg: #f1f3f4;
+  --badge-strap: #fafafa;
+  --badge-stitch: rgb(60 64 67 / 28%);
 
   --committee-gradient-blue: #2d5495;
   --committee-gradient-red: #c44744;

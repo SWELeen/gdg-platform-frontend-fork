@@ -22,53 +22,53 @@ type MemberBadgeInput = {
 const isCommitteeCode = (code: string): code is CommitteeCode => Object.hasOwn(committees, code);
 const rank = (position: string) => committeeRoles.indexOf(position as CommitteeRole);
 
-// Builds a member's badge from their profile and committees. Someone in several
-// committees gets the one where they hold the highest position.
-export function useMemberBadge({ name, university, photoUrl, gender, committees: memberships, roles }: MemberBadgeInput) {
+// Builds a separate badge for every committee and leadership assignment.
+export function useMemberBadges({ name, university, photoUrl, gender, committees: memberships, roles }: MemberBadgeInput) {
   const t = useTranslations("profile.badge");
-  const membership = memberships?.length
-    ? [...memberships].sort((a, b) => rank(b.position) - rank(a.position))[0]
-    : null;
-  const globalBadge = roles?.includes("GROUP_LEADER")
-    ? { role: t("globalRoles.groupLeader"), committee: t("globalRoles.groupLeadership"), theme: clubLeadershipTheme }
-    : roles?.includes("GROUP_CO_LEADER")
-      ? { role: t("globalRoles.groupCoLeader"), committee: t("globalRoles.groupLeadership"), theme: clubLeadershipTheme }
-      : roles?.includes("DEVELOPER_COMMITTEES_LEADER")
-        ? { role: t("globalRoles.developerCommitteesLeader"), committee: t("globalRoles.developerCommittees"), theme: developerLeadershipTheme }
-        : null;
-  const useCommitteeBadge = Boolean(membership && !globalBadge);
-  const code = membership?.code ?? "";
-  const role = membership?.position ?? "";
-  const matched = useCommitteeBadge && isCommitteeCode(code);
   const silhouette: Gender = gender?.toLowerCase() === "male" ? "male" : "female";
-  const badgeRole = globalBadge && !useCommitteeBadge ? globalBadge.role : role;
-  const badgeCommittee = globalBadge && !useCommitteeBadge
-    ? globalBadge.committee
-    : membership?.name?.trim() ?? "";
-
-  const data = useMemo<BadgeData>(() => {
+  return useMemo(() => {
+    const memberName = name?.trim() ?? "";
+    if (!memberName) return [];
     const shared = {
+      name: memberName,
       chapter: "Google Developer Group on Campus",
       university: university?.trim() || "University of Jeddah",
+      photoUrl: photoUrl ?? null,
       gender: silhouette,
     };
-    return {
-      ...shared,
-      name: name?.trim() ?? "",
-      role: badgeRole,
-      committee: badgeCommittee,
-      photoUrl: photoUrl ?? null,
-    };
-  }, [name, badgeRole, badgeCommittee, university, photoUrl, silhouette]);
+    const badges = (memberships ?? [])
+      .slice()
+      .sort((a, b) => rank(b.position) - rank(a.position))
+      .filter((membership) => Boolean(membership.position && membership.name?.trim()))
+      .map((membership) => {
+        const code = membership.code.toUpperCase();
+        const committee = membership.name!.trim();
+        const data: BadgeData = { ...shared, role: membership.position, committee };
+        return {
+          data,
+          theme: isCommitteeCode(code) ? committees[code].theme : defaultTheme,
+          label: t("label", { name: data.name, role: data.role, committee: data.committee }),
+          key: `committee-${code}-${membership.position}`,
+        };
+      });
 
-  if ((!membership && !globalBadge) || !name?.trim() || !badgeRole || !badgeCommittee) return null;
-  return {
-    data,
-    theme: globalBadge && !useCommitteeBadge
-      ? globalBadge.theme
-      : matched && useCommitteeBadge
-        ? committees[code as CommitteeCode].theme
-        : defaultTheme,
-    label: t("label", { name: data.name, role: data.role, committee: data.committee }),
-  };
+    if (roles?.includes("GROUP_LEADER")) {
+      const role = t("globalRoles.groupLeader");
+      const committee = t("globalRoles.groupLeadership");
+      const data: BadgeData = { ...shared, role, committee };
+      badges.unshift({ data, theme: clubLeadershipTheme, label: t("label", { name: data.name, role, committee }), key: "group-leader" });
+    } else if (roles?.includes("GROUP_CO_LEADER")) {
+      const role = t("globalRoles.groupCoLeader");
+      const committee = t("globalRoles.groupLeadership");
+      const data: BadgeData = { ...shared, role, committee };
+      badges.unshift({ data, theme: clubLeadershipTheme, label: t("label", { name: data.name, role, committee }), key: "group-co-leader" });
+    }
+    if (roles?.includes("DEVELOPER_COMMITTEES_LEADER")) {
+      const role = t("globalRoles.developerCommitteesLeader");
+      const committee = t("globalRoles.developerCommittees");
+      const data: BadgeData = { ...shared, role, committee };
+      badges.unshift({ data, theme: developerLeadershipTheme, label: t("label", { name: data.name, role, committee }), key: "developer-committees-leader" });
+    }
+    return badges;
+  }, [name, university, photoUrl, silhouette, memberships, roles, t]);
 }

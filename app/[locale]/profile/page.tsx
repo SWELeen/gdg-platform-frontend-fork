@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, ChevronRight } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { HangingBadge } from "@/components/badge/HangingBadge";
-import { useMemberBadge } from "@/components/badge/useMemberBadge";
+import { useMemberBadges } from "@/components/badge/useMemberBadge";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { ProfileBio } from "@/components/profile/ProfileBio";
@@ -75,6 +75,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
   const tSocial = useTranslations("profile.social");
   const router = useRouter();
   const [account, setAccount] = useState<ProfileAccount | null>(null);
+  const [activeBadgeIndex, setActiveBadgeIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [bioDraft, setBioDraft] = useState("");
@@ -134,7 +135,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
   // Committee members and global leaders get a 3D badge beside the cards, hanging
   // from the cover and staying in view while the page scrolls; on phones it
   // sits between the header and the cards. Anyone else gets the page without it.
-  const badge = useMemberBadge({
+  const badges = useMemberBadges({
     name: account?.fullName,
     university: account?.university,
     photoUrl: account?.profileImageUrl,
@@ -142,6 +143,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
     committees: account?.committees,
     roles: account?.roles,
   });
+  const badge = badges[activeBadgeIndex] ?? badges[0];
 
   async function saveBio() {
     if (isSavingBio) return;
@@ -288,14 +290,39 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
               />
             </div>
             {badge && (
-              <HangingBadge
-                {...badge}
-                className="order-first h-[26rem] translate-y-3 md:order-none md:sticky md:top-24 md:col-start-2 md:row-start-1 md:h-[38rem]"
-                stageClassName="top-0 -bottom-40 md:top-0 md:-bottom-[26rem]"
-                spanViewport
-                desktop={{ fit: 0.66, fitW: 0.86 }}
-                phone={{ fit: 0.8, fitW: 0.62 }}
-              />
+              <div className="relative order-first h-[26rem] translate-y-3 md:order-none md:sticky md:top-24 md:col-start-2 md:row-start-1 md:h-[38rem]">
+                <HangingBadge
+                  {...badge}
+                  className="h-full"
+                  stageClassName="top-0 -bottom-40 md:top-0 md:-bottom-[26rem]"
+                  spanViewport
+                  desktop={{ fit: 0.66, fitW: 0.86 }}
+                  phone={{ fit: 0.8, fitW: 0.62 }}
+                />
+                {badges.length > 1 && (
+                  <div className="absolute inset-x-0 bottom-3 z-30 flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      aria-label="Previous committee badge"
+                      onClick={() => setActiveBadgeIndex((index) => (index - 1 + badges.length) % badges.length)}
+                      className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/95 text-foreground shadow-md transition hover:bg-surface-muted"
+                    >
+                      <ChevronLeft className="size-5 rtl:rotate-180" aria-hidden="true" />
+                    </button>
+                    <span className="rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-md" aria-live="polite">
+                      {activeBadgeIndex + 1} / {badges.length}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Next committee badge"
+                      onClick={() => setActiveBadgeIndex((index) => (index + 1) % badges.length)}
+                      className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/95 text-foreground shadow-md transition hover:bg-surface-muted"
+                    >
+                      <ChevronRight className="size-5 rtl:rotate-180" aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
