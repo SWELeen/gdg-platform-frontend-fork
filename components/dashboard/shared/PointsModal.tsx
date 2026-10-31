@@ -14,7 +14,7 @@ interface PointsModalProps {
 
 export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
   const t = useTranslations("dashboard.leader");
-  const { updateMemberPoints, canManagePoints } = useLeaderDashboard();
+  const { updateMemberPoints, canManagePoints, currentMember } = useLeaderDashboard();
 
   const [mode, setMode] = useState<"add" | "deduct">("add");
   const [pointsAmount, setPointsAmount] = useState<number | string>(50);
@@ -22,7 +22,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
   const [touched, setTouched] = useState<{ points?: boolean; reason?: boolean }>({});
   const [generalError, setGeneralError] = useState<string>("");
 
-  if (!isOpen || !member) return null;
+  if (!isOpen || !member || member.id === currentMember?.id) return null;
 
   const validatePoints = (val: number | string) => {
     if (val === "" || isNaN(Number(val))) {
@@ -246,7 +246,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
             </button>
             <button
               type="submit"
-              disabled={!canManagePoints}
+              disabled={!canManagePoints || member.id === currentMember?.id}
               className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:opacity-50"
             >
               {mode === "add" ? t("points.award") : t("points.deduct")}

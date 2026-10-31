@@ -7,13 +7,15 @@ import { useLeaderDashboard } from "../shared/LeaderDashboardContext";
 
 export function EventReportsPanel({ eventId }: { eventId?: string }) {
   const t = useTranslations("dashboard.leader.eventReports");
-  const { events } = useLeaderDashboard();
+  const { events, committee, currentMember, canManageRegistrations } = useLeaderDashboard();
   const reportableEvents = events.filter((event) => event.status !== "Draft" && !event.isDraft);
   const [selectedId, setSelectedId] = useState(eventId ?? reportableEvents[0]?.id ?? "");
   const selectedEvent = useMemo(
     () => reportableEvents.find((event) => event.id === (eventId ?? selectedId)),
     [eventId, selectedId, reportableEvents],
   );
+  const isDataCommitteeLeader = committee === "data-analysis" && (currentMember?.role === "Leader" || currentMember?.role === "Co-Leader");
+  if (!isDataCommitteeLeader || !canManageRegistrations) return null;
 
   return (
     <section className="space-y-5">

@@ -11,7 +11,7 @@ interface MemberPointsPreviewProps {
 }
 
 export function MemberPointsPreview({ onUpdatePoints }: MemberPointsPreviewProps) {
-  const { members, canManagePoints, committee } = useLeaderDashboard();
+  const { members, canManagePoints, currentMember, committee } = useLeaderDashboard();
   const pointsHref = `${leaderCommitteeConfig[committee].routeBase}/points`;
   const t = useTranslations("dashboard.leader");
 
@@ -91,7 +91,7 @@ export function MemberPointsPreview({ onUpdatePoints }: MemberPointsPreviewProps
                   )}
                 </td>
                 <td className="py-3 text-end">
-                  {canManagePoints && (
+                  {canManagePoints && member.id !== currentMember?.id && (
                     <button
                       type="button"
                       onClick={() => onUpdatePoints(member)}

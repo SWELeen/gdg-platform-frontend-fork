@@ -12,7 +12,7 @@ interface PointsSectionProps {
 }
 
 export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
-  const { members, pointHistory, canManagePoints, clubLeadership } = useLeaderDashboard();
+  const { members, pointHistory, canManagePoints, currentMember, clubLeadership } = useLeaderDashboard();
   const committees = useClubCommittees();
   const t = useTranslations("dashboard.leader");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
@@ -110,7 +110,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                   <td className="px-4 py-3.5 text-foreground/80">{member.tasksCompleted}</td>
                   <td className="px-4 py-3.5 text-muted">{member.lastActivity}</td>
                   <td className="px-5 py-3.5 text-end">
-                    {canManagePoints && (
+                    {canManagePoints && member.id !== currentMember?.id && (
                       <button
                         type="button"
                         onClick={() => onOpenUpdatePoints(member)}
