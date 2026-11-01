@@ -15,7 +15,8 @@
     "recruitment": "Recruitment",
     "workshops": "Workshops",
     "results": "Results",
-    "community": "Community"
+    "community": "Community",
+    "trip": "Trip"
   },
   "controls": {
     "searchLabel": "Search announcements",

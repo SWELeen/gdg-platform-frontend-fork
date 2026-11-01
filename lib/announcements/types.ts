@@ -1,20 +1,17 @@
-// Frontend view model for the Announcements UI.
-//
-// These types describe only what the approved Announcements design renders.
-// They are NOT the backend DTO: the Announcements API contract is not published
-// yet (TBD). When it is, map the Swagger response onto this model inside
-// lib/announcements/provider.ts so the components stay unchanged.
+// Frontend view model returned by the documented NestJS Announcements API.
 
-// The category chips shown in the approved design. Backend enum values are TBD.
+// These values match the backend AnnouncementCategory enum.
 export const announcementCategories = [
   "events",
   "recruitment",
   "workshops",
   "results",
   "community",
+  "trip",
 ] as const;
 
 export type AnnouncementCategory = (typeof announcementCategories)[number];
+export type AnnouncementPublicationStatus = "DRAFT" | "PUBLISHED";
 
 // Abstract GDG-coloured artwork used until real announcement media exists.
 export type AnnouncementArtwork = "navy" | "forest" | "plum" | "ember" | "ocean" | "pine";
@@ -43,9 +40,11 @@ export type Announcement = {
   title: string;
   excerpt: string;
   category: AnnouncementCategory;
+  publicationStatus?: AnnouncementPublicationStatus;
   media: AnnouncementMedia;
   // ISO 8601 date (YYYY-MM-DD).
   publishedAt: string;
+  updatedAt?: string;
   publishedBy?: string;
   readTimeMinutes?: number;
   pinned?: boolean;

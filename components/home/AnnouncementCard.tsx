@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import type { Announcement } from "@/lib/announcements/types";
 
 type AnnouncementCardProps = {
@@ -28,6 +29,10 @@ const categoryConfig = {
   workshops: {
     label: "Workshops",
     color: "var(--gdg-red)",
+  },
+  trip: {
+    label: "Trip",
+    color: "var(--gdg-green)",
   },
 } as const;
 
@@ -108,7 +113,7 @@ export default function AnnouncementCard({
           overflow-hidden
         "
         style={{
-          background: `
+          background: announcement.media.type === "image" ? "var(--surface-muted)" : `
             radial-gradient(
               circle at 25% 25%,
               color-mix(in srgb, ${artwork.primary} 90%, transparent),
@@ -127,13 +132,16 @@ export default function AnnouncementCard({
           `,
         }}
       >
+        {announcement.media.type === "image" && (
+          <Image src={announcement.media.src} alt={announcement.media.alt} fill unoptimized sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+        )}
         {/* Diagonal pattern */}
         <div
-          className="
+          className={`
             absolute
             inset-0
-            opacity-20
-          "
+            ${announcement.media.type === "image" ? "hidden" : "opacity-20"}
+          `}
           style={{
             backgroundImage: `
               repeating-linear-gradient(
@@ -148,7 +156,7 @@ export default function AnnouncementCard({
         />
 
         {/* Soft glow */}
-        <div
+        {announcement.media.type === "artwork" && <div
           className="
             absolute
             -right-16
@@ -162,7 +170,7 @@ export default function AnnouncementCard({
           style={{
             backgroundColor: artwork.secondary,
           }}
-        />
+        />}
 
         {/* Pinned */}
         {announcement.pinned && (

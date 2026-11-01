@@ -14,6 +14,7 @@ import {
   Settings,
   X,
   ClipboardCheck,
+  Megaphone,
 } from "lucide-react";
 
 interface LeaderSidebarProps {
@@ -41,6 +42,7 @@ export function LeaderSidebar({
     { id: "approvals", label: leadershipT("approvalNavigation"), href: `${basePath}#leadership-approvals-title`, icon: ClipboardCheck },
   ] : clubLeadership ? [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
+    { id: "announcements", label: leadershipT("announcementsTitle"), href: `${basePath}/announcements`, icon: Megaphone },
     { id: "members", label: t("nav.members"), href: `${basePath}/members`, icon: Users },
     { id: "tasks", label: t("nav.tasks"), href: `${basePath}/tasks`, icon: CheckSquare },
     { id: "points", label: t("nav.points"), href: `${basePath}/points`, icon: Trophy },

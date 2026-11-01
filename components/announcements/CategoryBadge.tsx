@@ -26,6 +26,10 @@ const categoryTones: Record<AnnouncementCategory, { classes: string; tint: strin
     classes: "bg-gdg-blue-light/60 text-[var(--dashboard-blue-text)]",
     tint: "var(--gdg-blue)",
   },
+  trip: {
+    classes: "bg-gdg-green-light/60 text-[var(--dashboard-green-text)]",
+    tint: "var(--gdg-green)",
+  },
 };
 
 // Dark mode only, matching the theme selectors in globals.css: a manual

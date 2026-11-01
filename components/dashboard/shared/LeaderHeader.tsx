@@ -54,6 +54,7 @@ export function LeaderHeader({
   else if (pathname.startsWith(`${routeRoot}/tasks`)) pageTitle = t("nav.tasks");
   else if (pathname.startsWith(`${routeRoot}/points`)) pageTitle = t("nav.points");
   else if (pathname.startsWith(`${routeRoot}/settings`)) pageTitle = t("nav.settings");
+  else if (clubLeadership && pathname.startsWith(`${routeRoot}/announcements`)) pageTitle = leadershipT("announcementsTitle");
 
   return (
     <div className="border-b border-border bg-surface px-4 py-4 sm:px-6 lg:px-8">
