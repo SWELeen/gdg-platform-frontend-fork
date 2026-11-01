@@ -76,6 +76,7 @@ export function AnnouncementMedia({
           src={media.src}
           alt={media.alt}
           fill
+          unoptimized
           sizes={sizes}
           priority={priority}
           className="object-cover"
