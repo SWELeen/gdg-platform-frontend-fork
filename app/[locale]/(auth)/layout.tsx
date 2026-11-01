@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
 import type { ReactNode } from "react"
 import { TopNav } from "@/components/dashboard/TopNav"
+import Footer from "@/components/Footer"
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
@@ -19,6 +20,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       >
         {children}
       </motion.div>
+      <Footer />
     </div>
   )
 }
