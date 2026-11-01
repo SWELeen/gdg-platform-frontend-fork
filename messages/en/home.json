@@ -208,7 +208,7 @@
       "developers": {
         "name": "Developers",
         "description": "A space for builders, problem-solvers, and technology enthusiasts to learn, create, and build meaningful solutions together.",
-        "leadName": "Shadi Alnajar",
+        "leadName": "Shadi Habeeb",
         "subCommittees": {
           "web-development": {
             "name": "Web Design & Development",
@@ -230,7 +230,7 @@
           "cybersecurity": {
             "name": "Cybersecurity",
             "description": "Protects systems, networks, and data from digital threats by learning cybersecurity fundamentals, discovering and addressing vulnerabilities, and applying practices that strengthen digital security.",
-            "leadName": "Shadi Alnajar"
+            "leadName": "Shadi Habeeb"
           },
           "automation": {
             "name": "Automation",
@@ -266,7 +266,7 @@
       "cybersecurity": {
         "name": "Cybersecurity",
         "description": "Protects systems, networks, and data from digital threats by learning cybersecurity fundamentals, discovering and addressing vulnerabilities, and applying practices that strengthen digital security.",
-        "leadName": "Shadi Alnajar"
+        "leadName": "Shadi Habeeb"
       },
       "automation": {
         "name": "Automation",

@@ -9,8 +9,8 @@ import CommitteePersonCard from "./CommitteePersonCard";
 const darkDeveloperAccent = [
   "[html[data-theme=dark]_&]:bg-[var(--committee-accent)]",
   "[html[data-theme=dark]_&]:text-white",
-  "dark:[html:not([data-theme])_&]:bg-[var(--committee-accent)]",
-  "dark:[html:not([data-theme])_&]:text-white",
+  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:bg-[var(--committee-accent)]",
+  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:text-white",
 ].join(" ");
 
 type Person = {
