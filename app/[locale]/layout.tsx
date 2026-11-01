@@ -56,7 +56,9 @@ export default async function RootLayout({
     >
       <body className="min-h-dvh w-full flex flex-col items-stretch">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <div className="flex min-h-dvh w-full flex-1 flex-col">
+            {children}
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>
