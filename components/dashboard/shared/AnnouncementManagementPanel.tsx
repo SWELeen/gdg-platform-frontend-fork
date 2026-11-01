@@ -20,8 +20,18 @@ const emptyForm = {
   pinned: false,
 };
 
+function isHttpUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export function AnnouncementManagementPanel() {
   const t = useTranslations("dashboard.announcements");
+  const tValidation = useTranslations("dashboard.validation");
   const tCategories = useTranslations("announcements.categories");
   const dir = useTextDirection();
   const [items, setItems] = useState<Announcement[]>([]);
@@ -38,6 +48,7 @@ export function AnnouncementManagementPanel() {
   const [publishingDraftId, setPublishingDraftId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"title" | "excerpt" | "body" | "actionLabel" | "actionHref", string>>>({});
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
@@ -58,6 +69,27 @@ export function AnnouncementManagementPanel() {
     const requestedStatus = submitter instanceof HTMLButtonElement && submitter.value === "DRAFT" ? "DRAFT" : "PUBLISHED";
     setError("");
     setSuccess("");
+    const nextFieldErrors: typeof fieldErrors = {};
+    const title = form.title.trim();
+    const excerpt = form.excerpt.trim();
+    const body = form.body.trim();
+    const actionLabel = form.actionLabel.trim();
+    const actionHref = form.actionHref.trim();
+    if (requestedStatus === "PUBLISHED" && title.length < 3) nextFieldErrors.title = tValidation("titleRequired");
+    else if (title.length > 200) nextFieldErrors.title = tValidation("titleTooLong");
+    if (requestedStatus === "PUBLISHED" && excerpt.length < 10) nextFieldErrors.excerpt = tValidation("excerptRequired");
+    else if (excerpt.length > 500) nextFieldErrors.excerpt = tValidation("excerptTooLong");
+    if (body.length > 10000) nextFieldErrors.body = tValidation("bodyTooLong");
+    if (actionLabel.length > 80) nextFieldErrors.actionLabel = tValidation("actionLabelTooLong");
+    else if (actionLabel.length > 0 && actionLabel.length < 2) nextFieldErrors.actionLabel = tValidation("actionLabelTooShort");
+    if (actionHref.length > 2048) nextFieldErrors.actionHref = tValidation("actionHrefTooLong");
+    else if (actionHref && !isHttpUrl(actionHref)) nextFieldErrors.actionHref = tValidation("actionHrefInvalid");
+    if (requestedStatus === "PUBLISHED" && actionLabel && !actionHref) nextFieldErrors.actionHref = t("fields.actionHrefRequired");
+    if (requestedStatus === "PUBLISHED" && actionHref && !actionLabel) nextFieldErrors.actionLabel = tValidation("actionLabelRequired");
+    setFieldErrors(nextFieldErrors);
+    if (Object.keys(nextFieldErrors).length > 0) {
+      return;
+    }
     setPublishing(true);
     let imageUrl = currentImageUrl;
     if (imageFile) {
@@ -76,12 +108,12 @@ export function AnnouncementManagementPanel() {
     const payload: CreateAnnouncementInput = {
       ...form,
       status: requestedStatus,
-      title: form.title.trim(),
-      excerpt: form.excerpt.trim(),
-      body: form.body.trim() || undefined,
+      title,
+      excerpt,
+      body: body || undefined,
       imageUrl: imageUrl ?? (editingId ? null : undefined),
-      actionLabel: form.actionLabel.trim() || (editingId ? null : undefined),
-      actionHref: form.actionHref.trim() || (editingId ? null : undefined),
+      actionLabel: actionLabel || (editingId ? null : undefined),
+      actionHref: actionHref || (editingId ? null : undefined),
     };
     const result = editingId
       ? await updateAnnouncement(editingId, payload)
@@ -95,6 +127,7 @@ export function AnnouncementManagementPanel() {
       ? current.map((item) => item.id === editingId ? result.data : item)
       : [result.data, ...current]);
     setForm(emptyForm);
+    setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -117,10 +150,11 @@ export function AnnouncementManagementPanel() {
       excerpt: item.excerpt,
       category: item.category,
       body: item.body?.map((block) => block.type === "paragraph" ? typeof block.text === "string" ? block.text : block.text.map((part) => part.text).join("") : "").filter(Boolean).join("\n\n") ?? "",
-      actionLabel: item.primaryAction?.label ?? "",
-      actionHref: item.primaryAction?.href ?? "",
+      actionLabel: item.primaryAction?.label ?? item.draftActionLabel ?? "",
+      actionHref: item.primaryAction?.href ?? item.draftActionHref ?? "",
       pinned: item.pinned ?? false,
     });
+    setFieldErrors({});
     setCurrentImageUrl(item.media.type === "image" ? item.media.src : null);
     setImageFile(null);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -134,6 +168,7 @@ export function AnnouncementManagementPanel() {
     setEditingId(null);
     setEditingStatus(null);
     setForm(emptyForm);
+    setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -144,10 +179,23 @@ export function AnnouncementManagementPanel() {
 
   async function publishDraft(item: Announcement) {
     setError("");
+    const hasIncompleteDetails = item.title.trim().length < 3
+      || item.excerpt.trim().length < 10
+      || Boolean(item.draftActionLabel) !== Boolean(item.draftActionHref);
+    if (hasIncompleteDetails) {
+      startEditing(item);
+      setError(t("draftNeedsDetails"));
+      return;
+    }
     setPublishingDraftId(item.id);
     const result = await updateAnnouncement(item.id, { status: "PUBLISHED" });
     setPublishingDraftId(null);
     if (!result.ok) {
+      if (result.status === 400) {
+        startEditing(item);
+        setError(t("draftNeedsDetails"));
+        return;
+      }
       setError(result.status === 403 ? t("forbidden") : result.status === 401 ? t("unauthorized") : t("publishError"));
       return;
     }
@@ -215,17 +263,19 @@ export function AnnouncementManagementPanel() {
         <p role="alert" className="mt-5 rounded-xl border border-amber-400/40 bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950/30 dark:text-amber-200">{t("apiDisabled")}</p>
       ) : (
         <>
-          {isCreating && <form id="announcement-create-form" onSubmit={onSubmit} className="mt-6 grid gap-4 rounded-2xl border border-border bg-gradient-to-br from-blue-500/10 via-green-500/5 to-yellow-500/10 p-1 shadow-sm">
+          {isCreating && <form id="announcement-create-form" noValidate onSubmit={onSubmit} className="mt-6 grid gap-4 rounded-2xl border border-border bg-gradient-to-br from-blue-500/10 via-green-500/5 to-yellow-500/10 p-1 shadow-sm">
             <div className="grid gap-5 rounded-xl bg-surface p-4 sm:p-6">
             <section className="grid gap-4 rounded-2xl border border-border border-s-gdg-red bg-surface-muted/40 p-4 sm:p-5">
               <h3 className="text-base font-bold text-foreground">{t("sections.basics")}</h3>
             <label className="grid gap-1.5 text-sm font-medium text-foreground">
               {t("fields.title")}
-              <input required minLength={3} maxLength={200} value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+              <input required minLength={3} maxLength={200} aria-invalid={Boolean(fieldErrors.title)} aria-describedby={fieldErrors.title ? "announcement-title-error" : undefined} value={form.title} onChange={(event) => { setForm((current) => ({ ...current, title: event.target.value })); setFieldErrors((current) => ({ ...current, title: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+              {fieldErrors.title && <span id="announcement-title-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.title}</span>}
             </label>
             <label className="grid gap-1.5 text-sm font-medium text-foreground">
               {t("fields.excerpt")}
-              <textarea required minLength={10} maxLength={500} rows={3} value={form.excerpt} onChange={(event) => setForm((current) => ({ ...current, excerpt: event.target.value }))} className="resize-y rounded-xl border border-border bg-background p-3 font-normal outline-none focus:border-blue-500" />
+              <textarea required minLength={10} maxLength={500} aria-invalid={Boolean(fieldErrors.excerpt)} aria-describedby={fieldErrors.excerpt ? "announcement-excerpt-error" : undefined} rows={3} value={form.excerpt} onChange={(event) => { setForm((current) => ({ ...current, excerpt: event.target.value })); setFieldErrors((current) => ({ ...current, excerpt: undefined })); }} className="resize-y rounded-xl border border-border bg-background p-3 font-normal outline-none focus:border-blue-500" />
+              {fieldErrors.excerpt && <span id="announcement-excerpt-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.excerpt}</span>}
             </label>
             </section>
 
@@ -233,7 +283,8 @@ export function AnnouncementManagementPanel() {
               <h3 className="text-base font-bold text-foreground">{t("sections.content")}</h3>
             <label className="grid gap-1.5 text-sm font-medium text-foreground">
               {t("fields.body")}
-              <textarea maxLength={10000} rows={5} value={form.body} onChange={(event) => setForm((current) => ({ ...current, body: event.target.value }))} className="resize-y rounded-xl border border-border bg-background p-3 font-normal outline-none focus:border-blue-500" />
+              <textarea maxLength={10000} aria-invalid={Boolean(fieldErrors.body)} aria-describedby={fieldErrors.body ? "announcement-body-error" : undefined} rows={5} value={form.body} onChange={(event) => { setForm((current) => ({ ...current, body: event.target.value })); setFieldErrors((current) => ({ ...current, body: undefined })); }} className="resize-y rounded-xl border border-border bg-background p-3 font-normal outline-none focus:border-blue-500" />
+              {fieldErrors.body && <span id="announcement-body-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.body}</span>}
             </label>
             </section>
 
@@ -270,11 +321,13 @@ export function AnnouncementManagementPanel() {
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1.5 text-sm font-medium text-foreground">
                 {t("fields.actionLabel")}
-                <input maxLength={80} value={form.actionLabel} onChange={(event) => setForm((current) => ({ ...current, actionLabel: event.target.value }))} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                <input maxLength={80} aria-invalid={Boolean(fieldErrors.actionLabel)} aria-describedby={fieldErrors.actionLabel ? "announcement-action-label-error" : undefined} value={form.actionLabel} onChange={(event) => { setForm((current) => ({ ...current, actionLabel: event.target.value })); setFieldErrors((current) => ({ ...current, actionLabel: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                {fieldErrors.actionLabel && <span id="announcement-action-label-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionLabel}</span>}
               </label>
               <label className="grid gap-1.5 text-sm font-medium text-foreground">
                 {t("fields.actionHref")}
-                <input type="url" dir="ltr" value={form.actionHref} onChange={(event) => setForm((current) => ({ ...current, actionHref: event.target.value }))} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                <input type="url" maxLength={2048} dir="ltr" aria-invalid={Boolean(fieldErrors.actionHref)} aria-describedby={fieldErrors.actionHref ? "announcement-action-href-error" : undefined} value={form.actionHref} onChange={(event) => { setForm((current) => ({ ...current, actionHref: event.target.value })); setFieldErrors((current) => ({ ...current, actionHref: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                {fieldErrors.actionHref && <span id="announcement-action-href-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionHref}</span>}
               </label>
             </div>
             <label className="flex items-center gap-2 text-sm text-foreground">

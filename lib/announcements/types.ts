@@ -41,6 +41,8 @@ export type Announcement = {
   excerpt: string;
   category: AnnouncementCategory;
   publicationStatus?: AnnouncementPublicationStatus;
+  draftActionLabel?: string | null;
+  draftActionHref?: string | null;
   media: AnnouncementMedia;
   // ISO 8601 date (YYYY-MM-DD).
   publishedAt: string;
