@@ -7,7 +7,6 @@ import SponsorSection from "@/components/home/SponsorsSection";
 import JoinCommunity from "@/components/home/JoinCommunity";
 import LeadershipTeam, { AdvisorsTeam } from "@/components/home/LeadershipTeam"
 import Committees from "@/components/home/Committees"
-import Footer from "@/components/Footer"
 import AnnouncementsSection from "@/components/home/AnnouncementsSection";
 import { getAnnouncements } from "@/lib/announcements/provider";
 
@@ -30,7 +29,6 @@ export default async function Home() {
         <Committees/>
         <AdvisorsTeam />
         <JoinCommunity/>
-        <Footer/>
       </main>
     </>
   );

@@ -3,7 +3,6 @@
 import { useState, type ReactNode } from "react";
 import { LeaderDashboardProvider } from "@/components/dashboard/shared/LeaderDashboardContext";
 import { TopNav } from "@/components/dashboard/TopNav";
-import Footer from "@/components/Footer";
 import { LeaderSidebar } from "@/components/dashboard/shared/LeaderSidebar";
 import { LeaderHeader } from "@/components/dashboard/shared/LeaderHeader";
 import { LeaderDashboardStatus } from "@/components/dashboard/shared/LeaderDashboardStatus";
@@ -59,8 +58,6 @@ function LeaderLayoutShell({
         </div>
       </div>
 
-      {/* Shared Platform Footer */}
-      <Footer />
     </div>
   );
 }

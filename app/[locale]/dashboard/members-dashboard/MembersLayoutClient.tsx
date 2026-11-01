@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { MotionConfig } from "framer-motion";
 
 import { TopNav } from "@/components/dashboard/TopNav";
-import Footer from "@/components/Footer";
 import { MembersSidebar } from "@/components/dashboard/members/MembersSidebar";
 import { MembersCompactNav } from "@/components/dashboard/members/MembersCompactNav";
 import { MembersPageHeader } from "@/components/dashboard/members/MembersPageHeader";
@@ -45,7 +44,6 @@ export function MembersLayoutClient({ children }: { children: ReactNode }) {
           </div>
         </div>
       </MotionConfig>
-      <Footer />
     </div>
     </MemberWorkspaceProvider>
     </DashboardAccessGate>

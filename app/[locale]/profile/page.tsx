@@ -6,7 +6,6 @@ import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { HangingBadge } from "@/components/badge/HangingBadge";
 import { useMemberBadges } from "@/components/badge/useMemberBadge";
 import { TopNav } from "@/components/dashboard/TopNav";
-import Footer from "@/components/Footer";
 import { ProfileBio } from "@/components/profile/ProfileBio";
 import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -330,7 +329,6 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }
