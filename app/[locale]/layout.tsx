@@ -6,6 +6,7 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { localeMetadata } from "@/i18n/locale-metadata";
+import Footer from "@/components/Footer";
 import "../globals.css";
 
 // Google Sans isn't published on Google Fonts (Google keeps it proprietary); Roboto is the closest available match.
@@ -58,6 +59,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <div className="flex h-full min-h-dvh w-full flex-1 flex-col">
             {children}
+            <Footer />
           </div>
         </NextIntlClientProvider>
       </body>

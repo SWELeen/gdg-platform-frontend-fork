@@ -1,6 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
 import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/Footer";
 import { AnnouncementsCTA } from "@/components/announcements/AnnouncementsCTA";
 
 // Shared shell for the listing and details pages, so loading and error states
@@ -21,7 +20,6 @@ export default async function AnnouncementsLayout({
         {children}
         <AnnouncementsCTA />
       </main>
-      <Footer />
     </>
   );
 }

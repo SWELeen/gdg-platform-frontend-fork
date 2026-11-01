@@ -7,7 +7,6 @@ import { LeaderGreeting } from "./LeaderGreeting";
 import { LeadershipApprovalsPanel } from "./LeadershipApprovalsPanel";
 import { LeaderDashboardStatus } from "./LeaderDashboardStatus";
 import { TopNav } from "@/components/dashboard/TopNav";
-import Footer from "@/components/Footer";
 import { committees } from "@/lib/badge/themes";
 
 const developerCommitteeAccents: Record<string, string> = {
@@ -34,7 +33,6 @@ function ClubLeadershipDashboard() {
           <LeadershipApprovalsPanel scope="CLUB" />
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
