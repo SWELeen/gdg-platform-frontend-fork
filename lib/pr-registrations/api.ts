@@ -23,10 +23,38 @@ type ApiRegistrant = {
   registeredAt: string;
   waitlistPosition: number | null;
   checkedInAt: string | null;
+  discoverySource: string | null;
   answers: { questionId: number; question: string; answer: string }[];
 };
 
 type RegistrantsPage = { items: ApiRegistrant[]; pagination: { totalPages: number } };
+
+export type RegistrationBlacklistReason =
+  | "NO_CHECK_IN"
+  | "CONFIRMATION_EXPIRED"
+  | "LATE_CANCELLATION";
+
+export type RegistrationBlacklistEntry = {
+  entryId: number;
+  reason: RegistrationBlacklistReason;
+  createdAt: string;
+  resolvedAt: string | null;
+  resolutionReason: string | null;
+  registration: {
+    registrationId: number;
+    status: string;
+    registeredAt: string;
+    checkedInAt: string | null;
+    name: string;
+    email: string | null;
+    event: { eventId: number; name: string; startsAt: string };
+  };
+};
+
+type RegistrationBlacklistPage = {
+  items: RegistrationBlacklistEntry[];
+  pagination: { totalPages: number };
+};
 
 // The dashboard models review (status) and the member's reply
 // (confirmationStatus) separately; the backend keeps one status.
@@ -66,6 +94,7 @@ function toEventRegistration(eventId: string, item: ApiRegistrant): EventRegistr
     lateCancellation: item.status === "LATE_CANCELLATION",
     checkInStatus: item.checkedInAt ? "CheckedIn" : item.status === "NO_CHECK_IN" ? "NoShow" : "NotCheckedIn",
     checkedInAt: item.checkedInAt ?? undefined,
+    discoverySource: item.discoverySource ?? undefined,
     waitlistPosition: item.waitlistPosition ?? undefined,
     // Keys are registrant field keys; the dashboard translates them for display.
     profile: Object.fromEntries(
@@ -98,6 +127,20 @@ export async function fetchRegistrants(eventId: string): Promise<EventRegistrati
     const result = await apiRequest<RegistrantsPage>(`/events/${eventId}/registrations?page=${page}&pageSize=100`);
     if (!result.ok) break;
     all.push(...result.data.items.map((item) => toEventRegistration(eventId, item)));
+    if (page >= result.data.pagination.totalPages) break;
+  }
+  return all;
+}
+
+/** PR's history of attendance and confirmation incidents. */
+export async function fetchRegistrationBlacklist(): Promise<RegistrationBlacklistEntry[]> {
+  const all: RegistrationBlacklistEntry[] = [];
+  for (let page = 1; ; page += 1) {
+    const result = await apiRequest<RegistrationBlacklistPage>(
+      `/registrations/blacklist?page=${page}&pageSize=100`,
+    );
+    if (!result.ok) throw new Error(result.message || "Blacklist could not be loaded.");
+    all.push(...result.data.items);
     if (page >= result.data.pagination.totalPages) break;
   }
   return all;

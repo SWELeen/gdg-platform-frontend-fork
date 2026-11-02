@@ -42,6 +42,8 @@ export function RegistrationForm({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [questionErrors, setQuestionErrors] = useState<Record<string, boolean>>({});
+    const [discoverySource, setDiscoverySource] = useState("");
+    const [discoverySourceError, setDiscoverySourceError] = useState(false);
     const [result, setResult] = useState<{ ok: boolean; key: string; detail?: string } | null>(null);
 
     useEffect(() => {
@@ -59,6 +61,9 @@ export function RegistrationForm({
         if (isSubmitting) return;
 
         if (questionsLoading || questionsError) return;
+        const hasDiscoverySource = Boolean(discoverySource);
+        setDiscoverySourceError(!hasDiscoverySource);
+        if (!hasDiscoverySource) return;
         const missingAnswers = Object.fromEntries(questions
             .filter((question) => question.required && !answers[question.id]?.trim())
             .map((question) => [question.id, true]));
@@ -67,7 +72,7 @@ export function RegistrationForm({
         if (Object.keys(missingAnswers).length > 0) return;
         if (!eventId) return;
         setIsSubmitting(true);
-        const outcome = await registerForEvent(eventId, questions, answers);
+        const outcome = await registerForEvent(eventId, questions, answers, discoverySource);
         setIsSubmitting(false);
         const known = ["ALREADY_REGISTERED", "REGISTRATION_CLOSED", "UNAUTHORIZED", "VALIDATION_ERROR"];
         setResult(
@@ -142,6 +147,28 @@ export function RegistrationForm({
                             </dl>
                         </section>
                     )}
+
+                    <fieldset className="mt-5 rounded-xl border border-border bg-surface-muted/30 p-4 text-start">
+                        <legend className="px-1 text-sm font-semibold text-foreground">
+                            {t("discoverySource.title")} <span className="text-gdg-red">*</span>
+                        </legend>
+                        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                            {(["WHATSAPP", "X", "LINKEDIN", "ME_QR", "LUMA_FEED", "GOOGLE", "INSTAGRAM", "TECH"] as const).map((source) => (
+                                <label key={source} className="flex cursor-pointer items-center gap-2 rounded-lg border border-border/70 bg-surface px-3 py-2 text-sm text-foreground">
+                                    <input
+                                        type="radio"
+                                        name="discovery-source"
+                                        value={source}
+                                        checked={discoverySource === source}
+                                        onChange={() => { setDiscoverySource(source); setDiscoverySourceError(false); }}
+                                        className="size-4 accent-[var(--gdg-dark)]"
+                                    />
+                                    {t(`discoverySource.options.${source}`)}
+                                </label>
+                            ))}
+                        </div>
+                        {discoverySourceError && <p className="mt-2 text-xs text-gdg-red">{tValidation("fieldRequired")}</p>}
+                    </fieldset>
 
                     {questions.map((question) => (
                         <div key={question.id} className="mt-5">

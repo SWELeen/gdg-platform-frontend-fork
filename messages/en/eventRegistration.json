@@ -9,6 +9,19 @@
   "questionsLoading": "Loading the event questions...",
   "questionsUnavailable": "We could not load this event's questions. Your registration was not sent.",
   "retryQuestions": "Try loading again",
+  "discoverySource": {
+    "title": "Where did you hear about this event?",
+    "options": {
+      "WHATSAPP": "WhatsApp",
+      "X": "Twitter / X",
+      "LINKEDIN": "LinkedIn",
+      "ME_QR": "me-qr.com",
+      "LUMA_FEED": "Luma Feed",
+      "GOOGLE": "Google",
+      "INSTAGRAM": "Instagram",
+      "TECH": "Tech"
+    }
+  },
   "date": "Date",
   "time": "Time",
   "location": "Location",

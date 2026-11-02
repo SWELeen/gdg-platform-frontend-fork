@@ -583,6 +583,7 @@
       "overview": "Overview",
       "events": "Events",
       "eventRegistrations": "Events / Registrations",
+      "blacklist": "Blacklist",
       "members": "Members",
       "tasks": "Tasks",
       "points": "Points",
@@ -783,6 +784,17 @@
       "applicantInfo": "Applicant information",
       "emptyProfile": "No additional profile information was included with this registration.",
       "questionsAnswers": "Registration questions & answers",
+      "discoverySourceQuestion": "Where did you hear about this event?",
+      "discoverySourceOptions": {
+        "WHATSAPP": "WhatsApp",
+        "X": "Twitter / X",
+        "LINKEDIN": "LinkedIn",
+        "ME_QR": "me-qr.com",
+        "LUMA_FEED": "Luma Feed",
+        "GOOGLE": "Google",
+        "INSTAGRAM": "Instagram",
+        "TECH": "Tech"
+      },
       "emptyAnswers": "No event-specific questions or answers are available in the current registration data.",
       "waitlist": "Add to waitlist",
       "reject": "Reject",
@@ -850,6 +862,23 @@
         "needsUpdate": "Needs update",
         "allStatuses": "All statuses",
         "confirmationOutstanding": "Confirmation outstanding"
+      }
+    },
+    "blacklist": {
+      "title": "Attendance blacklist",
+      "description": "Review missed confirmations, late cancellations, and confirmed attendees without a check-in 24 hours after the event ends.",
+      "apiDisabled": "The attendance blacklist is available when the platform API is enabled.",
+      "loadError": "The attendance blacklist could not be loaded. Please try again.",
+      "loading": "Loading attendance records…",
+      "empty": "There are no attendance incidents to show.",
+      "filterLabel": "Filter incidents",
+      "resolved": "Resolved",
+      "unresolved": "Needs review",
+      "filters": { "all": "All" },
+      "reasons": {
+        "NO_CHECK_IN": "Did not attend",
+        "CONFIRMATION_EXPIRED": "Confirmation expired",
+        "LATE_CANCELLATION": "Late cancellation"
       }
     },
     "settings": {

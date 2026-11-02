@@ -9,6 +9,19 @@
   "questionsLoading": "جارٍ تحميل أسئلة الفعالية...",
   "questionsUnavailable": "تعذر تحميل أسئلة الفعالية، ولم يُرسل تسجيلك.",
   "retryQuestions": "إعادة المحاولة",
+  "discoverySource": {
+    "title": "من أين سمعت عن هذه الفعالية؟",
+    "options": {
+      "WHATSAPP": "واتساب",
+      "X": "تويتر (X)",
+      "LINKEDIN": "لينكدإن",
+      "ME_QR": "me-qr.com",
+      "LUMA_FEED": "Luma Feed",
+      "GOOGLE": "Google",
+      "INSTAGRAM": "إنستجرام",
+      "TECH": "Tech"
+    }
+  },
   "date": "التاريخ",
   "time": "الوقت",
   "location": "الموقع",

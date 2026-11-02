@@ -153,5 +153,6 @@ export interface EventRegistration {
   attendanceQrCodeDataUrl?: string;
   waitlistPosition?: number;
   profile: Record<string, string>;
+  discoverySource?: string;
   answers: RegistrationAnswer[];
 }
