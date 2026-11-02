@@ -12,6 +12,8 @@
   },
   "scanner": {
     "title": "Scan attendee QR",
+    "aim": "Keep the QR code inside the red frame.",
+    "detected": "QR detected. Checking attendance…",
     "description": "Scan the attendee’s code. Event, approval, confirmation, and duplicate-use checks belong to the backend.",
     "startCamera": "Open camera",
     "stopCamera": "Close camera",
