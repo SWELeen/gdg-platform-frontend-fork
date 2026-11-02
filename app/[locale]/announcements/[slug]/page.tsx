@@ -15,6 +15,8 @@ import {
 
 type Props = PageProps<"/[locale]/announcements/[slug]">;
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const announcements = await getAnnouncements();
   return announcements.map(({ slug }) => ({ slug }));
