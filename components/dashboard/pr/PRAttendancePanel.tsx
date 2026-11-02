@@ -29,13 +29,16 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<vo
     let scanner: import("html5-qrcode").Html5Qrcode | undefined;
     let startPromise: Promise<void> | undefined;
 
-    void import("html5-qrcode").then(({ Html5Qrcode }) => {
+    void import("html5-qrcode").then(({ Html5Qrcode, Html5QrcodeSupportedFormats }) => {
       if (disposed) return;
 
-      scanner = new Html5Qrcode(scannerId, { verbose: false });
+      scanner = new Html5Qrcode(scannerId, {
+        verbose: false,
+        formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+      });
       startPromise = scanner.start(
         { facingMode: "environment" },
-        { fps: 15, qrbox: { width: 220, height: 220 }, aspectRatio: 1 },
+        { fps: 25, qrbox: { width: 220, height: 220 }, aspectRatio: 1 },
         (decodedText) => {
           if (tokenHandled) return;
           tokenHandled = true;
@@ -111,12 +114,12 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<vo
       </div>
 
       {cameraActive && (
-        <div className="relative mt-4 aspect-video max-h-72 overflow-hidden rounded-xl bg-black">
+        <div className="relative mx-auto mt-4 aspect-square w-full max-h-72 max-w-72 overflow-hidden rounded-xl bg-black">
           <div id={scannerId} className="size-full [&_video]:size-full [&_video]:object-cover" />
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3">
             <div
               aria-hidden="true"
-              className={`size-56 rounded-2xl border-[3px] shadow-[0_0_0_999px_rgba(0,0,0,0.2)] transition-colors ${
+              className={`size-56 shrink-0 rounded-2xl border-[3px] shadow-[0_0_0_999px_rgba(0,0,0,0.2)] transition-colors ${
                 scanDetected ? "border-green-500" : "border-red-500"
               }`}
             />
