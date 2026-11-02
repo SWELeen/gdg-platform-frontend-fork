@@ -15,6 +15,7 @@ import {
   X,
   ClipboardCheck,
   Megaphone,
+  ShieldAlert,
 } from "lucide-react";
 
 interface LeaderSidebarProps {
@@ -51,6 +52,7 @@ export function LeaderSidebar({
   ] : [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
     { id: "events", label: t(committee === "pr" ? "nav.eventRegistrations" : "nav.events"), href: `${basePath}/events`, icon: Calendar },
+    ...(committee === "pr" ? [{ id: "blacklist", label: t("nav.blacklist"), href: `${basePath}/blacklist`, icon: ShieldAlert }] : []),
     { id: "members", label: t("nav.members"), href: `${basePath}/members`, icon: Users },
     { id: "tasks", label: t("nav.tasks"), href: `${basePath}/tasks`, icon: CheckSquare },
     { id: "points", label: t("nav.points"), href: `${basePath}/points`, icon: Trophy },

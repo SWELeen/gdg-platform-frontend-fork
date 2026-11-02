@@ -792,10 +792,16 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
 
             <div className="mt-5 border-t border-border pt-4">
               <h4 className="text-sm font-semibold text-foreground">{t("registrations.questionsAnswers")}</h4>
-              {selectedRegistration.answers.length === 0 ? (
+              {selectedRegistration.answers.length === 0 && !selectedRegistration.discoverySource ? (
                 <p className="mt-2 text-xs text-muted">{t("registrations.emptyAnswers")}</p>
               ) : (
                 <dl className="mt-2 space-y-3">
+                  {selectedRegistration.discoverySource && (
+                    <div className="rounded-xl border border-border bg-surface-muted/30 p-3">
+                      <dt className="text-xs font-semibold text-foreground">{t("registrations.discoverySourceQuestion")}</dt>
+                      <dd className="mt-1 whitespace-pre-wrap text-xs leading-relaxed text-muted">{t(`registrations.discoverySourceOptions.${selectedRegistration.discoverySource}`)}</dd>
+                    </div>
+                  )}
                   {selectedRegistration.answers.map((answer) => (
                     <div key={answer.questionId} className="rounded-xl border border-border bg-surface-muted/30 p-3">
                       <dt className="text-xs font-semibold text-foreground">{answer.question}</dt>

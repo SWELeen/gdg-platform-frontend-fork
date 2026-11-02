@@ -583,6 +583,7 @@
       "overview": "نظرة عامة",
       "events": "الفعاليات",
       "eventRegistrations": "الفعاليات والتسجيلات",
+      "blacklist": "القائمة السوداء",
       "members": "الأعضاء",
       "tasks": "المهام",
       "points": "النقاط",
@@ -783,6 +784,17 @@
       "applicantInfo": "معلومات المتقدم",
       "emptyProfile": "لم تُرفق معلومات إضافية للمتقدم مع هذا التسجيل.",
       "questionsAnswers": "أسئلة التسجيل وإجاباتها",
+      "discoverySourceQuestion": "من أين سمعت عن هذه الفعالية؟",
+      "discoverySourceOptions": {
+        "WHATSAPP": "واتساب",
+        "X": "تويتر (X)",
+        "LINKEDIN": "لينكدإن",
+        "ME_QR": "me-qr.com",
+        "LUMA_FEED": "Luma Feed",
+        "GOOGLE": "Google",
+        "INSTAGRAM": "إنستجرام",
+        "TECH": "Tech"
+      },
       "emptyAnswers": "لا توجد أسئلة أو إجابات خاصة بهذه الفعالية ضمن بيانات التسجيل الحالية.",
       "waitlist": "إضافة إلى قائمة الانتظار",
       "reject": "رفض",
@@ -850,6 +862,23 @@
         "needsUpdate": "بحاجة إلى تحديث",
         "allStatuses": "جميع الحالات",
         "confirmationOutstanding": "بانتظار التأكيد"
+      }
+    },
+    "blacklist": {
+      "title": "القائمة السوداء للحضور",
+      "description": "راجعي من انتهت مهلة تأكيده، أو ألغى متأخرًا، أو لم يُسجّل حضوره بعد مرور 24 ساعة على انتهاء الفعالية.",
+      "apiDisabled": "تتوفر قائمة الحضور عند تفعيل واجهة المنصة.",
+      "loadError": "تعذر تحميل قائمة الحضور. حاولي مرة أخرى.",
+      "loading": "جارٍ تحميل سجلات الحضور...",
+      "empty": "لا توجد مخالفات حضور لعرضها.",
+      "filterLabel": "تصفية السجلات",
+      "resolved": "تمت المراجعة",
+      "unresolved": "تحتاج إلى مراجعة",
+      "filters": { "all": "الكل" },
+      "reasons": {
+        "NO_CHECK_IN": "لم يحضر",
+        "CONFIRMATION_EXPIRED": "انتهت مهلة التأكيد",
+        "LATE_CANCELLATION": "إلغاء متأخر"
       }
     },
     "settings": {

@@ -99,8 +99,10 @@ export async function registerForEvent(
   eventId: string,
   questions: RegistrationQuestion[],
   answers: Record<string, string>,
+  discoverySource: string,
 ): Promise<RegisterResult> {
   const body = {
+    discoverySource,
     answers: questions
       .filter((question) => (answers[question.id] ?? "").trim() !== "")
       .map((question) => ({
