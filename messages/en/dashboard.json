@@ -1147,7 +1147,7 @@
         "previewAlt": "Selected event image"
       },
       "registration": {
-        "description": "These profile details are shown read-only to the attendee and PR team. Add any event-specific questions below.",
+        "description": "These profile details, including membership status, are shown read-only to the attendee and PR team. Add any event-specific questions below.",
         "fields": {
           "fullName": "Full name",
           "college": "College",

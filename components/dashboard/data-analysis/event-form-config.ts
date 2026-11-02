@@ -24,7 +24,14 @@ export const requiredRegistrantFields: string[] = [
 ];
 
 /** Attendee details read from each account; additional event-specific details use custom questions. */
-export const accountRegistrantFields: RegistrantFieldKey[] = ["fullName", "email", "phone", "major", "university"];
+export const accountRegistrantFields: RegistrantProfileKey[] = [
+  "fullName",
+  "email",
+  "phone",
+  "major",
+  "university",
+  "membership",
+];
 
 /** Stored value → translation key, so stored English values render in either locale. */
 export const registrantFieldKeyByValue: Record<string, RegistrantProfileKey> = {

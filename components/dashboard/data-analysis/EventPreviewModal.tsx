@@ -16,7 +16,7 @@ import {
 import { parseEventDate } from "@/lib/dashboard/event-format";
 import type { CommitteeEventDetails } from "@/lib/committee-dashboard/api";
 import { useDialog } from "../shared/useDialog";
-import { registrantFieldKeys, questionTypeKeys, type DraftQuestion } from "./event-form-config";
+import { accountRegistrantFields, questionTypeKeys, type DraftQuestion } from "./event-form-config";
 
 export interface EventPreviewData {
   title: string;
@@ -211,7 +211,7 @@ export function EventPreviewModal({
               {t("preview.registrationInfo")}
             </h4>
             <ul className="mt-3 flex flex-wrap gap-2">
-              {registrantFieldKeys.map((key) => (
+              {accountRegistrantFields.map((key) => (
                 <li
                   key={key}
                   className="rounded-full border border-border bg-surface-muted/60 px-3 py-1 text-xs text-foreground/80"
