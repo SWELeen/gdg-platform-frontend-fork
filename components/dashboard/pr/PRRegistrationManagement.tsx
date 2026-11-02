@@ -19,13 +19,14 @@ import { PRAttendancePanel } from "./PRAttendancePanel";
 import { CreateEventModal, EditDraftEventModal, type CreateEventInput } from "../data-analysis/CreateEventForm";
 import { EventPreviewModal, toEventPreviewData, type EventPreviewData } from "../data-analysis/EventPreviewModal";
 import { API_ENABLED } from "@/lib/api/client";
-import { registrantFieldKeys, type RegistrantFieldKey } from "../data-analysis/event-form-config";
+import { registrantFieldKeys, type RegistrantProfileKey } from "../data-analysis/event-form-config";
 import { updateCommitteeEvent, uploadCommitteeEventImage, type CommitteeEventDetails, type EventSchedule } from "@/lib/committee-dashboard/api";
 import { leaderCommitteeConfig } from "../shared/committee-config";
 import type { CommitteeEvent } from "../shared/types";
 
-const isRegistrantFieldKey = (key: string): key is RegistrantFieldKey =>
-  (registrantFieldKeys as readonly string[]).includes(key);
+const registrantProfileFieldKeys: readonly string[] = [...registrantFieldKeys, "membership", "committees"];
+const isRegistrantFieldKey = (key: string): key is RegistrantProfileKey =>
+  registrantProfileFieldKeys.includes(key);
 import {
   ArrowLeft,
   Calendar,

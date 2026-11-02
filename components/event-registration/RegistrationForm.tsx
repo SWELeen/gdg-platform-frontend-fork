@@ -6,6 +6,17 @@ import type { RegistrationQuestion } from "@/components/dashboard/shared/types";
 import { API_ENABLED, apiRequest } from "@/lib/api/client";
 import { CHOICE_SEPARATOR, registerForEvent } from "@/lib/events/api";
 
+type RegistrationAccount = {
+    fullName: string;
+    email: string | null;
+    phoneNumber: string | null;
+    university: string | null;
+    college: string | null;
+    major: string | null;
+    memberId: number | null;
+    committees: { code: string; name: string; position: string }[];
+};
+
 export function RegistrationForm({
     onClose,
     questions = [],
@@ -25,9 +36,9 @@ export function RegistrationForm({
     const t = useTranslations("eventRegistration");
     const tValidation = useTranslations("validation");
 
-    // Name, email, phone, major and membership come from the account, so the
-    // form only asks the event's own questions.
-    const [registrant, setRegistrant] = useState<{ fullName: string; email: string | null } | null>(null);
+    // Account details are displayed read-only; the attendee answers only the
+    // event-specific questions below.
+    const [registrant, setRegistrant] = useState<RegistrationAccount | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [questionErrors, setQuestionErrors] = useState<Record<string, boolean>>({});
@@ -36,7 +47,7 @@ export function RegistrationForm({
     useEffect(() => {
         if (!API_ENABLED) return;
         let active = true;
-        void apiRequest<{ fullName: string; email: string | null }>("/me").then((result) => {
+        void apiRequest<RegistrationAccount>("/me").then((result) => {
             if (active && result.ok) setRegistrant(result.data);
         });
         return () => { active = false; };
@@ -109,10 +120,27 @@ export function RegistrationForm({
                     noValidate
                 >
                     {registrant && (
-                        <p className="rounded-md border border-border bg-surface-muted/40 px-3 py-2 text-start text-sm text-foreground">
-                            {t("registeringAs", { name: registrant.fullName })}
-                            {registrant.email && <span className="block text-xs text-muted">{registrant.email}</span>}
-                        </p>
+                        <section className="rounded-xl border border-border bg-surface-muted/30 p-4 text-start">
+                            <h3 className="text-sm font-semibold text-foreground">{t("accountInfo.title")}</h3>
+                            <p className="mt-1 text-xs leading-5 text-muted">{t("accountInfo.description")}</p>
+                            <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+                                {([
+                                    ["name", registrant.fullName],
+                                    ["email", registrant.email],
+                                    ["phone", registrant.phoneNumber],
+                                    ["university", registrant.university],
+                                    ["college", registrant.college],
+                                    ["major", registrant.major],
+                                    ["membership", registrant.memberId ? t("accountInfo.member") : t("accountInfo.nonMember")],
+                                    ["committees", registrant.committees?.map((committee) => committee.name).join(", ") || t("accountInfo.none")],
+                                ] as const).map(([key, value]) => (
+                                    <div key={key} className="min-w-0 rounded-lg border border-border/70 bg-surface px-3 py-2">
+                                        <dt className="text-xs text-muted">{t(`accountInfo.${key}`)}</dt>
+                                        <dd className="mt-1 break-words text-sm font-medium text-foreground">{value || t("accountInfo.notProvided")}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </section>
                     )}
 
                     {questions.map((question) => (

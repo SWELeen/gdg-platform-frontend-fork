@@ -109,7 +109,9 @@ export function EventDetails({ eventId }: { eventId: string }) {
 
   const status = statusStyles[event.status];
   const percent = event.capacity > 0 ? Math.min(100, Math.round((event.registered / event.capacity) * 100)) : 0;
-  const registrantFields = event.requiredRegistrantFields ?? [];
+  const registrantFields = (event.requiredRegistrantFields ?? []).filter(
+    (field) => field !== "GDG on Campus membership",
+  );
   const questions = event.registrationQuestions ?? [];
 
   return (

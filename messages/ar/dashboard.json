@@ -50,6 +50,7 @@
     "updated": "تم تحديث الإعلان.",
     "deleted": "تم حذف الإعلان.",
     "deleteError": "تعذر حذف الإعلان. حاول مرة أخرى.",
+    "deleteDialogTitle": "حذف الإعلان؟",
     "confirmDelete": "هل تريد حذف «{title}»؟ سيُزال من الموقع.",
     "edit": "تعديل",
     "delete": "حذف",
@@ -1146,14 +1147,16 @@
         "previewAlt": "صورة الفعالية المختارة"
       },
       "registration": {
-        "description": "هذه المعلومات تؤخذ من حساب كل مشارك، فما يحتاج يكتبها مرة ثانية. أضف أي معلومات خاصة بالفعالية كأسئلة أدناه.",
+        "description": "تظهر معلومات الحساب هذه للمتقدم وفريق PR بشكل غير قابل للتعديل. أضف أي أسئلة خاصة بالفعالية أدناه.",
         "fields": {
           "fullName": "الاسم الكامل",
           "college": "الكلية",
           "major": "التخصص",
           "phone": "رقم الجوال",
           "email": "البريد الإلكتروني",
-          "membership": "هل أنت عضو في GDG on Campus؟"
+          "university": "الجامعة",
+          "membership": "العضوية في GDG on Campus",
+          "committees": "اللجان"
         },
         "placeholders": {
           "fullName": "أدخل اسمك الكامل",
@@ -1162,8 +1165,8 @@
           "phone": "5xxxxxxxx",
           "email": "أدخل بريدك الإلكتروني"
         },
-        "memberYes": "نعم، أنا عضو",
-        "memberNo": "لا، لست عضوًا"
+        "memberYes": "عضو",
+        "memberNo": "غير عضو"
       },
       "questions": {
         "title": "أسئلة إضافية",
@@ -1235,7 +1238,10 @@
         "imageAlt": "صورة الفعالية",
         "date": "التاريخ",
         "time": "الوقت",
+        "speakers": "المتحدثون",
         "location": "الموقع",
+        "deadline": "آخر موعد للتسجيل",
+        "requirements": "المتطلبات",
         "capacity": "السعة",
         "capacityValue": "{count, plural, one {مشارك واحد} two {مشاركان} few {# مشاركين} many {# مشاركًا} other {# مشارك}}",
         "noRequirements": "لا توجد متطلبات",

@@ -12,7 +12,13 @@ type ApiRegistrant = {
   registrationId: number;
   name: string;
   email: string | null;
-  profile: { membership: boolean; phone?: string | null; major?: string | null };
+  profile: {
+    membership: boolean;
+    university?: string | null;
+    committees?: string | null;
+    phone?: string | null;
+    major?: string | null;
+  };
   status: string;
   registeredAt: string;
   waitlistPosition: number | null;
@@ -65,7 +71,7 @@ function toEventRegistration(eventId: string, item: ApiRegistrant): EventRegistr
     profile: Object.fromEntries(
       Object.entries(item.profile)
         .filter(([, value]) => value !== null && value !== undefined && value !== "")
-        .map(([key, value]) => [key, String(value)]),
+        .map(([key, value]) => [key, Array.isArray(value) ? value.join(", ") : String(value)]),
     ),
     answers: item.answers.map((answer) => ({
       questionId: String(answer.questionId),
