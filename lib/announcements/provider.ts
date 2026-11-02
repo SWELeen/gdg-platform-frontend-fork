@@ -26,7 +26,13 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 export async function getAnnouncementBySlug(
   slug: string,
 ): Promise<Announcement | undefined> {
-  return request<Announcement>(`/announcements/${encodeURIComponent(slug)}`);
+  const announcement = await request<Announcement>(`/announcements/${encodeURIComponent(slug)}`);
+  if (announcement) return announcement;
+
+  // Fall back to the public collection if the detail endpoint is temporarily
+  // unavailable or the deployed API does not resolve this slug consistently.
+  const announcements = await getAnnouncements();
+  return announcements.find((item) => item.slug === slug);
 }
 
 // "More announcements" on the details page: the newest others. Deliberately simple.
