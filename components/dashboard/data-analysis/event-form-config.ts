@@ -12,13 +12,15 @@ export const registrantFieldKeys = [
 export type RegistrantFieldKey = (typeof registrantFieldKeys)[number];
 export type RegistrantProfileKey = RegistrantFieldKey | "college" | "membership" | "committees";
 
-/** Values stored on CommitteeEvent.requiredRegistrantFields (unchanged data shape). */
+/** Account fields exposed to the PR registration list when the backend supports a field selector.
+ * University and membership are included in the account info UI but are returned by the backend
+ * from the user's profile automatically, so they must not be sent in this selector.
+ */
 export const requiredRegistrantFields: string[] = [
   "Full name",
   "Major",
   "Phone number",
   "Email address",
-  "University",
 ];
 
 /** Attendee details read from each account; additional event-specific details use custom questions. */
