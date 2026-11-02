@@ -7,11 +7,12 @@ import type { CommitteeEvent, EventRegistration } from "../shared/types";
 import { checkInAttendance, type AttendanceCheckInResult } from "@/lib/attendance/repository";
 import { useLeaderDashboard } from "@/components/dashboard/shared/LeaderDashboardContext";
 
-function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
+function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<void> }) {
   const t = useTranslations("attendance");
   const onTokenRef = useRef(onToken);
   const scannerId = `attendance-qr-reader-${useId().replace(/:/g, "")}`;
   const [cameraActive, setCameraActive] = useState(false);
+  const [scanDetected, setScanDetected] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [manualToken, setManualToken] = useState("");
 
@@ -21,6 +22,7 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
 
   useEffect(() => {
     if (!cameraActive) return;
+    setScanDetected(false);
 
     let disposed = false;
     let tokenHandled = false;
@@ -33,12 +35,18 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
       scanner = new Html5Qrcode(scannerId, { verbose: false });
       startPromise = scanner.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 }, aspectRatio: 1 },
+        { fps: 15, qrbox: { width: 220, height: 220 }, aspectRatio: 1 },
         (decodedText) => {
           if (tokenHandled) return;
           tokenHandled = true;
-          onTokenRef.current(decodedText);
-          setCameraActive(false);
+          setScanDetected(true);
+          void (async () => {
+            try {
+              await onTokenRef.current(decodedText);
+            } finally {
+              if (!disposed) setCameraActive(false);
+            }
+          })();
         },
         () => undefined,
       ).then(() => undefined);
@@ -75,7 +83,7 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
     const token = manualToken.trim();
     if (!token) return;
     setManualToken("");
-    onTokenRef.current(token);
+    void onTokenRef.current(token);
   };
 
   return (
@@ -105,8 +113,16 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => void }) {
       {cameraActive && (
         <div className="relative mt-4 aspect-video max-h-72 overflow-hidden rounded-xl bg-black">
           <div id={scannerId} className="size-full [&_video]:size-full [&_video]:object-cover" />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid place-items-center">
-            <div className="size-44 rounded-2xl border-2 border-white/80 shadow-[0_0_0_999px_rgba(0,0,0,0.2)]" />
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <div
+              aria-hidden="true"
+              className={`size-56 rounded-2xl border-[3px] shadow-[0_0_0_999px_rgba(0,0,0,0.2)] transition-colors ${
+                scanDetected ? "border-green-500" : "border-red-500"
+              }`}
+            />
+            <p className="rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white">
+              {scanDetected ? t("scanner.detected") : t("scanner.aim")}
+            </p>
           </div>
         </div>
       )}
@@ -186,9 +202,13 @@ export function PRAttendancePanel({
 
   const handleToken = async (token: string) => {
     setVerificationState(null);
-    const result = await checkInAttendance({ eventId: event.id, token });
-    setVerificationState(result.state);
-    if (result.state === "checked-in") await reloadRegistrations(event.id);
+    try {
+      const result = await checkInAttendance({ eventId: event.id, token });
+      setVerificationState(result.state);
+      if (result.state === "checked-in") await reloadRegistrations(event.id);
+    } catch {
+      setVerificationState("error");
+    }
   };
 
   const checkInLabel = (registration: EventRegistration) => {
