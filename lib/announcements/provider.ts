@@ -7,6 +7,16 @@ const API_ORIGIN = (
   "http://localhost:3001"
 ).replace(/\/+$/, "");
 
+function normalizeAnnouncementSlug(value: string) {
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    // Keep the original value if it is not a valid percent-encoded string.
+  }
+  return decoded.normalize("NFKC");
+}
+
 async function request<T>(path: string): Promise<T | undefined> {
   if (!API_ENABLED) return undefined;
   try {
@@ -26,13 +36,14 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 export async function getAnnouncementBySlug(
   slug: string,
 ): Promise<Announcement | undefined> {
-  const announcement = await request<Announcement>(`/announcements/${encodeURIComponent(slug)}`);
+  const normalizedSlug = normalizeAnnouncementSlug(slug);
+  const announcement = await request<Announcement>(`/announcements/${encodeURIComponent(normalizedSlug)}`);
   if (announcement) return announcement;
 
   // Fall back to the public collection if the detail endpoint is temporarily
   // unavailable or the deployed API does not resolve this slug consistently.
   const announcements = await getAnnouncements();
-  return announcements.find((item) => item.slug === slug);
+  return announcements.find((item) => normalizeAnnouncementSlug(item.slug) === normalizedSlug);
 }
 
 // "More announcements" on the details page: the newest others. Deliberately simple.
