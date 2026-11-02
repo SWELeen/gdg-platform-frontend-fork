@@ -9,6 +9,7 @@ import { deleteAnnouncement, fetchManagedAnnouncements, publishAnnouncement, upd
 import { announcementCategories, type Announcement, type AnnouncementCategory } from "@/lib/announcements/types";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { CategoryBadge } from "@/components/announcements/CategoryBadge";
+import { ConfirmModal } from "@/components/dashboard/shared/ConfirmModal";
 
 const emptyForm = {
   title: "",
@@ -47,6 +48,7 @@ export function AnnouncementManagementPanel() {
   const [publishing, setPublishing] = useState(false);
   const [publishingDraftId, setPublishingDraftId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Announcement | null>(null);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"title" | "excerpt" | "body" | "actionLabel" | "actionHref", string>>>({});
   const [success, setSuccess] = useState("");
@@ -227,7 +229,6 @@ export function AnnouncementManagementPanel() {
   }
 
   async function removeAnnouncement(item: Announcement) {
-    if (!window.confirm(t("confirmDelete", { title: item.title }))) return;
     setError("");
     setDeletingId(item.id);
     const result = await deleteAnnouncement(item.id);
@@ -242,6 +243,7 @@ export function AnnouncementManagementPanel() {
   }
 
   return (
+    <>
     <section aria-labelledby="announcements-management-heading" className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -318,17 +320,17 @@ export function AnnouncementManagementPanel() {
                 {announcementCategories.map((category) => <option key={category} value={category}>{tCategories(category)}</option>)}
               </select>
             </label>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="grid gap-1.5 text-sm font-medium text-foreground">
-                {t("fields.actionLabel")}
-                <input maxLength={80} aria-invalid={Boolean(fieldErrors.actionLabel)} aria-describedby={fieldErrors.actionLabel ? "announcement-action-label-error" : undefined} value={form.actionLabel} onChange={(event) => { setForm((current) => ({ ...current, actionLabel: event.target.value })); setFieldErrors((current) => ({ ...current, actionLabel: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
-                {fieldErrors.actionLabel && <span id="announcement-action-label-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionLabel}</span>}
-              </label>
-              <label className="grid gap-1.5 text-sm font-medium text-foreground">
-                {t("fields.actionHref")}
-                <input type="url" maxLength={2048} dir="ltr" aria-invalid={Boolean(fieldErrors.actionHref)} aria-describedby={fieldErrors.actionHref ? "announcement-action-href-error" : undefined} value={form.actionHref} onChange={(event) => { setForm((current) => ({ ...current, actionHref: event.target.value })); setFieldErrors((current) => ({ ...current, actionHref: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
-                {fieldErrors.actionHref && <span id="announcement-action-href-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionHref}</span>}
-              </label>
+            <div className="grid gap-4 sm:grid-cols-2 sm:items-start">
+              <div className="grid content-start gap-1.5 text-sm font-medium text-foreground">
+                <label htmlFor="announcement-action-label">{t("fields.actionLabel")}</label>
+                <input id="announcement-action-label" maxLength={80} aria-invalid={Boolean(fieldErrors.actionLabel)} aria-describedby={fieldErrors.actionLabel ? "announcement-action-label-error" : undefined} value={form.actionLabel} onChange={(event) => { setForm((current) => ({ ...current, actionLabel: event.target.value })); setFieldErrors((current) => ({ ...current, actionLabel: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                <div className="min-h-5" aria-live="polite">{fieldErrors.actionLabel && <span id="announcement-action-label-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionLabel}</span>}</div>
+              </div>
+              <div className="grid content-start gap-1.5 text-sm font-medium text-foreground">
+                <label htmlFor="announcement-action-href">{t("fields.actionHref")}</label>
+                <input id="announcement-action-href" type="url" maxLength={2048} dir="ltr" aria-invalid={Boolean(fieldErrors.actionHref)} aria-describedby={fieldErrors.actionHref ? "announcement-action-href-error" : undefined} value={form.actionHref} onChange={(event) => { setForm((current) => ({ ...current, actionHref: event.target.value })); setFieldErrors((current) => ({ ...current, actionHref: undefined })); }} className="h-11 rounded-xl border border-border bg-background px-3 font-normal outline-none focus:border-blue-500" />
+                <div className="min-h-5" aria-live="polite">{fieldErrors.actionHref && <span id="announcement-action-href-error" className="text-sm text-red-600 dark:text-red-400">{fieldErrors.actionHref}</span>}</div>
+              </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-foreground">
               <input type="checkbox" checked={form.pinned} onChange={(event) => setForm((current) => ({ ...current, pinned: event.target.checked }))} className="size-4 accent-blue-600" />
@@ -400,7 +402,7 @@ export function AnnouncementManagementPanel() {
                     <button type="button" onClick={() => startEditing(item)} className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
                       <Pencil aria-hidden="true" className="size-4" /> {t("edit")}
                     </button>
-                    <button type="button" onClick={() => void removeAnnouncement(item)} disabled={deletingId === item.id} className="inline-flex items-center gap-1 text-sm font-semibold text-red-600 hover:underline disabled:opacity-50 dark:text-red-400">
+                    <button type="button" onClick={() => setDeleteTarget(item)} disabled={deletingId === item.id} className="inline-flex items-center gap-1 text-sm font-semibold text-red-600 hover:underline disabled:opacity-50 dark:text-red-400">
                       <Trash2 aria-hidden="true" className="size-4" /> {deletingId === item.id ? t("deleting") : t("delete")}
                     </button>
                   </li>
@@ -411,5 +413,18 @@ export function AnnouncementManagementPanel() {
         </>
       )}
     </section>
+    <ConfirmModal
+      isOpen={Boolean(deleteTarget)}
+      onClose={() => setDeleteTarget(null)}
+      onConfirm={() => {
+        if (deleteTarget) void removeAnnouncement(deleteTarget);
+      }}
+      title={t("deleteDialogTitle")}
+      message={deleteTarget ? t("confirmDelete", { title: deleteTarget.title }) : ""}
+      confirmText={t("delete")}
+      cancelText={t("cancelCreate")}
+      danger
+    />
+    </>
   );
 }

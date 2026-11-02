@@ -6,6 +6,7 @@ export type EventInfoData = {
   location: string;
   imageSrc: string;
   imageAlt: string;
+  mapsLink?: string;
   speaker?: {
     name: string;
     title: string;

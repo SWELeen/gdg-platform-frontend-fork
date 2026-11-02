@@ -3,14 +3,14 @@
 /** Attendee fields every registration collects, in display order (translation keys). */
 export const registrantFieldKeys = [
   "fullName",
-  "college",
   "major",
   "phone",
   "email",
-  "membership",
+  "university",
 ] as const;
 
 export type RegistrantFieldKey = (typeof registrantFieldKeys)[number];
+export type RegistrantProfileKey = RegistrantFieldKey | "college" | "membership" | "committees";
 
 /** Values stored on CommitteeEvent.requiredRegistrantFields (unchanged data shape). */
 export const requiredRegistrantFields: string[] = [
@@ -18,20 +18,22 @@ export const requiredRegistrantFields: string[] = [
   "Major",
   "Phone number",
   "Email address",
-  "GDG on Campus membership",
+  "University",
 ];
 
 /** Attendee details read from each account; additional event-specific details use custom questions. */
-export const accountRegistrantFields: RegistrantFieldKey[] = ["fullName", "email", "phone", "major", "membership"];
+export const accountRegistrantFields: RegistrantFieldKey[] = ["fullName", "email", "phone", "major", "university"];
 
 /** Stored value → translation key, so stored English values render in either locale. */
-export const registrantFieldKeyByValue: Record<string, RegistrantFieldKey> = {
+export const registrantFieldKeyByValue: Record<string, RegistrantProfileKey> = {
   "Full name": "fullName",
   College: "college",
   Major: "major",
   "Phone number": "phone",
   "Email address": "email",
+  University: "university",
   "GDG on Campus membership": "membership",
+  Committees: "committees",
 };
 
 export const questionTypes = [

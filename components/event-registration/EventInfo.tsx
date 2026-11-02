@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { SpeakerCard } from "./SpeakerCard";
 import type { EventInfoData } from "@/data/event-registration";
 import { useTranslations } from "next-intl";
@@ -15,13 +14,12 @@ export function EventInfo({ event }: EventInfoProps) {
     <section className="bg-surface-muted px-2 py-3 sm:px-4 lg:px-5 lg:py-7">
       <div className="mx-auto flex w-full max-w-xl flex-col">
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element -- Uploaded event images use API-provided hosts. */}
+          <img
             src={event.imageSrc}
             alt={event.imageAlt}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 44vw"
-            className="object-cover"
+            onError={(error) => { error.currentTarget.src = "/images/event-placeholder.png"; }}
+            className="size-full object-cover"
           />
         </div>
 
@@ -55,6 +53,11 @@ export function EventInfo({ event }: EventInfoProps) {
             <p className="mt-1 whitespace-nowrap text-xs text-foreground/80">
               {event.location}
             </p>
+            {event.mapsLink && (
+              <a href={event.mapsLink} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs font-semibold text-gdg-blue hover:underline">
+                {t("openMap")}
+              </a>
+            )}
           </div>
         </div>
 

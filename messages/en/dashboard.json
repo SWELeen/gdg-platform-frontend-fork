@@ -52,6 +52,7 @@
     "updated": "Announcement updated.",
     "deleted": "Announcement deleted.",
     "deleteError": "The announcement could not be deleted. Please try again.",
+    "deleteDialogTitle": "Delete announcement?",
     "confirmDelete": "Delete “{title}”? This will remove it from the website.",
     "edit": "Edit",
     "delete": "Delete",
@@ -1146,14 +1147,16 @@
         "previewAlt": "Selected event image"
       },
       "registration": {
-        "description": "These details come from each attendee's account, so they don't type them again. Add any event-specific details as questions below.",
+        "description": "These profile details are shown read-only to the attendee and PR team. Add any event-specific questions below.",
         "fields": {
           "fullName": "Full name",
           "college": "College",
           "major": "Major",
           "phone": "Phone number",
           "email": "Email address",
-          "membership": "Are you a GDG on Campus member?"
+          "university": "University",
+          "membership": "GDG on Campus membership",
+          "committees": "Committees"
         },
         "placeholders": {
           "fullName": "Enter your full name",
@@ -1162,8 +1165,8 @@
           "phone": "5xxxxxxxx",
           "email": "Enter your email address"
         },
-        "memberYes": "Yes, I am a member",
-        "memberNo": "No, I am not a member"
+        "memberYes": "Member",
+        "memberNo": "Not a member"
       },
       "questions": {
         "title": "Custom questions",
@@ -1235,7 +1238,10 @@
         "imageAlt": "Event image",
         "date": "Date",
         "time": "Time",
+        "speakers": "Speakers",
         "location": "Location",
+        "deadline": "Registration deadline",
+        "requirements": "Requirements",
         "capacity": "Capacity",
         "capacityValue": "{count, plural, one {# attendee} other {# attendees}}",
         "noRequirements": "No requirements",

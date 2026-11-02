@@ -25,7 +25,12 @@ export default function EventRegistrationModal({
     API_ENABLED ? "loading" : "ready",
   );
   const [questionRetry, setQuestionRetry] = useState(0);
-  const [details, setDetails] = useState<{ description: string; speakers: string } | null>(null);
+  const [details, setDetails] = useState<{
+    description: string;
+    speakers: string;
+    imageUrl: string | null;
+    mapsLink: string | null;
+  } | null>(null);
   // The card can be stale (a page left open past the deadline), so trust the fresh details.
   const [registrationOpen, setRegistrationOpen] = useState(event.registrationOpen !== false);
   useEffect(() => {
@@ -38,7 +43,12 @@ export default function EventRegistrationModal({
         return;
       }
       setQuestions(details.questions.map(toRegistrationQuestion));
-      setDetails({ description: details.description ?? "", speakers: details.speakers ?? "" });
+      setDetails({
+        description: details.description ?? "",
+        speakers: details.speakers ?? "",
+        imageUrl: details.imageUrl,
+        mapsLink: details.mapsLink,
+      });
       setRegistrationOpen(details.registrationOpen);
       setQuestionsState("ready");
     });
@@ -53,8 +63,9 @@ export default function EventRegistrationModal({
     date: event.date,
     time: event.time,
     location: event.location,
-    imageSrc: event.image,
+    imageSrc: details?.imageUrl || event.image || "/images/event-placeholder.png",
     imageAlt: event.name,
+    mapsLink: details?.mapsLink ?? undefined,
   };
 
   useEffect(() => {
