@@ -178,32 +178,32 @@
         "description": "Creates, writes, and edits the group’s content, including technical, educational, and informational materials, ensuring accuracy, quality, and alignment with the group’s identity and goals.",
         "leadName": "Asma Alhasani",
         "coLeaderName": "Sameera Radwan",
-        "leadLabel": "{name} Committee Lead",
-        "coLeaderLabel": "{name} Committee Co-Leader"
+        "leadLabel": "Committee Lead",
+        "coLeaderLabel": "Committee Co-Leader"
       },
       "project-management": {
         "name": "Project Management",
         "description": "Plans projects, organizes tasks, assigns responsibilities, coordinates efforts, and tracks progress against timelines to deliver projects efficiently and meet their goals.",
         "leadName": "Mohammed Elkasabgy",
         "coLeaderName": "Shahad Almazrui",
-        "leadLabel": "{name} Committee Lead",
-        "coLeaderLabel": "{name} Committee Co-Leader"
+        "leadLabel": "Committee Lead",
+        "coLeaderLabel": "Committee Co-Leader"
       },
       "digital-media": {
         "name": "Digital Media and Design",
         "description": "Turns ideas into creative visual and digital content through marketing, design, photography, and video editing, producing engaging work that reflects the group’s identity and highlights its activities and events.",
         "leadName": "Joud Abdullah",
         "coLeaderName": "Linda Alminhali",
-        "leadLabel": "{name} Committee Lead",
-        "coLeaderLabel": "{name} Committee Co-Leader"
+        "leadLabel": "Committee Lead",
+        "coLeaderLabel": "Committee Co-Leader"
       },
       "public-relations": {
         "name": "Public Relations",
         "description": "Represents the group externally, builds professional relationships, and strengthens partnerships to expand the group’s presence and deepen connections with partners and organizations.",
         "leadName": "Layan Mashraie",
         "coLeaderName": "Abdullah Saif",
-        "leadLabel": "{name} Committee Lead",
-        "coLeaderLabel": "{name} Committee Co-Leader"
+        "leadLabel": "Committee Lead",
+        "coLeaderLabel": "Committee Co-Leader"
       },
       "developers": {
         "name": "Developers",
@@ -214,13 +214,13 @@
             "name": "Web Design & Development",
             "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
             "leadName": "Leen Alghamdi",
-            "leadLabel": "{name} Committee Lead"
+            "leadLabel": "Committee Lead"
           },
           "artificial-intelligence": {
             "name": "Artificial Intelligence",
             "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
             "leadName": "Atheer Alzahrani",
-            "leadLabel": "{name} Committee Lead"
+            "leadLabel": "Committee Lead"
           },
           "robotics-iot": {
             "name": "Robotics & IOT",
@@ -236,13 +236,13 @@
             "name": "Automation",
             "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
             "leadName": "Asma Aldossari",
-            "leadLabel": "{name} Committee Lead"
+            "leadLabel": "Committee Lead"
           },
           "data-analysis": {
             "name": "Data Analysis",
             "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
             "leadName": "Shahad Almazrui",
-            "leadLabel": "{name} Committee Lead"
+            "leadLabel": "Committee Lead"
           }
         }
       },
@@ -250,13 +250,13 @@
         "name": "Web Design & Development",
         "description": "Designs and develops websites, from building interfaces and improving user experience to developing backend systems and deploying sites, turning ideas into interactive, practical digital projects.",
         "leadName": "Leen Alghamdi",
-        "leadLabel": "{name} Committee Lead"
+        "leadLabel": "Committee Lead"
       },
       "artificial-intelligence": {
         "name": "Artificial Intelligence",
         "description": "Explores artificial intelligence and machine learning technologies and applications, experimenting with modern tools to build intelligent apps and innovative solutions for real needs.",
         "leadName": "Atheer Alzahrani",
-        "leadLabel": "{name} Committee Lead"
+        "leadLabel": "Committee Lead"
       },
       "robotics-iot": {
         "name": "Robotics & IOT",
@@ -272,13 +272,13 @@
         "name": "Automation",
         "description": "Uses technology to automate tasks and improve workflows by exploring automation tools, programming, and system integrations, then building practical solutions that save time and effort and increase efficiency.",
         "leadName": "Asma Aldossari",
-        "leadLabel": "{name} Committee Lead"
+        "leadLabel": "Committee Lead"
       },
       "data-analysis": {
         "name": "Data Analysis",
         "description": "Prepares and analyzes data, extracts useful information, and uses visualization to uncover patterns and trends that support data-driven decisions.",
         "leadName": "Shahad Almazrui",
-        "leadLabel": "{name} Committee Lead"
+        "leadLabel": "Committee Lead"
       }
     }
   },

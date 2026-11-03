@@ -73,6 +73,8 @@ export default function CommitteeCard({
   const activeName = t(`${basePath}.name`);
   const activeDescription = t(`${basePath}.description`);
   const activeLeadName = t(`${basePath}.leadName`);
+  const leadLabelKey = `${basePath}.leadLabel`;
+  const coLeaderLabelKey = `${basePath}.coLeaderLabel`;
 
   const activeCoLeaderName = activeCommittee.coLeader
     ? t(`items.${committee.id}.coLeaderName`)
@@ -86,7 +88,9 @@ export default function CommitteeCard({
       linkedin: activeCommittee.lead.linkedin,
       x: activeCommittee.lead.x,
       name: activeLeadName,
-      label: t("leadLabel"),
+      label: t.has(leadLabelKey)
+        ? t(leadLabelKey)
+        : t("leadLabel"),
     },
     ...(activeCommittee.coLeader && activeCoLeaderName
       ? [
@@ -98,7 +102,9 @@ export default function CommitteeCard({
             linkedin: activeCommittee.coLeader.linkedin,
             x: activeCommittee.coLeader.x,
             name: activeCoLeaderName,
-            label: t("coLeaderLabel"),
+            label: t.has(coLeaderLabelKey)
+              ? t(coLeaderLabelKey)
+              : t("coLeaderLabel"),
           },
         ]
       : []),
