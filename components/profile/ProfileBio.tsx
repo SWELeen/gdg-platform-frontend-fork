@@ -38,7 +38,7 @@ export function ProfileBio({
           <button
             type="button"
             onClick={onEdit}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-[#325fa6] transition-colors hover:bg-[#4285f4]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4285f4] dark:text-[#8ab4f8]"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-navy transition-colors hover:bg-[var(--profile-blue-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue dark:text-[var(--profile-blue-light)]"
           >
             <Pencil className="size-4" aria-hidden="true" />
             {t("edit")}
@@ -55,7 +55,7 @@ export function ProfileBio({
             maxLength={500}
             aria-label={t("title")}
             aria-describedby={error ? "profile-bio-error" : undefined}
-            className="w-full resize-none rounded-md bg-transparent text-sm leading-relaxed text-foreground outline-none placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-[#4285f4]/40 sm:text-base"
+            className="w-full resize-none rounded-md bg-transparent text-sm leading-relaxed text-foreground outline-none placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-[var(--profile-blue-focus)] sm:text-base"
           />
           {error && (
             <p id="profile-bio-error" role="alert" className="mt-2 text-sm text-gdg-red">
@@ -67,7 +67,7 @@ export function ProfileBio({
               type="button"
               onClick={onSave}
               disabled={isSaving}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#4285f4] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3367d6] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-gdg-blue px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--gdg-blue-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Check className="size-4" aria-hidden="true" />
               {t(isSaving ? "saving" : "save")}

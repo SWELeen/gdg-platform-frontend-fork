@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useHomeSectionHref } from "@/components/layout/useHomeSectionHref";
+import { ProfileAccountMenu } from "@/components/home/Navbar";
+import { API_ENABLED, apiRequest, logoutSession } from "@/lib/api/client";
+import { dashboardPathsFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route";
 
 const navItems = [
   { key: "home", hash: "#home" },
@@ -42,7 +45,30 @@ function IconMenu({ className }: IconProps) {
 export function TopNav() {
   const t = useTranslations("common");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileName, setProfileName] = useState<string | null>(null);
+  const [dashboardHref, setDashboardHref] = useState<string | null>(null);
   const sectionHref = useHomeSectionHref();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!API_ENABLED) return;
+    let active = true;
+    void apiRequest<AuthenticatedIdentity & { fullName: string }>("/me").then((result) => {
+      if (!active || !result.ok) return;
+      setProfileName(result.data.fullName);
+      setDashboardHref(dashboardPathsFor(result.data)[0] ?? null);
+    });
+    return () => { active = false; };
+  }, []);
+
+  const handleSignOut = async () => {
+    await logoutSession();
+    setProfileName(null);
+    setDashboardHref(null);
+    setMobileOpen(false);
+    router.replace("/login");
+  };
+  const profileHref = profileName || !API_ENABLED ? "/profile" : "/login?returnTo=%2Fprofile";
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-border bg-surface text-foreground">
@@ -92,6 +118,16 @@ export function TopNav() {
 
           <LanguageSwitcher />
 
+          {profileName ? (
+            <div className="hidden lg:block">
+              <ProfileAccountMenu name={profileName} dashboardHref={dashboardHref} onSignOut={handleSignOut} variant="desktop" />
+            </div>
+          ) : (
+            <Link href={profileHref} className="hidden rounded-full border border-current/30 px-3 py-2 text-sm font-medium hover:bg-current/10 lg:inline-flex">
+              {t("nav.profile")}
+            </Link>
+          )}
+
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
@@ -136,6 +172,15 @@ export function TopNav() {
                 {t("nav.announcements")}
                 <span className={linkUnderline} />
               </Link>
+              {profileName ? (
+                <div className="px-2 py-2">
+                  <ProfileAccountMenu name={profileName} dashboardHref={dashboardHref} onSignOut={handleSignOut} variant="mobile" />
+                </div>
+              ) : (
+                <Link href={profileHref} onClick={() => setMobileOpen(false)} className="px-2 py-2 text-foreground/80 hover:text-foreground">
+                  {t("nav.profile")}
+                </Link>
+              )}
             </div>
           </motion.nav>
         )}

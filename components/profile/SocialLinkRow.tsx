@@ -50,7 +50,7 @@ export function SocialLinkRow({
   className={`flex min-w-0 items-center gap-3 border-b py-4 first:pt-0 last:border-b-0 last:pb-0 ${
     error
       ? "border-gdg-red"
-      : "border-gray-200 dark:border-[#243b64]/50"
+      : "border-gray-200 dark:border-[var(--profile-navy-border-dark)]"
   }`}
 >
       <span

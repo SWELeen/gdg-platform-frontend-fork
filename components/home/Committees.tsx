@@ -173,14 +173,14 @@ export default function Committees() {
               className={`mb-4 mx-auto h-10 w-full items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground ${selectedMainItem ? "hidden xl:flex xl:max-w-none" : "flex max-w-[380px]"}`}
             >
               <span className="inline-flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[conic-gradient(from_0deg,#4285F4_0deg,#34A853_90deg,#FBBC04_180deg,#EA4335_270deg,#4285F4_360deg)] text-sm text-white">1</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[image:var(--committee-step-gradient)] text-sm text-white">1</span>
                 <span dir={dir}>{t("mainCommitteesLabel")}</span>
               </span>
             </h3>
             {selectedMainItem && (
               <h3 dir="ltr" className="mx-auto mb-4 flex h-10 w-full max-w-[380px] items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground xl:hidden">
                 <span className="inline-flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[conic-gradient(from_0deg,#4285F4_0deg,#34A853_90deg,#FBBC04_180deg,#EA4335_270deg,#4285F4_360deg)] text-sm text-white">1</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[image:var(--committee-step-gradient)] text-sm text-white">1</span>
                   <span dir={dir}>{t("mainCommitteesLabel")}</span>
                 </span>
               </h3>

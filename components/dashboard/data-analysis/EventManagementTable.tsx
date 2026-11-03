@@ -182,7 +182,7 @@ export function EventManagementTable({
         </div>
 
         {/* Info Banner */}
-        <div className="border-b border-border bg-blue-50/70 p-3 text-xs text-blue-900 dark:border-blue-900/40 dark:bg-[#0e1b2e] dark:text-blue-200">
+        <div className="border-b border-border bg-blue-50/70 p-3 text-xs text-blue-900 dark:border-blue-900/40 dark:bg-[var(--event-info-dark-bg)] dark:text-blue-200">
           <div className="flex items-center gap-2">
             <Info className="size-4 shrink-0 text-blue-600 dark:text-blue-400" />
             <span className="text-blue-950 dark:text-blue-200">

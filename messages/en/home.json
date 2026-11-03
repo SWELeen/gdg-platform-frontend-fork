@@ -170,8 +170,8 @@
     "highlight": "Committees",
     "subtitle": "Our committees work together in different roles to develop ideas, empower talent, and create experiences that enrich our tech community and strengthen collaboration and innovation.",
     "backToDevelopers": "Back To Developers",
-    "leadLabel": "{name} Committee Lead",
-    "coLeaderLabel": "{name} Committee Co-Leader",
+    "leadLabel": "Committee Lead",
+    "coLeaderLabel": "Committee Co-Leader",
     "items": {
       "content-writing": {
         "name": "Content Writing",

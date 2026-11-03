@@ -4,17 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties } from "react";
 
 const DEFAULT_MEMBER_IMAGE = "/images/unknown.png";
-const darkAccent = [
-  "[html[data-theme=dark]_&]:bg-[var(--committee-accent)]",
-  "[html[data-theme=dark]_&]:text-white",
-  "dark:[html:not([data-theme])_&]:bg-[var(--committee-accent)]",
-  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:text-white",
-].join(" ");
-const darkText = [
-  "[html[data-theme=dark]_&]:text-white",
-  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:text-white",
-].join(" ");
-
 type CommitteePersonCardProps = {
   image?: string;
   alt: string;
@@ -28,7 +17,6 @@ type CommitteePersonCardProps = {
   imagePositionClass?: string;
   linkedin?: string;
   x?: string;
-  darkAccent?: boolean;
   googleAccent?: boolean;
 };
 
@@ -45,7 +33,6 @@ export default function CommitteePersonCard({
   imagePositionClass,
   linkedin,
   x,
-  darkAccent = false,
   googleAccent = false,
 }: CommitteePersonCardProps) {
   const reduceMotion = useReducedMotion();
@@ -89,11 +76,13 @@ export default function CommitteePersonCard({
           className={`absolute inset-x-4 top-0 z-10 h-0.5 rounded-full ${googleAccent ? "bg-[image:var(--google-gradient)]" : ""}`}
           style={googleAccent ? undefined : { backgroundColor: `color-mix(in srgb, ${accentColor} 35%, transparent)` }}
         />
-        <div className="relative z-10 mx-auto w-fit max-w-full px-1 py-1">
-          <p className={`text-xs font-semibold leading-tight ${googleAccent ? "bg-[image:var(--google-gradient)] bg-clip-text text-transparent" : "text-[var(--committee-accent)]"} ${darkAccent ? darkText : ""}`}>
-            {label}
-          </p>
-          <h4 className="mt-1 break-words text-xs font-bold leading-tight text-foreground sm:text-sm">{name}</h4>
+        <div className="relative z-10 mx-auto w-full max-w-full px-1 py-1">
+          <div className="flex h-12 items-center justify-center">
+            <p className={`w-fit max-w-full rounded-md px-1.5 py-0.5 text-xs font-semibold leading-tight ${googleAccent ? "bg-[image:var(--google-gradient)] bg-clip-text text-transparent" : "bg-[var(--committee-accent)] text-white"}`}>
+              {label}
+            </p>
+          </div>
+          <h4 className="mt-2 break-words text-xs font-bold leading-tight text-foreground sm:text-sm">{name}</h4>
         </div>
         <div className="relative z-10 mt-auto flex items-center justify-center gap-2 pt-1">
           {linkedinHref ? (

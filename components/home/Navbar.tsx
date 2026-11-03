@@ -18,7 +18,7 @@ import { dashboardPathsFor, type AuthenticatedIdentity } from "@/lib/auth/dashbo
 // Locale-aware Link with the same hover motion as the hash links.
 const MotionLink = motion.create(Link);
 
-function ProfileAccountMenu({
+export function ProfileAccountMenu({
   name,
   dashboardHref,
   onSignOut,

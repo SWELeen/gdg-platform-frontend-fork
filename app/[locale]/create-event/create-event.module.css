@@ -1,8 +1,8 @@
 .page {
   min-height: 100vh;
   padding: 40px 24px;
-  background: #f5f7fb;
-  color: #1f2937;
+  background: var(--create-event-page-bg);
+  color: var(--create-event-page-text);
   width: 100%;
   direction: inherit;
 
@@ -12,10 +12,10 @@
 .card {
   max-width: 900px;
   margin: 0 auto;
-  background: white;
+  background: var(--white);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--create-event-card-shadow);
   width: 100%;
   padding: 40px 48px;
 }
@@ -23,7 +23,7 @@
 .header {
   padding: 20px 30px;
   color: white;
-  background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc04);
+  background: var(--create-event-gradient);
 
 }
 
@@ -31,12 +31,12 @@
   margin: 0;
   font-size: 32px;
   font-weight: 700;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 .subtitle {
   margin-top: 8px;
-  color: #00050f;
+  color: var(--create-event-subtitle-text);
   font-size: 15px;
 }
 
@@ -52,7 +52,7 @@
   margin-bottom: 5px;
   font-size: 21px;
   font-weight: 700;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 
@@ -65,12 +65,12 @@
 
 /* Orange */
 .orangeGroup {
-  border-left-color: #f5a623;
+  border-left-color: var(--create-event-orange);
 }
 
 /* Red */
 .redGroup {
-  border-left-color: #a71b09;
+  border-left-color: var(--create-event-dark-red);
   border-left: 4px solid;
   padding-inline-start: 14px;
   margin-bottom: 28px;
@@ -79,12 +79,12 @@
 
 /* Green */
 .greenGroup {
-  border-left-color: #45a85b;
+  border-left-color: var(--create-event-green);
 }
 
 /* Blue */
 .blueGroup {
-  border-left-color: #4285f4;
+  border-left-color: var(--gdg-blue);
 }
 
 .row {
@@ -105,7 +105,7 @@
 .label {
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--create-event-label-text);
   margin-bottom: 2px;
 }
 
@@ -115,10 +115,10 @@
 .field select {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--create-event-border);
   border-radius: 10px;
-  background: #ffffff;
-  color: #1f2937;
+  background: var(--white);
+  color: var(--create-event-page-text);
   font-size: 14px;
   padding: 12px 14px;
   transition:
@@ -141,7 +141,7 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: #9ca3af;
+  color: var(--create-event-placeholder);
 }
 
 
@@ -149,8 +149,8 @@
 .textarea:focus,
 .field select:focus {
   outline: none;
-  border-color: #4285f4;
-  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.12);
+  border-color: var(--gdg-blue);
+  box-shadow: var(--create-event-focus-shadow);
 }
 
 
@@ -158,9 +158,9 @@
   position: relative;
   min-height: 180px;
   padding: 30px;
-  border: 2px dashed #93c5fd;
+  border: 2px dashed var(--create-event-upload-border);
   border-radius: 16px;
-  background: #ffffff;
+  background: var(--white);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,25 +174,25 @@
 }
 
 .uploadBox:hover {
-  background: #f8fbff;
-  border-color: #4285f4;
+  background: var(--create-event-upload-hover-bg);
+  border-color: var(--gdg-blue);
 }
 
 .uploadBox span {
   font-size: 15px;
   font-weight: 600;
-  color: #374151;
+  color: var(--create-event-label-text);
 }
 
 .uploadBox small {
-  color: #6b7280;
+  color: var(--create-event-muted-text);
   font-size: 12px;
 }
 
 .UploadIcon {
   width: 34px;
   height: 34px;
-  color: #4285f4;
+  color: var(--gdg-blue);
 }
 
 .uploadBox input[type="file"] {
@@ -212,23 +212,23 @@
 
 .questionForm {
   padding: 24px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--create-event-question-border);
   border-radius: 16px;
-  background: #fafafa;
+  background: var(--create-event-question-bg);
 }
 
 .questionTitle {
   margin: 0 0 20px;
   font-size: 18px;
   font-weight: 700;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 .questionItem {
   padding: 18px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--create-event-question-border);
 border-radius: 14px;
-  background: #ffffff;
+  background: var(--white);
 }
 
 .questionOptions {
@@ -244,7 +244,7 @@ border-radius: 14px;
   gap: 8px;
   margin-top: 8px;
   font-size: 14px;
-  color: #374151;
+  color: var(--create-event-label-text);
 }
 
 
@@ -271,7 +271,7 @@ button:active {
   width: fit-content;
   border: none;
   background: transparent;
-  color: #4285f4;
+  color: var(--gdg-blue);
   font-size: 14px;
   font-weight: 600;
   padding: 8px 0;
@@ -285,31 +285,31 @@ button:active {
 .addOption {
   width: fit-content;
   padding: 9px 14px;
-  border: 1px solid #4285f4;
+  border: 1px solid var(--gdg-blue);
   border-radius: 8px;
-  background: #ffffff;
-  color: #4285f4;
+  background: var(--white);
+  color: var(--gdg-blue);
   font-size: 13px;
   font-weight: 600;
 }
 
 .addOption:hover {
-  background: #eff6ff;
+  background: var(--create-event-option-hover-bg);
 }
 
 
 .removeOption {
   padding: 8px 12px;
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--create-event-error-border);
   border-radius: 8px;
-  background: #ffffff;
-  color: #dc2626;
+  background: var(--white);
+  color: var(--create-event-error-text);
   font-size: 12px;
   font-weight: 600;
 }
 
 .removeOption:hover {
-  background: #fef2f2;
+  background: var(--create-event-error-bg);
 }
 
 
@@ -322,30 +322,30 @@ button:active {
 
 .cancelQuestion {
   padding: 10px 18px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--create-event-border);
   border-radius: 9px;
-  background: #ffffff;
-  color: #374151;
+  background: var(--white);
+  color: var(--create-event-label-text);
   font-size: 14px;
   font-weight: 600;
 }
 
 .cancelQuestion:hover {
-  background: #f9fafb;
+  background: var(--create-event-row-hover-bg);
 }
 
 .addQuestionButton {
   padding: 10px 18px;
   border: none;
   border-radius: 9px;
-  background: #4285f4;
-  color: #ffffff;
+  background: var(--gdg-blue);
+  color: var(--white);
   font-size: 14px;
   font-weight: 600;
 }
 
 .addQuestionButton:hover {
-  background: #3367d6;
+  background: var(--create-event-button-hover-bg);
 }
 
 
@@ -356,7 +356,7 @@ button:active {
   gap: 12px;
   margin-top: 30px;
   padding-top: 25px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--create-event-question-border);
 }
 
 .cancelButton,
@@ -371,46 +371,46 @@ button:active {
 
 
 .cancelButton {
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #374151;
+  border: 1px solid var(--create-event-border);
+  background: var(--white);
+  color: var(--create-event-label-text);
 }
 
 .cancelButton:hover {
-  background: #f9fafb;
+  background: var(--create-event-row-hover-bg);
 }
 
 
 
 .previewButton {
-  border: 1px solid #4285f4;
-  background: #ffffff;
-  color: #4285f4;
+  border: 1px solid var(--gdg-blue);
+  background: var(--white);
+  color: var(--gdg-blue);
 }
 
 .previewButton:hover {
-  background: #eff6ff;
+  background: var(--create-event-option-hover-bg);
 }
 
 
 .publishButton {
   border: none;
-  background: #4285f4;
-  color: #ffffff;
+  background: var(--gdg-blue);
+  color: var(--white);
 }
 
 .publishButton:hover {
-  background: #3367d6;
+  background: var(--create-event-button-hover-bg);
 }
 
 
 .errorMessage {
   margin-top: 10px;
   padding: 16px 18px;
-  border: 1px solid #f3b4b4;
+  border: 1px solid var(--create-event-error-border-muted);
   border-radius: 12px;
-  background: #fff5f5;
-  color: #b42318;
+  background: var(--create-event-error-bg-muted);
+  color: var(--create-event-error-text-muted);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -438,10 +438,10 @@ button:active {
 .successMessage {
   margin-top: 10px;
   padding: 16px 18px;
-  border: 1px solid #a7e3c0;
+  border: 1px solid var(--create-event-success-border);
   border-radius: 12px;
-  background: #f0fdf4;
-  color: #15803d;
+  background: var(--create-event-success-bg);
+  color: var(--create-event-success-text);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -457,7 +457,7 @@ button:active {
 
   padding: 25px;
 
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--create-event-preview-overlay);
   backdrop-filter: blur(4px);
 
   overflow-y: auto;
@@ -471,10 +471,10 @@ button:active {
   display: flex;
   flex-direction: column;
 
-  background: #ffffff;
+  background: var(--white);
   border-radius: 20px;
 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--create-event-preview-shadow);
 
   overflow: hidden;
 }
@@ -487,13 +487,13 @@ button:active {
 
   padding: 20px 24px;
 
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--create-event-question-border);
 }
 
 .previewHeader h2 {
   margin: 0;
   font-size: 22px;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 .closePreview {
@@ -507,15 +507,15 @@ button:active {
   border: none;
   border-radius: 50%;
 
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--create-event-preview-muted-bg);
+  color: var(--create-event-label-text);
 
   font-size: 24px;
   line-height: 1;
 }
 
 .closePreview:hover {
-  background: #e5e7eb;
+  background: var(--create-event-question-border);
 }
 
 
@@ -528,7 +528,7 @@ button:active {
   margin-top: 0;
   margin-bottom: 16px;
   font-size: 18px;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 .previewContent h3:not(:first-child) {
@@ -549,20 +549,20 @@ button:active {
 
   border-radius: 8px;
 
-  background: #f8f9fa;
+  background: var(--create-event-preview-info-bg);
 
-  color: #374151;
+  color: var(--create-event-label-text);
    font-size: 14px;
   line-height: 1.5;
 }
 
 .previewInfo strong {
   font-weight: 600;
-  color: #202124;
+  color: var(--badge-ink-dark);
 }
 
 .previewInfo a {
-  color: #4285f4;
+  color: var(--gdg-blue);
   text-decoration: none;
   font-weight: 600;
 }
@@ -580,17 +580,17 @@ button:active {
   margin-bottom: 14px;
   padding: 16px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--create-event-question-border);
   border-radius: 12px;
 
-  background: #ffffff;
+  background: var(--white);
 }
 
 .previewQuestion strong {
   display: block;
   margin-bottom: 10px;
 
-  color: #202124;
+  color: var(--badge-ink-dark);
   font-size: 14px;
 }
 
@@ -601,7 +601,7 @@ button:active {
 
   margin-top: 8px;
 
-  color: #4b5563;
+  color: var(--create-event-preview-muted-text);
   font-size: 14px;
 }
 
@@ -625,8 +625,8 @@ button:active {
   gap: 12px;
 
   padding: 18px 24px;
- border-top: 1px solid #e5e7eb;
-  background: #ffffff;
+ border-top: 1px solid var(--create-event-question-border);
+  background: var(--white);
 }
 
 
@@ -635,7 +635,7 @@ button:active {
   width: 16px;
   height: 16px;
 
-  accent-color: #4285f4;
+  accent-color: var(--gdg-blue);
 
   cursor: pointer;
 }
@@ -723,4 +723,3 @@ button:disabled {
     width: 100%;
   }
 }
-

@@ -107,7 +107,7 @@ export function AnnouncementMedia({
           }
         />
       ))}
-      <span className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgb(255_255_255/0.035)_0_2px,transparent_2px_16px)]" />
+      <span className="absolute inset-0 bg-[image:var(--announcement-media-pattern)]" />
     </div>
   );
 }

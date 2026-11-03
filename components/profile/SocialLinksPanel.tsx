@@ -40,7 +40,7 @@ export function SocialLinksPanel({
     <div className="flex w-full min-w-0 rounded-2xl border border-border bg-surface text-foreground shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-[var(--navy)]/30 hover:shadow-lg">
 
       {/* Accent sidebar */}
-      <div className="flex w-12 shrink-0 justify-center rounded-s-2xl bg-[#4285f4] pt-5 sm:w-14 sm:pt-6">
+      <div className="flex w-12 shrink-0 justify-center rounded-s-2xl bg-gdg-blue pt-5 sm:w-14 sm:pt-6">
         <Link2
           className="size-5 text-white"
           aria-hidden="true"
@@ -52,7 +52,7 @@ export function SocialLinksPanel({
         <div className="mb-4 flex items-center justify-between gap-3">
           <h3 className="text-lg font-semibold text-foreground">{t("title")}</h3>
           {!isEditing && (
-            <button type="button" onClick={onEdit} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-[#325fa6] transition-colors hover:bg-[#4285f4]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4285f4] dark:text-[#8ab4f8]">
+            <button type="button" onClick={onEdit} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-navy transition-colors hover:bg-[var(--profile-blue-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue dark:text-[var(--profile-blue-light)]">
               <Pencil className="size-4" aria-hidden="true" />
               {tb("edit")}
             </button>
@@ -86,7 +86,7 @@ export function SocialLinksPanel({
           <>
             {error && <p role="alert" className="mt-3 text-sm text-gdg-red">{error}</p>}
             <div className="mt-4 flex flex-wrap gap-2">
-              <button type="button" onClick={onSave} disabled={isSaving || Object.values(errors).some(Boolean)} className="inline-flex items-center gap-1.5 rounded-lg bg-[#4285f4] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3367d6] disabled:cursor-not-allowed disabled:opacity-60">
+              <button type="button" onClick={onSave} disabled={isSaving || Object.values(errors).some(Boolean)} className="inline-flex items-center gap-1.5 rounded-lg bg-gdg-blue px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--gdg-blue-hover)] disabled:cursor-not-allowed disabled:opacity-60">
                 <Check className="size-4" aria-hidden="true" />
                 {tb(isSaving ? "saving" : "save")}
               </button>
