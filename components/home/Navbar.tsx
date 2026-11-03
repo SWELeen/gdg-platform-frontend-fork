@@ -210,7 +210,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           href={sectionHref("#home")}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("home")}</span>
 
@@ -221,7 +221,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           href={sectionHref("#about")}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("about")}</span>
 
@@ -232,7 +232,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           href={sectionHref("#projects")}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("projects")}</span>
 
@@ -243,7 +243,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           href={sectionHref("#events")}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("events")}</span>
 
@@ -255,7 +255,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           // aria-current={isAnnouncementsActive ? "page" : undefined}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("announcements")}</span>
 
@@ -267,7 +267,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
           href={sectionHref("#committees")}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col items-center text-md font-medium leading-none"
+          className="group flex flex-col items-center text-sm font-medium leading-none"
         >
           <span dir={dir}>{t("community")}</span>
 
