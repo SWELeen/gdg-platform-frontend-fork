@@ -272,7 +272,7 @@ export function MemberHelpPage() {
             href={GDG_LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2867b2] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2867b2]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-linkedin-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-linkedin-blue/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >
             <FaLinkedinIn aria-hidden="true" />
             {t("contact.linkedin")}

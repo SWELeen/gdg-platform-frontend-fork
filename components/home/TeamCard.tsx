@@ -51,7 +51,7 @@ export default function TeamCard({ member }: TeamCardProps) {
     >
       {/* Photo */}
       <div className="relative isolate aspect-[4/4.5] w-full overflow-hidden bg-surface-muted">
-        <div aria-hidden="true" className="absolute -inset-5 scale-110 opacity-20 blur-2xl" style={{ background: "radial-gradient(ellipse at 78% 24%, #EA4335 0%, rgb(234 67 53 / 78%) 22%, transparent 58%), linear-gradient(135deg, #4285F4 0%, #34A853 34%, #FBBC04 68%, #EA4335 100%)" }} />
+        <div aria-hidden="true" className="absolute -inset-5 scale-110 opacity-20 blur-2xl" style={{ background: "var(--team-card-photo-glow)" }} />
         <img
           src={member.image}
           alt={t(`team.${member.id}.name`)}

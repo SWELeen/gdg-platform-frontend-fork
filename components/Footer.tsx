@@ -22,7 +22,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative isolate mt-auto overflow-hidden bg-gdg-dark text-white">
+    <footer className="relative isolate mt-auto overflow-hidden bg-white text-foreground dark:bg-gdg-dark dark:text-white">
       <div
         aria-hidden="true"
         className="gdg-spectrum h-1 w-full bg-[length:200%_100%]"
@@ -35,10 +35,10 @@ export default function Footer() {
       >
         <defs>
           <linearGradient id="gdg-footer-wave-gradient" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="#4285f4" />
-            <stop offset="33%" stopColor="#34a853" />
-            <stop offset="66%" stopColor="#f9ab00" />
-            <stop offset="100%" stopColor="#ea4335" />
+            <stop offset="0%" stopColor="var(--gdg-blue)" />
+            <stop offset="33%" stopColor="var(--gdg-green)" />
+            <stop offset="66%" stopColor="var(--gdg-yellow)" />
+            <stop offset="100%" stopColor="var(--gdg-red)" />
           </linearGradient>
         </defs>
         <path
@@ -55,26 +55,31 @@ export default function Footer() {
 
       <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.4fr_1fr_0.8fr] lg:gap-12 lg:px-10 lg:py-9">
         <section className="flex flex-col items-start gap-7">
-          <Link href="/" aria-label={t("nav.home")} className="inline-flex rounded-xl outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
+          <Link href="/" aria-label={t("nav.home")} className="inline-flex rounded-xl outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:focus-visible:outline-white">
+            <img
+              src="/images/black-logo-with-colors.png"
+              alt={t("logoAlt")}
+              className="footer-logo-light w-56 max-w-full object-contain sm:w-70"
+            />
             <img
               src="/images/gdg-logo.png"
               alt={t("logoAlt")}
-              className="w-56 max-w-full object-contain sm:w-70"
+              className="footer-logo-dark w-56 max-w-full object-contain sm:w-70"
             />
           </Link>
-          <p dir={dir} className="max-w-md whitespace-pre-line text-sm leading-6 text-white/65">
+          <p dir={dir} className="max-w-md whitespace-pre-line text-sm leading-6 text-foreground/70 dark:text-white/65">
             {t("footer.tagline")}
           </p>
         </section>
 
         <section>
-          <h3 dir={dir} className="text-base font-bold tracking-wide text-white">
+          <h3 dir={dir} className="text-base font-bold tracking-wide text-foreground dark:text-white">
             {t("footer.linksTitle")}
           </h3>
           <div className="mt-2 h-1 w-10 rounded-full bg-[var(--gdg-blue)]" />
           <nav aria-label={t("footer.linksTitle")} className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
             {links.map((link) => {
-              const className = "w-fit text-sm text-white/70 transition-colors hover:text-white focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-white";
+              const className = "w-fit text-sm text-foreground/70 transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:text-white/70 dark:hover:text-white dark:focus-visible:outline-white";
 
               return link.route ? (
                 <Link key={link.label} href={link.href} dir={dir} className={className}>
@@ -90,7 +95,7 @@ export default function Footer() {
         </section>
 
         <section>
-          <h3 dir={dir} className="text-base font-bold tracking-wide text-white">
+          <h3 dir={dir} className="text-base font-bold tracking-wide text-foreground dark:text-white">
             {t("footer.contactTitle")}
           </h3>
           <div className="mt-2 h-1 w-10 rounded-full bg-[var(--gdg-green)]" />
@@ -100,7 +105,7 @@ export default function Footer() {
               aria-label="LinkedIn"
               target="_blank"
               rel="noreferrer"
-              className="flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/75 transition hover:border-[#2867b2] hover:bg-[#2867b2] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+              className="flex size-11 items-center justify-center rounded-full border border-foreground/15 bg-foreground/5 text-foreground/75 transition hover:border-linkedin-blue hover:bg-linkedin-blue hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:border-white/15 dark:bg-white/5 dark:text-white/75 dark:focus-visible:outline-white"
             >
               <FaLinkedinIn className="text-lg" />
             </a>
@@ -110,7 +115,7 @@ export default function Footer() {
               aria-label="X"
               target="_blank"
               rel="noreferrer"
-              className="flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 hover:bg-white/15 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+              className="flex size-11 items-center justify-center rounded-full border border-foreground/15 bg-foreground/5 text-foreground/75 transition hover:border-foreground/30 hover:bg-foreground/15 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:border-white/15 dark:bg-white/5 dark:text-white/75 dark:hover:border-white/30 dark:hover:bg-white/15 dark:hover:text-white dark:focus-visible:outline-white"
             >
               <FaXTwitter className="text-lg" />
             </a>
@@ -118,8 +123,8 @@ export default function Footer() {
         </section>
       </div>
 
-      <div className="relative z-10 border-t border-white/10">
-        <p dir={dir} className="mx-auto max-w-7xl px-6 py-3 text-center text-xs leading-5 text-white/50 sm:px-8 lg:px-10">
+      <div className="relative z-10 border-t border-foreground/10 dark:border-white/10">
+        <p dir={dir} className="mx-auto max-w-7xl px-6 py-3 text-center text-xs leading-5 text-foreground/55 dark:text-white/50 sm:px-8 lg:px-10">
           {t("footer.copyright")}
         </p>
       </div>

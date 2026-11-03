@@ -36,7 +36,7 @@ export function InfoCard({
 
       {/* Colored accent sidebar */}
       <div
-        className={`flex w-12 shrink-0 justify-center rounded-s-2xl pt-5 sm:w-14 sm:pt-6 ${isPersonal ? "bg-[#4285f4]" : "bg-[#34a853]"
+        className={`flex w-12 shrink-0 justify-center rounded-s-2xl pt-5 sm:w-14 sm:pt-6 ${isPersonal ? "bg-gdg-blue" : "bg-gdg-green"
           }`}
       >
         {isPersonal ? (

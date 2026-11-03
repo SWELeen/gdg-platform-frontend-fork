@@ -59,7 +59,7 @@ export function MembersSection({
   return (
     <div className="space-y-6">
       {/* Banner explaining Temporary Access */}
-      {showTemporaryAccess && <div className="rounded-2xl border border-blue-200 bg-blue-50/80 p-4 text-xs text-blue-900 dark:border-blue-800/50 dark:bg-[#0f1f38] dark:text-blue-200">
+      {showTemporaryAccess && <div className="rounded-2xl border border-blue-200 bg-blue-50/80 p-4 text-xs text-blue-900 dark:border-blue-800/50 dark:bg-[var(--members-temp-access-dark-bg)] dark:text-blue-200">
         <div className="flex items-start gap-3">
           <ShieldAlert className="mt-0.5 size-5 shrink-0 text-blue-600 dark:text-blue-400" />
           <div className="space-y-1">

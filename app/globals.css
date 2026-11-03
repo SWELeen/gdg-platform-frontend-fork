@@ -91,11 +91,23 @@
   display: none;
 }
 
+.footer-logo-dark {
+  display: none;
+}
+
 html[data-theme="dark"] .topnav-logo-light {
   display: none;
 }
 
 html[data-theme="dark"] .topnav-logo-dark {
+  display: block;
+}
+
+html[data-theme="dark"] .footer-logo-light {
+  display: none;
+}
+
+html[data-theme="dark"] .footer-logo-dark {
   display: block;
 }
 
@@ -172,6 +184,14 @@ html[data-theme="dark"] .topnav-logo-dark {
   html:not([data-theme]) .topnav-logo-dark {
     display: block;
   }
+
+  html:not([data-theme]) .footer-logo-light {
+    display: none;
+  }
+
+  html:not([data-theme]) .footer-logo-dark {
+    display: block;
+  }
 }
 
 /* =========================================================
@@ -189,12 +209,107 @@ html[data-theme="dark"] .topnav-logo-dark {
   --black: #000000;
   --footer-muted: #9aa0a6;
   --linkedin-blue: #2867b2;
+  --google-yellow: #fbbc04;
+  --avatar-google-yellow: #fbbc05;
+  --gdg-blue-hover: #3367d6;
 
   --gdg-red: #ea4335;
   --gdg-yellow: #f9ab00;
   --gdg-green: #34a853;
   --gdg-blue: #4285f4;
   --gdg-dark: #1e1e1e;
+  --avatar-ring-gradient: conic-gradient(
+    var(--gdg-blue) 0deg 90deg,
+    var(--gdg-red) 90deg 180deg,
+    var(--avatar-google-yellow) 180deg 270deg,
+    var(--gdg-green) 270deg 360deg
+  );
+  --team-card-photo-glow: radial-gradient(
+      ellipse at 78% 24%,
+      var(--gdg-red) 0%,
+      color-mix(in srgb, var(--gdg-red) 78%, transparent) 22%,
+      transparent 58%
+    ),
+    linear-gradient(
+      135deg,
+      var(--gdg-blue) 0%,
+      var(--gdg-green) 34%,
+      var(--google-yellow) 68%,
+      var(--gdg-red) 100%
+    );
+  --project-card-reflection: linear-gradient(
+    transparent 78%,
+    color-mix(in srgb, var(--white) 16%, transparent)
+  );
+  --project-card-shadow-active: 0 28px 50px rgb(40 40 70 / 25%);
+  --project-card-shadow-inactive: 0 18px 32px rgb(40 40 70 / 14%);
+  --announcement-media-pattern: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--white) 3.5%, transparent) 0 2px,
+    transparent 2px 16px
+  );
+
+  --profile-navy-ink: #243b64;
+  --profile-blue-light: #8ab4f8;
+  --profile-blue-surface: #eaf2ff;
+  --profile-blue-tint: color-mix(in srgb, var(--gdg-blue) 10%, transparent);
+  --profile-blue-focus: color-mix(in srgb, var(--gdg-blue) 40%, transparent);
+  --profile-blue-border-hover: color-mix(in srgb, var(--gdg-blue) 50%, transparent);
+  --profile-navy-border-dark: color-mix(in srgb, var(--profile-navy-ink) 50%, transparent);
+  --profile-navy-border-strong: color-mix(in srgb, var(--profile-navy-ink) 70%, transparent);
+  --profile-avatar-ink: #1e3a5f;
+  --profile-title-dark: #f1f5f9;
+  --profile-cover-gradient-dark: linear-gradient(
+    90deg,
+    #356fc4 0%,
+    #6fafc4 50%,
+    #d9786d 100%
+  );
+
+  --committee-content-writing-accent: #ffd34e;
+
+  --members-temp-access-dark-bg: #0f1f38;
+  --events-info-dark-bg: #0e1b2e;
+
+  --create-event-page-bg: #f5f7fb;
+  --create-event-page-text: #1f2937;
+  --create-event-subtitle-text: #00050f;
+  --create-event-orange: #f5a623;
+  --create-event-dark-red: #a71b09;
+  --create-event-green: #45a85b;
+  --create-event-label-text: #374151;
+  --create-event-border: #d1d5db;
+  --create-event-placeholder: #9ca3af;
+  --create-event-upload-border: #93c5fd;
+  --create-event-upload-hover-bg: #f8fbff;
+  --create-event-muted-text: #6b7280;
+  --create-event-question-border: #e5e7eb;
+  --create-event-question-bg: #fafafa;
+  --create-event-option-hover-bg: #eff6ff;
+  --create-event-error-border: #fca5a5;
+  --create-event-error-text: #dc2626;
+  --create-event-error-bg: #fef2f2;
+  --create-event-row-hover-bg: #f9fafb;
+  --create-event-button-hover-bg: var(--gdg-blue-hover);
+  --create-event-error-border-muted: #f3b4b4;
+  --create-event-error-bg-muted: #fff5f5;
+  --create-event-error-text-muted: #b42318;
+  --create-event-success-border: #a7e3c0;
+  --create-event-success-bg: #f0fdf4;
+  --create-event-success-text: #15803d;
+  --create-event-preview-muted-bg: #f3f4f6;
+  --create-event-preview-muted-text: #4b5563;
+  --create-event-preview-info-bg: #f8f9fa;
+  --create-event-card-shadow: 0 4px 20px color-mix(in srgb, var(--black) 8%, transparent);
+  --create-event-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--gdg-blue) 12%, transparent);
+  --create-event-preview-overlay: rgb(15 23 42 / 60%);
+  --create-event-preview-shadow: 0 20px 60px color-mix(in srgb, var(--black) 20%, transparent);
+  --create-event-gradient: linear-gradient(
+    135deg,
+    var(--gdg-blue),
+    var(--gdg-red),
+    var(--google-yellow)
+  );
 
   /* Dashboard event card: always dark in both modes */
   --event-card-start: #2b2b2b;
@@ -279,6 +394,14 @@ html[data-theme="dark"] .topnav-logo-dark {
     var(--gdg-green) 33%,
     var(--gdg-yellow) 66%,
     var(--gdg-red) 100%
+  );
+  --committee-step-gradient: conic-gradient(
+    from 0deg,
+    var(--gdg-blue) 0deg,
+    var(--gdg-green) 90deg,
+    var(--google-yellow) 180deg,
+    var(--gdg-red) 270deg,
+    var(--gdg-blue) 360deg
   );
 
   /* Featured Projects */
@@ -884,6 +1007,7 @@ html:not([data-theme]) select option {
 
   --color-footer-muted: var(--footer-muted);
   --color-linkedin-blue: var(--linkedin-blue);
+  --color-google-yellow: var(--google-yellow);
   --color-sponsor-gray: var(--sponsor-gray);
 
   /* ---------------------------------------------------------
@@ -1020,6 +1144,13 @@ html {
   scroll-behavior: smooth;
   /* Anchor links (#about, #events, ...) stop below the fixed navbar. */
   scroll-padding-top: var(--home-nav-height);
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+body {
+  overflow-x: clip;
+  overscroll-behavior-x: none;
 }
 
 /* =========================================================

@@ -20,9 +20,9 @@ export function Avatar({
   
   return (
   <div
-    className={`shrink-0 rounded-full bg-[conic-gradient(#4285F4_0deg_90deg,#EA4335_90deg_180deg,#FBBC05_180deg_270deg,#34A853_270deg_360deg)] p-1 ${sizeClasses[size]} ${className}`}
+    className={`shrink-0 rounded-full bg-[image:var(--avatar-ring-gradient)] p-1 ${sizeClasses[size]} ${className}`}
   >
-    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white text-5xl font-bold text-[#1E3A5F] dark:bg-[#1E1E1E] dark:text-5xl dark:text-white">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white text-5xl font-bold text-[var(--profile-avatar-ink)] dark:bg-gdg-dark dark:text-5xl dark:text-white">
       {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

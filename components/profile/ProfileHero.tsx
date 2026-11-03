@@ -22,12 +22,12 @@ export function ProfileHero({ initials, name, email, memberSince, avatarUrl, con
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <div className="h-32 bg-gradient-to-r from-[#4285F4] via-[#C3ECF6] to-[#EA4335] sm:h-36 md:h-40 dark:bg-[linear-gradient(90deg,#356FC4_0%,#6FAFC4_50%,#D9786D_100%)]" />
+      <div className="h-32 bg-[image:linear-gradient(90deg,var(--gdg-blue)_0%,var(--gdg-blue-light)_50%,var(--gdg-red)_100%)] sm:h-36 md:h-40 dark:bg-[image:var(--profile-cover-gradient-dark)]" />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-10 lg:px-16">
         <div className={`relative -mt-10 flex flex-col items-center text-center sm:-mt-12 md:items-start md:text-start ${contentClassName}`}>
           <Avatar initials={initials} imageUrl={avatarUrl} size="lg" />
           <div className="mt-3 flex w-full flex-col gap-1">
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#243b64] dark:text-slate-100 md:text-4xl">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-[var(--profile-navy-ink)] dark:text-[var(--profile-title-dark)] md:text-4xl">
               {name}
             </h1>
             <p className="text-base leading-relaxed text-foreground/75">

@@ -53,10 +53,10 @@ export function ProfileTabs({
   return (
     <section>
       <div className="mb-4 flex gap-7 border-b border-gray-200 dark:border-white/10" role="tablist" aria-label={t("label")}>
-        <button type="button" role="tab" aria-selected={activeTab === "personal"} onClick={() => setActiveTab("personal")} className={`border-b-2 px-0 pb-2 text-base font-semibold transition-colors ${activeTab === "personal" ? "border-[#4285f4] text-[#4285f4]" : "border-transparent text-foreground/70 hover:text-foreground"}`}>
+        <button type="button" role="tab" aria-selected={activeTab === "personal"} onClick={() => setActiveTab("personal")} className={`border-b-2 px-0 pb-2 text-base font-semibold transition-colors ${activeTab === "personal" ? "border-gdg-blue text-gdg-blue" : "border-transparent text-foreground/70 hover:text-foreground"}`}>
           {t("personal")}
         </button>
-        <button type="button" role="tab" aria-selected={activeTab === "social"} onClick={() => setActiveTab("social")} className={`border-b-2 px-0 pb-2 text-base font-semibold transition-colors ${activeTab === "social" ? "border-[#4285f4] text-[#4285f4]" : "border-transparent text-foreground/70 hover:text-foreground"}`}>
+        <button type="button" role="tab" aria-selected={activeTab === "social"} onClick={() => setActiveTab("social")} className={`border-b-2 px-0 pb-2 text-base font-semibold transition-colors ${activeTab === "social" ? "border-gdg-blue text-gdg-blue" : "border-transparent text-foreground/70 hover:text-foreground"}`}>
           {t("social")}
         </button>
       </div>

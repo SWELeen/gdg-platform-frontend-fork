@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -120,6 +120,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   const t = useTranslations("home.projects");
   const dir = useTextDirection();
+  const reduceMotion = useReducedMotion();
   const titleKey = `items.${project.id}.title`;
   const descriptionKey = `items.${project.id}.shortDescription`;
   const projectTitle = t.has(titleKey) ? t(titleKey) : project.id;
@@ -145,15 +146,16 @@ export default function ProjectCard({
         rotateY: slot.rotateY * side * mirror, // الدوران ثلاثي الأبعاد
         opacity: slot.opacity,
       }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduceMotion ? 0.01 : 0.55, ease: [0.22, 1, 0.36, 1] }}
       style={{
         // التصغير والدوران من أسفل الكرت => كل الكروت قاعها على نفس الخط
         originX: 0.5,
         originY: 1,
+        willChange: "transform",
         zIndex: 10 - abs, // الكرت النشط فوق الباقي
         // انعكاس الكرت على الأرضية
         WebkitBoxReflect:
-          "below 4px linear-gradient(transparent 78%, rgba(255,255,255,0.16))",
+          "below 4px var(--project-card-reflection)",
       }}
       onClick={!isActive ? (detailsOpen ? onViewProject : onSelect) : undefined}
       className={`absolute left-1/2 top-0 -ml-[140px] h-[420px] w-[280px] ${
@@ -164,8 +166,8 @@ export default function ProjectCard({
       <div
         className={`relative h-full w-full overflow-hidden rounded-[24px] border-3 border-border bg-surface ${
           isActive
-            ? "shadow-[0_28px_50px_rgba(40,40,70,0.25)]"
-            : "shadow-[0_18px_32px_rgba(40,40,70,0.14)]"
+            ? "shadow-[var(--project-card-shadow-active)]"
+            : "shadow-[var(--project-card-shadow-inactive)]"
         }`}
         style={{ backgroundColor: project.committeeColor ?? "var(--surface-muted)" }}
       >

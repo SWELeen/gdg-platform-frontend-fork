@@ -112,7 +112,7 @@ const allCommittees = [
   {
     id: "content-writing",
     name: "Content Writing",
-    color: "#FFD34E",
+    color: "var(--committee-content-writing-accent)",
     description:
       "Creates and manages the group’s written and media content, ensuring content quality, consistency in style and identity, and clarity of messaging across various platforms.",
     lead: {
@@ -132,7 +132,7 @@ const allCommittees = [
   {
     id: "project-management",
     name: "Project Management",
-    color: "#4285F4",
+    color: "var(--gdg-blue)",
     description:
       "Where ideas become structured plans with clear owners, clear deadlines, and clear outcomes. We bring together planning, coordination, and follow through to turn vision into execution, and execution into results.",
     lead: {
@@ -152,7 +152,7 @@ const allCommittees = [
   {
     id: "digital-media",
     name: "Digital Media and Design",
-    color: "#EA4335",
+    color: "var(--gdg-red)",
     description:
       "A space where ideas transform into creativity through innovative designs, visual storytelling, and purposeful digital content. We bring together design, photography, video editing, and marketing to create content that reflects ideas and leaves an impact.",
     lead: {
@@ -172,7 +172,7 @@ const allCommittees = [
   {
     id: "public-relations",
     name: "Public Relations",
-    color: "#34A853",
+    color: "var(--gdg-green)",
     description:
       "Representing the group externally, building strong relationships, and strengthening its image with partners, stakeholders, and the wider community.",
     lead: {
@@ -190,7 +190,7 @@ const allCommittees = [
   {
     id: "developers",
     name: "Developers",
-    color: "#000000",
+    color: "var(--black)",
     description:
       "A space for builders, problem-solvers, and technology enthusiasts to learn, create, and build meaningful solutions together.",
     lead: {
