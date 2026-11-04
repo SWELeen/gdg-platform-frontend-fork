@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { MotionConfig } from "framer-motion";
+import { usePathname } from "@/i18n/navigation";
 import { LeaderDashboardProvider } from "@/components/dashboard/shared/LeaderDashboardContext";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
@@ -22,9 +24,11 @@ function LeaderLayoutShell({
   clubLeadership: boolean;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div className="flex min-h-screen flex-col bg-surface text-foreground">
+      <MotionConfig reducedMotion="user">
       {/* Universal TopNav reused from Member Dashboard */}
       <TopNav />
 
@@ -50,14 +54,15 @@ function LeaderLayoutShell({
           />
 
           {/* Content Body */}
-          <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-            <div>
+          <main className="min-w-0 flex-1 bg-surface-muted/40 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+            <div key={pathname} className="dashboard-page-enter">
               <LeaderDashboardStatus />
               {children}
             </div>
           </main>
         </div>
       </div>
+    </MotionConfig>
 
       {/* Shared Platform Footer */}
       <Footer />

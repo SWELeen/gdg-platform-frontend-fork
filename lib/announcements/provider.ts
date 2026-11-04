@@ -22,7 +22,9 @@ async function request<T>(path: string): Promise<T | undefined> {
   try {
     const response = await fetch(`${API_ORIGIN}${path}`, { cache: "no-store" });
     if (!response.ok) return undefined;
-    const envelope = await response.json() as { success?: boolean; data?: T };
+    const text = await response.text();
+    if (!text) return undefined;
+    const envelope = JSON.parse(text) as { success?: boolean; data?: T };
     return envelope.success ? envelope.data : undefined;
   } catch {
     return undefined;
