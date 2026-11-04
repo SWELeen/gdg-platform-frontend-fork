@@ -682,10 +682,10 @@
       "pointsUnit": "{count} pts",
       "expired": "Standard Member",
       "modalTitle": "Add Committee Member",
-      "addDescription": "Add an active student to the {committee}.",
+      "addDescription": "Add an existing account to {committee}.",
       "permission": "You must be a Leader or Co-Leader to add committee members.",
       "fullName": "Full Name *",
-      "universityEmail": "University Email *",
+      "universityEmail": "Account email",
       "roleLabel": "Role",
       "statusLabel": "Status",
       "namePlaceholder": "e.g. Layla Al-Ghamdi",
@@ -715,7 +715,13 @@
         "communicationsMember": "Communications Member",
         "partnershipsMember": "Partnerships Member",
         "member": "Member"
-      }
+      },
+      "accountEmail": "Account email",
+      "accountEmailPlaceholder": "Enter the account login email",
+      "existingAccountOnly": "This email must belong to an account already registered on the platform. No new account will be created.",
+      "assignmentRole": "Role",
+      "adding": "Adding...",
+      "accountNotFound": "No account uses this email yet. The person must create a platform account before you can add them."
     },
     "points": {
       "previewTitle": "Member points",
@@ -883,7 +889,9 @@
       "removeTitle": "Remove {name} from the blacklist?",
       "removeMessage": "This person will leave the blacklist and be treated like any other attendee.",
       "removeError": "The person could not be removed. Please try again.",
-      "filters": { "all": "All" },
+      "filters": {
+        "all": "All"
+      },
       "reasons": {
         "NO_CHECK_IN": "Did not attend",
         "CONFIRMATION_EXPIRED": "Confirmation expired",
@@ -1371,7 +1379,11 @@
       "selectCommitteePlaceholder": "Choose a committee",
       "alreadyInAll": "This member is already in every committee.",
       "requiredSelection": "Choose a member and a committee.",
-      "requestFailed": "Could not add the member. Try again."
+      "requestFailed": "Could not add the member. Try again.",
+      "assignPersonTitle": "Assign an account",
+      "assignPersonDescription": "Enter an existing account email, then choose a role and committee.",
+      "requiredAssignment": "Choose a role and committee.",
+      "roleDeveloperLeader": "Developer Committees Leader"
     }
   },
   "membershipRequests": {

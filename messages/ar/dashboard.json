@@ -682,10 +682,10 @@
       "pointsUnit": "{count} نقطة",
       "expired": "عضو عادي",
       "modalTitle": "إضافة عضو إلى اللجنة",
-      "addDescription": "أضف طالبًا نشطًا إلى {committee}.",
+      "addDescription": "أضف حسابًا موجودًا إلى {committee}.",
       "permission": "يجب أن تكون قائدًا أو نائب قائد لإضافة أعضاء إلى اللجنة.",
       "fullName": "الاسم الكامل *",
-      "universityEmail": "البريد الجامعي *",
+      "universityEmail": "بريد الحساب",
       "roleLabel": "الدور",
       "statusLabel": "الحالة",
       "namePlaceholder": "مثال: ليلى الغامدي",
@@ -715,7 +715,13 @@
         "communicationsMember": "عضو الاتصالات",
         "partnershipsMember": "عضو الشراكات",
         "member": "عضو"
-      }
+      },
+      "accountEmail": "بريد الحساب",
+      "accountEmailPlaceholder": "أدخل بريد تسجيل الدخول",
+      "existingAccountOnly": "يجب أن يكون لهذا البريد حساب مسجل مسبقًا في المنصة. لن يتم إنشاء حساب جديد.",
+      "assignmentRole": "الدور",
+      "adding": "جارٍ الإضافة...",
+      "accountNotFound": "لا يوجد حساب مسجل بهذا البريد. يجب أن ينشئ الشخص حسابًا قبل إضافته."
     },
     "points": {
       "previewTitle": "نقاط الأعضاء",
@@ -883,7 +889,9 @@
       "removeTitle": "إزالة {name} من القائمة السوداء؟",
       "removeMessage": "راح ينشال هذا الشخص من القائمة السوداء ويصير متقدم عادي.",
       "removeError": "تعذرت إزالة الشخص. حاولي مرة أخرى.",
-      "filters": { "all": "الكل" },
+      "filters": {
+        "all": "الكل"
+      },
       "reasons": {
         "NO_CHECK_IN": "لم يحضر",
         "CONFIRMATION_EXPIRED": "انتهت مهلة التأكيد",
@@ -1371,7 +1379,11 @@
       "selectCommitteePlaceholder": "اختر لجنة",
       "alreadyInAll": "هذا العضو موجود في كل اللجان.",
       "requiredSelection": "اختر العضو واللجنة.",
-      "requestFailed": "ما قدرنا نضيف العضو. حاول مرة ثانية."
+      "requestFailed": "ما قدرنا نضيف العضو. حاول مرة ثانية.",
+      "assignPersonTitle": "إضافة حساب وتحديد دوره",
+      "assignPersonDescription": "أدخل بريد الحساب الحالي ثم اختر الدور واللجنة.",
+      "requiredAssignment": "اختر الدور واللجنة.",
+      "roleDeveloperLeader": "قائد لجان المطورين"
     }
   },
   "membershipRequests": {

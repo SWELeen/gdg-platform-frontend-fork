@@ -38,8 +38,13 @@ export interface DeveloperCommitteeOverview {
   activeTaskCount: number;
 }
 
+export interface DeveloperCommitteeDashboardData {
+  committees: DeveloperCommitteeOverview[];
+  permissions: { canAssignMembers: boolean };
+}
+
 export function fetchDeveloperCommitteeOverview() {
-  return apiRequest<DeveloperCommitteeOverview[]>("/developer-committees/dashboard");
+  return apiRequest<DeveloperCommitteeDashboardData>("/developer-committees/dashboard");
 }
 
 export interface CommitteeDashboardData extends LeaderDashboardSeed {
@@ -186,11 +191,26 @@ export async function deleteCommitteeTask(code: string, id: string) {
   return apiRequest(`/committees/${encodeURIComponent(code)}/tasks/${encodeURIComponent(id)}`, { method: "DELETE" });
 }
 
-export async function createCommitteeMember(code: string, member: { name: string; email: string }) {
-  return apiRequest(`/committees/${encodeURIComponent(code)}/members`, {
-    method: "POST",
-    body: { fullName: member.name, email: member.email },
+export type MemberAssignmentRole =
+  | 'Member'
+  | 'Leader'
+  | 'Co-Leader'
+  | 'ADVISOR'
+  | 'DEVELOPER_COMMITTEES_LEADER';
+
+export async function createCommitteeMember(code: string, email: string) {
+  return apiRequest('/committees/' + encodeURIComponent(code) + '/members', {
+    method: 'POST',
+    body: { email },
   });
+}
+
+export async function assignDeveloperCommitteeMember(input: { email: string; committeeCode: string; role: 'Member' | 'Leader' | 'Co-Leader' }) {
+  return apiRequest('/developer-committees/members', { method: 'POST', body: input });
+}
+
+export async function assignClubPerson(input: { email: string; committeeCode?: string; role: MemberAssignmentRole }) {
+  return apiRequest('/club-leadership/members', { method: 'POST', body: input });
 }
 
 /** Exact start, end and registration close times the create-event form picked, as ISO strings. */
