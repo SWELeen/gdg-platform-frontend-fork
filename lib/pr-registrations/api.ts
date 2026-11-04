@@ -12,6 +12,7 @@ type ApiRegistrant = {
   registrationId: number;
   name: string;
   email: string | null;
+  blacklisted: boolean;
   profile: {
     membership: boolean;
     university?: string | null;
@@ -52,6 +53,7 @@ export type RegistrationBlacklistEntry = {
 };
 
 type RegistrationBlacklistPage = {
+  canResolve: boolean;
   items: RegistrationBlacklistEntry[];
   pagination: { totalPages: number };
 };
@@ -92,6 +94,7 @@ function toEventRegistration(eventId: string, item: ApiRegistrant): EventRegistr
     registeredAt: item.registeredAt,
     ...toDashboardStatus(item.status),
     lateCancellation: item.status === "LATE_CANCELLATION",
+    blacklisted: item.blacklisted,
     checkInStatus: item.checkedInAt ? "CheckedIn" : item.status === "NO_CHECK_IN" ? "NoShow" : "NotCheckedIn",
     checkedInAt: item.checkedInAt ?? undefined,
     discoverySource: item.discoverySource ?? undefined,
@@ -132,18 +135,35 @@ export async function fetchRegistrants(eventId: string): Promise<EventRegistrati
   return all;
 }
 
-/** PR's history of attendance and confirmation incidents. */
-export async function fetchRegistrationBlacklist(): Promise<RegistrationBlacklistEntry[]> {
-  const all: RegistrationBlacklistEntry[] = [];
+/**
+ * PR's history of attendance and confirmation incidents. `canResolve` is
+ * true only for the PR Leader or Co-Leader, who may remove people from the list.
+ */
+export async function fetchRegistrationBlacklist(): Promise<{
+  canResolve: boolean;
+  entries: RegistrationBlacklistEntry[];
+}> {
+  const entries: RegistrationBlacklistEntry[] = [];
+  let canResolve = false;
   for (let page = 1; ; page += 1) {
     const result = await apiRequest<RegistrationBlacklistPage>(
       `/registrations/blacklist?page=${page}&pageSize=100`,
     );
     if (!result.ok) throw new Error(result.message || "Blacklist could not be loaded.");
-    all.push(...result.data.items);
+    canResolve = result.data.canResolve;
+    entries.push(...result.data.items);
     if (page >= result.data.pagination.totalPages) break;
   }
-  return all;
+  return { canResolve, entries };
+}
+
+/** Resolves every open entry of the person behind this entry. */
+export async function resolveBlacklistEntry(entryId: number): Promise<string | null> {
+  const result = await apiRequest(`/registrations/blacklist/${entryId}/resolve`, {
+    method: "POST",
+    body: {},
+  });
+  return result.ok ? null : result.message;
 }
 
 /**
