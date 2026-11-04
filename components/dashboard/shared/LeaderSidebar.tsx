@@ -1,8 +1,15 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { usePathname } from "@/i18n/navigation";
-import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import {
+  DashboardMobileDrawer,
+  DashboardSidebarAside,
+  SidebarNavLink,
+  SidebarSectionLabel,
+  useSidebarCollapsed,
+} from "./DashboardSidebar";
 import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import {
@@ -67,66 +74,39 @@ export function LeaderSidebar({
   };
 
   const navContent = (
-    <div className="flex h-full flex-col justify-between p-4 text-foreground">
+    <div className="flex h-full flex-col justify-between p-3 text-foreground">
       <div>
-        {/* Workspace Pill Card */}
-        <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-surface-muted/60 p-3 shadow-2xs">
-          <div className="min-w-0">
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-muted">
-              {t("nav.leaderWorkspace")}
-            </span>
-            <WorkspaceSwitcher
-              className="mt-1 w-full"
-              fallback={
-                <span className="mt-0.5 block text-sm font-semibold text-foreground">
-                  {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
-                </span>
-              }
-            />
-          </div>
-          {onCloseMobile && (
-            <button
-              type="button"
-              onClick={onCloseMobile}
-              className="p-1 text-muted hover:text-foreground lg:hidden"
-              aria-label={t("nav.closeMenu")}
-            >
-              <X className="size-5" />
-            </button>
-          )}
-        </div>
+        {/* Workspace Pill Card (hidden, not unmounted, while the desktop rail is collapsed) */}
+        <WorkspaceCard
+          title={t("nav.leaderWorkspace")}
+          onCloseMobile={onCloseMobile}
+          closeLabel={t("nav.closeMenu")}
+        >
+          <WorkspaceSwitcher
+            className="mt-1 w-full"
+            fallback={
+              <span className="mt-0.5 block text-sm font-semibold text-foreground">
+                {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
+              </span>
+            }
+          />
+        </WorkspaceCard>
 
         {/* Navigation Section */}
         <div>
-          <span className="block px-3 text-[11px] font-bold uppercase tracking-wider text-muted">
-            {t("nav.workspace")}
-          </span>
+          <SidebarSectionLabel>{t("nav.workspace")}</SidebarSectionLabel>
 
           <nav className="mt-2 flex flex-col gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const active = isItemActive(item.href);
-
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  onClick={onCloseMobile}
-                  className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                    active
-                      ? "border-s-4 border-gdg-red bg-[var(--dashboard-red-bg)] ps-2.5 font-semibold text-[var(--dashboard-red-text)]"
-                      : "text-foreground/70 hover:bg-surface-muted hover:text-foreground"
-                  }`}
-                >
-                  <Icon
-                    className={`size-4.5 shrink-0 transition-colors ${
-                      active ? "text-[var(--dashboard-red-text)]" : "text-muted group-hover:text-foreground"
-                    }`}
-                  />
-                  <span className="truncate">{item.label}</span>
-                </Link>
-              );
-            })}
+            {navItems.map((item) => (
+              <SidebarNavLink
+                key={item.id}
+                href={item.href}
+                label={item.label}
+                Icon={item.icon}
+                active={isItemActive(item.href)}
+                onClick={onCloseMobile}
+              />
+            ))}
           </nav>
         </div>
       </div>
@@ -135,23 +115,50 @@ export function LeaderSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar (Permanent) matching member dashboard sidebar */}
-      <aside className="hidden w-60 shrink-0 border-e border-border bg-surface lg:block self-stretch">
-        {navContent}
-      </aside>
+      {/* Desktop Sidebar (collapsible) matching member dashboard sidebar */}
+      <DashboardSidebarAside>{navContent}</DashboardSidebarAside>
 
       {/* Mobile Drawer (Overlay) */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-            onClick={onCloseMobile}
-          />
-          <aside className="relative z-10 h-full w-72 border-e border-border bg-surface shadow-2xl">
-            {navContent}
-          </aside>
-        </div>
-      )}
+      <DashboardMobileDrawer open={mobileOpen} onClose={onCloseMobile}>
+        {navContent}
+      </DashboardMobileDrawer>
     </>
+  );
+}
+
+function WorkspaceCard({
+  title,
+  children,
+  onCloseMobile,
+  closeLabel,
+}: {
+  title: string;
+  children: ReactNode;
+  onCloseMobile?: () => void;
+  closeLabel: string;
+}) {
+  const [collapsed] = useSidebarCollapsed();
+
+  return (
+    <div
+      className={`mb-4 items-center justify-between rounded-lg border border-border bg-surface-muted/60 p-3 ${
+        collapsed ? "flex lg:hidden" : "flex"
+      }`}
+    >
+      <div className="min-w-0">
+        <span className="block text-[11px] font-bold uppercase tracking-wider text-muted">{title}</span>
+        {children}
+      </div>
+      {onCloseMobile && (
+        <button
+          type="button"
+          onClick={onCloseMobile}
+          className="cursor-pointer rounded-full p-1 text-muted transition-colors hover:bg-foreground/5 hover:text-foreground lg:hidden"
+          aria-label={closeLabel}
+        >
+          <X className="size-5" />
+        </button>
+      )}
+    </div>
   );
 }

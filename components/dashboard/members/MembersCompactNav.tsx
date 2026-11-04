@@ -23,8 +23,8 @@ function NavIconButton({
   Icon: IconComponent;
   active?: boolean;
 }): ReactElement {
-  const className = `inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
-    active ? "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]" : "text-muted hover:bg-surface-muted hover:text-foreground"
+  const className = `relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors duration-200 ${
+    active ? "bg-[var(--dashboard-red-bg)] text-[var(--dashboard-red-text)]" : "text-muted hover:bg-foreground/5 hover:text-foreground"
   }`;
 
   // Internal routes use the locale-aware Link; "#" placeholders stay native anchors.

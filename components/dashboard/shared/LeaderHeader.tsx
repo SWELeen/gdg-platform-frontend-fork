@@ -8,6 +8,7 @@ import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-con
 import type { LeaderCommittee } from "./types";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import { apiRequest } from "@/lib/api/client";
+import { SidebarCollapseToggle } from "./DashboardSidebar";
 
 interface LeaderHeaderProps {
   onOpenMobileMenu?: () => void;
@@ -57,18 +58,20 @@ export function LeaderHeader({
   else if (clubLeadership && pathname.startsWith(`${routeRoot}/announcements`)) pageTitle = leadershipT("announcementsTitle");
 
   return (
-    <div className="border-b border-border bg-surface px-4 py-4 sm:px-6 lg:px-8">
+    <div className="border-b border-border bg-surface px-4 py-3 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* Left: Mobile hamburger & Title */}
-        <div className="flex items-center gap-3">
+        {/* Left: sidebar toggle & Title */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onOpenMobileMenu}
-            className="p-1.5 text-foreground/70 hover:text-foreground lg:hidden"
+            className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground lg:hidden"
             aria-label={t("nav.openSidebar")}
           >
             <Menu className="size-5" />
           </button>
+          <SidebarCollapseToggle className="max-lg:hidden" />
+          <span className="mx-1 h-4 w-px self-center bg-border max-lg:hidden" aria-hidden="true" />
 
           <div>
             <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
@@ -80,7 +83,7 @@ export function LeaderHeader({
         {/* Right: Profile Info */}
         <div className="flex items-center gap-3">
           {/* Profile Card */}
-          <div className="flex items-center gap-2.5 rounded-xl border border-border bg-surface-muted/50 px-3 py-1.5">
+          <div className="flex items-center gap-2.5 rounded-lg border border-border bg-surface-muted/50 px-3 py-1.5 transition-colors duration-200 hover:bg-surface-muted">
               <div className="flex size-9 items-center justify-center rounded-full bg-avatar-bg text-sm font-semibold text-foreground">
               {leaderInitials}
             </div>

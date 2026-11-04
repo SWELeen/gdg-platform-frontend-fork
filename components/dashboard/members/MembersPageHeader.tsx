@@ -22,7 +22,7 @@ export function MembersPageHeader(): ReactElement {
   const activeItem = navItems.find((item) => isSidebarItemActive(pathname, item));
 
   return (
-    <header className="flex items-center justify-between gap-3">
+    <header className="flex items-center justify-between gap-3 border-b border-border pb-4">
       {activeItem && (
         <h1 className="min-w-0 text-2xl font-semibold text-foreground sm:text-3xl">
           {t(`items.${activeItem.id}`)}

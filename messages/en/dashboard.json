@@ -118,6 +118,8 @@
     "sectionsLabel": "Dashboard sections",
     "accountLabel": "Account",
     "compactLabel": "Members Dashboard",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
     "items": {
       "dashboard": "Dashboard",
       "events": "Events",
