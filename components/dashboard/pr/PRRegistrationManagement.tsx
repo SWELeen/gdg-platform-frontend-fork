@@ -33,6 +33,7 @@ import {
   Clock,
   MapPin,
   Search,
+  ShieldAlert,
   Users,
   ClipboardList,
   CircleCheck,
@@ -54,6 +55,17 @@ function riyadhDateTime(value: string) {
   }).formatToParts(new Date(value));
   const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "00";
   return { date: `${part("year")}-${part("month")}-${part("day")}`, time: `${part("hour")}:${part("minute")}` };
+}
+
+// Informational only: blacklisted people are reviewed like everyone else.
+function BlacklistedBadge() {
+  const t = useTranslations("dashboard.leader");
+  return (
+    <span title={t("registrations.blacklistedHint")} className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[11px] font-semibold text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
+      <ShieldAlert aria-hidden="true" className="size-3" />
+      {t("registrations.blacklisted")}
+    </span>
+  );
 }
 
 function RegistrationStatusBadge({
@@ -172,7 +184,10 @@ export function PROverviewRegistrations() {
                   return (
                     <tr key={registration.id} className="hover:bg-surface-muted/30">
                       <td className="px-5 py-3">
-                        <span className="block font-semibold text-foreground">{registration.applicantName}</span>
+                        <span className="flex flex-wrap items-center gap-1.5 font-semibold text-foreground">
+                          {registration.applicantName}
+                          {registration.blacklisted && <BlacklistedBadge />}
+                        </span>
                         <span className="text-muted">{registration.email}</span>
                       </td>
                       <td className="px-4 py-3 text-foreground">{event?.title ?? t("registrations.eventFallback")}</td>
@@ -703,7 +718,10 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                 {filteredRegistrations.map((registration) => (
                   <tr key={registration.id} className="hover:bg-surface-muted/30">
                     <td className="px-5 py-3.5">
-                      <span className="block font-semibold text-foreground">{registration.applicantName}</span>
+                      <span className="flex flex-wrap items-center gap-1.5 font-semibold text-foreground">
+                        {registration.applicantName}
+                        {registration.blacklisted && <BlacklistedBadge />}
+                      </span>
                       <span className="text-muted">{registration.email}</span>
                     </td>
                     <td className="px-4 py-3.5 text-muted">{registration.registeredAt}</td>
@@ -749,8 +767,14 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
           <section className="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-surface p-5 shadow-2xl sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-4">
               <div>
-                <h3 className="text-lg font-bold text-foreground">{selectedRegistration.applicantName}</h3>
+                <h3 className="flex flex-wrap items-center gap-2 text-lg font-bold text-foreground">
+                  {selectedRegistration.applicantName}
+                  {selectedRegistration.blacklisted && <BlacklistedBadge />}
+                </h3>
                 <p className="mt-1 text-xs text-muted">{selectedRegistration.email} · {t("registrations.registeredAt")} {selectedRegistration.registeredAt}</p>
+                {selectedRegistration.blacklisted && (
+                  <p className="mt-1 text-xs text-rose-700 dark:text-rose-300">{t("registrations.blacklistedHint")}</p>
+                )}
               </div>
               <RegistrationStatusBadge
                 status={selectedRegistration.status}

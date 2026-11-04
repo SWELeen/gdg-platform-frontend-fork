@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { AlertTriangle, CalendarDays, Mail, ShieldAlert } from "lucide-react";
+import { AlertTriangle, CalendarDays, Mail, ShieldAlert, UserCheck } from "lucide-react";
 import { API_ENABLED } from "@/lib/api/client";
+import { ConfirmModal } from "../shared/ConfirmModal";
 import {
   fetchRegistrationBlacklist,
+  resolveBlacklistEntry,
   type RegistrationBlacklistEntry,
   type RegistrationBlacklistReason,
 } from "@/lib/pr-registrations/api";
@@ -19,6 +21,16 @@ export function PRBlacklistPage() {
   const [filter, setFilter] = useState<ReasonFilter>("all");
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
+  const [canResolve, setCanResolve] = useState(false);
+  const [toRemove, setToRemove] = useState<RegistrationBlacklistEntry | null>(null);
+  const [removing, setRemoving] = useState(false);
+  const [removeError, setRemoveError] = useState(false);
+
+  const load = () =>
+    fetchRegistrationBlacklist().then((result) => {
+      setEntries(result.entries);
+      setCanResolve(result.canResolve);
+    });
 
   useEffect(() => {
     let active = true;
@@ -27,8 +39,10 @@ export function PRBlacklistPage() {
       return;
     }
     fetchRegistrationBlacklist()
-      .then((items) => {
-        if (active) setEntries(items);
+      .then((result) => {
+        if (!active) return;
+        setEntries(result.entries);
+        setCanResolve(result.canResolve);
       })
       .catch(() => {
         if (active) setFailed(true);
@@ -49,6 +63,15 @@ export function PRBlacklistPage() {
     () => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Riyadh" }),
     [locale],
   );
+  const removePerson = async (entry: RegistrationBlacklistEntry) => {
+    setToRemove(null);
+    setRemoving(true);
+    setRemoveError(false);
+    const error = await resolveBlacklistEntry(entry.entryId);
+    if (error) setRemoveError(true);
+    else await load().catch(() => setRemoveError(true));
+    setRemoving(false);
+  };
   const filters: ReasonFilter[] = ["all", "NO_CHECK_IN", "CONFIRMATION_EXPIRED", "LATE_CANCELLATION"];
 
   return (
@@ -83,6 +106,10 @@ export function PRBlacklistPage() {
             ))}
           </div>
 
+          {removeError && (
+            <p role="alert" className="border-b border-border bg-rose-50/50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/20 dark:text-rose-300">{t("blacklist.removeError")}</p>
+          )}
+
           {loading ? (
             <p className="p-5 text-sm text-muted" role="status">{t("blacklist.loading")}</p>
           ) : visibleEntries.length === 0 ? (
@@ -115,6 +142,17 @@ export function PRBlacklistPage() {
                     <span className={`rounded-full px-2.5 py-1 font-semibold ${entry.resolvedAt ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300" : "bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-200"}`}>
                       {t(entry.resolvedAt ? "blacklist.resolved" : "blacklist.unresolved")}
                     </span>
+                    {canResolve && !entry.resolvedAt && (
+                      <button
+                        type="button"
+                        disabled={removing}
+                        onClick={() => setToRemove(entry)}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <UserCheck aria-hidden="true" className="size-3.5" />
+                        {t(removing ? "blacklist.removing" : "blacklist.remove")}
+                      </button>
+                    )}
                   </div>
                 </li>
               ))}
@@ -122,6 +160,19 @@ export function PRBlacklistPage() {
           )}
         </section>
       )}
+
+      <ConfirmModal
+        isOpen={Boolean(toRemove)}
+        onClose={() => setToRemove(null)}
+        onConfirm={() => {
+          if (toRemove) void removePerson(toRemove);
+        }}
+        title={t("blacklist.removeTitle", { name: toRemove?.registration.name ?? "" })}
+        message={t("blacklist.removeMessage")}
+        confirmText={t("blacklist.remove")}
+        cancelText={t("members.cancel")}
+        danger={false}
+      />
     </div>
   );
 }

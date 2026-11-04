@@ -147,6 +147,8 @@ export interface EventRegistration {
   confirmationStatus?: RegistrationConfirmationStatus;
   // A confirmed seat given up in the final two hours before the event.
   lateCancellation?: boolean;
+  // Has an open attendance-blacklist entry; informational, never blocks review.
+  blacklisted?: boolean;
   attendanceConfirmedAt?: string;
   checkInStatus?: "NotCheckedIn" | "CheckedIn" | "NoShow";
   checkedInAt?: string;
