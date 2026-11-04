@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import { LeaderGreeting } from "./LeaderGreeting";
@@ -9,6 +10,7 @@ import { LeaderDashboardStatus } from "./LeaderDashboardStatus";
 import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { committees } from "@/lib/badge/themes";
+import { AssignPersonModal } from "./AssignPersonModal";
 
 const developerCommitteeAccents: Record<string, string> = {
   DATA: committees.DATA.theme.bg,
@@ -41,8 +43,10 @@ function ClubLeadershipDashboard() {
 
 function DeveloperCommitteesDashboard() {
   const t = useTranslations("dashboard.leadershipDashboard");
-  const { developerCommitteesOverview, dashboardLoading, dashboardError } = useLeaderDashboard();
+  const membersT = useTranslations("dashboard.leader.members");
+  const { developerCommitteesOverview, canAssignDeveloperMembers, dashboardLoading, dashboardError } = useLeaderDashboard();
   const [selectedCommittee, setSelectedCommittee] = useState("all");
+  const [assignOpen, setAssignOpen] = useState(false);
   const visibleCommittees = selectedCommittee === "all"
     ? developerCommitteesOverview
     : developerCommitteesOverview.filter((item) => item.code === selectedCommittee);
@@ -53,8 +57,9 @@ function DeveloperCommitteesDashboard() {
       <LeaderDashboardStatus />
       <section className="space-y-3" aria-labelledby="developer-committee-overview-title">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
+          <div className="flex items-center gap-3">
             <h2 id="developer-committee-overview-title" className="text-lg font-bold">{t("overviewTitle")}</h2>
+            {canAssignDeveloperMembers && <button type="button" onClick={() => setAssignOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"><Plus className="size-3.5" />{membersT("add")}</button>}
           </div>
           <label className="flex flex-col gap-1.5 text-xs font-semibold text-foreground/85">
             {t("committeeFilter")}
@@ -120,6 +125,7 @@ function DeveloperCommitteesDashboard() {
         ) : null}
       </section>
       <LeadershipApprovalsPanel scope="DEVELOPER_COMMITTEES" />
+      <AssignPersonModal isOpen={assignOpen} onClose={() => setAssignOpen(false)} scope="developer" />
     </div>
   );
 }

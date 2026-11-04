@@ -27,7 +27,7 @@ import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
 import { API_ENABLED } from "@/lib/api/client";
-import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, assignClubPerson, assignDeveloperCommitteeMember, type MemberAssignmentRole, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -54,6 +54,7 @@ interface LeaderDashboardContextValue {
   canCreateEvents: boolean;
   canManageMembers: boolean;
   canAddMembers: boolean;
+  canAssignDeveloperMembers: boolean;
   canManageTasks: boolean;
   canManagePoints: boolean;
   canManageSettings: boolean;
@@ -69,7 +70,8 @@ interface LeaderDashboardContextValue {
   /** Deletes a draft event; published events cannot be deleted. */
   deleteDraft: (id: string) => Promise<void>;
   // Member Actions
-  addMember: (member: { name: string; email: string }) => Promise<void>;
+  addMember: (member: { email: string }) => Promise<void>;
+  assignPerson: (assignment: { email: string; role: MemberAssignmentRole; committeeCode?: string }) => Promise<void>;
   addMemberToCommittee: (memberId: string, committeeCode: string) => Promise<void>;
   updateMember: (id: string, updates: Partial<CommitteeMember>) => void;
   removeMember: (id: string) => void;
@@ -146,6 +148,7 @@ export function LeaderDashboardProvider({
   const [currentMember, setCurrentMember] = useState<{ id: string; name: string; role: string } | null>(null);
   const [developerCommitteesOverview, setDeveloperCommitteesOverview] = useState<DeveloperCommitteeOverview[]>([]);
   const [canAddMembers, setCanAddMembers] = useState(false);
+  const [canAssignDeveloperMembers, setCanAssignDeveloperMembers] = useState(false);
   const [canCreateEvents, setCanCreateEvents] = useState(false);
   const [prDrafts, setPrDrafts] = useState<CommitteeEvent[]>([]);
   const [canManageTasks, setCanManageTasks] = useState(false);
@@ -237,9 +240,10 @@ export function LeaderDashboardProvider({
         setDashboardLoading(false);
         return;
       }
-      setDeveloperCommitteesOverview(result.data);
-      const memberCount = result.data.reduce((sum, item) => sum + item.memberCount, 0);
-      const taskCount = result.data.reduce((sum, item) => sum + item.activeTaskCount, 0);
+      setDeveloperCommitteesOverview(result.data.committees);
+      setCanAssignDeveloperMembers(result.data.permissions.canAssignMembers);
+      const memberCount = result.data.committees.reduce((sum, item) => sum + item.memberCount, 0);
+      const taskCount = result.data.committees.reduce((sum, item) => sum + item.activeTaskCount, 0);
       setStats((current) => ({ ...current, committeeMembers: memberCount, activeMembers: memberCount, activeTasks: taskCount }));
       setDashboardLoading(false);
       return;
@@ -424,9 +428,24 @@ export function LeaderDashboardProvider({
   };
 
   // Member handlers
-  const addMember = async (data: { name: string; email: string }) => {
-    const result = await createCommitteeMember(committeeConfig.committeeCode, data);
-    if (!result.ok) throw new Error(result.message);
+  const addMember = async (data: { email: string }) => {
+    const result = await createCommitteeMember(committeeConfig.committeeCode, data.email);
+    if (!result.ok) throw new Error(result.status === 404 ? t("members.accountNotFound") : result.message);
+    await reloadDashboard();
+  };
+
+  const assignPerson = async (assignment: { email: string; role: MemberAssignmentRole; committeeCode?: string }) => {
+    const result = clubLeadership
+      ? await assignClubPerson(assignment)
+      : developerCommitteesLeader && canAssignDeveloperMembers && assignment.committeeCode && ['Member', 'Leader', 'Co-Leader'].includes(assignment.role)
+        ? await assignDeveloperCommitteeMember({
+            email: assignment.email,
+            committeeCode: assignment.committeeCode,
+            role: assignment.role as 'Member' | 'Leader' | 'Co-Leader',
+          })
+        : null;
+    if (!result) throw new Error('This account cannot assign that role.');
+    if (!result.ok) throw new Error(result.status === 404 ? t("members.accountNotFound") : result.message);
     await reloadDashboard();
   };
 
@@ -547,6 +566,7 @@ export function LeaderDashboardProvider({
     canCreateEvents,
     canManageMembers,
     canAddMembers,
+    canAssignDeveloperMembers,
     canManageTasks,
     canManagePoints,
     canManageSettings,
@@ -559,6 +579,7 @@ export function LeaderDashboardProvider({
     deleteDraft,
     addMember,
     addMemberToCommittee,
+    assignPerson,
     updateMember,
     removeMember,
     grantTemporaryAccess,
