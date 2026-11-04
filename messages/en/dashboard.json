@@ -1063,15 +1063,25 @@
       "description": "Download an Excel-ready report for each guest status.",
       "event": "Event",
       "empty": "No event is available for reporting yet.",
-      "sampleNotice": "Preview downloads use sample guest records. Live event data will connect when the backend report contract is available.",
+      "loading": "Loading event reports...",
+      "loadFailed": "Could not load event reports. Please try again.",
+      "downloadFailed": "Could not download this report. Please try again.",
+      "downloading": "Preparing file...",
       "allGuests": "All Guests",
       "allGuestsDescription": "Everyone who registered for this event",
       "going": "Going",
-      "goingDescription": "Accepted attendees",
+      "goingDescription": "Attendees who confirmed they are going",
       "checkedIn": "Checked In",
       "checkedInDescription": "Attendees who checked in",
-      "guestCount": "{count} guests",
-      "download": "Download Excel"
+      "download": "Download Excel",
+      "columns": {
+        "name": "Guest name",
+        "email": "Email",
+        "status": "Registration status",
+        "registeredAt": "Registered at",
+        "checkedInAt": "Checked in at",
+        "discoverySource": "Where they heard about the event"
+      }
     },
     "eventForm": {
       "create": "Create New Event",

@@ -29,7 +29,7 @@ Do not consume a production-facing endpoint unless the published specification c
 
 ## Local configuration
 
-Run the frontend at `http://localhost:3000` and the backend API at `http://localhost:3001`. When `NEXT_PUBLIC_USE_API=true`, the browser uses the same-origin `/api/*` path and the Next.js rewrite targets `http://localhost:3001` by default. Set `API_PROXY_TARGET` locally only when the backend uses a different origin. `NEXT_PUBLIC_API_URL` is retained as a fallback for local demo-mode API calls when the integration toggle is off.
+Run the frontend at `http://localhost:3000` and the backend API at `http://localhost:3001`. When `NEXT_PUBLIC_USE_API=true`, the browser uses the same-origin `/api/*` path and the Next.js rewrite targets `API_PROXY_TARGET` (default `http://localhost:3001`). The checked-in `.env.example` and local `.env.local` should use the local target. Use the backend repository Docker Compose setup for a local API and database; it overrides the ignored backend `.env` database URL with the local Docker database. `NEXT_PUBLIC_API_URL` is retained as a fallback for demo-mode API calls when the integration toggle is off.
 
 ## Hosted same-origin API proxy
 
@@ -65,3 +65,7 @@ Before connecting this dashboard to production, the backend contract must define
 - ordered waitlist positions and server-side promotion of the first eligible applicant after a decline or expiry.
 
 The frontend must not report a message as sent or promote waitlisted applicants itself. Registration open/close behavior remains **TBD** until an approved contract confirms it.
+
+## Data committee guest reports
+
+The backend contract for the Data dashboard exports is in `gdg-main-platform-backend/docs/data-event-reports-openapi.yaml`. The Data Leader and Co-Leader can list all non-draft events and request `all`, `going` (`CONFIRMED`), or `checked-in` (a recorded check-in) rows. Each row includes the attendee's answer to “Where did you hear about this event?”. The frontend downloads UTF-8 CSV files that Excel can open; authorization remains enforced by NestJS.
