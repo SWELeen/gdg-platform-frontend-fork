@@ -29,9 +29,9 @@ export function dashboardWorkspacesFor(identity: AuthenticatedIdentity): Dashboa
     const entry = Object.entries(leaderCommitteeConfig).find(([, config]) => config.committeeCode === code);
     if (entry) workspaces.push({ kind: "committee", path: entry[1].routeBase, committee: entry[0] as LeaderCommittee });
   }
-  if (identity.committees.some(({ position }) => position === "Member")) {
-    workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
-  }
+  // The member workspace is the shared "My Tasks" view, available to every
+  // platform member, including leaders who also have one or more leader dashboards.
+  workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
   return workspaces;
 }
 

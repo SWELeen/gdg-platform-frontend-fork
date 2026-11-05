@@ -68,7 +68,7 @@ export function ProfileAccountMenu({
       {open && (
         <div
           role="menu"
-          className={`absolute top-full z-[220] mt-3 min-w-44 overflow-hidden rounded-xl border border-border bg-surface p-1.5 text-foreground shadow-xl ${variant === "mobile" ? "start-0" : "end-0"}`}
+          className={`z-[220] min-w-44 overflow-hidden rounded-xl border border-border bg-surface p-1.5 text-foreground shadow-xl ${variant === "mobile" ? "relative mt-2 w-full" : "absolute end-0 top-full mt-3"}`}
         >
           <button
             role="menuitem"

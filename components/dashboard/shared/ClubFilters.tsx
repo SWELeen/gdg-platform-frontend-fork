@@ -24,13 +24,18 @@ const OFFICIAL_COMMITTEES: LeaderCommittee[] = [
 /** Every official committee, even ones with no database row yet, then any other committee the backend returned. */
 export function useClubCommittees(): CommitteeOption[] {
   const t = useTranslations("dashboard.leader");
+  const filtersT = useTranslations("dashboard.leader.groupFilters");
   const { committees } = useLeaderDashboard();
   const official = OFFICIAL_COMMITTEES.map((key) => ({
     code: leaderCommitteeConfig[key].committeeCode,
     name: t(`nav.${committeeTranslationKeys[key]}`),
   }));
   const officialCodes = new Set(official.map((item) => item.code));
-  return [...official, ...committees.filter((item) => !officialCodes.has(item.code))];
+  return [
+    ...official,
+    ...committees.filter((item) => !officialCodes.has(item.code) && item.code !== "DEV"),
+    { code: "DEV", name: filtersT("roleDeveloperLeader") },
+  ];
 }
 
 /** Translated committee name by code, falling back to the backend name. */
@@ -78,6 +83,7 @@ export function RoleFilterSelect({ value, onChange }: { value: string; onChange:
 
 export function matchesCommittee(member: CommitteeMember, committee: string) {
   if (committee === ALL) return true;
+  if (committee === "DEV" && (member.globalRoles ?? []).includes("DEVELOPER_COMMITTEES_LEADER")) return true;
   return (member.committees ?? []).some((item) => item.code === committee);
 }
 
@@ -102,7 +108,8 @@ export function CommitteeBadges({ member }: { member: CommitteeMember }) {
   const t = useTranslations("dashboard.leader.groupFilters");
   const committeeName = useCommitteeName();
   const memberCommittees = member.committees ?? [];
-  if (memberCommittees.length === 0) return <span className="text-muted">{t("noCommittee")}</span>;
+  const isDeveloperLeader = (member.globalRoles ?? []).includes("DEVELOPER_COMMITTEES_LEADER");
+  if (memberCommittees.length === 0 && !isDeveloperLeader) return <span className="text-muted">{t("noCommittee")}</span>;
   return (
     <div className="flex flex-wrap gap-1">
       {memberCommittees.map((item) => (
@@ -113,6 +120,11 @@ export function CommitteeBadges({ member }: { member: CommitteeMember }) {
           {committeeName(item.code, item.name)} · {item.role}
         </span>
       ))}
+      {isDeveloperLeader && !memberCommittees.some((item) => item.code === "DEV") && (
+        <span className="rounded-md bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 sm:text-sm">
+          {committeeName("DEV")}
+        </span>
+      )}
     </div>
   );
 }

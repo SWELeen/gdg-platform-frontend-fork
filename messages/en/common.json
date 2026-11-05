@@ -13,7 +13,7 @@
   },
   "workspaces": {
     "label": "Switch dashboard",
-    "memberDashboard": "Member Dashboard"
+    "myTasks": "My Tasks"
   },
   "language": {
     "label": "Language",

@@ -59,7 +59,7 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
     if (workspace.kind === "club") return leadershipT("groupTitle");
     if (workspace.kind === "developer") return leadershipT("developerTitle");
     if (workspace.kind === "committee") return leaderT(`nav.${committeeTranslationKeys[workspace.committee]}`);
-    return t("memberDashboard");
+    return t("myTasks");
   };
   const current = workspaces.find(({ path }) => pathname === path || pathname.startsWith(`${path}/`));
 
@@ -73,7 +73,7 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
         aria-controls={menuId}
         aria-haspopup="menu"
         onClick={() => setIsOpen((open) => !open)}
-        className="flex w-full min-w-0 items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-start text-sm font-semibold text-foreground shadow-sm transition-colors hover:border-foreground/25 hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue"
+        className="flex w-full min-w-0 items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-start text-[13px] font-semibold text-foreground shadow-sm transition-colors hover:border-foreground/25 hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
       >
         <PanelsTopLeft className="size-4 shrink-0 text-muted" aria-hidden="true" />
         <span className="min-w-0 flex-1 truncate">{current ? label(current) : t("label")}</span>
@@ -87,7 +87,7 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
           id={menuId}
           role="menu"
           aria-label={t("label")}
-          className="absolute start-0 top-full z-50 mt-2 max-h-72 w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-border bg-surface p-1.5 shadow-xl"
+          className="absolute start-0 top-full z-50 mt-2 max-h-60 w-[min(18rem,100%)] overflow-y-auto rounded-xl border border-border bg-surface p-1 shadow-xl sm:max-h-72 sm:p-1.5"
         >
           {workspaces.map((workspace) => {
             const isCurrent = current?.path === workspace.path;
@@ -101,13 +101,13 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
                   setIsOpen(false);
                   if (!isCurrent) router.push(workspace.path);
                 }}
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-blue ${
+                className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start text-[13px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-blue sm:gap-3 sm:px-3 sm:py-2.5 sm:text-sm ${
                   isCurrent
                     ? "bg-[var(--dashboard-red-bg)] font-semibold text-[var(--dashboard-red-text)]"
                     : "text-foreground/80 hover:bg-surface-muted hover:text-foreground"
                 }`}
               >
-                <span className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
+                <span className={`flex size-7 shrink-0 items-center justify-center rounded-lg sm:size-8 ${
                   isCurrent ? "bg-[var(--dashboard-red-text)]/10" : "bg-surface-muted"
                 }`}>
                   <PanelsTopLeft className="size-4" aria-hidden="true" />

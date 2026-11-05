@@ -13,7 +13,7 @@
   },
   "workspaces": {
     "label": "التنقل بين لوحاتك",
-    "memberDashboard": "لوحة العضو"
+    "myTasks": "مهامي"
   },
   "language": {
     "label": "اللغة",

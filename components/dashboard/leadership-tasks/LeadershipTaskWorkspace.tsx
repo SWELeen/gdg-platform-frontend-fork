@@ -23,6 +23,10 @@ import {
 type Mode = "club" | "developer" | "project-events";
 type BoardData = LeadershipTaskBoard | { targets: LeadershipTaskTarget[]; events: ProjectManagedEvent[] };
 
+function targetKey(target: LeadershipTaskTarget) {
+  return `${target.committeeCode}:${target.memberId}`;
+}
+
 export function LeadershipTaskWorkspace({ mode }: { mode: Mode }) {
   const t = useTranslations("dashboard.leadershipTasks");
   const [data, setData] = useState<BoardData | null>(null);
@@ -58,7 +62,7 @@ export function LeadershipTaskWorkspace({ mode }: { mode: Mode }) {
   const board = !isEventMode && data ? data as LeadershipTaskBoard : null;
   const events = isEventMode && data ? (data as { events: ProjectManagedEvent[] }).events : [];
   const targets = data ? data.targets : [];
-  const selectedTarget = targets.find((target) => target.memberId === targetId);
+  const selectedTarget = targets.find((target) => targetKey(target) === targetId);
 
   async function submit(event: FormEvent<HTMLFormElement>, eventId?: string) {
     event.preventDefault();
@@ -129,7 +133,7 @@ export function LeadershipTaskWorkspace({ mode }: { mode: Mode }) {
           <input required maxLength={150} value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("taskTitle")} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm" />
           <select required value={targetId} onChange={(e) => setTargetId(e.target.value)} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm">
             <option value="">{t("assignee")}</option>
-            {targets.map((target) => <option key={`${target.memberId}-${target.committeeCode}`} value={target.memberId}>{target.name} · {target.committeeName} · {target.role}</option>)}
+            {targets.map((target) => <option key={targetKey(target)} value={targetKey(target)}>{target.name} · {target.committeeName} · {target.role}</option>)}
           </select>
           <textarea maxLength={5000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder={t("descriptionField")} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm sm:col-span-2" />
           <label className="grid gap-1 text-xs text-muted">{t("dueDate")}<input required type="datetime-local" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground" /></label>
@@ -145,7 +149,7 @@ export function LeadershipTaskWorkspace({ mode }: { mode: Mode }) {
             <div><h2 className="font-bold text-foreground">{event.title}</h2><p className="text-xs text-muted">{new Date(event.startsAt).toLocaleString()}</p><p className="mt-1 text-sm text-muted">{event.location}</p></div>
             <form onSubmit={(e) => { setSelectedEvent(event.id); void submit(e, event.id); }} className="grid gap-2 rounded-xl bg-surface-muted/50 p-3">
               <input required maxLength={150} value={selectedEvent === event.id ? title : ""} onFocus={() => setSelectedEvent(event.id)} onChange={(e) => { setSelectedEvent(event.id); setTitle(e.target.value); }} placeholder={t("taskTitle")} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm" />
-              <select required value={selectedEvent === event.id ? targetId : ""} onFocus={() => setSelectedEvent(event.id)} onChange={(e) => { setSelectedEvent(event.id); setTargetId(e.target.value); }} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm"><option value="">{t("assignee")}</option>{targets.map((target) => <option key={`${target.memberId}-${target.committeeCode}`} value={target.memberId}>{target.name} · {target.committeeName} · {target.role}</option>)}</select>
+              <select required value={selectedEvent === event.id ? targetId : ""} onFocus={() => setSelectedEvent(event.id)} onChange={(e) => { setSelectedEvent(event.id); setTargetId(e.target.value); }} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm"><option value="">{t("assignee")}</option>{targets.map((target) => <option key={targetKey(target)} value={targetKey(target)}>{target.name} · {target.committeeName} · {target.role}</option>)}</select>
               <textarea maxLength={5000} value={selectedEvent === event.id ? description : ""} onFocus={() => setSelectedEvent(event.id)} onChange={(e) => { setSelectedEvent(event.id); setDescription(e.target.value); }} placeholder={t("descriptionField")} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm" />
               <div className="grid grid-cols-2 gap-2"><input required type="datetime-local" value={selectedEvent === event.id ? dueAt : ""} onFocus={() => setSelectedEvent(event.id)} onChange={(e) => { setSelectedEvent(event.id); setDueAt(e.target.value); }} className="min-w-0 rounded-lg border border-border bg-surface px-2 py-2 text-xs" /><select value={priority} onChange={(e) => setPriority(e.target.value as CreateLeadershipTaskInput["priority"])} className="rounded-lg border border-border bg-surface px-2 py-2 text-sm"><option value="HIGH">{t("high")}</option><option value="MEDIUM">{t("medium")}</option><option value="LOW">{t("low")}</option></select></div>
               <button disabled={saving || !targets.length} className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">{saving ? t("saving") : t("create")}</button>
