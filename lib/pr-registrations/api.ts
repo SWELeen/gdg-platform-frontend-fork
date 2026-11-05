@@ -32,7 +32,6 @@ type RegistrantsPage = { items: ApiRegistrant[]; pagination: { totalPages: numbe
 
 export type RegistrationBlacklistReason =
   | "NO_CHECK_IN"
-  | "CONFIRMATION_EXPIRED"
   | "LATE_CANCELLATION";
 
 export type RegistrationBlacklistEntry = {

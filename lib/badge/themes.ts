@@ -31,6 +31,10 @@ export const developerLeadershipTheme: BadgeTheme = {
   bg: "var(--committee-developers)",
 };
 
+export const advisorTheme: BadgeTheme = {
+  ...clubLeadershipTheme,
+};
+
 // a card in one solid colour; light colours need dark ink
 const solid = (bg: string, ink: string): BadgeTheme => ({
   ...badgeBase,

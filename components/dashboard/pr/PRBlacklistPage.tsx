@@ -72,7 +72,7 @@ export function PRBlacklistPage() {
     else await load().catch(() => setRemoveError(true));
     setRemoving(false);
   };
-  const filters: ReasonFilter[] = ["all", "NO_CHECK_IN", "CONFIRMATION_EXPIRED", "LATE_CANCELLATION"];
+  const filters: ReasonFilter[] = ["all", "NO_CHECK_IN", "LATE_CANCELLATION"];
 
   return (
     <div className="space-y-6">

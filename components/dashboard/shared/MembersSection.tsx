@@ -176,7 +176,7 @@ export function MembersSection({
 
                     {/* ROLE */}
                     <td className="px-4 py-3.5 font-medium text-foreground/90 whitespace-nowrap">
-                      {member.role}
+                      {member.role.split(" / ").map((role) => role === "DEVELOPER_COMMITTEES_LEADER" ? t("groupFilters.roleDeveloperLeader") : role).join(" / ")}
                     </td>
 
                     {/* COMMITTEES */}

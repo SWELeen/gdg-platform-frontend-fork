@@ -12,6 +12,18 @@ export interface MemberIdentity {
   committees: MemberCommittee[];
 }
 
+export interface CommitteeDirectoryMember {
+  id: string;
+  name: string;
+  role: string;
+  university: string | null;
+  major: string | null;
+  phone: string | null;
+  profileImageUrl: string | null;
+  bio: string | null;
+  socialLinks: { github: string | null; linkedin: string | null; website: string | null; x: string | null };
+}
+
 /** A task assigned to the signed-in member, labelled with its committee. */
 export interface MemberTask extends DashboardTask {
   committeeCode: string;
@@ -68,6 +80,10 @@ export async function fetchMyTasks() {
   const result = await apiRequest<ApiMyTask[]>("/my/tasks");
   if (!result.ok) return result;
   return { ok: true as const, data: result.data.map(toMemberTask) };
+}
+
+export function fetchCommitteeDirectory(committeeCode: string) {
+  return apiRequest<CommitteeDirectoryMember[]>(`/my/committees/${encodeURIComponent(committeeCode)}/members`);
 }
 
 /** Moves the member's own task; marking it done sends it to a leader for confirmation. */

@@ -85,24 +85,27 @@ export function MyRegistrationPanel({
   const router = useRouter();
   const runAction = async () => {
     if (!pendingAction || busy) return;
+    const action = pendingAction;
     setBusy(true);
+    // Dismiss the confirmation immediately. The result is announced inline once
+    // the request settles, so a slow response cannot trap the member in a modal.
+    setPendingAction(null);
     let result: RegistrationActionResult;
     try {
       if (API_ENABLED) {
-        const outcome = await respondToRegistration(registration.id, pendingAction === "confirm" ? "confirm" : "decline");
+        const outcome = await respondToRegistration(registration.id, action === "confirm" ? "confirm" : "decline");
         result = outcome.ok ? { ok: true, mode: "api" } : { ok: false, reason: "not-allowed" };
         if (outcome.ok) router.refresh();
       } else {
-        result = pendingAction === "confirm" ? await confirmRegistration(registration) : await cancelRegistration(registration);
+        result = action === "confirm" ? await confirmRegistration(registration) : await cancelRegistration(registration);
       }
     } catch {
       result = { ok: false, reason: "storage-unavailable" };
     }
     setBusy(false);
-    setPendingAction(null);
     setFeedback(
       result.ok
-        ? { tone: "success", message: t(pendingAction === "confirm" ? "feedback.confirmed" : "feedback.cancelled") }
+        ? { tone: "success", message: t(action === "confirm" ? "feedback.confirmed" : "feedback.cancelled") }
         : { tone: "error", message: t(`feedback.${result.reason === "not-allowed" ? "notAllowed" : "storageUnavailable"}`) },
     );
   };

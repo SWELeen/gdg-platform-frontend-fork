@@ -47,6 +47,7 @@ export function LeaderSidebar({
   const leadershipT = useTranslations("dashboard.leadershipDashboard");
   const navItems = developerCommitteesLeader ? [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
+    { id: "tasks", label: t("nav.tasks"), href: `${basePath}/tasks`, icon: CheckSquare },
     { id: "approvals", label: leadershipT("approvalNavigation"), href: `${basePath}#leadership-approvals-title`, icon: ClipboardCheck },
   ] : clubLeadership ? [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },

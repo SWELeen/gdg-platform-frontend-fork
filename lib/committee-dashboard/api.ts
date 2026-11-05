@@ -67,7 +67,7 @@ type ApiTask = {
   id: string; title: string; description: string; assignedMemberId: string;
   assignedMemberName: string; createdByMemberId: string; dueAt: string;
   priority: string; status: string; createdAt: string; updatedAt: string;
-  committeeCode?: string; committeeName?: string;
+  committeeCode?: string; committeeName?: string; taskScope?: string; eventId?: string | null; eventTitle?: string | null;
 };
 
 type RawCommitteeDashboardData = Omit<CommitteeDashboardData, "members" | "events" | "tasks" | "pointHistory" | "recentActivities"> & {
@@ -100,7 +100,7 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
         accessExpiresAt: null,
         initials: member.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase(),
         avatarBgColor: "bg-blue-100 text-blue-700",
-        lastActivity: member.lastActivity ? relativeTime(member.lastActivity) : "—",
+        lastActivity: member.lastActivity ? relativeTime(member.lastActivity) : "â€”",
       })),
       events: data.events.map((event): CommitteeEvent => ({
         id: event.id,
@@ -127,7 +127,8 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
         createdBy: memberById.get(task.createdByMemberId)?.name ?? "",
         dueDate: task.dueAt,
         priority: task.priority === "HIGH" ? "High" : task.priority === "LOW" ? "Low" : "Medium",
-        status: task.status === "COMPLETED" ? "Completed" : task.status === "IN_PROGRESS" ? "In Progress" : "To Do",
+        status: task.status === "COMPLETED" ? "Completed" : task.status === "PENDING_REVIEW" ? "Pending Review" : task.status === "IN_PROGRESS" ? "In Progress" : "To Do",
+        taskScope: task.taskScope, eventId: task.eventId, eventTitle: task.eventTitle,
         committeeCode: task.committeeCode,
         committeeName: task.committeeName,
       })),
@@ -339,4 +340,128 @@ function relativeTime(value: string) {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h ago`;
   return `${Math.floor(hours / 24)}d ago`;
+}
+
+export interface LeadershipTaskTarget {
+  memberId: string;
+  name: string;
+  committeeCode: string;
+  committeeName: string;
+  role: string;
+}
+
+export interface LeadershipWorkTask {
+  id: string;
+  title: string;
+  description: string;
+  assignedMemberId: string;
+  assignedMemberName: string;
+  createdByMemberId: string;
+  dueAt: string;
+  priority: string;
+  status: string;
+  taskScope: string;
+  committeeCode: string;
+  committeeName: string;
+  eventId: string | null;
+  eventTitle: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LeadershipTaskBoard {
+  canManageTasks?: boolean;
+  tasks: LeadershipWorkTask[];
+  targets: LeadershipTaskTarget[];
+  inboxTasks?: LeadershipWorkTask[];
+}
+
+export interface ProjectManagedEvent {
+  id: string;
+  title: string;
+  description: string;
+  startsAt: string;
+  endsAt: string;
+  location: string | null;
+  tasks: LeadershipWorkTask[];
+}
+
+export interface ProjectManagedEvents {
+  targets: LeadershipTaskTarget[];
+  events: ProjectManagedEvent[];
+}
+
+export function fetchClubLeadershipTasks() {
+  return apiRequest<LeadershipTaskBoard>("/club-leadership/tasks");
+}
+
+export function fetchDeveloperLeadershipTasks() {
+  return apiRequest<LeadershipTaskBoard>("/developer-committees/tasks");
+}
+
+export function fetchProjectManagedEvents() {
+  return apiRequest<ProjectManagedEvents>("/committees/PM/managed-events");
+}
+
+export interface CreateLeadershipTaskInput {
+  title: string;
+  description: string;
+  assignedMemberId: string;
+  targetCommitteeCode: string;
+  dueAt: string;
+  priority: "HIGH" | "MEDIUM" | "LOW";
+}
+
+function leadershipTaskPath(scope: "club" | "developer") {
+  return scope === "club" ? "/club-leadership/tasks" : "/developer-committees/tasks";
+}
+
+export function createLeadershipTask(scope: "club" | "developer", input: CreateLeadershipTaskInput) {
+  return apiRequest<LeadershipWorkTask>(leadershipTaskPath(scope), {
+    method: "POST",
+    body: { ...input, assignedMemberId: Number(input.assignedMemberId) },
+  });
+}
+
+export function updateLeadershipTask(scope: "club" | "developer", taskId: string, updates: { status?: string }) {
+  return apiRequest<LeadershipWorkTask>(`${leadershipTaskPath(scope)}/${encodeURIComponent(taskId)}`, {
+    method: "PATCH",
+    body: updates,
+  });
+}
+
+export function reviewLeadershipTask(scope: "club" | "developer", taskId: string, decision: "APPROVE" | "RETURN") {
+  return apiRequest(`${leadershipTaskPath(scope)}/${encodeURIComponent(taskId)}/review`, {
+    method: "POST",
+    body: { decision },
+  });
+}
+
+export function deleteLeadershipTask(scope: "club" | "developer", taskId: string) {
+  return apiRequest(`${leadershipTaskPath(scope)}/${encodeURIComponent(taskId)}`, { method: "DELETE" });
+}
+
+export function createProjectEventTask(eventId: string, input: CreateLeadershipTaskInput) {
+  return apiRequest<LeadershipWorkTask>(`/committees/PM/managed-events/${encodeURIComponent(eventId)}/tasks`, {
+    method: "POST",
+    body: { ...input, assignedMemberId: Number(input.assignedMemberId) },
+  });
+}
+
+export function updateProjectEventTask(eventId: string, taskId: string, updates: { status?: string }) {
+  return apiRequest<LeadershipWorkTask>(`/committees/PM/managed-events/${encodeURIComponent(eventId)}/tasks/${encodeURIComponent(taskId)}`, {
+    method: "PATCH",
+    body: updates,
+  });
+}
+
+export function reviewProjectEventTask(eventId: string, taskId: string, decision: "APPROVE" | "RETURN") {
+  return apiRequest(`/committees/PM/managed-events/${encodeURIComponent(eventId)}/tasks/${encodeURIComponent(taskId)}/review`, {
+    method: "POST",
+    body: { decision },
+  });
+}
+
+export function deleteProjectEventTask(eventId: string, taskId: string) {
+  return apiRequest(`/committees/PM/managed-events/${encodeURIComponent(eventId)}/tasks/${encodeURIComponent(taskId)}`, { method: "DELETE" });
 }

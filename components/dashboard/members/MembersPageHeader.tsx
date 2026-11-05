@@ -11,6 +11,7 @@ import {
 import { WorkspaceSwitcher } from "@/components/dashboard/shared/WorkspaceSwitcher";
 import { MembersUserInfo } from "./MembersUserInfo";
 import { isSidebarItemActive } from "./nav-utils";
+import { useMemberWorkspace } from "./MemberWorkspaceContext";
 
 const navItems = [...sidebarPrimaryItems, ...sidebarSecondaryItems];
 
@@ -20,6 +21,7 @@ export function MembersPageHeader(): ReactElement {
   const pathname = usePathname();
   const t = useTranslations("dashboard.nav");
   const activeItem = navItems.find((item) => isSidebarItemActive(pathname, item));
+  const { committees, selectedCommittee, selectCommittee } = useMemberWorkspace();
 
   return (
     <header className="flex items-center justify-between gap-3 border-b border-border pb-4">
@@ -29,7 +31,7 @@ export function MembersPageHeader(): ReactElement {
         </h1>
       )}
       <div className="ms-auto flex shrink-0 items-center gap-3">
-        <WorkspaceSwitcher />
+        <WorkspaceSwitcher className="w-[min(18rem,45vw)] sm:w-auto sm:min-w-52 sm:max-w-[22rem]" taskCommittees={committees} selectedCommittee={selectedCommittee} onSelectCommittee={selectCommittee} />
         <MembersUserInfo />
       </div>
     </header>

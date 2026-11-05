@@ -5,12 +5,22 @@
   "badge": {
     "label": "بطاقة العضوية: {name}، {role}، {committee}",
     "globalLabel": "بطاقة العضوية: {name}، {role}",
+    "chapter": "مجموعة مطوري جوجل في الجامعة",
+    "university": "جامعة جدة",
+    "previous": "بطاقة العضوية السابقة",
+    "next": "بطاقة العضوية التالية",
+    "committeeRoles": {
+      "member": "عضو",
+      "leader": "قائد",
+      "coLeader": "كوليدر"
+    },
     "globalRoles": {
       "groupLeader": "قائد المجموعة",
       "groupCoLeader": "نائبة قائد المجموعة",
       "groupLeadership": "قيادة المجموعة",
-      "developerCommitteesLeader": "قائد لجنة المطورين",
-      "developerCommittees": "لجنة المطورين"
+      "developerCommitteesLeader": "قائد لجان المطورين",
+      "developerCommittees": "لجنة المطورين",
+      "advisor": "مستشار"
     }
   },
   "bio": {
