@@ -32,14 +32,7 @@ export const developerLeadershipTheme: BadgeTheme = {
 };
 
 export const advisorTheme: BadgeTheme = {
-  ...badgeBase,
-  bg: "#ffffff",
-  ink: "var(--badge-ink-dark)",
-  photoBg: "#f8fafc",
-  photoFrame: "var(--badge-photo-frame-dark)",
-  patternBg: "#f1f5f9",
-  strap: "#ffffff",
-  stitch: "var(--badge-ink-dark)",
+  ...clubLeadershipTheme,
 };
 
 // a card in one solid colour; light colours need dark ink
