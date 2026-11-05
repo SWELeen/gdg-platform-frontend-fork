@@ -45,6 +45,8 @@ Do not put secrets in `NEXT_PUBLIC_*` variables. The browser must not be trusted
 
 The leadership task pages consume the backend operations documented in `gdg-main-platform-backend/docs/leadership-tasks-openapi.yaml`. Group Leaders/Co-Leaders manage `/club-leadership/tasks`; the overall Developer Committees Leader manages `/developer-committees/tasks`; PM Leaders/Co-Leaders manage published PR event tasks under `/committees/PM/managed-events`. The backend validates target committee, active leadership role, event ownership/status, and caller permission on every request. Regular committee task boards display assigned cross-level tasks, while only the task's owning leadership scope can manage or review it.
 
+The My Tasks dashboard's Members page loads the selected committee directory from `GET /my/committees/{committeeCode}/members`. The backend requires the caller's active membership in that committee and returns active members' limited directory fields. Loading, empty, retryable error, and unauthorized states are rendered by the frontend; no mock directory records are used when API mode is enabled.
+
 ## Profile badge status
 
 `/profile` builds the member badge from the same `GET /me` response the page already loads:
@@ -55,7 +57,7 @@ The leadership task pages consume the backend operations documented in `gdg-main
 | `gender` | Picks the silhouette | `"male"` in any case gets the male one; anything else, or nothing, the female one. |
 | `committees[]` (`code`, `position`) | Committee colours and short name, role headline | Empty or missing: no badge. Several: the highest position wins. |
 
-`lib/badge/themes.ts` is keyed by the committee codes the dashboards already use (`WEB`, `DATA`, `CYBER`, `AI`, `AUTOMATION`, `ROBOTICS`, `PR`, `CONTENT`, `PM`, `DMD`), and the badge knows the positions Member, Co-Leader and Leader. If the code or position doesn't match, or the name is missing, the badge shows an all-placeholder card ("Role", "Committee name", "Member name") on the default card instead of wrong data. `/me`'s exact position values beyond Leader and Co-Leader, and positions such as Advisor, are `TBD` until the contract confirms them.
+`lib/badge/themes.ts` is keyed by the committee codes the dashboards already use (`WEB`, `DATA`, `CYBER`, `AI`, `AUTOMATION`, `ROBOTICS`, `PR`, `CONTENT`, `PM`, `DMD`), and the badge localizes committee names, membership roles, and global roles in English and Arabic. Advisor badges use a white theme. `/me`'s exact position values beyond Member, Co-Leader, Leader, and Advisor remain `TBD` until the contract confirms them.
 
 ## PR registration dashboard status
 

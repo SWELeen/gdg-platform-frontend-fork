@@ -6,11 +6,19 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { Check, ChevronDown, PanelsTopLeft } from "lucide-react";
 import { apiRequest } from "@/lib/api/client";
 import { dashboardWorkspacesFor, type AuthenticatedIdentity, type DashboardWorkspace } from "@/lib/auth/dashboard-route";
-import { committeeTranslationKeys } from "./committee-config";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "./committee-config";
+
+type TaskCommittee = { code: string; name: string; position: string };
 
 // Lets someone with several roles move between their dashboards. The list comes
 // from /me, and every dashboard still checks access on its own.
-export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallback?: ReactNode; className?: string }) {
+export function WorkspaceSwitcher({ fallback = null, className = "", taskCommittees = [], selectedCommittee, onSelectCommittee }: {
+  fallback?: ReactNode;
+  className?: string;
+  taskCommittees?: TaskCommittee[];
+  selectedCommittee?: string | null;
+  onSelectCommittee?: (code: string) => void;
+}) {
   const t = useTranslations("common.workspaces");
   const leadershipT = useTranslations("dashboard.leadershipDashboard");
   const leaderT = useTranslations("dashboard.leader");
@@ -53,7 +61,8 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
     };
   }, [isOpen]);
 
-  if (workspaces.length < 2) return fallback;
+  const hasTaskChoices = Boolean(onSelectCommittee && taskCommittees.length > 0);
+  if (workspaces.length < 2 && !hasTaskChoices) return fallback;
 
   const label = (workspace: DashboardWorkspace) => {
     if (workspace.kind === "club") return leadershipT("groupTitle");
@@ -61,7 +70,15 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
     if (workspace.kind === "committee") return leaderT(`nav.${committeeTranslationKeys[workspace.committee]}`);
     return t("myTasks");
   };
+  const taskCommitteeLabel = (committee: TaskCommittee) => {
+    const entry = Object.entries(leaderCommitteeConfig).find(([, config]) => config.committeeCode === committee.code);
+    return entry ? leaderT(`nav.${committeeTranslationKeys[entry[0] as keyof typeof committeeTranslationKeys]}`) : committee.name;
+  };
   const current = workspaces.find(({ path }) => pathname === path || pathname.startsWith(`${path}/`));
+  const currentTaskCommittee = taskCommittees.find(({ code }) => code === selectedCommittee);
+  const currentLabel = current?.kind === "member" && currentTaskCommittee
+    ? `${t("myTasks")} · ${taskCommitteeLabel(currentTaskCommittee)}`
+    : current ? label(current) : t("label");
 
   return (
     <div ref={switcherRef} className={`relative min-w-0 ${className}`}>
@@ -76,7 +93,7 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
         className="flex w-full min-w-0 items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-start text-[13px] font-semibold text-foreground shadow-sm transition-colors hover:border-foreground/25 hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
       >
         <PanelsTopLeft className="size-4 shrink-0 text-muted" aria-hidden="true" />
-        <span className="min-w-0 flex-1 truncate">{current ? label(current) : t("label")}</span>
+        <span className="min-w-0 flex-1 truncate">{currentLabel}</span>
         <ChevronDown
           className={`size-4 shrink-0 text-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
           aria-hidden="true"
@@ -87,9 +104,10 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
           id={menuId}
           role="menu"
           aria-label={t("label")}
-          className="absolute start-0 top-full z-50 mt-2 max-h-60 w-[min(18rem,100%)] overflow-y-auto rounded-xl border border-border bg-surface p-1 shadow-xl sm:max-h-72 sm:p-1.5"
+          className="absolute start-0 top-full z-50 mt-2 max-h-60 w-[min(22rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-border bg-surface p-1 shadow-xl sm:max-h-72 sm:p-1.5"
         >
           {workspaces.map((workspace) => {
+            if (hasTaskChoices && workspace.kind === "member") return null;
             const isCurrent = current?.path === workspace.path;
             return (
               <button
@@ -114,6 +132,33 @@ export function WorkspaceSwitcher({ fallback = null, className = "" }: { fallbac
                 </span>
                 <span className="min-w-0 flex-1 truncate">{label(workspace)}</span>
                 {isCurrent && <Check className="size-4 shrink-0" aria-hidden="true" />}
+              </button>
+            );
+          })}
+          {hasTaskChoices && taskCommittees.map((committee) => {
+            const isCurrentTaskChoice = current?.kind === "member" && committee.code === selectedCommittee;
+            return (
+              <button
+                key={`tasks:${committee.code}`}
+                type="button"
+                role="menuitemradio"
+                aria-checked={isCurrentTaskChoice}
+                onClick={() => {
+                  onSelectCommittee?.(committee.code);
+                  if (current?.kind !== "member") router.push("/dashboard/members-dashboard");
+                  setIsOpen(false);
+                }}
+                className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start text-[13px] transition-colors sm:gap-3 sm:px-3 sm:py-2.5 sm:text-sm ${
+                  isCurrentTaskChoice
+                    ? "bg-[var(--dashboard-red-bg)] font-semibold text-[var(--dashboard-red-text)]"
+                    : "text-foreground/80 hover:bg-surface-muted hover:text-foreground"
+                }`}
+              >
+                <span className={`flex size-7 shrink-0 items-center justify-center rounded-lg sm:size-8 ${isCurrentTaskChoice ? "bg-[var(--dashboard-red-text)]/10" : "bg-surface-muted"}`}>
+                  <PanelsTopLeft className="size-4" aria-hidden="true" />
+                </span>
+                <span className="min-w-0 flex-1 truncate">{t("myTasks")} · {taskCommitteeLabel(committee)} · {t(`taskRoles.${committee.position === "Leader" ? "leader" : committee.position === "Co-Leader" ? "coLeader" : "member"}`)}</span>
+                {isCurrentTaskChoice && <Check className="size-4 shrink-0" aria-hidden="true" />}
               </button>
             );
           })}

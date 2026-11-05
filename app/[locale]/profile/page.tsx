@@ -306,7 +306,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
                   <div className={`absolute inset-x-0 bottom-2 ${badges.length > 1 ? "z-30" : "z-10"} flex items-center justify-center gap-3`}>
                     <button
                       type="button"
-                      aria-label="Previous committee badge"
+                      aria-label={t("badge.previous")}
                       onClick={() => setActiveBadgeIndex((index) => (index - 1 + badges.length) % badges.length)}
                       className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/95 text-foreground shadow-md transition hover:bg-surface-muted"
                     >
@@ -317,7 +317,7 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
                     </span>
                     <button
                       type="button"
-                      aria-label="Next committee badge"
+                      aria-label={t("badge.next")}
                       onClick={() => setActiveBadgeIndex((index) => (index + 1) % badges.length)}
                       className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/95 text-foreground shadow-md transition hover:bg-surface-muted"
                     >

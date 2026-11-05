@@ -1,6 +1,5 @@
 import type { ReactElement } from "react";
 import { useTranslations } from "next-intl";
-
 import { useMemberWorkspace } from "./MemberWorkspaceContext";
 
 export function MembersUserInfo(): ReactElement {
@@ -14,13 +13,15 @@ export function MembersUserInfo(): ReactElement {
       </span>
       <div className="leading-tight">
         <p className="hidden text-sm font-semibold text-foreground sm:block">{user.name}</p>
-        {committees.length > 1 ? (
+        {false ? (
           // Members in several committees switch which committee's tasks they see.
           <select
             value={selectedCommittee ?? ""}
             onChange={(event) => selectCommittee(event.target.value)}
             aria-label={t("label")}
-            className="mt-0.5 max-w-48 cursor-pointer rounded-md border border-border bg-surface px-1.5 py-0.5 text-xs text-foreground outline-none focus:border-blue-500"
+            aria-hidden="true"
+            tabIndex={-1}
+            className="hidden"
           >
             {committees.map((committee) => (
               <option key={committee.code} value={committee.code}>

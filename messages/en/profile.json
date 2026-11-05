@@ -5,12 +5,22 @@
   "badge": {
     "label": "Member badge: {name}, {role}, {committee}",
     "globalLabel": "Member badge: {name}, {role}",
+    "chapter": "Google Developer Group on Campus",
+    "university": "University of Jeddah",
+    "previous": "Previous membership card",
+    "next": "Next membership card",
+    "committeeRoles": {
+      "member": "Member",
+      "leader": "Leader",
+      "coLeader": "Co-Leader"
+    },
     "globalRoles": {
       "groupLeader": "Group Leader",
       "groupCoLeader": "Group Co-Leader",
       "groupLeadership": "Group Leadership",
       "developerCommitteesLeader": "Developer Committees Leader",
-      "developerCommittees": "Developer Committees"
+      "developerCommittees": "Developer Committees",
+      "advisor": "Advisor"
     }
   },
   "bio": {

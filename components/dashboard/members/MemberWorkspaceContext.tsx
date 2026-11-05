@@ -5,7 +5,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { API_ENABLED } from "@/lib/api/client";
 import {
   fetchMemberIdentity,
+  fetchCommitteeDirectory,
   fetchMyTasks,
+  type CommitteeDirectoryMember,
   updateMyTaskStatus,
   type MemberCommittee,
   type MemberSettableStatus,
@@ -26,6 +28,9 @@ interface MemberWorkspaceValue {
   retry: () => void;
   /** Only with the API: members move their own tasks; null otherwise. Rejects with the reason when refused. */
   updateTaskStatus: ((taskId: string, status: MemberSettableStatus) => Promise<void>) | null;
+  directoryMembers: CommitteeDirectoryMember[];
+  directoryStatus: "loading" | "ready" | "error";
+  retryDirectory: () => void;
 }
 
 const MemberWorkspaceContext = createContext<MemberWorkspaceValue | null>(null);
@@ -45,9 +50,12 @@ function readSavedCommittee() {
 export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
   const [identity, setIdentity] = useState<{ fullName: string; committees: MemberCommittee[] } | null>(null);
   const [allTasks, setAllTasks] = useState<MemberTask[]>([]);
+  const [directoryMembers, setDirectoryMembers] = useState<CommitteeDirectoryMember[]>([]);
+  const [directoryStatus, setDirectoryStatus] = useState<"loading" | "ready" | "error">(API_ENABLED ? "loading" : "error");
   const [selectedCommittee, setSelectedCommittee] = useState<string | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">(API_ENABLED ? "loading" : "ready");
   const [attempt, setAttempt] = useState(0);
+  const [directoryAttempt, setDirectoryAttempt] = useState(0);
 
   useEffect(() => {
     if (!API_ENABLED) return;
@@ -70,6 +78,26 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
     };
   }, [attempt]);
 
+  useEffect(() => {
+    if (!API_ENABLED || !identity || !selectedCommittee) return;
+    let active = true;
+    void Promise.resolve().then(() => {
+      if (!active) return null;
+      setDirectoryStatus("loading");
+      return fetchCommitteeDirectory(selectedCommittee);
+    }).then((result) => {
+      if (!result) return;
+      if (!active) return;
+      if (!result.ok) {
+        setDirectoryStatus("error");
+        return;
+      }
+      setDirectoryMembers(result.data);
+      setDirectoryStatus("ready");
+    });
+    return () => { active = false; };
+  }, [identity, selectedCommittee, directoryAttempt]);
+
   const selectCommittee = useCallback((code: string) => {
     setSelectedCommittee(code);
     try {
@@ -87,7 +115,7 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<MemberWorkspaceValue>(() => {
     if (!API_ENABLED) {
-      return { user: currentUser, committees: [], selectedCommittee: null, selectCommittee, tasks: dashboardTasks, status, retry: () => undefined, updateTaskStatus: null };
+      return { user: currentUser, committees: [], selectedCommittee: null, selectCommittee, tasks: dashboardTasks, status, retry: () => undefined, updateTaskStatus: null, directoryMembers: [], directoryStatus: "error", retryDirectory: () => undefined };
     }
     const committee = identity?.committees.find((item) => item.code === selectedCommittee);
     return {
@@ -101,6 +129,9 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
       selectedCommittee,
       selectCommittee,
       tasks: allTasks.filter((task) => task.committeeCode === selectedCommittee),
+      directoryMembers,
+      directoryStatus,
+      retryDirectory: () => setDirectoryAttempt((current) => current + 1),
       status,
       retry: () => {
         setStatus("loading");
@@ -108,7 +139,7 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
       },
       updateTaskStatus,
     };
-  }, [identity, allTasks, selectedCommittee, selectCommittee, status, updateTaskStatus]);
+  }, [identity, allTasks, selectedCommittee, selectCommittee, status, updateTaskStatus, directoryMembers, directoryStatus]);
 
   return <MemberWorkspaceContext.Provider value={value}>{children}</MemberWorkspaceContext.Provider>;
 }

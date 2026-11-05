@@ -4,12 +4,12 @@ import { useId, useState } from "react";
 import type { ReactElement } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronRight, Phone, Search, UsersRound } from "lucide-react";
-import { FaGithub, FaGlobe, FaLinkedinIn } from "react-icons/fa6";
+import { FaGithub, FaGlobe, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 
-import { directoryMembers } from "@/components/dashboard/members/members-directory-mock-data";
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { PILL_SHAPE } from "@/components/dashboard/members/task-styles";
 import { MemberProfileDialog } from "@/components/dashboard/members/MemberProfileDialog";
+import { useMemberWorkspace } from "@/components/dashboard/members/MemberWorkspaceContext";
 
 const memberTones = [
   "bg-[var(--dashboard-blue-bg)] text-[var(--dashboard-blue-text)]",
@@ -19,10 +19,13 @@ const memberTones = [
 ];
 
 const socialPlatforms = [
-  { key: "github", name: "GitHub", icon: FaGithub },
-  { key: "linkedin", name: "LinkedIn", icon: FaLinkedinIn },
-  { key: "website", name: "Website", icon: FaGlobe },
+  { key: "github", name: "github", icon: FaGithub },
+  { key: "linkedin", name: "linkedin", icon: FaLinkedinIn },
+  { key: "website", name: "website", icon: FaGlobe },
+  { key: "x", name: "x", icon: FaXTwitter },
 ] as const;
+
+const initialsOf = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 
 export function MembersDirectoryPage(): ReactElement {
   const t = useTranslations("dashboard.directory");
@@ -30,12 +33,21 @@ export function MembersDirectoryPage(): ReactElement {
   const searchId = useId();
   const [query, setQuery] = useState("");
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
+  const { directoryMembers, directoryStatus, retryDirectory } = useMemberWorkspace();
 
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
   const visibleMembers = directoryMembers
     .filter((member) => member.name.toLocaleLowerCase(locale).includes(normalizedQuery))
-    .sort((first, second) => Number(second.isTeamLead) - Number(first.isTeamLead));
+    .sort((first, second) => Number(["Leader", "Co-Leader"].includes(second.role)) - Number(["Leader", "Co-Leader"].includes(first.role)));
   const selectedMember = directoryMembers.find((member) => member.id === selectedMemberId) ?? null;
+
+  if (directoryStatus === "loading") return <p className="rounded-xl border border-border bg-surface p-6 text-sm text-muted" role="status">{t("loading")}</p>;
+  if (directoryStatus === "error") return (
+    <div className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-700" role="alert">
+      <p>{t("loadError")}</p>
+      <button type="button" onClick={retryDirectory} className="mt-3 rounded-lg border border-rose-300 px-3 py-1.5 font-semibold hover:bg-rose-100">{t("retry")}</button>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
@@ -81,9 +93,10 @@ export function MembersDirectoryPage(): ReactElement {
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {visibleMembers.map((member) => {
-            const tone = memberTones[directoryMembers.indexOf(member) % memberTones.length];
-            const role = member.isTeamLead ? t("teamLead") : member.role[locale];
-            const cardTone = member.isTeamLead
+            const tone = memberTones[visibleMembers.indexOf(member) % memberTones.length];
+            const isTeamLead = member.role === "Leader" || member.role === "Co-Leader";
+            const role = member.role === "Leader" ? t("roles.leader") : member.role === "Co-Leader" ? t("roles.coLeader") : t("roles.member");
+            const cardTone = isTeamLead
               ? "border-gdg-blue/60 bg-[var(--dashboard-blue-bg)]/20"
               : "border-border bg-surface";
 
@@ -104,13 +117,13 @@ export function MembersDirectoryPage(): ReactElement {
                       aria-hidden="true"
                       className={`flex size-14 shrink-0 items-center justify-center rounded-full text-lg font-semibold ${tone}`}
                     >
-                      {member.initials}
+                      {initialsOf(member.name)}
                     </span>
                     <div className="flex min-w-0 flex-col items-start gap-1.5">
                       <h2 className="w-full truncate text-sm font-semibold text-foreground">{member.name}</h2>
                       <TaskBadge
                         className={`${PILL_SHAPE} max-w-full py-0.5 ${
-                          member.isTeamLead
+                          isTeamLead
                             ? "bg-[var(--dashboard-green-bg)] text-[var(--dashboard-green-text)]"
                             : tone
                         }`}
@@ -126,26 +139,19 @@ export function MembersDirectoryPage(): ReactElement {
                   />
 
                   <p className="pointer-events-none relative z-10 mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-muted">
-                    {member.bio[locale]}
+                    {member.bio || t("emptyBio")}
                   </p>
 
-                  <a
-                    href={`tel:${member.phone.replace(/[^\d+]/g, "")}`}
-                    aria-label={t("callMember", { name: member.name })}
-                    className="relative z-20 mt-3 inline-flex w-fit items-center gap-2 rounded-sm text-sm text-muted transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"
-                  >
-                    <Phone aria-hidden="true" className="size-4 shrink-0" />
-                    <span dir="ltr">{member.phone}</span>
-                  </a>
+                  {member.phone && <a href={`tel:${member.phone.replace(/[^\d+]/g, "")}`} aria-label={t("callMember", { name: member.name })} className="relative z-20 mt-3 inline-flex w-fit items-center gap-2 rounded-sm text-sm text-muted transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"><Phone aria-hidden="true" className="size-4 shrink-0" /><span dir="ltr">{member.phone}</span></a>}
 
                   <div className="relative z-20 mt-auto flex items-center gap-2.5 pt-4">
-                    {socialPlatforms.map(({ key, name, icon: Icon }) => (
+                    {socialPlatforms.filter(({ key }) => Boolean(member.socialLinks[key])).map(({ key, name, icon: Icon }) => (
                       <a
                         key={key}
-                        href={member.socialLinks[key]}
+                        href={member.socialLinks[key]!}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={t("socialLink", { platform: name, name: member.name })}
+                        aria-label={t("socialLink", { platform: t(`socialPlatforms.${name}`), name: member.name })}
                         className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-surface text-foreground transition-colors hover:border-gdg-blue/50 hover:text-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue"
                       >
                         <Icon aria-hidden="true" className="size-4" />

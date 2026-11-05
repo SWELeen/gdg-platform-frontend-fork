@@ -13,7 +13,8 @@
   },
   "workspaces": {
     "label": "التنقل بين لوحاتك",
-    "myTasks": "مهامي"
+    "myTasks": "مهامي",
+    "taskRoles": { "member": "عضو", "leader": "قائد", "coLeader": "كوليدر" }
   },
   "language": {
     "label": "اللغة",

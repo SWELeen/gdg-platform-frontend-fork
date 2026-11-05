@@ -13,7 +13,8 @@
   },
   "workspaces": {
     "label": "Switch dashboard",
-    "myTasks": "My Tasks"
+    "myTasks": "My Tasks",
+    "taskRoles": { "member": "Member", "leader": "Leader", "coLeader": "Co-Leader" }
   },
   "language": {
     "label": "Language",

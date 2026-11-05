@@ -2,8 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { clubLeadershipTheme, committees, defaultTheme, developerLeadershipTheme } from "@/lib/badge/themes";
+import { advisorTheme, clubLeadershipTheme, committees, defaultTheme, developerLeadershipTheme } from "@/lib/badge/themes";
 import { committeeRoles, type BadgeData, type CommitteeCode, type CommitteeRole, type Gender } from "@/lib/badge/types";
+import { committeeTranslationKeys, leaderCommitteeConfig } from "@/components/dashboard/shared/committee-config";
 
 // Loosely typed on purpose: these come straight from /me, so anything that
 // doesn't match is caught here instead of breaking the card.
@@ -25,14 +26,15 @@ const rank = (position: string) => committeeRoles.indexOf(position as CommitteeR
 // Builds a separate badge for every committee and leadership assignment.
 export function useMemberBadges({ name, university, photoUrl, gender, committees: memberships, roles }: MemberBadgeInput) {
   const t = useTranslations("profile.badge");
+  const committeeT = useTranslations("dashboard.leader");
   const silhouette: Gender = gender?.toLowerCase() === "male" ? "male" : "female";
   return useMemo(() => {
     const memberName = name?.trim() ?? "";
     if (!memberName) return [];
     const shared = {
       name: memberName,
-      chapter: "Google Developer Group on Campus",
-      university: university?.trim() || "University of Jeddah",
+      chapter: t("chapter"),
+      university: university?.trim() || t("university"),
       photoUrl: photoUrl ?? null,
       gender: silhouette,
     };
@@ -42,8 +44,15 @@ export function useMemberBadges({ name, university, photoUrl, gender, committees
       .filter((membership) => Boolean(membership.position && membership.name?.trim()))
       .map((membership) => {
         const code = membership.code.toUpperCase();
-        const committee = membership.name!.trim();
-        const data: BadgeData = { ...shared, role: membership.position, committee };
+        const config = Object.entries(leaderCommitteeConfig).find(([, value]) => value.committeeCode === code);
+        const committee = config
+          ? committeeT(`nav.${committeeTranslationKeys[config[0] as keyof typeof committeeTranslationKeys]}`)
+          : membership.name!.trim();
+        const role = membership.position === "Leader" ? t("committeeRoles.leader")
+          : membership.position === "Co-Leader" ? t("committeeRoles.coLeader")
+            : membership.position === "Member" ? t("committeeRoles.member")
+              : membership.position;
+        const data: BadgeData = { ...shared, role, committee };
         return {
           data,
           theme: isCommitteeCode(code) ? committees[code].theme : defaultTheme,
@@ -69,6 +78,11 @@ export function useMemberBadges({ name, university, photoUrl, gender, committees
       const data: BadgeData = { ...shared, role, committee };
       badges.unshift({ data, theme: developerLeadershipTheme, label: t("label", { name: data.name, role, committee }), key: "developer-committees-leader" });
     }
+    if (roles?.includes("ADVISOR")) {
+      const role = t("globalRoles.advisor");
+      const data: BadgeData = { ...shared, role, committee: "" };
+      badges.unshift({ data, theme: advisorTheme, label: t("globalLabel", { name: data.name, role }), key: "advisor" });
+    }
     return badges;
-  }, [name, university, photoUrl, silhouette, memberships, roles, t]);
+  }, [name, university, photoUrl, silhouette, memberships, roles, t, committeeT]);
 }
