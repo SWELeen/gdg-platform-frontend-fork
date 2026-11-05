@@ -181,7 +181,7 @@ export function TasksSection({
                   <p className="truncate text-sm font-semibold text-foreground">{task.title}</p>
                   <p className="text-[11px] text-muted">{task.assignedMemberName}</p>
                 </div>
-                {canManageTasks && (
+                {canManageTasks && (!task.taskScope || task.taskScope === "COMMITTEE") && (
                   <div className="flex gap-2">
                     <button
                       type="button"
@@ -255,7 +255,7 @@ export function TasksSection({
                     </span>
                   </div>
 
-                  {canManageTasks && (
+                  {canManageTasks && (!task.taskScope || task.taskScope === "COMMITTEE") && (
                     <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2">
                       <select
                         value={task.status}
@@ -335,7 +335,7 @@ export function TasksSection({
                     </span>
                   </div>
 
-                  {canManageTasks && (
+                  {canManageTasks && (!task.taskScope || task.taskScope === "COMMITTEE") && (
                     <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2">
                       <select
                         value={task.status}
@@ -408,7 +408,7 @@ export function TasksSection({
                     </span>
                   </div>
 
-                  {canManageTasks && (
+                  {canManageTasks && (!task.taskScope || task.taskScope === "COMMITTEE") && (
                     <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2">
                       <select
                         value={task.status}
@@ -463,7 +463,7 @@ export function TasksSection({
                   <td className="px-4 py-3.5">{getPriorityBadge(task.priority)}</td>
                   <td className="px-4 py-3.5 font-semibold text-foreground/80">{t(taskStatusKeys[task.status])}</td>
                   <td className="px-5 py-3.5 text-end">
-                    {canManageTasks && (
+                    {canManageTasks && (!task.taskScope || task.taskScope === "COMMITTEE") && (
                       <div className="inline-flex items-center gap-1">
                         <button
                           type="button"

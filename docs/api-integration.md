@@ -41,6 +41,10 @@ The backend scopes its final HttpOnly session cookies to the proxy paths: `gdg_a
 
 Do not put secrets in `NEXT_PUBLIC_*` variables. The browser must not be trusted to enforce roles or protect data. The frontend may use backend-provided identity/permission information to shape the interface, while the backend remains the enforcement point.
 
+## Leadership task management
+
+The leadership task pages consume the backend operations documented in `gdg-main-platform-backend/docs/leadership-tasks-openapi.yaml`. Group Leaders/Co-Leaders manage `/club-leadership/tasks`; the overall Developer Committees Leader manages `/developer-committees/tasks`; PM Leaders/Co-Leaders manage published PR event tasks under `/committees/PM/managed-events`. The backend validates target committee, active leadership role, event ownership/status, and caller permission on every request. Regular committee task boards display assigned cross-level tasks, while only the task's owning leadership scope can manage or review it.
+
 ## Profile badge status
 
 `/profile` builds the member badge from the same `GET /me` response the page already loads:

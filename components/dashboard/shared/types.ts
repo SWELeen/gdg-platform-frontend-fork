@@ -82,6 +82,9 @@ export interface CommitteeTask {
   status: TaskStatus;
   committeeCode?: string;
   committeeName?: string;
+  taskScope?: string;
+  eventId?: string | null;
+  eventTitle?: string | null;
 }
 
 export interface PointHistoryItem {
