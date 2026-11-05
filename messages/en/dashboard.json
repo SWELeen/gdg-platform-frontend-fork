@@ -918,7 +918,7 @@
     },
     "blacklist": {
       "title": "Attendance blacklist",
-      "description": "Review missed confirmations, late cancellations, and confirmed attendees without a check-in 24 hours after the event ends.",
+      "description": "Review confirmed attendees without a check-in after the event and people who cancelled within two hours of its start.",
       "apiDisabled": "The attendance blacklist is available when the platform API is enabled.",
       "loadError": "The attendance blacklist could not be loaded. Please try again.",
       "loading": "Loading attendance records…",
@@ -936,7 +936,6 @@
       },
       "reasons": {
         "NO_CHECK_IN": "Did not attend",
-        "CONFIRMATION_EXPIRED": "Confirmation expired",
         "LATE_CANCELLATION": "Late cancellation"
       }
     },
