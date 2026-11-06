@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { use } from "react"
 import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel"
+import AuthFormPanel from "@/app/components/auth/AuthFormPanel"
 import AuthCard from "@/app/components/auth/AuthCard"
 import VerifyCodeForm from "@/app/components/auth/VerifyCodeForm"
 
@@ -21,10 +22,10 @@ export default function VerifyCode({ params }: PageProps<"/[locale]/signup/verif
   const t = useTranslations("auth.verifyCode")
 
   return (
-    <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background text-foreground lg:flex-row">
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
       <AuthVisualPanel side="start" animateOnMount={true} />
 
-      <section className="flex flex-1 items-center justify-center bg-background py-8 lg:h-full lg:py-0">
+      <AuthFormPanel>
         <AuthCard
           size="sm"
           title={t("title")}
@@ -32,7 +33,7 @@ export default function VerifyCode({ params }: PageProps<"/[locale]/signup/verif
         >
           <VerifyCodeForm />
         </AuthCard>
-      </section>
+      </AuthFormPanel>
     </main>
   )
 }
