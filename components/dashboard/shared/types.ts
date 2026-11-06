@@ -64,6 +64,7 @@ export interface CommitteeMember {
   lastActivity: string;
   committees?: MemberCommitteeInfo[];
   globalRoles?: string[];
+  wallet?: { membershipNumber: number; linked: boolean };
 }
 
 export type TaskPriority = "High" | "Medium" | "Low";
@@ -144,6 +145,8 @@ export interface EventRegistration {
   id: string;
   eventId: string;
   applicantName: string;
+  isMember?: boolean;
+  emailState?: "PENDING" | "SENDING" | "SENT" | "FAILED" | "SKIPPED";
   email: string;
   registeredAt: string;
   status: RegistrationStatus;

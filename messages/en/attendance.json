@@ -32,6 +32,22 @@
       "error": "Check-in failed. Please scan again."
     }
   },
+  "email": {
+    "title": "Email",
+    "PENDING": "Queued",
+    "SENDING": "Sending",
+    "SENT": "Sent",
+    "FAILED": "Failed",
+    "SKIPPED": "Skipped",
+    "retry": "Retry email",
+    "error": "Could not queue the email for retry."
+  },
+  "filters": {
+    "participant": "Participant type",
+    "all": "All",
+    "member": "Member",
+    "guest": "Guest"
+  },
   "table": {
     "title": "Attendee check-in list",
     "empty": "No registrations are available for this event yet.",

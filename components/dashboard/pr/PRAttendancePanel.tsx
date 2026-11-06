@@ -6,6 +6,7 @@ import { Camera, CameraOff, Check, CircleAlert, ScanLine } from "lucide-react";
 import type { CommitteeEvent, EventRegistration } from "../shared/types";
 import { checkInAttendance, type AttendanceCheckInResult } from "@/lib/attendance/repository";
 import { useLeaderDashboard } from "@/components/dashboard/shared/LeaderDashboardContext";
+import { retryRegistrationEmail } from "@/lib/pr-registrations/api";
 
 function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<void> }) {
   const t = useTranslations("attendance");
@@ -22,7 +23,6 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<vo
 
   useEffect(() => {
     if (!cameraActive) return;
-    setScanDetected(false);
 
     let disposed = false;
     let tokenHandled = false;
@@ -104,6 +104,7 @@ function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<vo
               setCameraError(t("scanner.cameraDenied"));
               return;
             }
+            setScanDetected(false);
             setCameraActive((active) => !active);
           }}
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-surface-muted"
@@ -191,6 +192,10 @@ export function PRAttendancePanel({
 }) {
   const t = useTranslations("attendance");
   const { reloadRegistrations } = useLeaderDashboard();
+  const [memberFilter, setMemberFilter] = useState("all");
+  const [attendanceFilter, setAttendanceFilter] = useState("all");
+  const [retryingId, setRetryingId] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState(false);
   const [verificationState, setVerificationState] = useState<
     AttendanceCheckInResult["state"] | null
   >(null);
@@ -199,6 +204,10 @@ export function PRAttendancePanel({
   const confirmed = accepted.filter((item) => item.confirmationStatus === "Confirmed");
   const checkedIn = accepted.filter((item) => item.checkInStatus === "CheckedIn");
   const noShow = accepted.filter((item) => item.checkInStatus === "NoShow");
+  const filtered = registrations.filter((item) =>
+    (memberFilter === "all" || item.isMember === (memberFilter === "member")) &&
+    (attendanceFilter === "all" || (item.checkInStatus === "CheckedIn") === (attendanceFilter === "checkedIn")),
+  );
   const attendanceRate = confirmed.length
     ? Math.round((checkedIn.length / confirmed.length) * 100)
     : 0;
@@ -211,6 +220,20 @@ export function PRAttendancePanel({
       if (result.state === "checked-in") await reloadRegistrations(event.id);
     } catch {
       setVerificationState("error");
+    }
+  };
+
+  const retryEmail = async (registrationId: string) => {
+    setEmailError(false);
+    setRetryingId(registrationId);
+    try {
+      const result = await retryRegistrationEmail(registrationId);
+      if (!result.ok) setEmailError(true);
+      await reloadRegistrations(event.id);
+    } catch {
+      setEmailError(true);
+    } finally {
+      setRetryingId(null);
     }
   };
 
@@ -291,7 +314,26 @@ export function PRAttendancePanel({
           <div className="border-b border-border bg-surface-muted/30 px-4 py-3">
             <h4 className="text-sm font-semibold text-foreground">{t("table.title")}</h4>
           </div>
-          {registrations.length === 0 ? (
+          <div className="grid gap-3 border-b border-border p-4 sm:grid-cols-2">
+            <label className="grid gap-1 text-sm text-foreground">
+              {t("filters.participant")}
+              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={memberFilter} onChange={(event) => setMemberFilter(event.target.value)}>
+                <option value="all">{t("filters.all")}</option>
+                <option value="member">{t("filters.member")}</option>
+                <option value="guest">{t("filters.guest")}</option>
+              </select>
+            </label>
+            <label className="grid gap-1 text-sm text-foreground">
+              {t("table.attendance")}
+              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={attendanceFilter} onChange={(event) => setAttendanceFilter(event.target.value)}>
+                <option value="all">{t("filters.all")}</option>
+                <option value="checkedIn">{t("table.checkedIn")}</option>
+                <option value="notCheckedIn">{t("table.notCheckedIn")}</option>
+              </select>
+            </label>
+          </div>
+          {emailError && <p role="alert" className="px-4 py-2 text-sm text-rose-700">{t("email.error")}</p>}
+          {filtered.length === 0 ? (
             <p className="p-5 text-sm text-muted">{t("table.empty")}</p>
           ) : (
             <div className="overflow-x-auto">
@@ -302,10 +344,11 @@ export function PRAttendancePanel({
                     <th className="px-4 py-3 text-start">{t("table.confirmation")}</th>
                     <th className="px-4 py-3 text-start">{t("table.attendance")}</th>
                     <th className="px-4 py-3 text-start">{t("table.checkInTime")}</th>
+                    <th className="px-4 py-3 text-start">{t("email.title")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/70">
-                  {registrations.map((registration) => (
+                  {filtered.map((registration) => (
                     <tr key={registration.id} className="align-top hover:bg-surface-muted/20">
                       <td className="px-4 py-3.5">
                         <span className="block font-semibold text-foreground">{registration.applicantName}</span>
@@ -319,6 +362,15 @@ export function PRAttendancePanel({
                       </td>
                       <td className="px-4 py-3.5 text-muted">
                         {registration.checkedInAt ?? t("table.noTime")}
+                      </td>
+                      <td className="px-4 py-3.5 text-muted">
+                        {registration.emailState ? t(`email.${registration.emailState}`) : t("table.noTime")}
+                        {registration.emailState === "FAILED" && (
+                          <button type="button" disabled={retryingId !== null} onClick={() => void retryEmail(registration.id)}
+                            className="mt-1 block rounded px-2 py-1 font-semibold text-blue disabled:opacity-50">
+                            {retryingId === registration.id ? t("email.PENDING") : t("email.retry")}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

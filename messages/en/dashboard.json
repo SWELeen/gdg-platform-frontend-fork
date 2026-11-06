@@ -695,6 +695,9 @@
       "pendingReview": "Awaiting confirmation"
     },
     "members": {
+      "walletNumber": "Membership {number, number, ::group-off}",
+      "walletLinked": "Wallet linked",
+      "walletUnlinked": "Wallet unlinked",
       "temporaryTitle": "Temporary Elevated Permissions System",
       "temporaryLeaders": "Committee leaders can temporarily elevate members for approved committee work. Elevated permissions expire automatically after the selected duration without making permanent role changes.",
       "temporaryMembers": "Temporary committee permissions expire automatically after the selected duration without making permanent role changes.",
@@ -1125,6 +1128,8 @@
       }
     },
     "eventForm": {
+      "publishedStartsAt": "Event start (Saudi time)",
+      "publishedEndsAt": "Event end (Saudi time)",
       "create": "Create New Event",
       "publish": "Publish",
       "edit": "Edit Event",

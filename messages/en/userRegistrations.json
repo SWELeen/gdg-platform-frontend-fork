@@ -36,6 +36,7 @@
     "qrTitle": "Your attendance QR",
     "qrDescription": "Show this code at the event entrance. This is the same QR code provided in your confirmation email.",
     "qrPending": "Your QR code will appear here after the ticket service is connected.",
+    "memberCard": "Use your membership card barcode at check-in. Contact the organizer if your card is not linked.",
     "qrAlt": "Secure attendance QR code",
     "confirmedAt": "Attendance confirmed {date}",
     "checkedInAt": "Checked in {date}",

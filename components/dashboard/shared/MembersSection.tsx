@@ -180,6 +180,13 @@ export function MembersSection({
                           <span className="block text-[11px] text-muted">
                             {member.email}
                           </span>
+                          {member.wallet && (
+                            <span className="mt-1 block text-[11px] text-muted">
+                              {t("members.walletNumber", { number: member.wallet.membershipNumber })}
+                              {" · "}
+                              {t(member.wallet.linked ? "members.walletLinked" : "members.walletUnlinked")}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>

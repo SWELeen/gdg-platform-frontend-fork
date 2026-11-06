@@ -11,6 +11,7 @@ type ApiMyRegistration = {
   checkedInAt: string | null;
   waitlistPosition: number | null;
   attendanceQrCodeDataUrl: string | null;
+  attendanceMethod?: UserRegistration["attendanceMethod"] | null;
   event: { name: string; startsAt: string; location: string | null };
 };
 
@@ -52,6 +53,7 @@ function toUserRegistration(item: ApiMyRegistration): UserRegistration {
               : undefined,
     attendanceConfirmedAt: item.confirmedAt ?? undefined,
     attendanceQrCodeDataUrl: item.attendanceQrCodeDataUrl ?? undefined,
+    attendanceMethod: item.attendanceMethod ?? undefined,
     checkInStatus:
       item.status === "CONFIRMED" ? (item.checkedInAt ? "checked-in" : "not-checked-in") : item.status === "NO_CHECK_IN" ? "no-show" : undefined,
     checkedInAt: item.checkedInAt ?? undefined,
