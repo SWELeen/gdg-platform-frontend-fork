@@ -1434,7 +1434,23 @@
       "assignPersonTitle": "Assign an account",
       "assignPersonDescription": "Enter an existing account email, then choose a role and committee.",
       "requiredAssignment": "Choose a role and committee.",
-      "roleDeveloperLeader": "Developer Committees Leader"
+      "roleDeveloperLeader": "Developer Committees Leader",
+      "removeMemberByEmail": "Remove by email",
+      "removeMemberTitle": "Remove group membership",
+      "removeMemberDescription": "Choose whether to remove this person from one committee or from the entire group. Their platform account and historical records are kept.",
+      "removeMemberCommittee": "Removal scope",
+      "removeMemberAllCommittees": "Entire group (all committees)",
+      "removeMemberCommitteeDescription": "Only this committee membership and its committee role will be removed.",
+      "removeMemberRoleDescription": "Only the selected group role will be revoked. Other roles and committee memberships will remain.",
+      "removeMemberAllDescription": "All committee memberships and group roles will be removed, and the membership will be deactivated.",
+      "removeMemberEmail": "Account email",
+      "removeMemberEmailPlaceholder": "name@example.com",
+      "removeMemberConfirm": "Remove membership",
+      "removeMemberFailed": "The membership could not be removed. Please try again.",
+      "removeMemberNotFound": "No active group membership was found for that email.",
+      "removeMemberConflict": "This membership cannot be removed because it belongs to you or is the last active group leader.",
+      "groupAdvisor": "Advisor",
+      "groupDeveloperLeader": "Developer Committees Leader"
     }
   },
   "membershipRequests": {

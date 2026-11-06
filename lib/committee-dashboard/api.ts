@@ -214,6 +214,10 @@ export async function assignClubPerson(input: { email: string; committeeCode?: s
   return apiRequest('/club-leadership/members', { method: 'POST', body: input });
 }
 
+export async function removeClubPerson(email: string, committeeCode?: string) {
+  return apiRequest('/club-leadership/members', { method: 'DELETE', body: { email, ...(committeeCode ? { committeeCode } : {}) } });
+}
+
 /** Exact start, end and registration close times the create-event form picked, as ISO strings. */
 export interface EventSchedule {
   startsAt: string;

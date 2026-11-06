@@ -27,7 +27,7 @@ import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
 import { API_ENABLED } from "@/lib/api/client";
-import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, assignClubPerson, assignDeveloperCommitteeMember, type MemberAssignmentRole, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, assignClubPerson, assignDeveloperCommitteeMember, removeClubPerson, type MemberAssignmentRole, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
@@ -73,8 +73,8 @@ interface LeaderDashboardContextValue {
   addMember: (member: { email: string }) => Promise<void>;
   assignPerson: (assignment: { email: string; role: MemberAssignmentRole; committeeCode?: string }) => Promise<void>;
   addMemberToCommittee: (memberId: string, committeeCode: string) => Promise<void>;
+  removeClubMemberByEmail: (email: string, committeeCode?: string) => Promise<void>;
   updateMember: (id: string, updates: Partial<CommitteeMember>) => void;
-  removeMember: (id: string) => void;
   grantTemporaryAccess: (memberId: string, durationMinutes: number) => void;
   revokeTemporaryAccess: (memberId: string) => void;
   // Task Actions
@@ -196,7 +196,9 @@ export function LeaderDashboardProvider({
 
   // Full management permissions inside the Leader workspace
   const canManageEvents = false;
-  const canManageMembers = false;
+  // Group leadership's member-management permission also controls the remove
+  // member actions. The backend independently enforces it on the delete API.
+  const canManageMembers = clubLeadership && canAddMembers;
   const canManageSettings = false;
 
   // The PR registration workflow is currently controlled by the existing API flag.
@@ -455,12 +457,21 @@ export function LeaderDashboardProvider({
     await reloadDashboard();
   };
 
-  const updateMember =(id: string, updates: Partial<CommitteeMember>) => {
-    setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)));
+  const removeClubMemberByEmail = async (email: string, committeeCode?: string) => {
+    const result = await removeClubPerson(email, committeeCode);
+    if (!result.ok) {
+      const message = result.status === 404
+        ? t("groupFilters.removeMemberNotFound")
+        : result.status === 409
+          ? t("groupFilters.removeMemberConflict")
+          : result.message;
+      throw new Error(message);
+    }
+    await reloadDashboard();
   };
 
-  const removeMember = (id: string) => {
-    setMembers((prev) => prev.filter((m) => m.id !== id));
+  const updateMember =(id: string, updates: Partial<CommitteeMember>) => {
+    setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)));
   };
 
   const grantTemporaryAccess = (memberId: string, durationMinutes: number) => {
@@ -579,9 +590,9 @@ export function LeaderDashboardProvider({
     deleteDraft,
     addMember,
     addMemberToCommittee,
+    removeClubMemberByEmail,
     assignPerson,
     updateMember,
-    removeMember,
     grantTemporaryAccess,
     revokeTemporaryAccess,
     addTask,

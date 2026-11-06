@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import type { CommitteeMember } from "./types";
-import { ConfirmModal } from "./ConfirmModal";
 import { leaderCommitteeConfig } from "./committee-config";
 import { ALL, CommitteeBadges, CommitteeFilterSelect, RoleFilterSelect, matchesCommittee, matchesRole, pointsFor } from "./ClubFilters";
 import {
@@ -19,23 +18,24 @@ import {
 
 interface MembersSectionProps {
   onOpenAddMember: () => void;
+  onOpenRemoveMember?: (email?: string) => void;
   onOpenTemporaryAccess?: (member: CommitteeMember) => void;
   onOpenUpdatePoints: (member: CommitteeMember) => void;
 }
 
 export function MembersSection({
   onOpenAddMember,
+  onOpenRemoveMember,
   onOpenTemporaryAccess,
   onOpenUpdatePoints,
 }: MembersSectionProps) {
   const t = useTranslations("dashboard.leader");
-  const { members, removeMember, canManageMembers, canAddMembers, canManagePoints, currentMember, committeeName, committee, clubLeadership } = useLeaderDashboard();
+  const { members, canManageMembers, canAddMembers, canManagePoints, currentMember, committeeName, committee, clubLeadership } = useLeaderDashboard();
   const showTemporaryAccess = !clubLeadership && leaderCommitteeConfig[committee].canGrantTemporaryAccess;
   const [searchTerm, setSearchTerm] = useState("");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
   const [roleFilter, setRoleFilter] = useState(ALL);
   const [currentTime, setCurrentTime] = useState(() => Date.now());
-  const [memberToRemove, setMemberToRemove] = useState<CommitteeMember | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(Date.now()), 10000);
@@ -117,6 +117,16 @@ export function MembersSection({
               >
                 <Plus className="size-3.5" />
                 <span>{clubLeadership ? t("groupFilters.addToCommittee") : t("members.add")}</span>
+              </button>
+            )}
+            {clubLeadership && canManageMembers && onOpenRemoveMember && (
+              <button
+                type="button"
+                onClick={() => onOpenRemoveMember()}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950/40"
+              >
+                <Trash2 className="size-3.5" />
+                <span>{t("groupFilters.removeMemberByEmail")}</span>
               </button>
             )}
           </div>
@@ -255,11 +265,11 @@ export function MembersSection({
                         )}
 
                         {/* Remove Member */}
-                        {canManageMembers && (
+                        {clubLeadership && canManageMembers && onOpenRemoveMember && (
                           <button
                             type="button"
                             title={t("members.remove")}
-                            onClick={() => setMemberToRemove(member)}
+                            onClick={() => onOpenRemoveMember(member.email)}
                             className="rounded-lg p-1.5 text-muted hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/50"
                           >
                             <Trash2 className="size-4" />
@@ -275,27 +285,6 @@ export function MembersSection({
         </div>
       </div>
 
-      {/* Custom Confirmation Modal */}
-      <ConfirmModal
-        isOpen={Boolean(memberToRemove)}
-        onClose={() => setMemberToRemove(null)}
-        onConfirm={() => {
-          if (memberToRemove) {
-            removeMember(memberToRemove.id);
-          }
-        }}
-        title={t("members.remove")}
-        message={
-          <>
-            Are you sure you want to remove{" "}
-            <strong className="text-foreground">{memberToRemove?.name}</strong> from the
-            committee? They will lose access to committee tasks and permissions.
-          </>
-        }
-        confirmText={t("members.remove")}
-        cancelText={t("members.cancel")}
-        danger
-      />
     </div>
   );
 }

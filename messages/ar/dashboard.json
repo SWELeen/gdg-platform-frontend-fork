@@ -1434,7 +1434,23 @@
       "assignPersonTitle": "إضافة حساب وتحديد دوره",
       "assignPersonDescription": "أدخل بريد الحساب الحالي ثم اختر الدور واللجنة.",
       "requiredAssignment": "اختر الدور واللجنة.",
-      "roleDeveloperLeader": "قائد لجان المطورين"
+      "roleDeveloperLeader": "قائد لجان المطورين",
+      "removeMemberByEmail": "إزالة بالبريد الإلكتروني",
+      "removeMemberTitle": "إزالة عضوية المجموعة",
+      "removeMemberDescription": "اختر إزالة الشخص من لجنة واحدة أو من المجموعة بالكامل. سيبقى حسابه في المنصة وسجله السابق محفوظًا.",
+      "removeMemberCommittee": "نطاق الإزالة",
+      "removeMemberAllCommittees": "المجموعة بالكامل (كل اللجان)",
+      "removeMemberCommitteeDescription": "ستُزال عضوية الشخص ودوره في هذه اللجنة فقط.",
+      "removeMemberRoleDescription": "ستُسحب الصلاحية المختارة فقط، مع بقاء أدواره وعضوياته الأخرى.",
+      "removeMemberAllDescription": "ستُزال عضوياته في كل اللجان وأدواره في المجموعة، وستُعطّل عضويته.",
+      "removeMemberEmail": "بريد الحساب",
+      "removeMemberEmailPlaceholder": "name@example.com",
+      "removeMemberConfirm": "إزالة العضوية",
+      "removeMemberFailed": "تعذرت إزالة العضوية. حاول مرة أخرى.",
+      "removeMemberNotFound": "لم نجد عضوية نشطة مرتبطة بهذا البريد.",
+      "removeMemberConflict": "لا يمكن إزالة عضويتك أو عضوية آخر قائد نشط للمجموعة.",
+      "groupAdvisor": "مستشار المجموعة",
+      "groupDeveloperLeader": "قائد لجان المطورين"
     }
   },
   "membershipRequests": {
