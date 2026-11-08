@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
-import { defaultPhoneCountryCode } from "@/data/signup"
+import { defaultPhoneCountryCode, getMajorOptions } from "@/data/signup"
 import { validateEmail } from "@/app/lib/validation/email"
 import {
   validateConfirmPassword,
@@ -244,7 +244,10 @@ export default function SignupFlow() {
       ...defaultValues,
       ...current,
       [normalizedField]: nextValue,
+      ...(normalizedField === "college" ? { major: "" } : {}),
     }))
+
+    if (normalizedField === "college") clearFieldError("major")
 
 
     if (fieldErrors[normalizedField]) {
@@ -275,10 +278,12 @@ export default function SignupFlow() {
       case "university":
       case "branch":
       case "college":
-      case "major":
       case "level":
       case "role":
         return validateSelect(value, normalizedField)
+      case "major":
+        if (!value) return "majorRequired"
+        return getMajorOptions(formValues.college).includes(value) ? "" : "fieldInvalid"
       default:
         return ""
     }

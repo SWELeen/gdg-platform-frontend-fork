@@ -6,6 +6,7 @@ type SelectFieldProps = {
   placeholder: string;
   options: { value: string; label: string }[];
   value: string;
+  disabled?: boolean;
   error?: string;
   className?: string;
   onChange: (value: string) => void;
@@ -18,6 +19,7 @@ export default function SelectField({
   placeholder,
   options,
   value,
+  disabled = false,
   error,
   className = "",
   onChange,
@@ -36,6 +38,7 @@ export default function SelectField({
           id={id}
           name={id}
           value={value}
+          disabled={disabled}
           onChange={(event) => onChange(event.target.value)}
           onBlur={onBlur}
           aria-invalid={Boolean(error)}

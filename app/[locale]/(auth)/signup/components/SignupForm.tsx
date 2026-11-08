@@ -15,6 +15,7 @@ import {
   committeeSkillOptions,
   type CommitteeOption,
   genderOptions,
+  getMajorOptions,
   levelOptions,
   majorOptions,
   roleOptions,
@@ -109,9 +110,10 @@ function validatePhone(value: string) {
   return ""
 }
 
-function validateChoice(field: FieldName, value: string) {
+function validateChoice(field: FieldName, value: string, values: FormValues) {
   if (!value) return field === "university" ? "universityChoiceRequired" : `${field}Required`
-  return selectOptions[field]?.includes(value) ? "" : "fieldInvalid"
+  const options = field === "major" ? getMajorOptions(values.college) : selectOptions[field]
+  return options?.includes(value) ? "" : "fieldInvalid"
 }
 
 function validateField(field: FieldName, values: FormValues) {
@@ -131,7 +133,7 @@ function validateField(field: FieldName, values: FormValues) {
       return values.committees.every((item) => committeeOptions.includes(item as CommitteeOption))
         ? ""
         : "fieldInvalid"
-    default: return validateChoice(field, value)
+    default: return validateChoice(field, value, values)
   }
 }
 
@@ -221,7 +223,7 @@ function PasswordField({
 }
 
 function ChoiceField({
-  id, label, placeholder, options, value, error, onChange, onBlur,
+  id, label, placeholder, options, value, error, onChange, onBlur, disabled = false,
 }: {
   id: string
   label: string
@@ -229,6 +231,7 @@ function ChoiceField({
   options: readonly (string | { value: string; label: string })[]
   value: string
   error?: string
+  disabled?: boolean
   onChange: (value: string) => void
   onBlur: () => void
 }) {
@@ -243,6 +246,7 @@ function ChoiceField({
         onChange={(event) => onChange(event.target.value)}
         onBlur={onBlur}
         required
+        disabled={disabled}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         className={`mt-1.5 h-8 w-full rounded-md border bg-surface px-2.75 text-sm font-normal outline-none ${error ? "border-gdg-red" : "border-foreground/15"}`}
@@ -385,6 +389,7 @@ export default function SignupForm() {
 
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
+    if (field === "college") next.major = ""
     const hideBranch = field === "university" && value !== "University of Jeddah"
     if (hideBranch) next.branch = ""
     setValues(next)
@@ -394,6 +399,9 @@ export default function SignupForm() {
     }
     if (hideBranch) {
       setErrors((current) => ({ ...current, branch: undefined }))
+    }
+    if (field === "college") {
+      setErrors((current) => ({ ...current, major: undefined }))
     }
     if (field === "password" && next.confirmPassword) {
       const confirmError = validateConfirmPassword(next.confirmPassword, next.password)
@@ -658,6 +666,7 @@ export default function SignupForm() {
       options={options}
       value={values[id] as string}
       error={errors[id]}
+      disabled={id === "major" && !values.college}
       onChange={(value) => update(id, value)}
       onBlur={() => blur(id)}
     />
@@ -736,7 +745,7 @@ export default function SignupForm() {
               {membership === "member" && values.university === "University of Jeddah" &&
                 field("branch", t("fields.branch.label"), t("fields.branch.placeholder"), branchOptions)}
               {field("college", t("fields.college.label"), t("fields.college.placeholder"), collegeOptions)}
-              {field("major", t("fields.major.label"), t("fields.major.placeholder"), majorOptions)}
+              {field("major", t("fields.major.label"), t("fields.major.placeholder"), getMajorOptions(values.college))}
               {field("level", t("fields.level.label"), t("fields.level.placeholder"), levelOptions)}
               {membership === "member" && <fieldset
                 className="relative col-span-full"
