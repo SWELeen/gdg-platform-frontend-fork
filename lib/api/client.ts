@@ -86,7 +86,16 @@ export async function apiRequest<T>(
   let response: Response;
   try {
     response = await makeRequest();
-    if (response.status === 401 && !["/auth/refresh", "/auth/login", "/auth/logout", "/auth/setup-password", "/auth/setup-password/complete"].includes(path) && await refreshAuthSession()) {
+    const skipRefreshRetry = [
+      "/auth/refresh",
+      "/auth/login",
+      "/auth/logout",
+      "/auth/google/session",
+      "/auth/google/complete-signup",
+      "/auth/setup-password",
+      "/auth/setup-password/complete",
+    ].includes(path);
+    if (response.status === 401 && !skipRefreshRetry && await refreshAuthSession()) {
       response = await makeRequest();
     }
   } catch {
