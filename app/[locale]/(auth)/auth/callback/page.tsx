@@ -63,13 +63,16 @@ export default function GoogleAuthCallbackPage() {
           return;
         }
 
-        await supabase.auth.signOut({ scope: "local" });
         if (result.data.nextStep === "COMPLETE_PROFILE" && result.data.profile) {
-          window.sessionStorage.setItem("gdg.google-signup-profile", JSON.stringify(result.data.profile));
+          window.sessionStorage.setItem("gdg.google-signup-profile", JSON.stringify({
+            ...result.data.profile,
+            accessToken: data.session.access_token,
+          }));
           router.replace("/signup/complete");
           return;
         }
 
+        await supabase.auth.signOut({ scope: "local" });
         storeAuthSession({ authenticated: true });
         const identity = await apiRequest<AuthenticatedIdentity>("/me");
         router.replace(identity.ok ? dashboardPathFor(identity.data) : "/login");

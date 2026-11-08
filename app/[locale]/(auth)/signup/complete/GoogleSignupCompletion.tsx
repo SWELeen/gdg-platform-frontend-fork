@@ -18,8 +18,9 @@ import {
 } from "@/data/signup";
 import { API_ENABLED, apiRequest } from "@/lib/api/client";
 import { storeAuthSession } from "@/lib/auth/session";
+import { createSupabaseBrowserClient } from "@/lib/auth/supabase-browser";
 
-type GoogleSignupProfile = { email: string; fullName: string };
+type GoogleSignupProfile = { email: string; fullName: string; accessToken: string };
 type RegistrationType = "MEMBER" | "NON_MEMBER";
 
 function Input({
@@ -108,7 +109,7 @@ export default function GoogleSignupCompletion() {
       if (!stored) return;
       try {
         const parsed = JSON.parse(stored) as GoogleSignupProfile;
-        if (parsed.email) {
+        if (parsed.email && parsed.accessToken) {
           setProfile(parsed);
           setFullName(parsed.fullName ?? "");
         }
@@ -154,6 +155,7 @@ export default function GoogleSignupCompletion() {
     setIsSubmitting(true);
     const result = await apiRequest<{ registrationPendingApproval: boolean }>("/auth/google/complete-signup", {
       method: "POST",
+      accessToken: profile.accessToken,
       body: {
         fullName,
         registrationType,
@@ -184,6 +186,11 @@ export default function GoogleSignupCompletion() {
       return;
     }
 
+    try {
+      await createSupabaseBrowserClient().auth.signOut({ scope: "local" });
+    } catch {
+      // The backend session is already established; local Supabase cleanup is best effort.
+    }
     window.sessionStorage.removeItem("gdg.google-signup-profile");
     storeAuthSession({ authenticated: true });
     if (result.data.registrationPendingApproval) router.replace("/signup/pending");
@@ -196,68 +203,75 @@ export default function GoogleSignupCompletion() {
   );
 
   return (
-    <AuthCard size="lg" title={t("completeProfile.title")} description={t("completeProfile.description")}>
-      {!profile ? (
-        <div className="w-full">
-          <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
-          <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
-            {t("signIn")}
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={submit} className="grid w-full grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2">
-          <AuthErrorMessage message={formError} className="col-span-full" />
-          <fieldset className="col-span-full">
-            <legend className="mb-3 text-sm font-medium">{t("membershipQuestion")} <span className="text-gdg-red">*</span></legend>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {(["MEMBER", "NON_MEMBER"] as const).map((choice) => (
-                <label key={choice} className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-3 text-sm ${registrationType === choice ? "border-blue bg-blue/5" : "border-foreground/15"}`}>
-                  <input type="radio" name="registrationType" required checked={registrationType === choice} onChange={() => setRegistrationType(choice)} />
-                  {t(choice === "MEMBER" ? "memberChoice" : "nonMemberChoice")}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <Input id="google-full-name" label={fieldLabel("fullName")} value={fullName} onChange={setFullName} />
-          <Input id="google-personal-email" label={fieldLabel("personalEmail")} value={profile.email} readOnly />
-          <Input id="google-phone" label={fieldLabel("phone")} value={phone} onChange={(value) => setPhone(value.replace(/\D/g, "").slice(0, 9))} type="tel" placeholder="5XXXXXXXX" />
-          <Input id="google-university-email" label={`${fieldLabel("universityEmail")} (${t("optional")})`} value={universityEmail} onChange={setUniversityEmail} type="email" required={false} />
-          {renderField("google-gender", fieldLabel("gender"), gender, setGender, genderOptions.map(({ value, labelKey }) => ({ value, label: t(`options.gender.${labelKey}`) })))}
-          {renderField("google-university", fieldLabel("university"), university, (value) => { setUniversity(value); setBranch(""); }, universityOptions)}
-          {registrationType === "MEMBER" && university === "University of Jeddah" && renderField("google-branch", fieldLabel("branch"), branch, setBranch, branchOptions)}
-          {renderField("google-college", fieldLabel("college"), college, updateCollege, collegeOptions)}
-          {renderField("google-major", fieldLabel("major"), major, setMajor, getMajorOptions(college), !college)}
-          {renderField("google-level", fieldLabel("level"), level, setLevel, levelOptions)}
-
-          {registrationType === "MEMBER" && (
+    <main className="flex w-full flex-1 justify-center bg-background px-4 py-8 md:items-center md:px-6">
+      <AuthCard
+        size="lg"
+        title={t("completeProfile.title")}
+        description={t("completeProfile.description")}
+        className="my-auto w-full max-w-3xl !px-5 !py-8 md:!max-w-3xl md:!px-8"
+      >
+        {!profile ? (
+          <div className="w-full">
+            <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
+            <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
+              {t("signIn")}
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-6 grid w-full grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+            <AuthErrorMessage message={formError} className="col-span-full" />
             <fieldset className="col-span-full">
-              <legend className="mb-2 text-sm font-medium">{fieldLabel("committees")} <span className="text-gdg-red">*</span></legend>
-              <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
-                {committeeOptions.map((committee) => (
-                  <label key={committee} className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" checked={selectedCommittees.includes(committee)} onChange={() => toggleCommittee(committee)} />
-                    {committee}
+              <legend className="mb-3 text-sm font-medium">{t("membershipQuestion")} <span className="text-gdg-red">*</span></legend>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {(["MEMBER", "NON_MEMBER"] as const).map((choice) => (
+                  <label key={choice} className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-3 text-sm ${registrationType === choice ? "border-blue bg-blue/5" : "border-foreground/15"}`}>
+                    <input type="radio" name="registrationType" required checked={registrationType === choice} onChange={() => setRegistrationType(choice)} />
+                    {t(choice === "MEMBER" ? "memberChoice" : "nonMemberChoice")}
                   </label>
                 ))}
               </div>
-              {selectedCommittees.length > 0 && <p className="mt-3 text-xs text-muted">{t("fields.committeeRolesInstruction")}</p>}
-              {selectedCommittees.map((committee) => (
-                <label key={committee} className="mt-3 flex items-center justify-between gap-3 text-sm">
-                  <span>{committee}</span>
-                  <select value={committeeRoles[committee] || "Member"} onChange={(event) => setCommitteeRoles((current) => ({ ...current, [committee]: event.target.value }))} className="h-8 rounded-md border border-foreground/15 bg-surface px-2">
-                    {["Member", "Co-Leader", "Leader"].map((role) => <option key={role} value={role}>{role}</option>)}
-                  </select>
-                </label>
-              ))}
             </fieldset>
-          )}
 
-          <button type="submit" disabled={isSubmitting} className="col-span-full mt-2 h-9 rounded-md bg-blue text-sm font-medium text-white transition hover:bg-blue/90 disabled:cursor-wait disabled:opacity-60">
-            {isSubmitting ? t("creatingAccount") : t("completeProfile.submit")}
-          </button>
-        </form>
-      )}
-    </AuthCard>
+            <Input id="google-full-name" label={fieldLabel("fullName")} value={fullName} onChange={setFullName} />
+            <Input id="google-personal-email" label={fieldLabel("personalEmail")} value={profile.email} readOnly />
+            <Input id="google-phone" label={fieldLabel("phone")} value={phone} onChange={(value) => setPhone(value.replace(/\D/g, "").slice(0, 9))} type="tel" placeholder="5XXXXXXXX" />
+            <Input id="google-university-email" label={`${fieldLabel("universityEmail")} (${t("optional")})`} value={universityEmail} onChange={setUniversityEmail} type="email" required={false} />
+            {renderField("google-gender", fieldLabel("gender"), gender, setGender, genderOptions.map(({ value, labelKey }) => ({ value, label: t(`options.gender.${labelKey}`) })))}
+            {renderField("google-university", fieldLabel("university"), university, (value) => { setUniversity(value); setBranch(""); }, universityOptions)}
+            {registrationType === "MEMBER" && university === "University of Jeddah" && renderField("google-branch", fieldLabel("branch"), branch, setBranch, branchOptions)}
+            {renderField("google-college", fieldLabel("college"), college, updateCollege, collegeOptions)}
+            {renderField("google-major", fieldLabel("major"), major, setMajor, getMajorOptions(college), !college)}
+            {renderField("google-level", fieldLabel("level"), level, setLevel, levelOptions)}
+
+            {registrationType === "MEMBER" && (
+              <fieldset className="col-span-full">
+                <legend className="mb-2 text-sm font-medium">{fieldLabel("committees")} <span className="text-gdg-red">*</span></legend>
+                <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
+                  {committeeOptions.map((committee) => (
+                    <label key={committee} className="flex items-center gap-2 text-sm">
+                      <input type="checkbox" checked={selectedCommittees.includes(committee)} onChange={() => toggleCommittee(committee)} />
+                      {committee}
+                    </label>
+                  ))}
+                </div>
+                {selectedCommittees.length > 0 && <p className="mt-3 text-xs text-muted">{t("fields.committeeRolesInstruction")}</p>}
+                {selectedCommittees.map((committee) => (
+                  <label key={committee} className="mt-3 flex items-center justify-between gap-3 text-sm">
+                    <span>{committee}</span>
+                    <select value={committeeRoles[committee] || "Member"} onChange={(event) => setCommitteeRoles((current) => ({ ...current, [committee]: event.target.value }))} className="h-8 rounded-md border border-foreground/15 bg-surface px-2">
+                      {["Member", "Co-Leader", "Leader"].map((role) => <option key={role} value={role}>{role}</option>)}
+                    </select>
+                  </label>
+                ))}
+              </fieldset>
+            )}
+
+            <button type="submit" disabled={isSubmitting} className="col-span-full mt-2 h-9 rounded-md bg-blue text-sm font-medium text-white transition hover:bg-blue/90 disabled:cursor-wait disabled:opacity-60">
+              {isSubmitting ? t("creatingAccount") : t("completeProfile.submit")}
+            </button>
+          </form>
+        )}
+      </AuthCard>
+    </main>
   );
 }
