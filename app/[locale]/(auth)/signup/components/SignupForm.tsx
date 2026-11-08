@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa6";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton"
 import PasswordInput from "@/app/components/auth/PasswordInput"
 import { validateEmail } from "@/app/lib/validation/email"
 import { PASSWORD_MAX_LENGTH, validateConfirmPassword, validatePassword } from "@/app/lib/validation/password"
@@ -727,6 +728,12 @@ export default function SignupForm() {
                 ))}
               </div>
               <AuthErrorMessage id="membership-error" message={membershipError} className="mt-1" />
+              <div className="mt-5 flex items-center gap-3 text-xs text-foreground/35">
+                <span className="h-px flex-1 bg-foreground/15" />
+                <span>{t("or")}</span>
+                <span className="h-px flex-1 bg-foreground/15" />
+              </div>
+              <GoogleAuthButton className="mt-5" />
               <div className="mt-10">
                 <button type="submit" className="h-8.75 w-full rounded-[5px] bg-blue text-sm font-medium text-[var(--white)] hover:bg-blue/90">{t("continue")}</button>
               </div>

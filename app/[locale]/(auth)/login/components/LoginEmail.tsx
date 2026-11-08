@@ -1,7 +1,7 @@
-import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton"
 
 type LoginEmailProps = {
   value: string;
@@ -69,13 +69,7 @@ export default function LoginEmail({
           <span className="h-px flex-1 bg-foreground/15" />
         </div>
 
-        <button
-          type="button"
-          className="flex h-8.75 w-full cursor-pointer items-center justify-center gap-2 rounded-[5px] border border-foreground/15 text-sm font-medium text-foreground/65 transition-colors duration-200 hover:bg-blue/10 active:bg-blue/20"
-        >
-          <Image src="/google-logo.svg" alt={t("googleLogoAlt")} width={15} height={15} />
-          {t("google")}
-        </button>
+        <GoogleAuthButton />
       </form>
 <p className="mt-2 pb-8 text-center text-sm text-foreground/55">
   {t("noAccount")}
