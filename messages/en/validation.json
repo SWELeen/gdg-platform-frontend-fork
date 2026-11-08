@@ -18,7 +18,7 @@
   "membershipRequired": "Please select whether you are a member.",
   "phoneRequired": "Please enter your phone number.",
   "phoneInvalid": "Please enter a valid phone number.",
-  "phoneFormat": "Enter a 9-digit Saudi mobile number starting with 5.",
+  "phoneFormat": "Enter 9 digits starting with 5.",
   "universityRequired": "Please enter your university.",
   "universityChoiceRequired": "Please select your university.",
   "universityTooLong": "University must be 255 characters or fewer.",

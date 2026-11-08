@@ -72,6 +72,55 @@ export const majorOptions = [
   "Other",
 ] as const;
 
+export const majorOptionsByCollege: Record<(typeof collegeOptions)[number], readonly string[]> = {
+  "College of Information Technology": [
+    "Information Systems",
+    "Information Technology",
+    "Other",
+  ],
+  "College of Computer Science and Engineering": [
+    "Computer & Network Engineering",
+    "Computer Science",
+    "Computer Engineering",
+    "Software Engineering",
+    "Data Science",
+    "Cybersecurity",
+    "Artificial Intelligence",
+    "Other",
+  ],
+  "College of Engineering": ["Industrial Engineering", "Other"],
+  "College of Science": [
+    "Chemistry",
+    "Industrial Chemistry",
+    "Applied Biochemistry",
+    "Biology",
+    "Other",
+  ],
+  "College of Medicine": ["Other"],
+  "College of Business": [
+    "Accounting",
+    "Business Administration",
+    "Supply Chain Management",
+    "Finance",
+    "Marketing",
+    "Human Resources",
+    "Other",
+  ],
+  "College of Applied Medical Sciences": ["Other"],
+  "College of Education": ["Other"],
+  "College of Law and Judicial Studies": ["Other"],
+  "College of Sport Sciences": ["Other"],
+  "College of Communication and Media": ["Digital Media", "Other"],
+  "College of Languages and Translation": ["Other"],
+  "College of Design and Arts": ["Graphic Design", "Other"],
+  "College of Quran and Islamic Studies": ["Other"],
+  Other: ["Other"],
+};
+
+export function getMajorOptions(college: string) {
+  return majorOptionsByCollege[college as keyof typeof majorOptionsByCollege] ?? [];
+}
+
 export const levelOptions = [
   "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6",
   "Level 7", "Level 8", "Level 9", "Level 10", "Level 11", "Level 12",

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
-import { collegeOptions, majorOptions } from "@/data/signup"
+import { collegeOptions, getMajorOptions } from "@/data/signup"
 import SelectField from "./SelectField"
 
 type SignupDetailsProps = {
@@ -73,8 +73,9 @@ export default function SignupDetails({
         id="major"
         label={t("fields.major.label")}
         placeholder={t("fields.major.placeholder")}
-        options={majorOptions.map((value) => ({ value, label: value }))}
+        options={getMajorOptions(values.college).map((value) => ({ value, label: value }))}
         value={values.major}
+        disabled={!values.college}
         error={errors.major}
         onChange={(value) => onChange("major", value)}
         onBlur={() => onBlur("major")}
