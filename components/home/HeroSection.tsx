@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Navbar from "@/components/home/Navbar";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   animate,
@@ -29,8 +29,8 @@ const LOGO_H = 145;
 const CX = 835;
 const CY = 395;
 
-const LEFT_END = CX - LOGO_W / 2 + 12;
-const RIGHT_END = CX + LOGO_W / 2 - 12;
+const RIBBON_VIEWBOX_WIDTH = 1672;
+const RIBBON_CENTER_X = RIBBON_VIEWBOX_WIDTH / 2;
 
 /* ========================================================= */
 /* RESPONSIVE STAGE                                          */
@@ -85,6 +85,7 @@ function useStageMetrics() {
   const [metrics, setMetrics] = useState<{
     scale: number;
     ribbonX: number;
+    width: number;
   } | null>(null);
 
   useIsomorphicLayoutEffect(() => {
@@ -94,6 +95,7 @@ function useStageMetrics() {
       setMetrics({
         scale: interpolate(SCALE_POINTS, w),
         ribbonX: interpolate(RIBBON_POINTS, w),
+        width: w,
       });
     };
 
@@ -232,10 +234,10 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "lRed",
     color: "var(--gdg-red)",
     side: "l",
-    start: [0, 262],
+    start: [0, 190],
     c1: [200, 250],
     c2: [390, 335],
-    endDy: -2,
+    endDy: -5,
     w0: 20,
     amp: 22,
     duration: 11,
@@ -245,10 +247,10 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "lBlue",
     color: "var(--gdg-blue)",
     side: "l",
-    start: [0, 455],
+    start: [0, 500],
     c1: [170, 462],
     c2: [370, 405],
-    endDy: 3,
+    endDy: 5,
     w0: 24,
     amp: 20,
     duration: 13,
@@ -258,7 +260,7 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "lRed2",
     color: "var(--gdg-pink-accent)",
     side: "l",
-    start: [0, 335],
+    start: [0, 340],
     c1: [230, 348],
     c2: [410, 380],
     endDy: -1,
@@ -271,27 +273,27 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "lBlue2",
     color: "var(--gdg-blue-accent)",
     side: "l",
-    start: [0, 525],
+    start: [0, 660],
     c1: [210, 528],
     c2: [410, 445],
-    endDy: 5,
+    endDy: 1,
     w0: 9,
     amp: 18,
     duration: 12,
   },
 
-  {
-    id: "lSilver",
-    color: "var(--hero-white)",
-    side: "l",
-    start: [0, 112],
-    c1: [90, 150],
-    c2: [175, 200],
-    end: [255, 244],
-    w0: 12,
-    amp: 5,
-    duration: 10,
-  },
+  // {
+  //   id: "lSilver",
+  //   color: "var(--hero-white)",
+  //   side: "l",
+  //   start: [0, 112],
+  //   c1: [90, 100],
+  //   c2: [175, 200],
+  //   end: [255, 244],
+  //   w0: 12,
+  //   amp: 5,
+  //   duration: 10,
+  // },
 
   /* RIGHT */
 
@@ -299,10 +301,10 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "rGreenTop",
     color: "var(--gdg-green)",
     side: "r",
-    start: [1672, 150],
+    start: [1672, 140],
     c1: [1500, 205],
     c2: [1270, 345],
-    endDy: -2,
+    endDy: -5,
     w0: 20,
     amp: 22,
     duration: 12,
@@ -312,10 +314,10 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "rGreenMid",
     color: "var(--gdg-green-accent)",
     side: "r",
-    start: [1672, 292],
+    start: [1672, 330],
     c1: [1520, 292],
     c2: [1390, 352],
-    endDy: 1,
+    endDy: -1,
     w0: 14,
     amp: 18,
     duration: 10,
@@ -325,10 +327,10 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "rYellow",
     color: "var(--gdg-yellow)",
     side: "r",
-    start: [1672, 432],
+    start: [1672, 510],
     c1: [1500, 432],
     c2: [1310, 412],
-    endDy: 3,
+    endDy: 5,
     w0: 24,
     amp: 20,
     duration: 13,
@@ -338,21 +340,27 @@ const RIBBON_DEFS: RibbonDef[] = [
     id: "rYellow2",
     color: "var(--gdg-yellow-accent)",
     side: "r",
-    start: [1672, 505],
+    start: [1672, 680],
     c1: [1500, 505],
     c2: [1290, 455],
-    endDy: 6,
+    endDy: 1,
     w0: 8,
     amp: 16,
     duration: 9,
   },
 ];
 
-const RIBBONS = RIBBON_DEFS.map((r) => {
-  const end: Pt =
-    r.end ??
-    [
-      r.side === "l" ? LEFT_END : RIGHT_END,
+function makeRibbons(viewportWidth: number, stageScale: number) {
+  const safeWidth = viewportWidth || 1280;
+  const gapPx = safeWidth < 640 ? 26 : safeWidth < 1024 ? 40 : 64;
+  const logoHalf = (LOGO_W * stageScale * RIBBON_VIEWBOX_WIDTH) / (2 * safeWidth);
+  const gap = (gapPx * RIBBON_VIEWBOX_WIDTH) / safeWidth;
+  const leftEnd = RIBBON_CENTER_X - logoHalf - gap;
+  const rightEnd = RIBBON_CENTER_X + logoHalf + gap;
+
+  return RIBBON_DEFS.map((r) => {
+    const end: Pt = r.end ?? [
+      r.side === "l" ? leftEnd : rightEnd,
       CY + (r.endDy ?? 0),
     ];
 
@@ -365,14 +373,17 @@ const RIBBONS = RIBBON_DEFS.map((r) => {
     end,
   ];
 
-  return {
-    ...r,
-    x1: r.start[0],
-    x2: end[0],
-    pts: mk(0),
-    d0: ribbonPath(mk(0), r.w0),
-  };
-});
+    return {
+      ...r,
+      x1: r.start[0],
+      x2: end[0],
+      pts: mk(0),
+      d0: ribbonPath(mk(0), r.w0),
+    };
+  });
+}
+
+type RibbonShape = ReturnType<typeof makeRibbons>[number];
 
 /* ========================================================= */
 /* SPARKS / DUST                                             */
@@ -417,7 +428,7 @@ function Ribbon({
   r,
   index,
 }: {
-  r: (typeof RIBBONS)[number];
+  r: RibbonShape;
   index: number;
 }) {
   const baseRef =
@@ -552,6 +563,10 @@ export default function HeroSection() {
 
   // يتحدد بالـ JS بعد التحميل. قبله تشتغل القيم الاحتياطية بالـ classes
   const metrics = useStageMetrics();
+  const ribbons = useMemo(
+    () => makeRibbons(metrics?.width ?? 1280, metrics?.scale ?? 1),
+    [metrics],
+  );
 
   // الحاوية الثابتة حق اللوقو: نراقبها هي بدل النصفين المزاحين برا الشاشة
   const heroRef = useRef<HTMLElement>(null);
@@ -612,6 +627,57 @@ export default function HeroSection() {
           bg-[radial-gradient(ellipse_at_50%_42%,var(--hero-glow-blue),transparent_45%),radial-gradient(ellipse_at_0%_45%,var(--hero-glow-left),transparent_40%),radial-gradient(ellipse_at_100%_45%,var(--hero-glow-right),transparent_40%),linear-gradient(to_bottom,var(--hero-background)_0%,var(--hero-background-mid)_60%,var(--hero-background-bottom)_100%)]
         "
       />
+
+      {/* Flowing ribbons that taper toward, but do not share one meeting point at, the logo. */}
+      <svg
+        className="pointer-events-none absolute inset-0 z-[1] h-full w-full overflow-visible"
+        viewBox="0 0 1672 1000"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <defs>
+          {ribbons.map((r) => (
+            <linearGradient key={r.id} id={`grad-${r.id}`} x1={r.x1} y1="0" x2={r.x2} y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor={r.color} stopOpacity="0.08" />
+              <stop offset="12%" stopColor={r.color} stopOpacity="0.9" />
+              <stop offset="72%" stopColor={r.color} stopOpacity="0.84" />
+              <stop offset="100%" stopColor={r.color} stopOpacity="0.12" />
+            </linearGradient>
+          ))}
+        </defs>
+        <g transform="translate(0 70)">
+          {ribbons.map((r, index) => <Ribbon key={r.id} r={r} index={index} />)}
+        </g>
+      </svg>
+
+      <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden="true">
+        {[
+          { x: 145, y: 225, size: 9, color: "var(--gdg-blue)" },
+          { x: 245, y: 325, size: 16, color: "var(--gdg-red)" },
+          { x: 270, y: 575, size: 5, color: "var(--gdg-red)" },
+          { x: 805, y: 245, size: 17, color: "var(--gdg-green)" },
+          { x: 715, y: 585, size: 10, color: "var(--gdg-green)" },
+          { x: 95, y: 805, size: 17, color: "var(--gdg-blue)" },
+          { x: 865, y: 790, size: 10, color: "var(--gdg-yellow)" },
+          { x: 600, y: 455, size: 10, color: "var(--gdg-yellow)" },
+
+        ].map((square, index) => (
+          <motion.div
+            key={`${square.x}-${square.y}`}
+            className="absolute"
+            style={{
+              left: `${square.x / 10}%`,
+              top: `${square.y / 10}%`,
+              width: square.size,
+              height: square.size,
+              backgroundColor: square.color,
+              transformOrigin: "center",
+            }}
+            animate={reduceMotion ? { opacity: 0.68 } : { opacity: [0.48, 0.78, 0.48], scale: [0.96, 1.02, 0.96] }}
+            transition={{ duration: 3.8 + index * 0.35, repeat: Infinity, ease: "easeInOut", delay: index * 0.42 }}
+          />
+        ))}
+      </div>
 
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {[
@@ -691,7 +757,7 @@ export default function HeroSection() {
       {/* ========================================================= */}
 
       <div
-        className="pointer-events-none absolute left-1/2 top-[26%] z-[2] h-0 w-0"
+        className="pointer-events-none absolute left-1/2 top-[46.5%] z-[2] h-0 w-0"
         style={{ transform: "scale(var(--stage-scale))" }}
       >
 
@@ -788,7 +854,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-x-0 z-10 flex flex-col items-center px-5 sm:px-8"
         style={{
-          top: "calc(26% + var(--stage-scale) * 100px + 20px)",
+          top: "calc(46.5% + var(--stage-scale) * 100px + 20px)",
         }}
       >
 
