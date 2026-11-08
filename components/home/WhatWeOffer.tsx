@@ -1,15 +1,10 @@
 "use client";
 
 import { offers } from "@/data/home";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function WhatWeOffer() {
   const t = useTranslations("home.offers");
@@ -18,21 +13,46 @@ export default function WhatWeOffer() {
   const sign = dir === "rtl" ? -1 : 1;
   const [activeStep, setActiveStep] = useState(1);
   const mobileSectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: mobileSectionRef,
-    offset: ["start start", "end end"],
-  });
+  const mobileItemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    const step = Math.min(
-      Math.floor(progress * offers.length) + 1,
-      offers.length
-    );
+  useEffect(() => {
+    const section = mobileSectionRef.current;
+    if (!section) return;
 
-    setActiveStep((previousStep) =>
-      previousStep === step ? previousStep : step
-    );
-  });
+    let frame = 0;
+    const updateActiveStep = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const viewportCenter = window.innerHeight / 2;
+        let closestIndex = 0;
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        mobileItemRefs.current.forEach((item, index) => {
+          if (!item) return;
+          const rect = item.getBoundingClientRect();
+          const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = index;
+          }
+        });
+
+        setActiveStep((previousStep) => {
+          const nextStep = offers[closestIndex]?.number ?? 1;
+          return previousStep === nextStep ? previousStep : nextStep;
+        });
+      });
+    };
+
+    updateActiveStep();
+    window.addEventListener("scroll", updateActiveStep, { passive: true });
+    window.addEventListener("resize", updateActiveStep);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateActiveStep);
+      window.removeEventListener("resize", updateActiveStep);
+    };
+  }, []);
 
   return (
     <section
@@ -171,6 +191,9 @@ export default function WhatWeOffer() {
           return (
             <div
               key={offer.number}
+              ref={(element) => {
+                mobileItemRefs.current[index] = element;
+              }}
               className="relative min-h-[230px]"
             >
               <div
