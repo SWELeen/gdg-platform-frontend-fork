@@ -24,6 +24,8 @@
   "universityTooLong": "University must be 255 characters or fewer.",
   "collegeRequired": "Please select your college.",
   "majorRequired": "Please select your major.",
+  "googleAccountLinkRequired": "Sign in to your existing GDG account before connecting Google.",
+  "googleSessionExpired": "Your Google session expired. Please sign in again.",
   "branchRequired": "Please select your branch.",
   "levelRequired": "Please select your level.",
   "roleRequired": "Please select your role.",

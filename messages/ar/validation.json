@@ -30,6 +30,8 @@
   "universityTooLong": "يجب ألا يتجاوز اسم الجامعة 255 حرفًا.",
   "collegeRequired": "يرجى اختيار كليتك.",
   "majorRequired": "يرجى اختيار تخصصك.",
+  "googleAccountLinkRequired": "سجّل الدخول إلى حساب GDG الحالي قبل ربط Google.",
+  "googleSessionExpired": "انتهت جلسة Google. سجّل الدخول مرة أخرى.",
   "formIncomplete": "يرجى تعبئة جميع الحقول المطلوبة.",
   "codeRequired": "يرجى إدخال رمز التحقق.",
   "codeIncomplete": "يرجى إدخال أرقام رمز التحقق الستة كاملة.",
