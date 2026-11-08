@@ -32,6 +32,7 @@ export interface UserRegistration {
   attendanceConfirmationStatus?: UserAttendanceConfirmationStatus;
   attendanceConfirmedAt?: string;
   attendanceQrCodeDataUrl?: string;
+  attendanceMethod?: "MEMBER_CARD" | "GUEST_QR";
   checkInStatus?: UserCheckInStatus;
   checkedInAt?: string;
   /** Place on the waiting list (1 = next to be offered a seat). */

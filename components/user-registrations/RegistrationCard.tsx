@@ -123,7 +123,9 @@ export function RegistrationCard({
               </p>
             )}
           </div>
-          {registration.attendanceQrCodeDataUrl ? (
+          {registration.attendanceMethod === "MEMBER_CARD" ? (
+            <p className="max-w-60 text-sm text-muted">{t("attendance.memberCard")}</p>
+          ) : registration.attendanceQrCodeDataUrl ? (
             <Image
               src={registration.attendanceQrCodeDataUrl}
               alt={t("attendance.qrAlt")}

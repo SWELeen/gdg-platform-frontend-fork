@@ -268,6 +268,9 @@ export function PREventsList() {
   const [editingEvent, setEditingEvent] = useState<{ event: CommitteeEvent; details: CommitteeEventDetails | null } | null>(null);
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
   const [deadlineDate, setDeadlineDate] = useState("");
+  const [publishedStart, setPublishedStart] = useState("");
+  const [publishedEnd, setPublishedEnd] = useState("");
+  const [savingSchedule, setSavingSchedule] = useState(false);
   const uploadEventImage = async (file: File) => {
     const result = await uploadCommitteeEventImage(leaderCommitteeConfig.pr.committeeCode, file);
     if (!result.ok) throw new Error(result.message || t("eventManagement.imageUploadFailed"));
@@ -310,7 +313,10 @@ export function PREventsList() {
     try {
       const details = await loadEventDetails(event.id);
       const { date, time } = riyadhDateTime(details.startsAt);
+      const end = riyadhDateTime(details.endsAt);
       setDeadlineDate(riyadhDateTime(details.registrationDeadline).date);
+      setPublishedStart(`${date}T${time}`);
+      setPublishedEnd(`${end.date}T${end.time}`);
       setEditingEvent({
         details,
         event: {
@@ -377,17 +383,32 @@ export function PREventsList() {
       imageUrl: imageUrl ?? undefined,
     });
   };
-  const savePublishedDeadline = async () => {
-    if (!editingEvent?.details || !deadlineDate) return;
+  const savePublishedSchedule = async () => {
+    if (!editingEvent?.details || !deadlineDate || !publishedStart || !publishedEnd || savingSchedule) return;
+    const { details } = editingEvent;
+    const oldStart = riyadhDateTime(details.startsAt);
+    const oldEnd = riyadhDateTime(details.endsAt);
+    const startsAt = publishedStart === `${oldStart.date}T${oldStart.time}`
+      ? details.startsAt : new Date(`${publishedStart}:00+03:00`).toISOString();
+    const endsAt = publishedEnd === `${oldEnd.date}T${oldEnd.time}`
+      ? details.endsAt : new Date(`${publishedEnd}:00+03:00`).toISOString();
     const deadlineAtEndOfDay = new Date(`${deadlineDate}T23:59:59+03:00`).getTime();
-    const registrationDeadline = new Date(Math.min(deadlineAtEndOfDay, new Date(editingEvent.details.startsAt).getTime())).toISOString();
-    const result = await updateCommitteeEvent(leaderCommitteeConfig.pr.committeeCode, editingEvent.event.id, { registrationDeadline });
-    if (!result.ok) {
-      const detailMessage = result.details.map((item) => item.message).join(" ");
-      throw new Error(detailMessage || result.message || t("eventManagement.editFailed"));
+    const currentDeadline = deadlineDate === riyadhDateTime(details.registrationDeadline).date
+      ? new Date(details.registrationDeadline).getTime() : deadlineAtEndOfDay;
+    const registrationDeadline = new Date(Math.min(currentDeadline, new Date(startsAt).getTime())).toISOString();
+    setEventError("");
+    setSavingSchedule(true);
+    try {
+      const result = await updateCommitteeEvent(leaderCommitteeConfig.pr.committeeCode, editingEvent.event.id, { startsAt, endsAt, registrationDeadline });
+      if (!result.ok) {
+        const detailMessage = result.details.map((item) => item.message).join(" ");
+        throw new Error(detailMessage || result.message || t("eventManagement.editFailed"));
+      }
+      await reloadDashboard();
+      setEditingEvent(null);
+    } finally {
+      setSavingSchedule(false);
     }
-    await reloadDashboard();
-    setEditingEvent(null);
   };
   const publish = (id: string) => {
     setPublishError("");
@@ -519,15 +540,21 @@ export function PREventsList() {
       {editingEvent?.details?.status === "PUBLISHED" ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <button type="button" aria-label={t("eventForm.cancel")} onClick={() => setEditingEvent(null)} className="fixed inset-0 bg-black/60 backdrop-blur-xs" />
-          <form onSubmit={(event) => { event.preventDefault(); savePublishedDeadline().catch((error: unknown) => setEventError(error instanceof Error ? error.message : t("eventManagement.editFailed"))); }} className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl">
+          <form onSubmit={(event) => { event.preventDefault(); savePublishedSchedule().catch((error: unknown) => setEventError(error instanceof Error ? error.message : t("eventManagement.editFailed"))); }} className="relative z-10 max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-surface p-6 shadow-2xl">
             <h2 className="text-lg font-bold text-foreground">{t("eventForm.edit")}</h2>
             <p className="mt-1 text-sm text-muted">{editingEvent.event.title}</p>
+            <label htmlFor="published-event-start" className="mt-5 block text-sm font-semibold text-foreground">{t("eventForm.publishedStartsAt")}</label>
+            <input id="published-event-start" type="datetime-local" value={publishedStart} onChange={(event) => setPublishedStart(event.target.value)} required
+              className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground" />
+            <label htmlFor="published-event-end" className="mt-4 block text-sm font-semibold text-foreground">{t("eventForm.publishedEndsAt")}</label>
+            <input id="published-event-end" type="datetime-local" value={publishedEnd} onChange={(event) => setPublishedEnd(event.target.value)} required
+              className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground" />
             <label htmlFor="published-event-deadline" className="mt-5 block text-sm font-semibold text-foreground">{t("eventForm.deadline")}</label>
             <input id="published-event-deadline" type="date" value={deadlineDate} onChange={(event) => setDeadlineDate(event.target.value)} className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
             {eventError && <p role="alert" className="mt-2 text-xs text-rose-600">{eventError}</p>}
             <div className="mt-5 flex justify-end gap-2 border-t border-border pt-4">
               <button type="button" onClick={() => setEditingEvent(null)} className="rounded-xl border border-border px-4 py-2 text-xs font-medium text-foreground hover:bg-surface-muted">{t("eventForm.cancel")}</button>
-              <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700">{t("eventForm.saveChanges")}</button>
+              <button type="submit" disabled={savingSchedule} className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50">{t("eventForm.saveChanges")}</button>
             </div>
           </form>
         </div>

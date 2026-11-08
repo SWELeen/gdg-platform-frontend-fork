@@ -13,6 +13,7 @@ type ApiRegistrant = {
   name: string;
   email: string | null;
   blacklisted: boolean;
+  emailState?: EventRegistration["emailState"] | null;
   profile: {
     membership: boolean;
     university?: string | null;
@@ -89,6 +90,8 @@ function toEventRegistration(eventId: string, item: ApiRegistrant): EventRegistr
     id: String(item.registrationId),
     eventId,
     applicantName: item.name,
+    isMember: item.profile.membership,
+    emailState: item.emailState ?? undefined,
     email: item.email ?? "",
     registeredAt: item.registeredAt,
     ...toDashboardStatus(item.status),
@@ -123,6 +126,10 @@ export async function fetchPrEvents(): Promise<CommitteeEvent[]> {
 }
 
 /** Every registrant of one event, read page by page. */
+export async function retryRegistrationEmail(registrationId: string) {
+  return apiRequest<{ emailState: "PENDING" }>(`/registrations/${registrationId}/email/retry`, { method: "POST" });
+}
+
 export async function fetchRegistrants(eventId: string): Promise<EventRegistration[]> {
   const all: EventRegistration[] = [];
   for (let page = 1; ; page += 1) {
