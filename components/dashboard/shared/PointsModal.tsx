@@ -63,7 +63,9 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
 
     const delta = mode === "add" ? Number(pointsAmount) : -Number(pointsAmount);
     try {
-      await updateMemberPoints(member.id, delta, reason.trim());
+      await updateMemberPoints(member.id, delta, reason.trim(), member.globalRoles?.includes("DEVELOPER_COMMITTEES_LEADER")
+        ? { global: true }
+        : member.pointsCommitteeCode ? { committeeCode: member.pointsCommitteeCode } : undefined);
       setPointsAmount(50);
       setReason("");
       setTouched({});

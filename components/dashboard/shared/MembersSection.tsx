@@ -30,7 +30,7 @@ export function MembersSection({
   onOpenUpdatePoints,
 }: MembersSectionProps) {
   const t = useTranslations("dashboard.leader");
-  const { members, canManageMembers, canAddMembers, canManagePoints, currentMember, committeeName, committee, clubLeadership } = useLeaderDashboard();
+  const { members, canManageMembers, canAddMembers, canManagePoints, currentMember, committeeName, committee, clubLeadership, developerCommitteesLeader } = useLeaderDashboard();
   const showTemporaryAccess = !clubLeadership && leaderCommitteeConfig[committee].canGrantTemporaryAccess;
   const [searchTerm, setSearchTerm] = useState("");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
@@ -154,6 +154,19 @@ export function MembersSection({
                   </td>
                 </tr>
               ) : filteredMembers.map((member) => {
+                const globalDeveloperLeader = member.globalRoles?.includes("DEVELOPER_COMMITTEES_LEADER") ?? false;
+                const leadershipCommittees = (member.committees ?? []).filter((item) => item.role === "Leader" || item.role === "Co-Leader");
+                const visibleLeadershipCommittees = committeeFilter === ALL
+                  ? leadershipCommittees
+                  : leadershipCommittees.filter((item) => item.code === committeeFilter);
+                const committeePointTarget = clubLeadership
+                  ? visibleLeadershipCommittees[0]
+                  : (member.committees ?? []).find((item) => item.code === leaderCommitteeConfig[committee].committeeCode) ?? member.committees?.[0];
+                const canManageThisMemberPoints = clubLeadership
+                  ? globalDeveloperLeader || visibleLeadershipCommittees.length > 0
+                  : developerCommitteesLeader
+                    ? leadershipCommittees.length > 0
+                    : member.role === "Member";
                 const isElevatedActive =
                   member.isElevated &&
                   member.accessExpiresAt &&
@@ -260,11 +273,15 @@ export function MembersSection({
                         )}
 
                         {/* Update Points */}
-                        {canManagePoints && member.id !== currentMember?.id && (
+                        {canManagePoints && canManageThisMemberPoints && member.id !== currentMember?.id && (
                           <button
                             type="button"
                             title={t("members.updatePoints")}
-                            onClick={() => onOpenUpdatePoints(member)}
+                            onClick={() => onOpenUpdatePoints({
+                              ...member,
+                              points: globalDeveloperLeader ? member.globalPoints ?? 0 : committeePointTarget?.points ?? member.points,
+                              pointsCommitteeCode: globalDeveloperLeader ? undefined : committeePointTarget?.code,
+                            })}
                             className="rounded-lg p-1.5 text-muted hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50"
                           >
                             <Trophy className="size-4" />

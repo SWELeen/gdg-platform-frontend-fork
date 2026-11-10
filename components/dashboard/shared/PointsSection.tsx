@@ -110,7 +110,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                   <td className="px-4 py-3.5 text-foreground/80">{member.tasksCompleted}</td>
                   <td className="px-4 py-3.5 text-muted">{member.lastActivity}</td>
                   <td className="px-5 py-3.5 text-end">
-                    {canManagePoints && member.id !== currentMember?.id && (
+                    {canManagePoints && member.id !== currentMember?.id && !(['Leader', 'Co-Leader'].includes(currentMember?.role ?? '') && ['Leader', 'Co-Leader'].includes(member.role)) && (
                       <button
                         type="button"
                         onClick={() => onOpenUpdatePoints(member)}

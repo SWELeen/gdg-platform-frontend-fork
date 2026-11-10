@@ -36,11 +36,13 @@ export interface DeveloperCommitteeOverview {
   memberCount: number;
   leaderCount: number;
   activeTaskCount: number;
+  leaders: { id: string; name: string; email: string; role: string; points: number }[];
 }
 
 export interface DeveloperCommitteeDashboardData {
   committees: DeveloperCommitteeOverview[];
-  permissions: { canAssignMembers: boolean };
+  permissions: { canAssignMembers: boolean; canManagePoints: boolean };
+  currentMember: { id: string; name: string; role: string };
 }
 
 export function fetchDeveloperCommitteeOverview() {
@@ -331,6 +333,13 @@ export async function addClubMemberToCommittee(memberId: string, committeeCode: 
 
 export async function updateCommitteePoints(code: string, memberId: string, pointsDelta: number, reason: string) {
   return apiRequest(`/committees/${encodeURIComponent(code)}/members/${encodeURIComponent(memberId)}/points`, {
+    method: "POST",
+    body: { pointsDelta, reason },
+  });
+}
+
+export async function updateDeveloperLeaderGlobalPoints(memberId: string, pointsDelta: number, reason: string) {
+  return apiRequest(`/club-leadership/members/${encodeURIComponent(memberId)}/global-points`, {
     method: "POST",
     body: { pointsDelta, reason },
   });

@@ -60,6 +60,8 @@ export interface CommitteeMember {
   initials: string;
   avatarBgColor: string;
   points: number;
+  globalPoints?: number;
+  pointsCommitteeCode?: string;
   tasksCompleted: number;
   lastActivity: string;
   committees?: MemberCommitteeInfo[];
