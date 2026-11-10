@@ -10,6 +10,7 @@ export interface MemberCommittee {
 export interface MemberIdentity {
   fullName: string;
   committees: MemberCommittee[];
+  roles: string[];
 }
 
 export interface CommitteeDirectoryMember {

@@ -20,6 +20,7 @@ const SELECTED_COMMITTEE_KEY = "gdg.members.selectedCommittee";
 interface MemberWorkspaceValue {
   user: DashboardUser;
   committees: MemberCommittee[];
+  hidePersonalPoints: boolean;
   selectedCommittee: string | null;
   selectCommittee: (code: string) => void;
   /** Tasks of the selected committee only. */
@@ -48,7 +49,7 @@ function readSavedCommittee() {
 
 /** The signed-in member, their committees and their own tasks, shared by every member dashboard page. */
 export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
-  const [identity, setIdentity] = useState<{ fullName: string; committees: MemberCommittee[] } | null>(null);
+  const [identity, setIdentity] = useState<{ fullName: string; committees: MemberCommittee[]; roles: string[] } | null>(null);
   const [allTasks, setAllTasks] = useState<MemberTask[]>([]);
   const [directoryMembers, setDirectoryMembers] = useState<CommitteeDirectoryMember[]>([]);
   const [directoryStatus, setDirectoryStatus] = useState<"loading" | "ready" | "error">(API_ENABLED ? "loading" : "error");
@@ -68,7 +69,7 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
       }
       const committees = me.data.committees ?? [];
       const saved = readSavedCommittee();
-      setIdentity({ fullName: me.data.fullName, committees });
+      setIdentity({ fullName: me.data.fullName, committees, roles: me.data.roles ?? [] });
       setAllTasks(tasks.data);
       setSelectedCommittee(committees.some((item) => item.code === saved) ? saved : (committees[0]?.code ?? null));
       setStatus("ready");
@@ -115,7 +116,7 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<MemberWorkspaceValue>(() => {
     if (!API_ENABLED) {
-      return { user: currentUser, committees: [], selectedCommittee: null, selectCommittee, tasks: dashboardTasks, status, retry: () => undefined, updateTaskStatus: null, directoryMembers: [], directoryStatus: "error", retryDirectory: () => undefined };
+      return { user: currentUser, committees: [], hidePersonalPoints: false, selectedCommittee: null, selectCommittee, tasks: dashboardTasks, status, retry: () => undefined, updateTaskStatus: null, directoryMembers: [], directoryStatus: "error", retryDirectory: () => undefined };
     }
     const committee = identity?.committees.find((item) => item.code === selectedCommittee);
     return {
@@ -126,6 +127,7 @@ export function MemberWorkspaceProvider({ children }: { children: ReactNode }) {
         membership: committee?.position ?? "",
       },
       committees: identity?.committees ?? [],
+      hidePersonalPoints: identity === null || identity.committees.some((item) => item.position === "Leader" || item.position === "Co-Leader") || identity.roles.some((role) => ["GROUP_LEADER", "GROUP_CO_LEADER", "DEVELOPER_COMMITTEES_LEADER"].includes(role)),
       selectedCommittee,
       selectCommittee,
       tasks: allTasks.filter((task) => task.committeeCode === selectedCommittee),

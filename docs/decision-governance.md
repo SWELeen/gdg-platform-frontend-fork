@@ -27,6 +27,7 @@ Do not silently choose one source when sources conflict. First identify the conf
 | Persistence uses MySQL and Prisma | Approved |
 | Authentication uses NestJS Auth, JWT, Google OAuth, and backend-enforced RBAC | Approved direction |
 | Swagger/OpenAPI is the authoritative frontend-backend contract | Approved |
+| Leadership point balances are hidden from their recipients; designated higher-level point managers can view them. Ordinary members retain visibility of their own points. | Approved (user request, 2026-11-10) |
 | Hosted browser API traffic uses a same-origin Next.js `/api` rewrite to the NestJS backend; session cookies are scoped to `/api` paths and use `SameSite=Strict` | Approved (user request, 2026-10-29) |
 | Arabic uses a full RTL layout (`dir="rtl"` on `<html>`), not text-only direction | Proposed (2026-09-28) |
 | three.js renders the 3D member badge on profile pages | Approved (2026-10-24) |
@@ -59,6 +60,14 @@ Do not silently choose one source when sources conflict. First identify the conf
 - **Decision:** Browser API requests use the frontend origin under `/api/*`; the Next.js external rewrite forwards the request to the configured NestJS backend origin with `/api` removed. Production session cookies remain `HttpOnly`, `Secure`, and `SameSite=Strict`, scoped to `/api` and `/api/auth`. The backend continues to enforce authentication, authorization, and exact `Origin` checks.
 - **Affected:** Frontend and backend repositories; frontend hosting must run the Next.js server/runtime and provide `API_PROXY_TARGET` and `NEXT_PUBLIC_USE_API=true`; backend `FRONTEND_URL` must match the frontend origin.
 - **Migration/rollback:** The backend temporarily emits both old and new cookie paths so it can deploy before the frontend. After the frontend proxy is live and verified, remove legacy `/` and `/auth` cookie issuance while retaining logout cleanup for those paths for one release. To roll back, set frontend API traffic back to the direct backend URL and restore legacy cookie issuance. Browser sessions must be renewed after changing cookie paths.
+
+### 2026-11-10: Leadership point visibility
+
+- **Owner/approver:** User approval in this conversation.
+- **Context:** Leadership roles can receive points managed by a higher leadership tier. Recipients must not see their own balances, and point managers need separate visibility boundaries.
+- **Decision:** Committee Leaders and Co-Leaders cannot see their own point balance or history. Group Leader/Co-Leader and the overall Developer Committees Leader can see the balances of leaders in the six developer committees. For other committees, Group Leader/Co-Leader can see committee leader balances. The overall Developer Committees Leader cannot see their own points; Group Leader/Co-Leader can see that global balance. Ordinary members retain visibility of their own points. Backend responses and the member achievements UI enforce these rules.
+- **Affected:** Backend point summaries, history, and dashboard API responses; frontend leadership dashboards and personal achievements page.
+- **Migration/rollback:** No additional schema change for visibility filtering. Keep the existing point-ledger migration required for the separate overall Developer Committees Leader balance. Rollback is reverting the backend response filtering and frontend visibility conditions together.
 
 ## Decision record minimum
 

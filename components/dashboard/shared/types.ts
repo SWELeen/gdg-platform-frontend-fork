@@ -46,6 +46,7 @@ export interface CommitteeOption {
 export interface MemberCommitteeInfo extends CommitteeOption {
   role: string;
   points: number;
+  pointsVisible?: boolean;
 }
 
 export interface CommitteeMember {
@@ -60,7 +61,9 @@ export interface CommitteeMember {
   initials: string;
   avatarBgColor: string;
   points: number;
+  pointsVisible?: boolean;
   globalPoints?: number;
+  globalPointsVisible?: boolean;
   pointsCommitteeCode?: string;
   tasksCompleted: number;
   lastActivity: string;

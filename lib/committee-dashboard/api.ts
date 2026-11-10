@@ -36,7 +36,7 @@ export interface DeveloperCommitteeOverview {
   memberCount: number;
   leaderCount: number;
   activeTaskCount: number;
-  leaders: { id: string; name: string; email: string; role: string; points: number }[];
+  leaders: { id: string; name: string; email: string; role: string; points: number; pointsVisible?: boolean }[];
 }
 
 export interface DeveloperCommitteeDashboardData {

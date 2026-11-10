@@ -8,6 +8,7 @@ import { CalendarDays, Check, Star, TrendingUp, TriangleAlert } from "lucide-rea
 import { PillAction } from "@/components/announcements/PillAction";
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { statusStyles } from "@/components/dashboard/members/task-styles";
+import { useMemberWorkspace } from "@/components/dashboard/members/MemberWorkspaceContext";
 import {
   memberCompletedTasks,
   memberPointHistory,
@@ -96,6 +97,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }): ReactElement {
 }
 
 export function MembersAchievementsPage(): ReactElement {
+  const { hidePersonalPoints } = useMemberWorkspace();
   const t = useTranslations("dashboard.achievements");
   const format = useFormatter();
   const pointFilterId = useId();
@@ -202,7 +204,7 @@ export function MembersAchievementsPage(): ReactElement {
         <>
           <section aria-label={t("statsLabel")}>
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {stats.map(({ key, value, Icon, card, tile }) => (
+              {stats.filter(({ key }) => !hidePersonalPoints || (key !== "totalPoints" && key !== "pointsThisMonth")).map(({ key, value, Icon, card, tile }) => (
                 <li
                   key={key}
                   className={`flex min-w-0 items-center gap-4 rounded-2xl border border-border p-4 sm:p-5 ${card}`}
@@ -221,7 +223,7 @@ export function MembersAchievementsPage(): ReactElement {
             </ul>
           </section>
 
-          <section
+          {!hidePersonalPoints && <section
             aria-labelledby="points-history-heading"
             className="rounded-2xl border border-border bg-surface p-4 sm:p-6"
           >
@@ -309,7 +311,7 @@ export function MembersAchievementsPage(): ReactElement {
                 </button>
               </div>
             )}
-          </section>
+          </section>}
 
           <section
             aria-labelledby="completed-tasks-heading"
