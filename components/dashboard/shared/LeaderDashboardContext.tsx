@@ -258,6 +258,7 @@ export function LeaderDashboardProvider({
         initials: leader.name.split(/\s+/).map((part) => part[0] ?? "").join("").slice(0, 2).toUpperCase(),
         avatarBgColor: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
         points: leader.points,
+        pointsVisible: leader.pointsVisible,
         pointsCommitteeCode: item.code,
         tasksCompleted: 0,
         lastActivity: "",

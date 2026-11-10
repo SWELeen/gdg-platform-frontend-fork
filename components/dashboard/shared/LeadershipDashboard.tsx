@@ -144,9 +144,9 @@ function DeveloperCommitteesDashboard() {
               {visibleLeaders.map((member) => <tr key={`${member.id}-${member.pointsCommitteeCode}`}>
                 <td className="px-5 py-3 font-semibold text-foreground">{member.name}</td>
                 <td className="px-4 py-3 text-muted">{member.role}</td>
-                <td className="px-4 py-3 font-bold text-blue-600 dark:text-blue-400">{member.points.toLocaleString()}</td>
+                <td className="px-4 py-3 font-bold text-blue-600 dark:text-blue-400">{member.pointsVisible === false ? "—" : member.points.toLocaleString()}</td>
                 <td className="px-5 py-3 text-end">
-                  {member.id !== currentMember?.id && <button type="button" title={membersT("updatePoints")} aria-label={membersT("updatePoints")} onClick={() => setPointsMember(member)} className="rounded-lg p-1.5 text-muted hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50"><Trophy className="size-4" /></button>}
+                  {member.pointsVisible !== false && member.id !== currentMember?.id && <button type="button" title={membersT("updatePoints")} aria-label={membersT("updatePoints")} onClick={() => setPointsMember(member)} className="rounded-lg p-1.5 text-muted hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50"><Trophy className="size-4" /></button>}
                 </td>
               </tr>)}
               {visibleLeaders.length === 0 && <tr><td colSpan={4} className="px-5 py-8 text-center text-sm text-muted">{t("noDeveloperCommittees")}</td></tr>}

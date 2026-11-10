@@ -250,7 +250,9 @@ export function MembersSection({
 
                     {/* POINTS */}
                     <td className="px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
-                      {t("members.pointsUnit", { count: pointsFor(member, committeeFilter).toLocaleString() })}
+                      {member.pointsVisible === false || (committeeFilter !== ALL && member.committees?.find((item) => item.code === committeeFilter)?.pointsVisible === false)
+                        ? "—"
+                        : t("members.pointsUnit", { count: pointsFor(member, committeeFilter).toLocaleString() })}
                     </td>
 
                     {/* ACTIONS */}

@@ -32,7 +32,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
     if (!Number.isInteger(num)) return t("points.integer");
     if (num <= 0) return t("points.positive");
     if (num > 2000) return t("points.max");
-    if (mode === "deduct" && num > member.points) {
+    if (mode === "deduct" && member.pointsVisible !== false && num > member.points) {
       return t("points.tooMany", { requested: num, available: member.points });
     }
     return "";
@@ -93,7 +93,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-foreground">{t("points.modalTitle")}</h2>
-              <p className="text-xs text-muted">{member.name} ? {t("points.current", { count: member.points.toLocaleString() })}</p>
+              <p className="text-xs text-muted">{member.name}{member.pointsVisible !== false ? ` · ${t("points.current", { count: member.points.toLocaleString() })}` : ""}</p>
             </div>
           </div>
           <button

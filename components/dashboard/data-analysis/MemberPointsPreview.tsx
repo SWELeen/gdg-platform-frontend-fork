@@ -69,7 +69,7 @@ export function MemberPointsPreview({ onUpdatePoints }: MemberPointsPreviewProps
                   </div>
                 </td>
                 <td className="py-3 pe-4 font-bold text-blue-600 dark:text-blue-400">
-                  {member.points.toLocaleString()}
+                  {member.pointsVisible === false ? "—" : member.points.toLocaleString()}
                 </td>
                 <td className="py-3 pe-4 text-foreground/80">
                   {member.tasksCompleted}
