@@ -27,12 +27,13 @@ import { setElevatedAccess, clearElevatedAccess } from "./accessStore";
 import { readPublishedHomeEvents, toPublishedHomeEvent, PUBLISHED_HOME_EVENTS_KEY } from "@/lib/events/published-home-events";
 import { applyDecision, fetchPrEvents, fetchRegistrants } from "@/lib/pr-registrations/api";
 import { API_ENABLED } from "@/lib/api/client";
-import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, assignClubPerson, assignDeveloperCommitteeMember, removeClubPerson, type MemberAssignmentRole, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
+import { fetchCommitteeDashboard, fetchClubLeadershipDashboard, fetchDeveloperCommitteeOverview, createCommitteeEvent, publishCommitteeEvent, deleteCommitteeDraftEvent, fetchCommitteeEvent, type CommitteeEventDetails, type EventSchedule, createCommitteeMember, addClubMemberToCommittee, assignClubPerson, assignDeveloperCommitteeMember, removeClubPerson, type MemberAssignmentRole, createCommitteeTask, updateCommitteeTask, reviewCommitteeTask, deleteCommitteeTask, updateCommitteePoints, updateDeveloperLeaderGlobalPoints, type CommitteeDashboardStats, type DeveloperCommitteeOverview } from "@/lib/committee-dashboard/api";
 
 interface LeaderDashboardContextValue {
   committee: LeaderCommittee;
   developerCommitteesOverview: DeveloperCommitteeOverview[];
   clubLeadership: boolean;
+  developerCommitteesLeader: boolean;
   committeeName: string;
   committeeDescription: string;
   events: CommitteeEvent[];
@@ -84,7 +85,7 @@ interface LeaderDashboardContextValue {
   /** Confirms a task a member marked done, or sends it back. */
   reviewTask: (id: string, decision: "APPROVE" | "RETURN") => Promise<void>;
   // Points Actions
-  updateMemberPoints: (memberId: string, delta: number, reason: string) => Promise<void>;
+  updateMemberPoints: (memberId: string, delta: number, reason: string, scope?: { committeeCode?: string; global?: boolean }) => Promise<void>;
   updateRegistrationStatus: (
     registrationId: string,
     status: RegistrationStatus,
@@ -229,8 +230,8 @@ export function LeaderDashboardProvider({
       setCurrentMember(result.data.currentMember);
       setCommittees(result.data.committees ?? []);
       setCanAddMembers(result.data.permissions.canAddMembers);
+      setCanManagePoints(result.data.permissions.canManagePoints);
       setCanManageTasks(false);
-      setCanManagePoints(false);
       setCanManageRegistrations(false);
       setDashboardLoading(false);
       return;
@@ -243,7 +244,25 @@ export function LeaderDashboardProvider({
         return;
       }
       setDeveloperCommitteesOverview(result.data.committees);
+      setCurrentMember(result.data.currentMember);
       setCanAssignDeveloperMembers(result.data.permissions.canAssignMembers);
+      setCanManagePoints(result.data.permissions.canManagePoints);
+      setMembers(result.data.committees.flatMap((item) => item.leaders.map((leader) => ({
+        id: leader.id,
+        name: leader.name,
+        email: leader.email,
+        role: leader.role,
+        status: "Active" as const,
+        isElevated: false,
+        accessExpiresAt: null,
+        initials: leader.name.split(/\s+/).map((part) => part[0] ?? "").join("").slice(0, 2).toUpperCase(),
+        avatarBgColor: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
+        points: leader.points,
+        pointsCommitteeCode: item.code,
+        tasksCompleted: 0,
+        lastActivity: "",
+        committees: [{ code: item.code, name: item.name, role: leader.role, points: leader.points }],
+      }))));
       const memberCount = result.data.committees.reduce((sum, item) => sum + item.memberCount, 0);
       const taskCount = result.data.committees.reduce((sum, item) => sum + item.activeTaskCount, 0);
       setStats((current) => ({ ...current, committeeMembers: memberCount, activeMembers: memberCount, activeTasks: taskCount }));
@@ -549,8 +568,10 @@ export function LeaderDashboardProvider({
   };
 
   // Points handler
-  const updateMemberPoints = async (memberId: string, delta: number, reason: string) => {
-    const result = await updateCommitteePoints(committeeConfig.committeeCode, memberId, delta, reason);
+  const updateMemberPoints = async (memberId: string, delta: number, reason: string, scope?: { committeeCode?: string; global?: boolean }) => {
+    const result = scope?.global
+      ? await updateDeveloperLeaderGlobalPoints(memberId, delta, reason)
+      : await updateCommitteePoints(scope?.committeeCode ?? committeeConfig.committeeCode, memberId, delta, reason);
     if (!result.ok) throw new Error(result.message);
     await reloadDashboard();
   };
@@ -559,6 +580,7 @@ export function LeaderDashboardProvider({
     committee,
     developerCommitteesOverview,
     clubLeadership,
+    developerCommitteesLeader,
     committeeName,
     committeeDescription,
     events: useApi ? [...events, ...prDrafts.filter((draft) => !events.some((event) => event.id === draft.id))] : events,

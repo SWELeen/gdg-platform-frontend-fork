@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Trophy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import { LeaderGreeting } from "./LeaderGreeting";
@@ -11,6 +11,8 @@ import { TopNav } from "@/components/dashboard/TopNav";
 import Footer from "@/components/Footer";
 import { committees } from "@/lib/badge/themes";
 import { AssignPersonModal } from "./AssignPersonModal";
+import { PointsModal } from "./PointsModal";
+import type { CommitteeMember } from "./types";
 
 const developerCommitteeAccents: Record<string, string> = {
   DATA: committees.DATA.theme.bg,
@@ -44,12 +46,14 @@ function ClubLeadershipDashboard() {
 function DeveloperCommitteesDashboard() {
   const t = useTranslations("dashboard.leadershipDashboard");
   const membersT = useTranslations("dashboard.leader.members");
-  const { developerCommitteesOverview, canAssignDeveloperMembers, dashboardLoading, dashboardError } = useLeaderDashboard();
+  const { developerCommitteesOverview, members, canAssignDeveloperMembers, canManagePoints, currentMember, dashboardLoading, dashboardError } = useLeaderDashboard();
   const [selectedCommittee, setSelectedCommittee] = useState("all");
   const [assignOpen, setAssignOpen] = useState(false);
+  const [pointsMember, setPointsMember] = useState<CommitteeMember | null>(null);
   const visibleCommittees = selectedCommittee === "all"
     ? developerCommitteesOverview
     : developerCommitteesOverview.filter((item) => item.code === selectedCommittee);
+  const visibleLeaders = members.filter((member) => member.committees?.some((item) => visibleCommittees.some((committee) => committee.code === item.code)));
 
   return (
     <div className="space-y-6">
@@ -124,6 +128,33 @@ function DeveloperCommitteesDashboard() {
           <p className="rounded-xl border border-dashed border-border bg-surface p-6 text-center text-sm font-medium text-foreground/75">{t("noDeveloperCommittees")}</p>
         ) : null}
       </section>
+      {canManagePoints && <section className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div className="border-b border-border px-5 py-4">
+          <h2 className="text-base font-bold text-foreground">{t("committeeLeaders")}</h2>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-max text-start text-sm">
+            <thead><tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted">
+              <th className="px-5 py-3 text-start">{membersT("member")}</th>
+              <th className="px-4 py-3 text-start">{membersT("role")}</th>
+              <th className="px-4 py-3 text-start">{membersT("points")}</th>
+              <th className="px-5 py-3 text-end">{membersT("actions")}</th>
+            </tr></thead>
+            <tbody className="divide-y divide-border/60">
+              {visibleLeaders.map((member) => <tr key={`${member.id}-${member.pointsCommitteeCode}`}>
+                <td className="px-5 py-3 font-semibold text-foreground">{member.name}</td>
+                <td className="px-4 py-3 text-muted">{member.role}</td>
+                <td className="px-4 py-3 font-bold text-blue-600 dark:text-blue-400">{member.points.toLocaleString()}</td>
+                <td className="px-5 py-3 text-end">
+                  {member.id !== currentMember?.id && <button type="button" title={membersT("updatePoints")} aria-label={membersT("updatePoints")} onClick={() => setPointsMember(member)} className="rounded-lg p-1.5 text-muted hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50"><Trophy className="size-4" /></button>}
+                </td>
+              </tr>)}
+              {visibleLeaders.length === 0 && <tr><td colSpan={4} className="px-5 py-8 text-center text-sm text-muted">{t("noDeveloperCommittees")}</td></tr>}
+            </tbody>
+          </table>
+        </div>
+      </section>}
+      <PointsModal isOpen={Boolean(pointsMember)} onClose={() => setPointsMember(null)} member={pointsMember} />
       <LeadershipApprovalsPanel scope="DEVELOPER_COMMITTEES" />
       <AssignPersonModal isOpen={assignOpen} onClose={() => setAssignOpen(false)} scope="developer" />
     </div>
