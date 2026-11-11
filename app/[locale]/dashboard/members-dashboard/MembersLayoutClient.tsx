@@ -29,7 +29,7 @@ export function MembersLayoutClient({ children }: { children: ReactNode }) {
           <TopNav />
           <div className="flex flex-1 flex-col lg:flex-row">
             <MembersSidebar />
-            <main className="min-w-0 flex-1 bg-surface-muted/40 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+            <main className="min-w-0 flex-1 bg-surface-muted/40 px-[var(--page-gutter)] py-6 lg:py-8">
               <div key={pathname} className="dashboard-page-enter">
                 {!isHome && (
                   <div className="pb-6">

@@ -72,8 +72,8 @@ export function TopNav() {
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-border bg-surface text-foreground">
-      <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <a href={sectionHref("#home")} aria-label={t("logoAlt")}>
+      <div className="flex items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6 lg:px-8">
+        <a href={sectionHref("#home")} aria-label={t("logoAlt")} className="block w-[clamp(6.5rem,28vw,11rem)] min-w-0 shrink">
           <Image
             src="/images/black-logo-with-colors.png"
             alt={t("logoAlt")}
@@ -81,7 +81,7 @@ export function TopNav() {
             height={165}
             priority
             unoptimized
-            className="topnav-logo-light h-9 w-auto min-w-0 max-w-full object-contain object-left sm:h-10 lg:h-12 rtl:object-right -translate-x-3"
+            className="topnav-logo-light h-auto max-h-9 w-full min-w-0 max-w-full object-contain object-left sm:max-h-10 lg:max-h-12 rtl:object-right"
           />
           <Image
             src="/images/gdg-white-Logo.png"
@@ -89,11 +89,11 @@ export function TopNav() {
             width={3612}
             height={347}
             priority
-            className="topnav-logo-dark h-10 w-auto min-w-0 max-w-full object-contain object-left sm:h-11 lg:h-12 rtl:object-right"
+            className="topnav-logo-dark h-auto max-h-9 w-full min-w-0 max-w-full object-contain object-left sm:max-h-11 lg:max-h-12 rtl:object-right"
           />
         </a>
 
-        <div className="flex shrink-0 items-center gap-3 lg:gap-6">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 lg:gap-6">
           <nav aria-label={t("topNav.navLabel")} className="hidden items-center gap-6 text-sm font-semibold lg:flex">
             {navItems.map(({ key, hash }) => (
               <a
