@@ -138,7 +138,7 @@ export function DashboardMobileDrawer({
           <motion.aside
             role="dialog"
             aria-modal="true"
-            className="relative z-10 h-full w-72 overflow-y-auto border-e border-border bg-surface shadow-2xl"
+            className="relative z-10 h-full w-[min(18rem,88vw)] overflow-y-auto border-e border-border bg-surface shadow-2xl"
             initial={{ x: offscreen }}
             animate={{ x: 0 }}
             exit={{ x: offscreen }}

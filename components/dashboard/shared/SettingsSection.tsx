@@ -58,22 +58,22 @@ export function SettingsSection() {
   };
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="mx-auto grid w-full max-w-5xl grid-cols-1 items-start gap-5 lg:grid-cols-2 lg:gap-6">
       {savedSuccess && (
-        <div className="flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+        <div className="flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 lg:col-span-2">
           <Check className="size-4 text-emerald-600" />
           <span>{t("settings.saved")}</span>
         </div>
       )}
 
       {generalError && (
-        <div className="rounded-2xl border border-rose-500/20 bg-rose-50/20 p-4 text-xs text-rose-600 dark:bg-rose-950/20 dark:text-rose-400">
+        <div className="rounded-2xl border border-rose-500/20 bg-rose-50/20 p-4 text-xs text-rose-600 dark:bg-rose-950/20 dark:text-rose-400 lg:col-span-2">
           {generalError}
         </div>
       )}
 
       {/* Committee Profile */}
-      <div className="rounded-2xl border border-border bg-surface p-6 shadow-2xs">
+      <div className="rounded-2xl border border-border bg-surface p-5 shadow-2xs sm:p-6 lg:col-span-2">
         <h3 className="text-base font-bold text-foreground">
           {t("settings.info")}
         </h3>
@@ -149,7 +149,7 @@ export function SettingsSection() {
       </div>
 
       {/* Leadership & Permissions */}
-      <div className="rounded-2xl border border-border bg-surface p-6 shadow-2xs">
+      <div className="rounded-2xl border border-border bg-surface p-5 shadow-2xs sm:p-6">
         <div className="flex items-center gap-2">
           <Shield className="size-4 text-blue-500" />
           <h3 className="text-base font-bold text-foreground">
@@ -184,7 +184,7 @@ export function SettingsSection() {
       </div>
 
       {/* Notification Preferences */}
-      <div className="rounded-2xl border border-border bg-surface p-6 shadow-2xs">
+      <div className="rounded-2xl border border-border bg-surface p-5 shadow-2xs sm:p-6">
         <div className="flex items-center gap-2">
           <Bell className="size-4 text-blue-500" />
           <h3 className="text-base font-bold text-foreground">
@@ -233,7 +233,7 @@ export function SettingsSection() {
 
       {/* Save Button */}
       {canManageSettings && (
-        <div className="flex justify-end">
+        <div className="flex justify-end lg:col-span-2">
           <button
             type="button"
             onClick={handleSave}

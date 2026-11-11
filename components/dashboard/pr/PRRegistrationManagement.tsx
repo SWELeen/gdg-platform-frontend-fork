@@ -675,27 +675,27 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
       <PRAttendancePanel event={event} registrations={eventRegistrations} />
 
       <section className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xs">
-        <div className="flex flex-col gap-3 border-b border-border/80 p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
+        <div className="flex min-w-0 flex-col gap-3 border-b border-border/80 p-4 sm:p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <h3 className="text-base font-bold text-foreground">{t("registrations.applicants")}</h3>
             <p className="text-xs text-muted">{t("registrations.reviewDescription")}</p>
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <div className="relative">
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
+            <div className="relative min-w-0 sm:w-56">
               <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t("registrations.searchApplicant")}
-                className="h-9 w-full rounded-xl border border-border bg-surface-muted/40 ps-9 pe-3 text-xs text-foreground outline-none focus:border-blue-500 sm:w-56"
+                className="h-9 w-full min-w-0 rounded-xl border border-border bg-surface-muted/40 ps-9 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               aria-label={t("registrations.filterRegistrations")}
-              className="h-9 rounded-xl border border-border bg-surface px-3 text-xs text-foreground outline-none focus:border-blue-500"
+              className="h-9 w-full min-w-0 rounded-xl border border-border bg-surface px-3 text-xs text-foreground outline-none focus:border-blue-500 sm:w-44"
             >
               {prRegistrationStatusFilterOptions.map((option) => (
                 <option key={option.value} value={option.value}>{option.value === "all" ? t("registrations.filters.allStatuses") : option.value === "pending" ? t("registrations.statuses.pending") : option.value === "accepted" ? t("registrations.statuses.accepted") : option.value === "rejected" ? t("registrations.statuses.rejected") : option.value === "waitlisted" ? t("registrations.statuses.waitlisted") : t("registrations.filters.confirmationOutstanding")}</option>

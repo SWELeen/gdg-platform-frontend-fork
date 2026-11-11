@@ -59,7 +59,7 @@ export function LeaderHeader({
 
   return (
     <div className="border-b border-border bg-surface px-4 py-3 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-w-0 flex-row items-center justify-between gap-3">
         {/* Left: sidebar toggle & Title */}
         <div className="flex items-center gap-2">
           <button
@@ -73,25 +73,25 @@ export function LeaderHeader({
           <SidebarCollapseToggle className="max-lg:hidden" />
           <span className="mx-1 h-4 w-px self-center bg-border max-lg:hidden" aria-hidden="true" />
 
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
+          <div className="min-w-0">
+            <h1 className="break-words text-[clamp(1.35rem,1rem+1.4vw,1.875rem)] font-semibold text-foreground">
               {pageTitle}
             </h1>
           </div>
         </div>
 
         {/* Right: Profile Info */}
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 shrink-0 items-center gap-3 sm:ms-auto">
           {/* Profile Card */}
-          <div className="flex items-center gap-2.5 rounded-lg border border-border bg-surface-muted/50 px-3 py-1.5 transition-colors duration-200 hover:bg-surface-muted">
-              <div className="flex size-9 items-center justify-center rounded-full bg-avatar-bg text-sm font-semibold text-foreground">
+          <div className="flex min-w-0 max-w-full items-center gap-2.5 rounded-full border-0 bg-transparent p-0 sm:rounded-lg sm:border sm:border-border sm:bg-surface-muted/50 sm:px-3 sm:py-1.5 sm:transition-colors sm:hover:bg-surface-muted">
+              <div role="img" aria-label={displayName || pageTitle} title={displayName || undefined} className="flex size-9 shrink-0 items-center justify-center rounded-full bg-avatar-bg text-sm font-semibold text-foreground ring-2 ring-surface sm:ring-0">
               {leaderInitials}
             </div>
-            <div className="text-start">
-              <span className="block text-xs font-semibold text-foreground leading-tight">
+            <div className="hidden min-w-0 text-start sm:block">
+              <span className="block truncate text-xs font-semibold leading-tight text-foreground">
                 {displayName}
               </span>
-              <span className="block text-[10px] text-muted leading-tight">
+              <span className="block truncate text-[10px] leading-tight text-muted">
                 {developerCommitteesLeader ? leadershipT("developerTitle") : clubLeadership ? leadershipT("groupTitle") : t(`nav.${committeeTranslationKeys[committee]}`)}
               </span>
             </div>
