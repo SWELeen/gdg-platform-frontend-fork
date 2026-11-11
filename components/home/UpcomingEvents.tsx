@@ -35,17 +35,21 @@ export default function UpcomingEvents() {
           setEventsStatus("error");
           return;
         }
+        const now = Date.now();
         setApiEvents(
-          result.data.map((event) => ({
-            id: String(event.eventId),
-            image: event.imageUrl || "/images/event-placeholder.png",
-            name: event.name,
-            date: formatDate(event.startsAt),
-            time: formatTime(event.startsAt),
-            location: event.location ?? "",
-            description: event.description ?? undefined,
-            registrationOpen: event.registrationOpen,
-          })),
+          result.data
+            .filter((event) => event.registrationOpen || now - new Date(event.endsAt).getTime() <= 24 * 60 * 60 * 1000)
+            .sort((a, b) => new Date(b.startsAt).getTime() - new Date(a.startsAt).getTime())
+            .map((event) => ({
+              id: String(event.eventId),
+              image: event.imageUrl || "/images/event-placeholder.png",
+              name: event.name,
+              date: formatDate(event.startsAt),
+              time: formatTime(event.startsAt),
+              location: event.location ?? "",
+              description: event.description ?? undefined,
+              registrationOpen: event.registrationOpen,
+            })),
         );
         setEventsStatus("loaded");
       })
