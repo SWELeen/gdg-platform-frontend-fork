@@ -27,6 +27,8 @@
   "googleAccountLinkRequired": "Sign in to your existing GDG account before connecting Google.",
   "googleSessionExpired": "Your Google session expired. Please sign in again.",
   "branchRequired": "Please select your branch.",
+  "branchTooLong": "Branch must be 100 characters or fewer.",
+  "branchInvalid": "Branch cannot contain control characters.",
   "levelRequired": "Please select your level.",
   "roleRequired": "Please select your role.",
   "committeeRequired": "Please select at least one committee.",

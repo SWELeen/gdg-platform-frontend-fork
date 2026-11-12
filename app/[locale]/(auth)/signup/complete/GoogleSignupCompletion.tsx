@@ -24,7 +24,7 @@ type GoogleSignupProfile = { email: string; fullName: string; accessToken: strin
 type RegistrationType = "MEMBER" | "NON_MEMBER";
 
 function Input({
-  id, label, value, onChange, type = "text", placeholder, readOnly = false, required = true,
+  id, label, value, onChange, type = "text", placeholder, readOnly = false, required = true, maxLength = 255,
 }: {
   id: string;
   label: string;
@@ -34,6 +34,7 @@ function Input({
   placeholder?: string;
   readOnly?: boolean;
   required?: boolean;
+  maxLength?: number;
 }) {
   return (
     <label htmlFor={id} className="block text-sm font-medium">
@@ -46,7 +47,7 @@ function Input({
         placeholder={placeholder}
         readOnly={readOnly}
         required={required}
-        maxLength={255}
+        maxLength={maxLength}
         className="mt-1.5 h-9 w-full rounded-md border border-foreground/15 bg-surface px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 read-only:opacity-70"
       />
     </label>
@@ -147,6 +148,21 @@ export default function GoogleSignupCompletion() {
       setFormError("signupEmailsMustDiffer");
       return;
     }
+    if (registrationType === "MEMBER") {
+      const normalizedBranch = branch.trim();
+      if (!normalizedBranch) {
+        setFormError("branchRequired");
+        return;
+      }
+      if (normalizedBranch.length > 100) {
+        setFormError("branchTooLong");
+        return;
+      }
+      if (/[\u0000-\u001F\u007F-\u009F]/.test(normalizedBranch)) {
+        setFormError("branchInvalid");
+        return;
+      }
+    }
     if (registrationType === "MEMBER" && selectedCommittees.length === 0) {
       setFormError("committeeRequired");
       return;
@@ -163,7 +179,7 @@ export default function GoogleSignupCompletion() {
           phoneNumber: `+966${phone}`,
           ...(universityEmail.trim() ? { universityEmail: universityEmail.trim() } : {}),
           university,
-          ...(branch ? { branch } : {}),
+          ...(registrationType === "MEMBER" ? { branch: branch.trim() } : {}),
           college,
           major,
           level,
@@ -178,7 +194,8 @@ export default function GoogleSignupCompletion() {
     });
 
     if (!result.ok) {
-      if (result.code === "GOOGLE_ACCOUNT_LINK_REQUIRED") setFormError("googleAccountLinkRequired");
+      if (result.code === "BRANCH_REQUIRED") setFormError("branchRequired");
+      else if (result.code === "GOOGLE_ACCOUNT_LINK_REQUIRED") setFormError("googleAccountLinkRequired");
       else if (result.code === "EMAILS_MUST_DIFFER") setFormError("signupEmailsMustDiffer");
       else if (result.status === 401) setFormError("googleSessionExpired");
       else setFormError("authRequestFailed");
@@ -238,7 +255,9 @@ export default function GoogleSignupCompletion() {
             <Input id="google-university-email" label={`${fieldLabel("universityEmail")} (${t("optional")})`} value={universityEmail} onChange={setUniversityEmail} type="email" required={false} />
             {renderField("google-gender", fieldLabel("gender"), gender, setGender, genderOptions.map(({ value, labelKey }) => ({ value, label: t(`options.gender.${labelKey}`) })))}
             {renderField("google-university", fieldLabel("university"), university, (value) => { setUniversity(value); setBranch(""); }, universityOptions)}
-            {registrationType === "MEMBER" && university === "University of Jeddah" && renderField("google-branch", fieldLabel("branch"), branch, setBranch, branchOptions)}
+            {registrationType === "MEMBER" && university && (university === "University of Jeddah"
+              ? renderField("google-branch", fieldLabel("branch"), branch, setBranch, branchOptions)
+              : <Input id="google-branch" label={fieldLabel("branch")} value={branch} onChange={setBranch} placeholder={t("fields.branch.typePlaceholder")} maxLength={100} />)}
             {renderField("google-college", fieldLabel("college"), college, updateCollege, collegeOptions)}
             {renderField("google-major", fieldLabel("major"), major, setMajor, getMajorOptions(college), !college)}
             {renderField("google-level", fieldLabel("level"), level, setLevel, levelOptions)}
