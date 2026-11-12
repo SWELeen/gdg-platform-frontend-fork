@@ -61,11 +61,12 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
           const open = selected === index;
           const highlighted = open || hovered === index || focused === index;
           const panelId = `${id}-${active.id}`;
+          const hasPortraitPair = Boolean(active.coLeader);
 
           return (
             <motion.div
               key={active.id}
-              className="group/panel relative min-h-24 min-w-0 shrink-0 basis-auto overflow-hidden border-e border-white/15 bg-linear-to-br from-(--committee-accent) to-gdg-dark md:flex-1"
+              className="group/panel relative flex min-h-24 min-w-0 shrink-0 basis-auto flex-col overflow-hidden border-e border-white/15 bg-linear-to-br from-(--committee-accent) to-gdg-dark md:block md:flex-1"
               style={{ "--committee-accent": active.color } as CSSProperties}
               animate={{ flexGrow: selected !== null ? (open ? 5 : 0.28) : highlighted ? 1.3 : 1 }}
               transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
@@ -76,36 +77,57 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                 if (!event.currentTarget.contains(event.relatedTarget)) setFocused(null);
               }}
             >
-              <div className={open
-                ? "relative aspect-3/1 w-full overflow-hidden md:absolute md:inset-y-0 md:start-0 md:aspect-auto md:h-full md:w-1/3"
-                : "absolute inset-0 h-full w-full overflow-hidden"}
+              <div
+                aria-hidden="true"
+                className={open
+                  ? "pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full"
+                  : "pointer-events-none absolute inset-0 isolate h-full w-full overflow-hidden"}
               >
-                <motion.img
-                  className="me-auto block h-full w-2/3 object-contain object-bottom-left rtl:object-bottom-right"
-                  src={active.lead.image}
-                  alt=""
-                  loading="lazy"
-                  animate={{
-                    scale: reduceMotion || highlighted ? 1 : 1.035,
-                    filter: highlighted
-                      ? "grayscale(0) brightness(.85)"
-                      : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
-                  }}
-                  transition={{
-                    scale: { duration: reduceMotion ? 0 : 0.9, ease: panelEase },
-                    filter: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
-                  }}
-                  onError={(event) => {
-                    if (!event.currentTarget.src.endsWith("/images/unknown.png")) {
-                      event.currentTarget.src = "/images/unknown.png";
-                    }
-                  }}
-                />
+                {[{ role: "lead", person: active.lead }, ...(active.coLeader ? [{ role: "co-lead", person: active.coLeader }] : [])].map(({ role, person }) => {
+                  const isLeader = role === "lead";
+                  // Only real leadership pairs use edge clipping. Single portraits
+                  // stay fully inside the card in both states and both locales.
+                  const portraitWidth = open
+                    ? hasPortraitPair ? "w-1/3 md:w-1/6" : "w-2/3 md:w-1/6"
+                    : hasPortraitPair ? "w-3/5" : "w-2/3";
+                  const edgeOffset = hasPortraitPair && !open ? (isLeader ? "25%" : "-25%") : "0%";
+                  return (
+                    <motion.div
+                      key={role}
+                      className={`absolute bottom-0 h-full transition-[width] duration-750 ease-[cubic-bezier(.22,.68,0,1)] motion-reduce:transition-none ${isLeader ? "right-0" : "left-0"} ${portraitWidth}`}
+                      initial={false}
+                      animate={{ x: edgeOffset }}
+                      transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
+                    >
+                      <motion.img
+                        className={`block h-full w-full object-contain ${!hasPortraitPair ? "object-bottom-right" : "object-bottom"}`}
+                        src={person.image?.trim() || "/images/unknown.png"}
+                        alt=""
+                        loading="lazy"
+                        animate={{
+                          scale: reduceMotion || highlighted ? 1 : 1.035,
+                          filter: highlighted
+                            ? "grayscale(0) brightness(.85)"
+                            : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
+                        }}
+                        transition={{
+                          scale: { duration: reduceMotion ? 0 : 0.9, ease: panelEase },
+                          filter: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
+                        }}
+                        onError={(event) => {
+                          if (!event.currentTarget.src.endsWith("/images/unknown.png")) {
+                            event.currentTarget.src = "/images/unknown.png";
+                          }
+                        }}
+                      />
+                    </motion.div>
+                  );
+                })}
               </div>
               <span
                 aria-hidden="true"
                 className={open
-                  ? "pointer-events-none absolute inset-0 bg-linear-to-t from-gdg-dark via-gdg-dark/50 to-transparent md:bg-linear-to-r md:from-transparent md:via-gdg-dark/50 md:to-gdg-dark md:rtl:bg-linear-to-l"
+                  ? "pointer-events-none absolute inset-0 bg-linear-to-t from-gdg-dark via-gdg-dark/50 to-transparent md:bg-linear-to-r md:from-transparent md:via-gdg-dark/50 md:to-gdg-dark md:ltr:bg-linear-to-l md:rtl:bg-linear-to-l"
                   : "pointer-events-none absolute inset-0 bg-linear-to-t from-gdg-dark/80 to-transparent"}
               />
               <button
@@ -124,7 +146,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 {!open && (
-                  <span className="absolute start-20 end-4 top-5 md:start-auto md:end-5">
+                  <span className="absolute start-20 end-4 top-5 ltr:start-4 ltr:end-20 md:start-auto md:end-5 md:ltr:start-5 md:ltr:end-auto">
                     <span className="flex items-center justify-between gap-3 text-sm leading-none font-medium md:rotate-180 md:justify-normal md:[writing-mode:vertical-rl]">
                       <span>{name}</span>
                       <span className="text-2xl leading-none text-gdg-yellow" aria-hidden="true">+</span>
@@ -136,10 +158,10 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               <div
                 id={panelId}
                 hidden={!open}
-                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:grid-cols-3 md:px-8 md:py-8"
+                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:grid-cols-6 md:px-8 md:py-8"
               >
                 {open && (
-                  <div className="min-w-0 md:col-span-2 md:col-start-2">
+                  <div className="min-w-0 md:col-span-4 md:col-start-2">
                     <CommitteeCard committee={committee} initialSubCommitteeId={subId} />
                   </div>
                 )}
