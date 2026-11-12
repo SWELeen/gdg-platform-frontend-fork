@@ -244,26 +244,42 @@ export function LeaderDashboardProvider({
         return;
       }
       setDeveloperCommitteesOverview(result.data.committees);
+      setCommittees(result.data.committees.map(({ code, name }) => ({ code, name })));
       setCurrentMember(result.data.currentMember);
       setCanAssignDeveloperMembers(result.data.permissions.canAssignMembers);
       setCanManagePoints(result.data.permissions.canManagePoints);
-      setMembers(result.data.committees.flatMap((item) => item.leaders.map((leader) => ({
-        id: leader.id,
-        name: leader.name,
-        email: leader.email,
-        role: leader.role,
-        status: "Active" as const,
-        isElevated: false,
-        accessExpiresAt: null,
-        initials: leader.name.split(/\s+/).map((part) => part[0] ?? "").join("").slice(0, 2).toUpperCase(),
-        avatarBgColor: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
-        points: leader.points,
-        pointsVisible: leader.pointsVisible,
-        pointsCommitteeCode: item.code,
-        tasksCompleted: 0,
-        lastActivity: "",
-        committees: [{ code: item.code, name: item.name, role: leader.role, points: leader.points }],
-      }))));
+      setPointHistory(result.data.pointHistory ?? []);
+      const leadersByMember = new Map<string, CommitteeMember>();
+      for (const item of result.data.committees) {
+        for (const leader of item.leaders) {
+          const membership = { code: item.code, name: item.name, role: leader.role, points: leader.points, pointsVisible: leader.pointsVisible };
+          const existing = leadersByMember.get(leader.id);
+          if (existing) {
+            existing.committees = [...(existing.committees ?? []), membership];
+            existing.points += leader.points;
+            existing.pointsVisible = existing.pointsVisible !== false || leader.pointsVisible !== false;
+            existing.role = [...new Set(`${existing.role} / ${leader.role}`.split(" / "))].join(" / ");
+          } else {
+            leadersByMember.set(leader.id, {
+              id: leader.id,
+              name: leader.name,
+              email: leader.email,
+              role: leader.role,
+              status: "Active",
+              isElevated: false,
+              accessExpiresAt: null,
+              initials: leader.name.split(/\s+/).map((part) => part[0] ?? "").join("").slice(0, 2).toUpperCase(),
+              avatarBgColor: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
+              points: leader.points,
+              pointsVisible: leader.pointsVisible,
+              tasksCompleted: 0,
+              lastActivity: "",
+              committees: [membership],
+            });
+          }
+        }
+      }
+      setMembers([...leadersByMember.values()]);
       const memberCount = result.data.committees.reduce((sum, item) => sum + item.memberCount, 0);
       const taskCount = result.data.committees.reduce((sum, item) => sum + item.activeTaskCount, 0);
       setStats((current) => ({ ...current, committeeMembers: memberCount, activeMembers: memberCount, activeTasks: taskCount }));
