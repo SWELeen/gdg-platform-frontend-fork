@@ -57,7 +57,7 @@ export default function WhatWeOffer() {
   return (
     <section
       id="offers"
-      className="relative isolate overflow-hidden bg-background px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
+      className="relative isolate overflow-hidden bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-8 opacity-100">
         <svg
@@ -85,8 +85,8 @@ export default function WhatWeOffer() {
       </div>
       {/* <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-[linear-gradient(90deg,transparent_0%,color-mix(in_srgb,var(--gdg-blue)_12%,transparent)_48%,color-mix(in_srgb,var(--gdg-blue)_30%,transparent)_100%)]" /> */}
 
-      <div className="relative max-w-2xl">
-        <h2 dir={dir} className="text-3xl font-bold leading-snug text-foreground md:text-4xl">
+      <div className="relative w-full text-start">
+        <h2 dir={dir} className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
           {t("title")}
         </h2>
       </div>
@@ -95,7 +95,7 @@ export default function WhatWeOffer() {
       {/* DESKTOP / LAPTOP */}
       {/* ===================================================== */}
 
-      <div className="mt-10 hidden h-[130px] gap-6 lg:flex">
+      <div className="mt-[clamp(2.5rem,5vw,5rem)] hidden w-full min-h-[clamp(8rem,13vw,16rem)] gap-[clamp(1.5rem,3vw,4rem)] lg:flex">
         {offers.map((offer) => {
           const isActive = activeStep === offer.number;
 
@@ -125,10 +125,10 @@ export default function WhatWeOffer() {
               />
 
               {/* Number + Content */}
-              <div className="mt-1 flex h-[120px] items-center gap-6">
+              <div className="mt-1 flex min-h-[clamp(7.5rem,12vw,15rem)] items-center gap-[clamp(1.5rem,3vw,4rem)]">
                 {/* Number */}
                 <h1
-                  className="shrink-0 text-7xl font-normal xl:text-8xl"
+                  className="shrink-0 text-[clamp(2.7075rem,2.2325rem_+_1.0925vw,4.5125rem)] font-normal"
                   style={{
                     color: offer.color,
                   }}
@@ -183,7 +183,7 @@ export default function WhatWeOffer() {
 
       <div
         ref={mobileSectionRef}
-        className="mt-10 lg:hidden"
+        className="mt-10 w-full lg:hidden"
       >
         {offers.map((offer, index) => {
           const isActive = activeStep === offer.number;
@@ -224,7 +224,7 @@ export default function WhatWeOffer() {
                 <div className="flex min-h-[150px] items-start gap-5 py-5">
                   {/* Number */}
                   <h1
-                    className="shrink-0 text-7xl font-normal"
+                    className="shrink-0 text-[clamp(2.7075rem,2.2325rem_+_1.0925vw,4.5125rem)] font-normal"
                     style={{
                       color: offer.color,
                     }}
@@ -259,7 +259,7 @@ export default function WhatWeOffer() {
                             duration: 0.35,
                             ease: "easeOut",
                           }}
-                          className="mt-1 max-w-[280px] text-base font-normal leading-normal"
+                          className="mt-1 max-w-[min(32rem,100%)] text-base font-normal leading-normal"
                         >
                           {t(`items.${offer.number}.description`)}
                         </motion.p>

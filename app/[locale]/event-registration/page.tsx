@@ -7,7 +7,7 @@ import { eventRegistrationMock } from "@/data/event-registration";
 export default function EventRegistrationPage() {
   return (
     <main className="min-h-screen bg-background">
-      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[44%_56%]">
+      <div className="grid min-h-screen min-w-0 grid-cols-1 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
         <EventInfo event={eventRegistrationMock} />
         <RegistrationForm />
       </div>

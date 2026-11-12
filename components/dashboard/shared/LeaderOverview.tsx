@@ -21,7 +21,7 @@ export function LeaderOverview() {
       <LeaderGreeting />
       <MetricCards />
       {committee === "data-analysis" && canManageRegistrations && <EventReportsPanel />}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[65%_35%]">
+      <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.8fr)_minmax(16rem,1fr)]">
         <MemberPointsPreview onUpdatePoints={(target) => { setMember(target); setPointsOpen(true); }} />
         <RecentActivityPreview />
       </div>

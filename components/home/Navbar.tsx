@@ -179,7 +179,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   // --home-nav-height (globals.css) is the space it takes at the top; sticky sections offset by it.
   return (
     <nav
-      className={`fixed inset-x-4 top-4 z-[200] mx-auto flex h-14 items-center justify-between gap-8 rounded-full border ps-5 pe-3 shadow-lg backdrop-blur-xl backdrop-saturate-150 lg:gap-8 lg:ps-12 lg:pe-8 ${
+      className={`fixed inset-x-[clamp(0.5rem,1vw,1.5rem)] top-[clamp(0.5rem,1vw,1.5rem)] z-[200] mx-auto flex h-[clamp(3.5rem,4vw,5rem)] items-center justify-between gap-[clamp(1rem,2.5vw,3rem)] rounded-full border ps-[clamp(1rem,2vw,2.5rem)] pe-[clamp(0.75rem,1.5vw,2rem)] shadow-lg backdrop-blur-xl backdrop-saturate-150 ${
         variant === "light"
           ? "border-border bg-surface/85 text-foreground shadow-black/5"
           : "border-white/20 bg-gdg-dark/35 text-[var(--white)] shadow-black/25"
@@ -194,13 +194,13 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             height={165}
             priority
             unoptimized
-            className="h-9 w-auto sm:h-10 lg:h-12 -translate-x-3"
+            className="h-[clamp(2.25rem,3.5vw,3.75rem)] w-auto -translate-x-3"
           />
         ) : (
           <img
             src="/images/gdg-white-Logo.png"
             alt={tCommon("logoAlt")}
-            className="h-14 w-auto lg:scale-x-[1.06] lg:origin-left"
+            className="h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left"
           />
         )}
       </div>

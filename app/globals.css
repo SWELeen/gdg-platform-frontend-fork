@@ -1078,32 +1078,37 @@ html:not([data-theme]) select option {
   --font-mono: var(--font-google-sans);
   --font-heading: var(--font-google-sans);
 
-  --text-5xl: 2.5rem;
+  --text-5xl: clamp(1.805rem, 1.5675rem + 0.9025vw, 3.135rem);
   --text-5xl--line-height: 1.1;
 
-  --text-4xl: 2rem;
+  --text-4xl: clamp(1.5675rem, 1.33rem + 0.76vw, 2.66rem);
   --text-4xl--line-height: 1.1;
 
-  --text-3xl: 1.75rem;
+  --text-3xl: clamp(1.33rem, 1.1875rem + 0.6175vw, 2.2325rem);
   --text-3xl--line-height: 1.25;
 
-  --text-2xl: 1.375rem;
+  --text-2xl: clamp(1.14rem, 0.9975rem + 0.475vw, 1.805rem);
   --text-2xl--line-height: 1.25;
 
-  --text-xl: 1.125rem;
+  --text-xl: clamp(0.9975rem, 0.9025rem + 0.3135vw, 1.349rem);
   --text-xl--line-height: 1.5;
 
-  --text-lg: 1rem;
+  --text-lg: clamp(0.9215rem, 0.874rem + 0.2185vw, 1.14rem);
   --text-lg--line-height: 1.5;
 
-  --text-base: 0.9375rem;
+  --text-base: clamp(0.855rem, 0.8312rem + 0.1045vw, 1.026rem);
   --text-base--line-height: 1.5;
 
-  --text-sm: 0.8125rem;
+  --text-sm: clamp(0.741rem, 0.722rem + 0.0712vw, 0.855rem);
   --text-sm--line-height: 1.5;
 
-  --text-xs: 0.6875rem;
+  --text-xs: clamp(0.6365rem, 0.6175rem + 0.0522vw, 0.741rem);
   --text-xs--line-height: 1.5;
+
+  /* Let common content containers use more of a large laptop display. */
+  --container-5xl: 80rem;
+  --container-6xl: 96rem;
+  --container-7xl: 112rem;
 
   /* ---------------------------------------------------------
      Breakpoints
@@ -1149,7 +1154,7 @@ textarea {
 :root {
   --page-gutter: clamp(1rem, 4vw, 2.5rem);
   --page-section-space: clamp(3rem, 7vw, 6rem);
-  --page-title-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  --page-title-size: clamp(1.3775rem, 1.235rem + 0.9025vw, 2.28rem);
 }
 
 /* Arabic typography */

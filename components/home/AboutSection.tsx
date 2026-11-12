@@ -59,12 +59,12 @@ export default function AboutSection() {
   }, [isInView]);
 
   return (
-    <section id="about" className="p-8 lg:p-10">
-      <div className="flex flex-col lg:grid lg:grid-cols-[1.2fr_1fr] lg:gap-5">
-        <div className="max-w-xl">
+    <section id="about" className="px-6 py-[clamp(1rem,1.5vw,1.75rem)]">
+      <div dir="ltr" className="grid w-full min-w-0 grid-cols-1 gap-[clamp(1.5rem,2vw,2.5rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
+        <div className="w-full min-w-0 text-left">
           <motion.h2
             dir={dir}
-            className="text-3xl font-bold leading-snug"
+            className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug"
             initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -78,7 +78,7 @@ export default function AboutSection() {
 
           <motion.p
             dir={dir}
-            className="mt-6 whitespace-pre-line text-justify text-lg font-normal leading-normal"
+            className="mt-5 whitespace-pre-line text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-normal leading-relaxed"
             initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -92,11 +92,11 @@ export default function AboutSection() {
           </motion.p>
         </div>
 
-        <div className="relative mt-6 h-[360px] w-full lg:mt-0 lg:h-[400px]">
+        <div className="relative mx-auto mt-6 h-[clamp(19rem,28vw,35rem)] w-[94%] min-w-0 max-w-full lg:mx-0 lg:mt-0 lg:w-[90%] lg:max-w-[min(42vw,50rem)] lg:justify-self-end">
           <motion.img
             src="/images/about-community-1.png"
             alt={t("imageAlt", { number: 1 })}
-            className="absolute top-0 end-0 h-[100px] w-full rounded-xl object-cover lg:h-1/3"
+            className="absolute top-0 end-0 h-[90px] w-full rounded-xl object-cover lg:h-1/3"
             initial={{ opacity: 0, x: 30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -109,7 +109,7 @@ export default function AboutSection() {
           <motion.img
             src="/images/about-community-2.png"
             alt={t("imageAlt", { number: 2 })}
-            className="absolute top-[110px] end-0 h-[170px] w-full rounded-xl object-cover lg:top-[140px] lg:h-[200px]"
+            className="absolute top-[100px] end-0 h-[150px] w-full rounded-xl object-cover lg:top-[calc(33.333%+clamp(0.625rem,1.2vw,1.25rem))] lg:h-[clamp(9rem,11vw,15rem)]"
             initial={{ opacity: 0, x: 30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -123,7 +123,7 @@ export default function AboutSection() {
           <motion.img
             src="/images/about-community-3.png"
             alt={t("imageAlt", { number: 3 })}
-            className="absolute start-[-10px] top-[190px] h-[130px] w-[42%] rounded-xl border-t-10 border-e-10 border-background object-cover lg:start-0 lg:top-[200px] lg:h-[170px] lg:w-[160px] xl:start-[-30px]"            initial={{ opacity: 0, x: -30 * sign }}
+            className="absolute bottom-[clamp(2rem,5vw,3rem)] start-[-10px] top-auto h-[clamp(7rem,24vw,8rem)] w-[40%] rounded-xl border-t-10 border-e-10 border-background object-cover lg:start-0 lg:h-[clamp(9rem,10vw,10.5rem)] lg:w-[clamp(7.5rem,10vw,10.5rem)] xl:start-[-24px]"            initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{

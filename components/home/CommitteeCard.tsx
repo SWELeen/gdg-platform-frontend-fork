@@ -112,7 +112,7 @@ export default function CommitteeCard({
 
   return (
     <article
-      className="group relative flex min-h-[520px] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-3 shadow-sm transition-shadow duration-200 hover:shadow-md motion-safe:transition-transform motion-safe:hover:-translate-y-0.5 sm:p-4"
+      className="group relative flex min-h-[clamp(32.5rem,42vw,48rem)] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-[clamp(0.75rem,1.5vw,2rem)] shadow-sm transition-shadow duration-200 hover:shadow-md motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
       style={{
         borderTopColor: activeCommittee.color,
         borderTopWidth: 3,

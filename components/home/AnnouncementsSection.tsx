@@ -54,7 +54,7 @@ export default function AnnouncementsSection({
         relative
         overflow-hidden
         bg-background
-        px-6 py-16 lg:px-10 lg:py-20
+        px-6 py-[clamp(1.25rem,2vw,2rem)]
       "
     >
       {/* Background decoration */}
@@ -93,7 +93,7 @@ export default function AnnouncementsSection({
         }}
       />
 
-      <div className="relative mx-auto w-full">
+      <div className="relative w-full">
         {/* Header */}
 
         <div
@@ -107,8 +107,8 @@ export default function AnnouncementsSection({
             lg:justify-between
           "
         >
-          <div className="max-w-[700px]">
-      <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
+          <div className="w-full max-w-[min(72rem,85vw)]">
+<h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("title")}{" "}
         <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("highlight")}

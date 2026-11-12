@@ -134,8 +134,8 @@ export default function UpcomingEvents() {
   };
 
   return (
-    <section id="events" className="bg-background px-6 py-16 lg:px-10 lg:py-20">
-      <div className="max-w-2xl">
+    <section id="events" className="bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]">
+      <div className="w-full">
         <p
           dir={dir}
           className="mb-3 text-xs font-medium uppercase tracking-widest text-gdg-blue"
@@ -145,7 +145,7 @@ export default function UpcomingEvents() {
 
         <h2
           dir={dir}
-          className="text-4xl font-bold leading-snug text-foreground md:text-5xl"
+          className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground"
         >
           {t("title")}{" "}
           <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
@@ -153,12 +153,12 @@ export default function UpcomingEvents() {
           </span>
         </h2>
 
-        <p dir={dir} className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
+        <p dir={dir} className="mt-4 max-w-[min(56rem,100%)] text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-muted">
           {t("subtitle")}
         </p>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 w-full">
         {eventsStatus === "loading" ? (
           <p role="status" className="py-12 text-center text-muted">{t("loading")}</p>
         ) : eventsStatus === "error" ? (
@@ -188,7 +188,7 @@ export default function UpcomingEvents() {
       </div>
 
       {maxIndex > 0 && (
-        <div className="mt-8 flex items-center justify-center gap-4">
+        <div className="mt-8 flex w-full items-center justify-center gap-4">
           <button
             type="button"
             aria-label={t("previous")}

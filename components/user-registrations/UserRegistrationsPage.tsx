@@ -77,7 +77,7 @@ export function UserRegistrationsPage({
   const registrations = result?.state === "ready" ? result.registrations : [];
   const kinds: RegistrationKind[] = ["event", "trip"];
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 text-foreground sm:px-6 lg:px-8">
+    <main className="w-full max-w-none flex-1 px-[clamp(1rem,3vw,3rem)] py-[clamp(1.5rem,3vw,3rem)] text-foreground">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
         <div className="min-w-0">
           <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">{t("title")}</h1>

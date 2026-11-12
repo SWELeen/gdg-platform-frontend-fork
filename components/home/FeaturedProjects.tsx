@@ -3,10 +3,10 @@
 import { projects } from "@/data/home";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
-import ProjectCard, { MAX_SIDE, PERSPECTIVE } from "./ProjectCard";
+import ProjectCard, { CARD_WIDTH, MAX_SIDE, PERSPECTIVE } from "./ProjectCard";
 
 export default function FeaturedProjects() {
   const t = useTranslations("home.projects");
@@ -23,7 +23,18 @@ export default function FeaturedProjects() {
    */
   const [offset, setOffset] = useState(0);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [desktopScale, setDesktopScale] = useState(1);
   const selectedProject = projects.find((project) => project.id === selectedProjectId);
+
+  useEffect(() => {
+    const updateScale = () => {
+      setDesktopScale(Math.min(1, Math.max(0.88, window.innerWidth / 1600)));
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, []);
 
   const total = projects.length; // عدد المشاريع (ديناميكي بالكامل)
   if (total === 0) return null; // ما في مشاريع = ما نعرض شي
@@ -72,7 +83,7 @@ export default function FeaturedProjects() {
   return (
 <section
   id="projects"
-  className="relative isolate overflow-hidden bg-background px-8 py-20 lg:px-10 lg:py-28"
+  className="relative isolate overflow-hidden bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]"
 >
   {/* ===== الخلفية ===== */}
   <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -80,10 +91,10 @@ export default function FeaturedProjects() {
     {/* <div className="absolute inset-0 text-foreground/25 [background-image:radial-gradient(currentColor_1.2px,transparent_1.2px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_85%_75%_at_50%_50%,black_30%,transparent)]" /> */}
 
     {/* توهّج ألوان Google */}
-    <div className="absolute -top-32 start-[-6%] h-[380px] w-[380px] rounded-full bg-gdg-blue/30 blur-[110px]" />
+    <div className="absolute -top-[clamp(6rem,10vw,12rem)] start-[-6%] size-[clamp(22rem,34vw,42rem)] rounded-full bg-gdg-blue/30 blur-[clamp(5rem,9vw,9rem)]" />
     {/* <div className="absolute -top-20 end-[-4%] h-[320px] w-[320px] rounded-full bg-gdg-red/25 blur-[110px]" /> */}
     {/* <div className="absolute bottom-[-120px] start-[18%] h-[340px] w-[340px] rounded-full bg-gdg-green/25 blur-[110px]" /> */}
-    <div className="absolute bottom-[-100px] end-[16%] h-[320px] w-[320px] rounded-full bg-gdg-blue/25 blur-[110px]" />
+    <div className="absolute -bottom-[clamp(5rem,9vw,10rem)] end-[16%] size-[clamp(20rem,30vw,38rem)] rounded-full bg-gdg-blue/25 blur-[clamp(5rem,9vw,9rem)]" />
 
     {/* خط علوي بألوان Google */}
     {/* <div className="absolute inset-x-0 top-0 flex h-[3px] opacity-80">
@@ -95,7 +106,7 @@ export default function FeaturedProjects() {
   </div>
 
   {/* ===== العنوان (على اليسار) ===== */}
-  <div className="max-w-2xl">
+  <div className="w-full text-start">
     <motion.div
       dir={dir}
       initial={{ opacity: 0, y: 24 }}
@@ -104,32 +115,32 @@ export default function FeaturedProjects() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="text-start"
     >
-      <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
+      <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("titleStart")}{" "}
         <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("titleHighlight")}
         </span>
       </h2>
 
-      <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground/60 md:text-lg">
+      <p className="mt-4 max-w-[min(56rem,75%)] text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
         {t("subtitle")}
       </p>
     </motion.div>
   </div>
 
       {/* ===== المعرض ثلاثي الأبعاد (شاشات الكمبيوتر) ===== */}
-      <div className="mx-auto mt-14 hidden w-full max-w-[1400px] lg:block">
+      <div className="mx-auto mt-[clamp(3rem,6vw,7rem)] hidden w-full max-w-[min(96vw,112rem)] lg:block">
         {/*
           perspective: العمق ثلاثي الأبعاد (نفس القيمة المستخدمة في حساب المسافات).
           perspectiveOrigin 100%: نقطة نظر العين عند قاع الكروت،
           عشان قواعد الكروت كلها تبقى على خط واحد.
         */}
-        <div className="relative mx-auto h-[420px] w-full" style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}>
+        <div className="relative mx-auto h-[clamp(28rem,32vw,40rem)] w-full" style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}>
           <motion.div
             className="absolute inset-0"
             animate={{
-              x: selectedProject ? (dir === "rtl" ? 280 : -280) : 0,
-              scale: selectedProject ? 0.90 : 1,
+              x: selectedProject ? (dir === "rtl" ? CARD_WIDTH : -CARD_WIDTH) * desktopScale : 0,
+              scale: desktopScale * (selectedProject ? 0.90 : 1),
             }}
             style={{ transformOrigin: "center center" }}
             transition={{ type: "spring", stiffness: 180, damping: 24 }}
@@ -221,14 +232,14 @@ export default function FeaturedProjects() {
       {/* ===== نسخة الجوال والتابلت: كرت واحد فقط ===== */}
       <div className="mt-10 lg:hidden">
         <div
-          className="relative mx-auto h-[255px] w-full overflow-visible"
+          className="relative mx-auto h-[clamp(21rem,82vw,24rem)] w-full overflow-visible"
           style={{ perspective: PERSPECTIVE, perspectiveOrigin: "50% 100%" }}
         >
           <motion.div
             initial={false}
-            animate={{ x: 2, scale: 0.60 }}
+            animate={{ x: 2, scale: 0.78 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="absolute inset-x-0 top-0 h-[420px] w-full"
+            className="absolute inset-x-0 top-0 h-[392px] w-full"
             style={{ transformOrigin: "top center" }}
           >
             {visible

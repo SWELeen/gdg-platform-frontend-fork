@@ -47,6 +47,8 @@ const SCALE_POINTS: Points = [
   [1280, 1],
   [1536, 1.12],
   [1920, 1.25],
+  [2560, 1.45],
+  [3200, 1.62],
 ];
 
 // [عرض الشاشة, ضغط الأشرطة أفقياً]: 1 = الطول الأصلي (من 1280 وفوق)
@@ -852,7 +854,7 @@ export default function HeroSection() {
       {/* ========================================================= */}
 
       <div
-        className="absolute inset-x-0 z-10 flex flex-col items-center px-5 sm:px-8"
+        className="absolute inset-x-0 z-10 flex flex-col items-center px-6"
         style={{
           top: "calc(46.5% + var(--stage-scale) * 100px + 20px)",
         }}
@@ -862,7 +864,7 @@ export default function HeroSection() {
 
         <motion.h1
           dir={dir}
-          className="max-w-[1100px] text-balance text-center text-[clamp(1.875rem,1.2rem+2.2vw,4rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[var(--hero-white)]"
+          className="max-w-[min(88vw,88rem)] text-balance text-center text-[clamp(1.55rem,1.32rem_+_1vw,3.15rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[var(--hero-white)]"
           initial={{
             opacity: 0,
             y: 25,
@@ -888,7 +890,7 @@ export default function HeroSection() {
 
         <motion.p
           dir={dir}
-          className="mt-4 text-balance text-center text-[clamp(1.05rem,0.8rem+1.1vw,2.2rem)] font-normal leading-snug text-[var(--hero-white-muted)]"
+          className="mt-4 text-balance text-center text-[clamp(0.9215rem,0.874rem_+_0.456vw,1.5675rem)] font-normal leading-snug text-[var(--hero-white-muted)]"
           initial={{
             opacity: 0,
             y: 20,
@@ -913,7 +915,7 @@ export default function HeroSection() {
 
         <motion.p
           dir={dir}
-          className="mt-3 max-w-[34ch] text-balance text-center text-[clamp(0.875rem,0.7rem+0.45vw,1.2rem)] leading-relaxed tracking-[0.06em] text-[var(--hero-white-muted)] sm:max-w-[60ch]"
+          className="mt-3 max-w-[min(80vw,64rem)] text-balance text-center text-[clamp(0.798rem,0.779rem_+_0.228vw,1.14rem)] leading-relaxed tracking-[0.06em] text-[var(--hero-white-muted)] sm:max-w-[min(80vw,64rem)]"
           initial={{
             opacity: 0,
             y: 15,
@@ -961,13 +963,13 @@ export default function HeroSection() {
             href="#events"
             className="
               relative flex
-              h-[50px] w-full max-w-[260px] sm:w-[240px]
+              h-[clamp(2.75rem,3.6vw,4rem)] w-full max-w-[clamp(12.5rem,17vw,19rem)] sm:w-[clamp(12.5rem,17vw,19rem)]
               items-center justify-between
               rounded-[40px]
               border border-[var(--hero-button-border)]
               bg-[var(--hero-button-secondary-bg)]
-              ps-7
-              text-[15px]
+              ps-[clamp(1.125rem,1.5vw,1.75rem)]
+              text-[clamp(0.85rem,0.78rem_+_0.38vw,1.25rem)]
               font-medium
               text-[var(--hero-foreground)]
               backdrop-blur-md
@@ -987,8 +989,8 @@ export default function HeroSection() {
 
             <span
               className="
-                me-[3px]
-                flex h-[42px] w-[42px]
+                me-1
+                flex size-[clamp(2.25rem,2.8vw,3rem)]
                 items-center justify-center
                 rounded-full
                 bg-[var(--hero-button-bg)]
@@ -1019,12 +1021,12 @@ export default function HeroSection() {
             })}
             className="
               relative flex
-              h-[50px] w-full max-w-[260px] sm:w-[190px]
+              h-[clamp(2.75rem,3.6vw,4rem)] w-full max-w-[clamp(12.5rem,16vw,18rem)] sm:w-[clamp(12.5rem,16vw,18rem)]
               items-center justify-between
               rounded-[40px]
               bg-[var(--hero-button-bg)]
-              ps-7
-              text-[15px]
+              ps-[clamp(1.125rem,1.5vw,1.75rem)]
+              text-[clamp(0.85rem,0.78rem_+_0.38vw,1.25rem)]
               font-medium
               text-[var(--hero-button-text)]
               shadow-[0_0_0_3px_var(--hero-button-shadow)]
@@ -1042,8 +1044,8 @@ export default function HeroSection() {
 
             <span
               className="
-                me-[3px]
-                flex h-[42px] w-[42px]
+                me-1
+                flex size-[clamp(2.25rem,2.8vw,3rem)]
                 items-center justify-center
                 rounded-full
                 bg-[var(--hero-button-text)]

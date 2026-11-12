@@ -290,13 +290,13 @@ export default function ProfilePage({}: PageProps<"/[locale]/profile">) {
               />
             </div>
             {badge && (
-              <div className={`relative order-first ${badges.length > 1 ? "h-[33rem]" : "h-[28rem]"} translate-y-3 md:order-none md:sticky md:top-24 md:col-start-2 md:row-start-1 md:h-[38rem]`}>
+              <div className={`relative order-first ${badges.length > 1 ? "h-[clamp(30rem,86vw,33rem)]" : "h-[clamp(26rem,76vw,28rem)]"} min-w-0 translate-y-3 md:order-none md:sticky md:top-24 md:col-start-2 md:row-start-1 md:h-[clamp(32rem,42vw,38rem)]`}>
                 <HangingBadge
                   key={badge.key}
                   data={badge.data}
                   theme={badge.theme}
                   label={badge.label}
-                  className={`absolute inset-x-0 top-0 ${badges.length > 1 ? "h-[28rem]" : "h-[26rem]"} md:h-full`}
+                  className={`absolute inset-x-0 top-0 ${badges.length > 1 ? "h-[clamp(26rem,78vw,28rem)]" : "h-[clamp(24rem,72vw,26rem)]"} md:h-full`}
                   stageClassName="top-0 -bottom-40 md:top-0 md:-bottom-[26rem]"
                   spanViewport
                   desktop={{ fit: 0.66, fitW: 0.86 }}
