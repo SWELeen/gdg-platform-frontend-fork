@@ -117,6 +117,16 @@ function validateChoice(field: FieldName, value: string, values: FormValues) {
   return options?.includes(value) ? "" : "fieldInvalid"
 }
 
+function validateBranch(value: string, university: string) {
+  if (!university) return ""
+  const branch = value.trim()
+  if (!branch) return "branchRequired"
+  if (branch.length > 100) return "branchTooLong"
+  if (/[\u0000-\u001F\u007F-\u009F]/.test(branch)) return "branchInvalid"
+  if (university === "University of Jeddah" && !branchOptions.includes(branch as typeof branchOptions[number])) return "fieldInvalid"
+  return ""
+}
+
 function validateField(field: FieldName, values: FormValues) {
   const value = field === "committees" ? "" : values[field] as string
   switch (field) {
@@ -129,6 +139,7 @@ function validateField(field: FieldName, values: FormValues) {
     case "password": return validatePassword(value)
     case "confirmPassword": return validateConfirmPassword(value, values.password)
     case "phone": return validatePhone(value)
+    case "branch": return validateBranch(value, values.university)
     case "committees":
       if (!values.committees.length && !values.developerCommitteesLeader && !values.advisor) return "committeeRequired"
       return values.committees.every((item) => committeeOptions.includes(item as CommitteeOption))
@@ -391,14 +402,14 @@ export default function SignupForm() {
   const update = (field: FieldName, value: string | string[]) => {
     const next = { ...values, [field]: value } as FormValues
     if (field === "college") next.major = ""
-    const hideBranch = field === "university" && value !== "University of Jeddah"
-    if (hideBranch) next.branch = ""
+    const universityChanged = field === "university" && value !== values.university
+    if (universityChanged) next.branch = ""
     setValues(next)
     if (errors[field]) {
       const error = validateField(field, next)
       setErrors((current) => ({ ...current, [field]: error || undefined }))
     }
-    if (hideBranch) {
+    if (universityChanged) {
       setErrors((current) => ({ ...current, branch: undefined }))
     }
     if (field === "college") {
@@ -422,7 +433,7 @@ export default function SignupForm() {
     : membership === "member"
       ? [
         "university",
-        ...(values.university === "University of Jeddah" ? ["branch" as const] : []),
+        "branch",
         "college",
         "major",
         "level",
@@ -508,7 +519,7 @@ export default function SignupForm() {
       phoneNumber: `+966${values.phone}`,
       ...(values.universityEmail ? { universityEmail: values.universityEmail } : {}),
       university: values.university,
-      ...(values.branch ? { branch: values.branch } : {}),
+      ...(membership === "member" ? { branch: values.branch.trim() } : {}),
       college: values.college,
       major: values.major,
       level: values.level,
@@ -541,7 +552,9 @@ export default function SignupForm() {
       },
     })
     if (!result.ok) {
-      if (result.code === "EMAIL_ALREADY_EXISTS") {
+      if (result.code === "BRANCH_REQUIRED") {
+        setErrors((current) => ({ ...current, branch: "branchRequired" }))
+      } else if (result.code === "EMAIL_ALREADY_EXISTS") {
         setSubmitError("emailAlreadyExists")
       } else if (result.code === "EMAILS_MUST_DIFFER") {
         setSubmitError("signupEmailsMustDiffer")
@@ -749,8 +762,18 @@ export default function SignupForm() {
           ) : (
             <>
               {field("university", t("fields.university.label"), t("fields.university.placeholder"), universityOptions)}
-              {membership === "member" && values.university === "University of Jeddah" &&
-                field("branch", t("fields.branch.label"), t("fields.branch.placeholder"), branchOptions)}
+              {membership === "member" && values.university && (values.university === "University of Jeddah"
+                ? field("branch", t("fields.branch.label"), t("fields.branch.placeholder"), branchOptions)
+                : <TextField
+                    id="branch"
+                    label={t("fields.branch.label")}
+                    value={values.branch}
+                    onChange={(value) => update("branch", value)}
+                    onBlur={() => blur("branch")}
+                    error={errors.branch}
+                    placeholder={t("fields.branch.typePlaceholder")}
+                    maxLength={100}
+                  />)}
               {field("college", t("fields.college.label"), t("fields.college.placeholder"), collegeOptions)}
               {field("major", t("fields.major.label"), t("fields.major.placeholder"), getMajorOptions(values.college))}
               {field("level", t("fields.level.label"), t("fields.level.placeholder"), levelOptions)}

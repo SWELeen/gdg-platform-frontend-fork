@@ -3,6 +3,8 @@
   "phoneRequired": "يرجى إدخال رقم الجوال.",
   "universityChoiceRequired": "يرجى اختيار الجامعة.",
   "branchRequired": "يرجى اختيار الفرع.",
+  "branchTooLong": "يجب ألا يتجاوز اسم الفرع 100 حرف.",
+  "branchInvalid": "اسم الفرع يحتوي على أحرف غير مسموح بها.",
   "levelRequired": "يرجى اختيار المستوى.",
   "roleRequired": "يرجى اختيار الدور.",
   "committeeRequired": "يرجى اختيار لجنة واحدة على الأقل.",
