@@ -14,7 +14,42 @@ import {
   Trash2,
   Trophy,
   Clock,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+
+const MEMBERS_PER_PAGE = 10;
+
+type MemberGroup = "clubLeadership" | "developerLeadership" | "committeeLeaders" | "committeeCoLeaders" | "advisors" | "members" | "other";
+
+function getMemberGroup(member: CommitteeMember): MemberGroup {
+  const globalRoles = member.globalRoles ?? [];
+  const roleText = member.role.toUpperCase();
+  const roleParts = member.role.split(" / ");
+  if (globalRoles.includes("GROUP_LEADER") || globalRoles.includes("GROUP_CO_LEADER") || roleText.includes("GROUP_LEADER") || roleText.includes("GROUP_CO_LEADER")) {
+    return "clubLeadership";
+  }
+  if (globalRoles.includes("DEVELOPER_COMMITTEES_LEADER") || roleText.includes("DEVELOPER_COMMITTEES_LEADER")) {
+    return "developerLeadership";
+  }
+  if (globalRoles.includes("ADVISOR") || roleText.includes("ADVISOR")) return "advisors";
+
+  const committeeRoles = (member.committees ?? []).map((item) => item.role);
+  if (committeeRoles.includes("Leader") || roleParts.includes("Leader")) return "committeeLeaders";
+  if (committeeRoles.includes("Co-Leader") || roleParts.includes("Co-Leader")) return "committeeCoLeaders";
+  if (committeeRoles.length > 0 || roleText === "MEMBER") return "members";
+  return "other";
+}
+
+const MEMBER_GROUP_ORDER: Record<MemberGroup, number> = {
+  clubLeadership: 0,
+  developerLeadership: 1,
+  committeeLeaders: 2,
+  committeeCoLeaders: 3,
+  advisors: 4,
+  members: 5,
+  other: 6,
+};
 
 interface MembersSectionProps {
   onOpenAddMember: () => void;
@@ -36,6 +71,7 @@ export function MembersSection({
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
   const [roleFilter, setRoleFilter] = useState(ALL);
   const [currentTime, setCurrentTime] = useState(() => Date.now());
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(Date.now()), 10000);
@@ -55,6 +91,37 @@ export function MembersSection({
       matchesCommittee(m, committeeFilter) &&
       matchesRole(m, roleFilter, committeeFilter)
   );
+  const sortedMembers = [...filteredMembers].sort((left, right) => {
+    const groupDifference = MEMBER_GROUP_ORDER[getMemberGroup(left)] - MEMBER_GROUP_ORDER[getMemberGroup(right)];
+    return groupDifference || left.name.localeCompare(right.name, undefined, { sensitivity: "base" });
+  });
+  const pageCount = Math.max(1, Math.ceil(sortedMembers.length / MEMBERS_PER_PAGE));
+  const pageMembers = sortedMembers.slice((page - 1) * MEMBERS_PER_PAGE, page * MEMBERS_PER_PAGE);
+
+  useEffect(() => {
+    setPage((currentPage) => Math.min(currentPage, pageCount));
+  }, [pageCount]);
+
+  const groupLabel = (group: MemberGroup) => {
+    switch (group) {
+      case "clubLeadership": return t("members.groups.clubLeadership");
+      case "developerLeadership": return t("members.groups.developerLeadership");
+      case "committeeLeaders": return t("members.groups.committeeLeaders");
+      case "committeeCoLeaders": return t("members.groups.committeeCoLeaders");
+      case "advisors": return t("members.groups.advisors");
+      case "members": return t("members.groups.members");
+      case "other": return t("members.groups.other");
+    }
+  };
+
+  const pageRows: Array<{ type: "group"; group: MemberGroup } | { type: "member"; member: CommitteeMember }> = [];
+  let previousGroup: MemberGroup | null = null;
+  for (const member of pageMembers) {
+    const group = getMemberGroup(member);
+    if (group !== previousGroup) pageRows.push({ type: "group", group });
+    pageRows.push({ type: "member", member });
+    previousGroup = group;
+  }
 
   return (
     <div className="space-y-6">
@@ -81,7 +148,7 @@ export function MembersSection({
         <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between border-b border-border/80">
           <div>
             <h2 className="text-base font-bold text-foreground">
-              {t("members.title", { count: members.length })}
+              {t("members.title", { count: filteredMembers.length })}
             </h2>
             <p className="text-xs text-muted">
               {showTemporaryAccess
@@ -96,7 +163,10 @@ export function MembersSection({
               <input
                 type="text"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);
+                }}
                 placeholder={t("members.search")}
                 className="h-9 rounded-xl border border-border bg-surface-muted/40 ps-8 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
               />
@@ -104,8 +174,8 @@ export function MembersSection({
 
             {clubLeadership && (
               <>
-                <CommitteeFilterSelect value={committeeFilter} onChange={setCommitteeFilter} />
-                <RoleFilterSelect value={roleFilter} onChange={setRoleFilter} />
+                <CommitteeFilterSelect value={committeeFilter} onChange={(value) => { setCommitteeFilter(value); setPage(1); }} />
+                <RoleFilterSelect value={roleFilter} onChange={(value) => { setRoleFilter(value); setPage(1); }} />
               </>
             )}
 
@@ -153,7 +223,18 @@ export function MembersSection({
                     {emptyMessage}
                   </td>
                 </tr>
-              ) : filteredMembers.map((member) => {
+              ) : pageRows.map((row) => {
+                if (row.type === "group") {
+                  const groupCount = filteredMembers.filter((member) => getMemberGroup(member) === row.group).length;
+                  return (
+                    <tr key={`group-${row.group}`} className="bg-surface-muted/40">
+                      <td colSpan={columnCount} className="px-5 py-2 text-xs font-bold uppercase tracking-wide text-muted">
+                        {groupLabel(row.group)} <span className="ms-1 font-medium normal-case">({groupCount})</span>
+                      </td>
+                    </tr>
+                  );
+                }
+                const { member } = row;
                 const globalDeveloperLeader = member.globalRoles?.includes("DEVELOPER_COMMITTEES_LEADER") ?? false;
                 const leadershipCommittees = (member.committees ?? []).filter((item) => item.role === "Leader" || item.role === "Co-Leader");
                 const visibleLeadershipCommittees = committeeFilter === ALL
@@ -309,6 +390,38 @@ export function MembersSection({
             </tbody>
           </table>
         </div>
+        {sortedMembers.length > MEMBERS_PER_PAGE && (
+          <div className="flex flex-col gap-3 border-t border-border/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-muted">
+              {t("members.showing", {
+                from: (page - 1) * MEMBERS_PER_PAGE + 1,
+                to: Math.min(page * MEMBERS_PER_PAGE, sortedMembers.length),
+                count: sortedMembers.length,
+              })}
+              <span className="ms-2">{t("members.pageOf", { page, pages: pageCount })}</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPage((currentPage) => Math.max(1, currentPage - 1))}
+                disabled={page === 1}
+                className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronLeft className="size-4 rtl:rotate-180" />
+                {t("members.previous")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPage((currentPage) => Math.min(pageCount, currentPage + 1))}
+                disabled={page === pageCount}
+                className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {t("members.next")}
+                <ChevronRight className="size-4 rtl:rotate-180" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
     </div>
