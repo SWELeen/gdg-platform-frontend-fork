@@ -40,7 +40,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
     <div className="min-w-0">
       <h3 className="mb-4 text-2xl leading-snug font-semibold text-foreground">{label}</h3>
       <div
-        className="relative isolate flex flex-col overflow-hidden bg-gdg-dark shadow-xl md:min-h-144 md:flex-row lg:min-h-160"
+        className="relative isolate flex flex-col overflow-hidden bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row"
         dir={dir}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
@@ -77,11 +77,11 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               }}
             >
               <div className={open
-                ? "relative aspect-video w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full md:w-2/3"
+                ? "relative aspect-3/1 w-full overflow-hidden md:absolute md:inset-y-0 md:start-0 md:aspect-auto md:h-full md:w-1/3"
                 : "absolute inset-0 h-full w-full overflow-hidden"}
               >
                 <motion.img
-                  className={`h-full w-full object-top ${open ? "object-contain md:object-cover" : "object-cover"}`}
+                  className="me-auto block h-full w-2/3 object-contain object-bottom-left rtl:object-bottom-right"
                   src={active.lead.image}
                   alt=""
                   loading="lazy"
@@ -124,9 +124,11 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 {!open && (
-                  <span className="absolute start-20 end-4 bottom-8 flex items-center justify-between gap-3 text-sm leading-none font-medium md:start-auto md:end-5 md:bottom-5 md:rotate-180 md:justify-normal md:[writing-mode:vertical-rl]">
-                    <span>{name}</span>
-                    <span className="text-2xl leading-none text-gdg-yellow" aria-hidden="true">+</span>
+                  <span className="absolute start-20 end-4 top-5 md:start-auto md:end-5">
+                    <span className="flex items-center justify-between gap-3 text-sm leading-none font-medium md:rotate-180 md:justify-normal md:[writing-mode:vertical-rl]">
+                      <span>{name}</span>
+                      <span className="text-2xl leading-none text-gdg-yellow" aria-hidden="true">+</span>
+                    </span>
                   </span>
                 )}
                 {open && <X className="absolute top-5 end-5 size-7" strokeWidth={1} aria-hidden="true" />}
@@ -134,10 +136,10 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               <div
                 id={panelId}
                 hidden={!open}
-                className="pointer-events-none relative z-20 grid grid-cols-1 gap-6 px-6 pt-6 pb-16 md:grid-cols-2 md:px-8 md:py-16"
+                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:grid-cols-3 md:px-8 md:py-8"
               >
                 {open && (
-                  <div className="min-w-0 md:col-start-2">
+                  <div className="min-w-0 md:col-span-2 md:col-start-2">
                     <CommitteeCard committee={committee} initialSubCommitteeId={subId} />
                   </div>
                 )}
@@ -171,7 +173,7 @@ export default function Committees() {
         </h2>
         <p className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</p>
       </div>
-      <div className="space-y-10">
+      <div className="mx-auto w-full max-w-5xl space-y-8 md:w-11/12">
         <CommitteeGallery items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
         <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
