@@ -43,10 +43,23 @@ export interface DeveloperCommitteeDashboardData {
   committees: DeveloperCommitteeOverview[];
   permissions: { canAssignMembers: boolean; canManagePoints: boolean };
   currentMember: { id: string; name: string; role: string };
+  pointHistory: PointHistoryItem[];
 }
 
-export function fetchDeveloperCommitteeOverview() {
-  return apiRequest<DeveloperCommitteeDashboardData>("/developer-committees/dashboard");
+type RawDeveloperCommitteeDashboardData = Omit<DeveloperCommitteeDashboardData, "pointHistory"> & {
+  pointHistory?: (Omit<PointHistoryItem, "timestamp"> & { createdAt: string })[];
+};
+
+export async function fetchDeveloperCommitteeOverview(): Promise<ApiResult<DeveloperCommitteeDashboardData>> {
+  const result = await apiRequest<RawDeveloperCommitteeDashboardData>("/developer-committees/dashboard");
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    data: {
+      ...result.data,
+      pointHistory: (result.data.pointHistory ?? []).map((item) => ({ ...item, timestamp: relativeTime(item.createdAt) })),
+    },
+  };
 }
 
 export interface CommitteeDashboardData extends LeaderDashboardSeed {

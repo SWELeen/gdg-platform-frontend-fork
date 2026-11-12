@@ -47,9 +47,10 @@ export function useCommitteeName() {
 const SELECT_CLASS =
   "h-9 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground outline-none focus:border-blue-500 cursor-pointer";
 
-export function CommitteeFilterSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+export function CommitteeFilterSelect({ value, onChange, options }: { value: string; onChange: (value: string) => void; options?: CommitteeOption[] }) {
   const t = useTranslations("dashboard.leader.groupFilters");
-  const committees = useClubCommittees();
+  const allCommittees = useClubCommittees();
+  const committees = options ?? allCommittees;
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={t("committee")} className={SELECT_CLASS}>
       <option value={ALL}>{t("allCommittees")}</option>

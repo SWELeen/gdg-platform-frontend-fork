@@ -48,6 +48,7 @@ export function LeaderSidebar({
   const navItems = developerCommitteesLeader ? [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },
     { id: "tasks", label: t("nav.tasks"), href: `${basePath}/tasks`, icon: CheckSquare },
+    { id: "points", label: t("nav.points"), href: `${basePath}/points`, icon: Trophy },
     { id: "approvals", label: leadershipT("approvalNavigation"), href: `${basePath}#leadership-approvals-title`, icon: ClipboardCheck },
   ] : clubLeadership ? [
     { id: "overview", label: t("nav.overview"), href: basePath, icon: LayoutDashboard },

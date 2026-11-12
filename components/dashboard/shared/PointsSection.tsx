@@ -12,7 +12,7 @@ interface PointsSectionProps {
 }
 
 export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
-  const { members, pointHistory, canManagePoints, currentMember, clubLeadership } = useLeaderDashboard();
+  const { members, pointHistory, canManagePoints, currentMember, clubLeadership, developerCommitteesLeader, developerCommitteesOverview } = useLeaderDashboard();
   const committees = useClubCommittees();
   const t = useTranslations("dashboard.leader");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
@@ -51,7 +51,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
               {t("points.standings")}
             </h3>
           </div>
-          {clubLeadership && (
+          {(clubLeadership || developerCommitteesLeader) && (
             <div className="flex flex-wrap items-center gap-2">
               <div className="relative">
                 <Search className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted" />
@@ -63,7 +63,11 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                   className="h-9 rounded-xl border border-border bg-surface-muted/40 ps-8 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
                 />
               </div>
-              <CommitteeFilterSelect value={committeeFilter} onChange={setCommitteeFilter} />
+              <CommitteeFilterSelect
+                value={committeeFilter}
+                onChange={setCommitteeFilter}
+                options={developerCommitteesLeader ? developerCommitteesOverview.map(({ code, name }) => ({ code, name })) : undefined}
+              />
             </div>
           )}
         </div>
@@ -98,9 +102,14 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                       >
                         {member.initials}
                       </div>
-                      <span className="font-bold text-foreground">
-                        {member.name}
-                      </span>
+                      <div>
+                        <span className="font-bold text-foreground">{member.name}</span>
+                        {developerCommitteesLeader && member.committees?.length ? (
+                          <span className="mt-0.5 block text-[11px] text-muted">
+                            {member.committees.map(({ name }) => name).join(", ")}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   </td>
                   <td className="px-4 py-3.5 text-muted">{member.role}</td>
@@ -162,7 +171,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                     {item.memberName}:
                   </span>{" "}
                   <span className="text-muted">{item.reason}</span>
-                  {clubLeadership && <span className="ms-2"><CommitteeTag code={item.committeeCode} name={item.committeeName} /></span>}
+                  {(clubLeadership || developerCommitteesLeader) && <span className="ms-2"><CommitteeTag code={item.committeeCode} name={item.committeeName} /></span>}
                 </div>
               </div>
 
