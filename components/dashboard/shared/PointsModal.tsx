@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import type { CommitteeMember } from "./types";
+import { leaderCommitteeConfig } from "./committee-config";
 import { X, Trophy, PlusCircle, MinusCircle } from "lucide-react";
 
 interface PointsModalProps {
@@ -14,15 +15,77 @@ interface PointsModalProps {
 
 export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
   const t = useTranslations("dashboard.leader");
-  const { updateMemberPoints, canManagePoints, currentMember } = useLeaderDashboard();
+  const {
+    updateMemberPoints,
+    canManagePoints,
+    currentMember,
+    committee,
+    committeeName,
+    clubLeadership,
+    developerCommitteesLeader,
+    developerCommitteesOverview,
+  } = useLeaderDashboard();
 
   const [mode, setMode] = useState<"add" | "deduct">("add");
   const [pointsAmount, setPointsAmount] = useState<number | string>(50);
   const [reason, setReason] = useState<string>("");
   const [touched, setTouched] = useState<{ points?: boolean; reason?: boolean }>({});
   const [generalError, setGeneralError] = useState<string>("");
+  const [scopeSelection, setScopeSelection] = useState<{ identity: string; key: string } | null>(null);
+
+  const targetCommittees = member?.committees ?? [];
+  const developerCommitteeCodes = new Set(developerCommitteesOverview.map((item) => item.code));
+  const ownCommitteeCode = leaderCommitteeConfig[committee].committeeCode;
+  const ownCommitteeMembership = targetCommittees.find((item) => item.code === ownCommitteeCode && item.role === "Member");
+  const eligibleCommitteeScopes = clubLeadership
+    ? targetCommittees.filter((item) => item.role === "Leader" || item.role === "Co-Leader")
+    : developerCommitteesLeader
+      ? targetCommittees.filter((item) => developerCommitteeCodes.has(item.code) && (item.role === "Leader" || item.role === "Co-Leader"))
+      : ownCommitteeMembership
+        ? [ownCommitteeMembership]
+        : member?.role === "Member"
+          ? [{
+              code: ownCommitteeCode,
+              name: committeeName,
+              role: "Member",
+              points: member.points,
+              pointsVisible: member.pointsVisible,
+            }]
+          : [];
+  const pointScopes = [
+    ...eligibleCommitteeScopes.map((item) => ({
+      key: `committee:${item.code}`,
+      kind: "committee" as const,
+      committeeCode: item.code,
+      label: `${item.name} — ${item.role}`,
+      points: item.points,
+      pointsVisible: item.pointsVisible,
+    })),
+    ...(clubLeadership && member?.globalRoles?.includes("DEVELOPER_COMMITTEES_LEADER")
+      ? [{
+          key: "global:DEVELOPER_COMMITTEES_LEADER",
+          kind: "global" as const,
+          label: t("points.developerLeaderScope"),
+          points: member.globalPoints ?? member.points,
+          pointsVisible: member.globalPointsVisible ?? member.pointsVisible,
+        }]
+      : []),
+  ];
+  const pointScopeSignature = pointScopes.map((scope) => scope.key).join("|");
+  const scopeSelectionIdentity = `${isOpen}:${member?.id ?? ""}:${pointScopeSignature}`;
+
+  useEffect(() => {
+    setScopeSelection(null);
+  }, [isOpen, member?.id, pointScopeSignature]);
 
   if (!isOpen || !member || member.id === currentMember?.id) return null;
+
+  const selectedScopeKey = pointScopes.length === 1
+    ? pointScopes[0].key
+    : scopeSelection?.identity === scopeSelectionIdentity ? scopeSelection.key : null;
+  const selectedScope = pointScopes.find((scope) => scope.key === selectedScopeKey);
+  const selectedPoints = selectedScope?.points ?? 0;
+  const selectedPointsVisible = selectedScope?.pointsVisible ?? false;
 
   const validatePoints = (val: number | string) => {
     if (val === "" || isNaN(Number(val))) {
@@ -32,8 +95,8 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
     if (!Number.isInteger(num)) return t("points.integer");
     if (num <= 0) return t("points.positive");
     if (num > 2000) return t("points.max");
-    if (mode === "deduct" && member.pointsVisible !== false && num > member.points) {
-      return t("points.tooMany", { requested: num, available: member.points });
+    if (mode === "deduct" && selectedPointsVisible !== false && num > selectedPoints) {
+      return t("points.tooMany", { requested: num, available: selectedPoints });
     }
     return "";
   };
@@ -49,6 +112,11 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
   const pointsError = touched.points ? validatePoints(pointsAmount) : "";
   const reasonError = touched.reason ? validateReason(reason) : "";
 
+  const handleClose = () => {
+    setScopeSelection(null);
+    onClose();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ points: true, reason: true });
@@ -63,14 +131,18 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
 
     const delta = mode === "add" ? Number(pointsAmount) : -Number(pointsAmount);
     try {
-      await updateMemberPoints(member.id, delta, reason.trim(), member.globalRoles?.includes("DEVELOPER_COMMITTEES_LEADER")
+      if (!selectedScope) {
+        setGeneralError(t("points.selectScopeRequired"));
+        return;
+      }
+      await updateMemberPoints(member.id, delta, reason.trim(), selectedScope.kind === "global"
         ? { global: true }
-        : member.pointsCommitteeCode ? { committeeCode: member.pointsCommitteeCode } : undefined);
+        : { committeeCode: selectedScope.committeeCode });
       setPointsAmount(50);
       setReason("");
       setTouched({});
       setGeneralError("");
-      onClose();
+      handleClose();
     } catch (error) {
       setGeneralError(error instanceof Error ? error.message : t("points.requestFailed"));
     }
@@ -81,7 +153,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-        onClick={onClose}
+        onClick={handleClose}
       />
 
       {/* Modal Dialog */}
@@ -93,12 +165,12 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-foreground">{t("points.modalTitle")}</h2>
-              <p className="text-xs text-muted">{member.name}{member.pointsVisible !== false ? ` · ${t("points.current", { count: member.points.toLocaleString() })}` : ""}</p>
+              <p className="text-xs text-muted">{member.name}{selectedPointsVisible !== false ? ` · ${t("points.current", { count: selectedPoints.toLocaleString() })}` : ""}</p>
             </div>
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-foreground"
           >
             <X className="size-5" />
@@ -118,6 +190,32 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
         )}
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          {pointScopes.length > 1 && (
+            <div>
+              <label htmlFor="points-scope" className="block text-xs font-semibold text-foreground">
+                {t("points.scopeLabel")}
+              </label>
+              <select
+                id="points-scope"
+                required
+                value={selectedScopeKey ?? ""}
+                onChange={(event) => {
+                  setScopeSelection(event.target.value
+                    ? { identity: scopeSelectionIdentity, key: event.target.value }
+                    : null);
+                  setGeneralError("");
+                }}
+                className="mt-1 h-10 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500"
+              >
+                <option value="">{t("points.selectScope")}</option>
+                {pointScopes.map((scope) => (
+                  <option key={scope.key} value={scope.key}>
+                    {scope.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           {/* Mode Switch: Add vs Deduct */}
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -248,7 +346,7 @@ export function PointsModal({ isOpen, onClose, member }: PointsModalProps) {
             </button>
             <button
               type="submit"
-              disabled={!canManagePoints || member.id === currentMember?.id}
+              disabled={!canManagePoints || member.id === currentMember?.id || !selectedScope}
               className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:opacity-50"
             >
               {mode === "add" ? t("points.award") : t("points.deduct")}
