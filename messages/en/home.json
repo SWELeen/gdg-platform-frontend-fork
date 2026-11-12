@@ -163,6 +163,8 @@
     }
   },
   "committees": {
+    "previousCommittee": "Previous committee",
+    "nextCommittee": "Next committee",
     "advisorsLabel": "Advisors",
     "developerCommitteesLabel": "Developer Committees",
     "mainCommitteesLabel": "Administrative Committees",

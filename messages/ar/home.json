@@ -163,6 +163,8 @@
     }
   },
   "committees": {
+    "previousCommittee": "اللجنة السابقة",
+    "nextCommittee": "اللجنة التالية",
     "advisorsLabel": "المستشارون",
     "developerCommitteesLabel": "لجان المطورين",
     "mainCommitteesLabel": "اللجان الإدارية",
