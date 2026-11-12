@@ -148,7 +148,7 @@ export default function CommitteeCard({
 
           {/* End / Bottom Side */}
           <div className="mt-4 border-t border-white/20 pt-3">
-            <div className="grid w-full grid-cols-1 items-stretch justify-items-center gap-3 sm:grid-cols-2">
+            <div dir={leaders.length > 1 ? "ltr" : dir} className="grid w-full grid-cols-1 items-stretch justify-items-center gap-3 sm:grid-cols-2">
               {leaders.map((leader, index) => (
                 <CommitteePersonCard
                   key={`${activeCommittee.id}-${leader.key}`}
@@ -163,7 +163,11 @@ export default function CommitteeCard({
                   x={leader.x}
                   imageScaleClass={leader.imageScaleClass}
                   imagePositionClass={leader.imagePositionClass}
-                  layoutClass={leaders.length === 1 ? "w-full sm:col-span-2 sm:max-w-1/2" : "w-full"}
+                  layoutClass={leaders.length === 1
+                    ? "w-full sm:col-span-2 sm:max-w-1/2"
+                    : leader.key === "lead"
+                      ? "w-full sm:col-start-2 sm:row-start-1"
+                      : "w-full sm:col-start-1 sm:row-start-1"}
                 />
               ))}
             </div>

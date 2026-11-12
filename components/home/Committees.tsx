@@ -80,7 +80,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               <div
                 aria-hidden="true"
                 className={open
-                  ? "pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full"
+                  ? `pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full ${hasPortraitPair ? "z-1" : ""}`
                   : "pointer-events-none absolute inset-0 isolate h-full w-full overflow-hidden"}
               >
                 {[{ role: "lead", person: active.lead }, ...(active.coLeader ? [{ role: "co-lead", person: active.coLeader }] : [])].map(({ role, person }) => {
@@ -106,7 +106,9 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                         loading="lazy"
                         animate={{
                           scale: reduceMotion || highlighted ? 1 : 1.035,
-                          filter: highlighted
+                          filter: open && hasPortraitPair
+                            ? "none"
+                            : highlighted
                             ? "grayscale(0) brightness(.85)"
                             : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
                         }}
