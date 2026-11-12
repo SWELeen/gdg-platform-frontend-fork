@@ -46,7 +46,7 @@ export default function CommitteePersonCard({
       transition={{ type: "spring", stiffness: 260, damping: 22, delay: reduceMotion ? 0 : index * 0.1 }}
       whileHover={reduceMotion ? undefined : { y: -6, scale: 1.02 }}
       whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-      className={`group relative mt-2 flex h-[260px] min-h-0 min-w-0 flex-col overflow-visible rounded-2xl border border-foreground/10 bg-background p-2 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg ${layoutClass}`}
+      className={`group relative mt-2 flex h-auto min-h-[clamp(15rem,18vw,17rem)] min-w-0 flex-col overflow-visible rounded-2xl border border-foreground/10 bg-background p-2 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg ${layoutClass}`}
       style={{ "--committee-accent": accentColor } as CSSProperties}
     >
       <span

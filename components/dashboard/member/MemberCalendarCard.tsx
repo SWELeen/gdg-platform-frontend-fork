@@ -68,7 +68,7 @@ export function MemberCalendarCard() {
   if (now === null) {
     return (
       <div
-        className={`h-[25rem] animate-pulse motion-reduce:animate-none ${DASHBOARD_CARD}`}
+        className={`min-h-[clamp(22rem,40vw,25rem)] animate-pulse motion-reduce:animate-none ${DASHBOARD_CARD}`}
         aria-busy="true"
         aria-label={t("loading")}
       />

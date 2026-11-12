@@ -58,7 +58,7 @@ export function SettingsSection() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-5xl grid-cols-1 items-start gap-5 lg:grid-cols-2 lg:gap-6">
+    <div className="mx-auto grid w-full max-w-[min(100%,88rem)] grid-cols-1 items-start gap-5 lg:grid-cols-2 lg:gap-6">
       {savedSuccess && (
         <div className="flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 lg:col-span-2">
           <Check className="size-4 text-emerald-600" />

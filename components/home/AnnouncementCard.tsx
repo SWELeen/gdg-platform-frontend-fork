@@ -94,7 +94,7 @@ export default function AnnouncementCard({
         relative
         flex
         h-full
-        min-h-[470px]
+        min-h-[clamp(26rem,42vw,29.375rem)]
         flex-col
         overflow-hidden
         rounded-[24px]
@@ -108,7 +108,7 @@ export default function AnnouncementCard({
       <div
         className="
           relative
-          h-[180px]
+          h-[clamp(10rem,18vw,12rem)]
           shrink-0
           overflow-hidden
         "

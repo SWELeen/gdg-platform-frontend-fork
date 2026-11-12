@@ -31,7 +31,8 @@ type ProjectCardProps = {
    إعدادات التصميم (غيّري هنا فقط)
    ============================================================ */
 
-const CARD_W = 280; // عرض الكرت بالبكسل
+export const CARD_WIDTH = 280;
+const CARD_W = CARD_WIDTH;
 const HALF_W = CARD_W / 2;
 
 /** المسافة الظاهرة بين كل كرتين متجاورين (بالبكسل) */
@@ -158,7 +159,7 @@ export default function ProjectCard({
           "below 4px var(--project-card-reflection)",
       }}
       onClick={!isActive ? (detailsOpen ? onViewProject : onSelect) : undefined}
-      className={`absolute left-1/2 top-0 -ml-[140px] h-[420px] w-[280px] ${
+      className={`absolute left-1/2 top-0 -ml-[140px] h-[392px] w-[280px] ${
         !isActive && onSelect ? "cursor-pointer" : ""
       }`}
     >
@@ -210,7 +211,7 @@ export default function ProjectCard({
 
           {/* الوصف + زر السهم */}
           <div className="mt-2 flex items-end justify-between gap-3">
-            <p className="line-clamp-4 max-w-[190px] text-xs leading-[1.6] text-white/80">
+            <p className="line-clamp-4 max-w-[min(14rem,58%)] text-[clamp(0.7125rem,0.646rem_+_0.114vw,0.9025rem)] leading-[1.6] text-white/80">
               {projectDescription}
             </p>
 

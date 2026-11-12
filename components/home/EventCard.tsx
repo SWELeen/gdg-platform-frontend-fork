@@ -144,7 +144,7 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="h-full w-full drop-shadow-sm sm:min-h-[160px]"
+      className="h-full w-full drop-shadow-sm sm:min-h-[clamp(10rem,13vw,18rem)]"
     >
       {/* الطبقة الخارجية = لون الحد */}
       <div
@@ -153,12 +153,12 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
       >
         {/* الطبقة الداخلية = محتوى التذكرة */}
         <div
-          className="relative flex h-full w-full flex-col overflow-hidden rounded-[15px] bg-surface [-webkit-mask:var(--mask-v)] [mask:var(--mask-v)] sm:min-h-[158px] sm:flex-row sm:[-webkit-mask:var(--mask-h)] sm:[mask:var(--mask-h)]"
+          className="relative flex h-full w-full flex-col overflow-hidden rounded-[15px] bg-surface [-webkit-mask:var(--mask-v)] [mask:var(--mask-v)] sm:min-h-[clamp(9.875rem,12.7vw,17.875rem)] sm:flex-row sm:[-webkit-mask:var(--mask-h)] sm:[mask:var(--mask-h)]"
           style={innerStyle}
         >
           {/* Event Image */}
           <div
-            className="relative h-[170px] w-full shrink-0 overflow-hidden [-webkit-mask:var(--scallop-v)] [mask:var(--scallop-v)] sm:h-auto sm:w-[34%] sm:[-webkit-mask:var(--scallop-h)] sm:[mask:var(--scallop-h)]"
+            className="relative h-[clamp(7.5rem,35vw,9rem)] w-full shrink-0 overflow-hidden [-webkit-mask:var(--scallop-v)] [mask:var(--scallop-v)] sm:h-auto sm:w-[34%] sm:[-webkit-mask:var(--scallop-h)] sm:[mask:var(--scallop-h)]"
             style={imageStyle}
           >
             <img
@@ -169,7 +169,7 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
           </div>
 
           {/* Event Info */}
-          <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 px-4 py-4">
+          <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 px-[clamp(0.875rem,1.5vw,1.5rem)] py-[clamp(0.75rem,1.25vw,1.25rem)]">
             <div>
               <h3 className="text-lg font-semibold leading-snug text-foreground">
                 {event.name}
@@ -232,7 +232,7 @@ export default function EventCard({ event, onRegister }: EventCardProps) {
           {/* Date stub */}
           {dateParts && (
             <div
-              className="flex shrink-0 items-center justify-center gap-3 border-t-2 border-dashed border-border text-foreground sm:w-[83px] sm:flex-col sm:gap-0 sm:border-t-0 sm:border-s-2"
+              className="flex shrink-0 items-center justify-center gap-3 border-t-2 border-dashed border-border text-foreground sm:w-[clamp(5rem,7vw,8rem)] sm:flex-col sm:gap-0 sm:border-t-0 sm:border-s-2"
               style={{ minHeight: STUB_HEIGHT - BORDER }}
             >
               {dateStubContent}

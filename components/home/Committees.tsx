@@ -64,25 +64,25 @@ export default function Committees() {
   return (
     <section
       id="committees"
-      className="bg-background px-6 py-12 sm:px-4 sm:py-12 lg:px-10 lg:py-14"
+      className="bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="max-w-2xl pb-8 sm:pb-10">
-          <h2 className="text-4xl font-bold leading-snug text-foreground md:text-5xl">
+      <div className="w-full">
+        <div className="pb-8 sm:pb-10">
+          <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
             {t("title")}{" "}
             <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
               {t("highlight")}
             </span>
           </h2>
 
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground/60 md:text-lg">
+          <p className="mt-4 max-w-[min(56rem,75%)] text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
             {t("subtitle")}
           </p>
         </div>
 
         <div
           dir="ltr"
-          className={`mx-auto grid w-full items-start gap-y-12 xl:grid-cols-2 xl:gap-y-0 ${hasOpenDetails ? "xl:max-w-7xl xl:gap-x-8" : "xl:max-w-5xl xl:gap-x-4"}`}
+          className={`grid w-full items-start gap-y-12 xl:grid-cols-2 xl:gap-y-0 ${hasOpenDetails ? "xl:gap-x-[clamp(2rem,4vw,5rem)]" : "xl:gap-x-[clamp(1rem,3vw,4rem)]"}`}
         >
           <section aria-label={t("developerCommitteesLabel")} dir={dir} className="mx-auto w-full md:max-w-[460px] order-2 xl:mx-0 xl:max-w-none xl:order-1">
             <h3

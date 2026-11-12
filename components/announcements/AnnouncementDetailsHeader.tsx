@@ -36,7 +36,7 @@ export function AnnouncementDetailsHeader({ announcement }: { announcement: Anno
 
       <CategoryBadge category={announcement.category} />
 
-      <h1 className="max-w-[860px] text-4xl font-bold leading-tight text-foreground lg:text-5xl">
+      <h1 className="max-w-[min(72rem,85vw)] text-[clamp(1.6625rem,1.425rem_+_0.665vw,2.85rem)] font-bold leading-tight text-foreground">
         {announcement.title}
       </h1>
 

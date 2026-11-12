@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <>
       
-      <main className="flex min-h-screen flex-col">
+      <main className="flex min-h-screen flex-col gap-y-[clamp(0.25rem,0.5vw,0.5rem)]">
         <HeroSection />
         <AboutSection />
         <WhatWeOffer/>

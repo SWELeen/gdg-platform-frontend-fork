@@ -11,25 +11,25 @@ export default function JoinCommunity() {
   const router = useRouter();
 
   return (
-    <section className="mt-5 px-6 py-16 lg:px-10 lg:py-20">
+    <section className="mt-5 py-[clamp(1rem,1.5vw,1.5rem)]">
       <div
-        className="relative mx-auto flex min-h-[310px] max-w-[1100px] items-center overflow-visible rounded-2xl px-8 py-10 lg:px-12"
+        className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-[60vw] items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
         style={{
           background:
             "linear-gradient(to right, var(--join-blue), var(--join-orange), var(--join-green))",
         }}
       >
-        <div className="max-w-[650px]">
+        <div className="relative z-10 max-w-[min(52rem,74%)] max-lg:max-w-full">
           <h3
             dir={dir}
-            className="text-2xl font-semibold leading-snug text-[var(--white)]"
+            className="text-[clamp(1.3062rem,1.14rem_+_0.665vw,2.1375rem)] font-semibold leading-snug text-[var(--white)]"
           >
             {t("title")}
           </h3>
 
           <h4
             dir={dir}
-            className="mt-5 max-w-[600px] text-lg font-normal leading-normal text-[var(--white)]"
+            className="mt-3 max-w-[min(38rem,100%)] text-[clamp(0.9rem,0.855rem_+_0.3vw,1.2rem)] font-normal leading-normal text-[var(--white)]"
           >
             {t("description")}
           </h4>
@@ -37,7 +37,7 @@ export default function JoinCommunity() {
           <motion.button
             type="button"
             onClick={() => router.push("/login")}
-            className="relative mt-8 flex h-[50px] w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-full border text-base font-bold text-[var(--white)] backdrop-blur-md lg:h-[56px] lg:w-[250px] lg:text-xl"
+            className="relative mt-5 flex min-h-10 w-fit min-w-[min(13rem,100%)] cursor-pointer items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[clamp(0.875rem,0.85rem_+_0.2vw,1.05rem)] font-bold text-[var(--white)] backdrop-blur-md"
             style={{
               borderColor: "var(--glass-border)",
               backgroundColor: "var(--glass-background)",
@@ -60,7 +60,7 @@ export default function JoinCommunity() {
           </motion.button>
         </div>
 
-        <div className="absolute -end-4 -top-30 hidden w-[280px] lg:block">
+        <div className="absolute -end-[clamp(0.5rem,1.5vw,0.875rem)] -top-[clamp(4rem,6vw,6rem)] hidden w-[clamp(12rem,18vw,21rem)] lg:block">
           <img
             src="/images/phone-image.png"
             alt={t("phoneAlt")}

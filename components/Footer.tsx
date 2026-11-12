@@ -53,33 +53,33 @@ export default function Footer() {
         className="pointer-events-none absolute -top-10 start-1/4 h-36 w-1/2 rounded-full bg-[var(--google-gradient)] opacity-[0.14] blur-3xl"
       />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.4fr_1fr_0.8fr] lg:gap-12 lg:px-10 lg:py-9">
+      <div className="relative z-10 grid w-full gap-[clamp(2rem,4vw,4rem)] px-6 py-[clamp(1rem,2vw,2rem)] lg:grid-cols-[1.4fr_1fr_0.8fr]">
         <section className="flex flex-col items-start gap-7">
           <Link href="/" aria-label={t("nav.home")} className="inline-flex rounded-xl outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:focus-visible:outline-white">
             <img
               src="/images/black-logo-with-colors.png"
               alt={t("logoAlt")}
-              className="footer-logo-light w-56 max-w-full object-contain sm:w-70"
+              className="footer-logo-light h-auto w-[clamp(14rem,20vw,26rem)] max-w-full object-contain"
             />
             <img
               src="/images/gdg-logo.png"
               alt={t("logoAlt")}
-              className="footer-logo-dark w-56 max-w-full object-contain sm:w-70"
+              className="footer-logo-dark h-auto w-[clamp(14rem,20vw,26rem)] max-w-full object-contain"
             />
           </Link>
-          <p dir={dir} className="max-w-md whitespace-pre-line text-sm leading-6 text-foreground/70 dark:text-white/65">
+          <p dir={dir} className="max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem_+_0.114vw,0.8906rem)] leading-relaxed text-foreground/70 dark:text-white/65">
             {t("footer.tagline")}
           </p>
         </section>
 
         <section>
-          <h3 dir={dir} className="text-base font-bold tracking-wide text-foreground dark:text-white">
+          <h3 dir={dir} className="text-[clamp(0.8906rem,0.855rem_+_0.19vw,1.0687rem)] font-bold tracking-wide text-foreground dark:text-white">
             {t("footer.linksTitle")}
           </h3>
           <div className="mt-2 h-1 w-10 rounded-full bg-[var(--gdg-blue)]" />
           <nav aria-label={t("footer.linksTitle")} className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
             {links.map((link) => {
-              const className = "w-fit text-sm text-foreground/70 transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:text-white/70 dark:hover:text-white dark:focus-visible:outline-white";
+              const className = "w-fit text-[clamp(0.7719rem,0.741rem_+_0.095vw,0.8906rem)] text-foreground/70 transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:text-white/70 dark:hover:text-white dark:focus-visible:outline-white";
 
               return link.route ? (
                 <Link key={link.label} href={link.href} dir={dir} className={className}>
@@ -95,7 +95,7 @@ export default function Footer() {
         </section>
 
         <section>
-          <h3 dir={dir} className="text-base font-bold tracking-wide text-foreground dark:text-white">
+          <h3 dir={dir} className="text-[clamp(0.8906rem,0.855rem_+_0.19vw,1.0687rem)] font-bold tracking-wide text-foreground dark:text-white">
             {t("footer.contactTitle")}
           </h3>
           <div className="mt-2 h-1 w-10 rounded-full bg-[var(--gdg-green)]" />
@@ -124,7 +124,7 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10 border-t border-foreground/10 dark:border-white/10">
-        <p dir={dir} className="mx-auto max-w-7xl px-6 py-3 text-center text-xs leading-5 text-foreground/55 dark:text-white/50 sm:px-8 lg:px-10">
+        <p dir={dir} className="w-full px-6 py-3 text-center text-[clamp(0.6531rem,0.627rem_+_0.095vw,0.7719rem)] leading-relaxed text-foreground/55 dark:text-white/50">
           {t("footer.copyright")}
         </p>
       </div>

@@ -16,8 +16,8 @@ type AuthCardProps = {
 // max-height would push the overflow past the rounded border. The surrounding
 // form panel scrolls instead when the viewport is short.
 const sizeClasses = {
-  sm: "md:w-109.5 md:h-120!",
-  md: "md:w-109.5 md:h-130!",
+  sm: "md:w-[clamp(27.5rem,36vw,40rem)] md:min-h-[clamp(30rem,42vh,40rem)]",
+  md: "md:w-[clamp(30rem,40vw,48rem)] md:min-h-[clamp(34rem,48vh,48rem)]",
   lg: "md:w-full md:max-w-135 md:pt-4",
 } as const;
 
@@ -34,7 +34,7 @@ export default function AuthCard({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className={`relative flex h-auto w-full flex-col items-center bg-surface px-8.75 pt-10.25 md:rounded-[20px] md:shadow-[0_0_15px_rgba(0,0,0,0.15)] ${compact && size === "md" ? "md:w-109.5 md:h-112!" : compact && size === "sm" ? "md:w-109.5 md:h-96!" : sizeClasses[size]} ${className}`}
+      className={`relative flex h-auto w-full flex-col items-center bg-surface px-[clamp(1.25rem,3vw,3rem)] pt-[clamp(2rem,4vw,3.5rem)] md:rounded-[20px] md:shadow-[0_0_15px_rgba(0,0,0,0.15)] ${compact && size === "md" ? "md:w-[clamp(27.5rem,36vw,40rem)] md:min-h-[clamp(28rem,40vh,36rem)]" : compact && size === "sm" ? "md:w-[clamp(27.5rem,36vw,40rem)] md:min-h-[clamp(24rem,35vh,32rem)]" : sizeClasses[size]} ${className}`}
     >
       {title && (
         <h1 className="text-center text-3xl font-bold leading-tight md:text-4xl">

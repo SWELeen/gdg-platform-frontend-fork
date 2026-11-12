@@ -74,7 +74,7 @@ export function LeaderHeader({
           <span className="mx-1 h-4 w-px self-center bg-border max-lg:hidden" aria-hidden="true" />
 
           <div className="min-w-0">
-            <h1 className="break-words text-[clamp(1.35rem,1rem+1.4vw,1.875rem)] font-semibold text-foreground">
+            <h1 className="break-words text-[clamp(1.2825rem,0.95rem+1.33vw,1.7812rem)] font-semibold text-foreground">
               {pageTitle}
             </h1>
           </div>

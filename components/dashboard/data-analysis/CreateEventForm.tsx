@@ -34,7 +34,7 @@ import {
 const styles = {
   overlay: "fixed inset-0 z-[1000] flex items-start justify-center overflow-y-auto bg-slate-900/65 p-3 backdrop-blur-sm sm:items-center sm:p-6",
   page: "min-h-screen w-full bg-surface-muted px-3 py-5 md:px-6 md:py-10",
-  card: "relative mx-auto w-full max-w-[900px] overflow-hidden rounded-[14px] bg-surface text-foreground shadow-[0_4px_20px_rgba(0,0,0,0.08)] outline-none",
+  card: "relative mx-auto w-full max-w-[min(94vw,90rem)] overflow-hidden rounded-[14px] bg-surface text-foreground shadow-[0_4px_20px_rgba(0,0,0,0.08)] outline-none",
   modalCard: "max-h-[calc(100vh-1.5rem)] overflow-y-auto sm:max-h-[calc(100vh-3rem)]",
   header: "relative bg-[image:var(--create-event-gradient)] px-6 py-5 pe-16 text-white sm:px-10",
   close: "absolute end-4 top-4 z-[1] grid size-9 place-items-center rounded-[10px] bg-white/90 text-gray-700 transition hover:bg-white",

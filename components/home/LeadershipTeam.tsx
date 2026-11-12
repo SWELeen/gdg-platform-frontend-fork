@@ -59,7 +59,8 @@ function TeamGroup({
   return (
     <div
       id={id}
-      className={`flex flex-col gap-10 lg:items-center lg:justify-between lg:gap-12 ${
+      dir="ltr"
+      className={`flex flex-col gap-10 lg:items-center lg:justify-between lg:gap-[clamp(3rem,6vw,7rem)] ${
         reverse ? "lg:flex-row-reverse" : "lg:flex-row"
       }`}
     >
@@ -70,9 +71,9 @@ function TeamGroup({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="max-w-md text-start lg:flex-1"
+        className="w-full max-w-[clamp(24rem,38vw,48rem)] text-left lg:flex-1"
       >
-        <h2 className="text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
+        <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-tight">
           <motion.span variants={textItem} className="block text-foreground">
             {eyebrow}
           </motion.span>
@@ -86,7 +87,7 @@ function TeamGroup({
 
         <motion.p
           variants={textItem}
-          className="mt-4 text-lg font-bold leading-snug text-foreground md:text-xl"
+          className="mt-4 text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-bold leading-snug text-foreground"
         >
           {description}
         </motion.p>
@@ -98,7 +99,7 @@ function TeamGroup({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        className={`flex flex-wrap justify-center gap-4 sm:gap-5 ${
+        className={`flex flex-wrap justify-center gap-[clamp(0.875rem,1.75vw,2rem)] ${
           reverse ? "lg:justify-start" : "lg:justify-end"
         }`}
       >
@@ -106,7 +107,7 @@ function TeamGroup({
           <motion.div
             key={member.id}
             variants={cardItem}
-            className="w-[calc(50%-0.5rem)] max-w-[200px] sm:w-[190px] lg:w-[200px]"
+            className="w-[calc(50%-0.5rem)] max-w-[24rem] sm:w-[clamp(12rem,16vw,24rem)]"
           >
             <TeamCard member={member} />
           </motion.div>
@@ -123,9 +124,9 @@ export default function LeadershipTeam() {
   return (
     <section
       id="leadership"
-      className="bg-sponsor-gray px-6 py-16 lg:px-10 lg:py-24"
+      className="bg-sponsor-gray px-6 py-[clamp(1.25rem,2vw,2rem)]"
     >
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:gap-15">
+      <div className="flex w-full flex-col gap-5">
         <TeamGroup
           members={leaders}
           eyebrow={t("eyebrow")}
@@ -143,8 +144,8 @@ export function AdvisorsTeam() {
   const advisors = teamMembers.filter((member) => member.type === "advisor");
 
   return (
-    <section id="advisors" className="bg-sponsor-gray px-6 py-16 lg:px-10 lg:py-24">
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:gap-15">
+    <section id="advisors" className="bg-sponsor-gray px-6 py-[clamp(1.25rem,2vw,2rem)]">
+      <div className="flex w-full flex-col gap-5">
         <TeamGroup
           members={advisors}
           eyebrow={t("advisors.eyebrow")}

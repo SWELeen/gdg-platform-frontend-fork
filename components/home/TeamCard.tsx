@@ -63,7 +63,7 @@ export default function TeamCard({ member }: TeamCardProps) {
       {/* Info */}
       <div
         dir={dir}
-        className="relative -mt-4 overflow-hidden rounded-t-2xl bg-background px-4 pb-4 pt-4 text-start"
+        className="relative -mt-[clamp(0.625rem,1vw,1.25rem)] overflow-hidden rounded-t-2xl bg-background px-[clamp(0.75rem,1vw,1.4rem)] pb-[clamp(0.75rem,1vw,1.4rem)] pt-[clamp(0.75rem,1vw,1.4rem)] text-start"
       >
         <img
           src="/images/Google-design%20.png"
@@ -73,12 +73,12 @@ export default function TeamCard({ member }: TeamCardProps) {
         />
         <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/65" />
         <div className="relative z-10">
-          <h4 className="text-base font-semibold leading-snug text-foreground sm:text-lg">
+          <h4 className="text-[clamp(0.845rem,0.812rem_+_0.18vw,1.015rem)] font-semibold leading-snug text-foreground">
             {t(`team.${member.id}.name`)}
           </h4>
 
           {/* Google Developer Group */}
-          <p className="mt-1 text-xs font-normal leading-normal sm:text-sm">
+          <p className="mt-1 text-[clamp(0.7125rem,0.665rem_+_0.095vw,0.8312rem)] font-normal leading-normal">
             <span className="text-gdg-blue">G</span>
             <span className="text-gdg-red">o</span>
             <span className="text-gdg-yellow">o</span>
@@ -89,7 +89,7 @@ export default function TeamCard({ member }: TeamCardProps) {
           </p>
 
           {/* Role */}
-          <p className="text-xs font-normal leading-normal text-foreground sm:text-sm">
+          <p className="text-[clamp(0.7125rem,0.665rem_+_0.095vw,0.8312rem)] font-normal leading-normal text-foreground">
             {t(`team.${member.id}.role`)}
           </p>
 

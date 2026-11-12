@@ -14,7 +14,7 @@ export function AnnouncementsHero() {
 
   return (
     <section className={`${announcementsContainer} flex items-start justify-between gap-10 pt-10 pb-10 lg:pt-14`}>
-      <div className="max-w-[520px]">
+      <div className="w-full max-w-[min(52rem,85vw)]">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gdg-blue">
           {t("eyebrow")}
         </p>

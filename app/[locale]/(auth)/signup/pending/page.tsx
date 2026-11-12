@@ -59,7 +59,7 @@ export default function SignupPendingPage({ params }: { params: Promise<{ locale
           compact
           title={t("title")}
           description={t("description")}
-          className="signup-pending-card max-w-[22rem] md:max-w-none md:h-80!"
+          className="signup-pending-card w-full max-w-[min(22rem,100%)] md:max-w-[min(30rem,100%)]"
         >
           <div className="signup-pending-visual">
             <div aria-hidden="true" className="signup-pending-decoration">

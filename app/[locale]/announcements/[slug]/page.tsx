@@ -51,7 +51,7 @@ export default async function AnnouncementDetailsPage({ params }: Props) {
         className="aspect-[16/9] w-full rounded-card sm:aspect-[21/9]"
       />
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,20rem)] lg:gap-12 xl:gap-14">
         <AnnouncementArticle announcement={announcement} />
         <AnnouncementInfoCard announcement={announcement} />
       </div>
