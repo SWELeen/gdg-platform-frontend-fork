@@ -9,7 +9,7 @@ const FALLBACK_IMAGE = "/images/unknown.png";
 // These describe transparent padding, not person-specific display sizes or scales.
 const portraitGeometry: Record<string, readonly [number, number, number, number, number, number]> = {
   "/images/PM-colead.png": [1228, 1700, 0, 11, 1228, 1689],
-  "/images/PM-lead.png": [1408, 1756, 0, 19, 1408, 1737],
+  "/images/PM-Lead.png": [1408, 1756, 0, 19, 1408, 1737],
   "/images/unknown.png": [364, 420, 1, 61, 363, 359],
   "/images/sameerah-preview.png": [408, 612, 0, 59, 408, 553],
   "/images/DMD-colead.png": [1552, 2184, 0, 68, 1552, 2116],
