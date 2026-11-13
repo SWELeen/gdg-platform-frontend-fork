@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import CommitteeCard, { type Committee } from "./CommitteeCard";
+import CommitteePortrait from "./CommitteePortrait";
 import { committees } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -88,40 +89,51 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                   // Only real leadership pairs use edge clipping. Single portraits
                   // stay fully inside the card in both states and both locales.
                   const portraitWidth = open
-                    ? hasPortraitPair ? "w-1/3 md:w-1/6" : "w-2/3 md:w-1/6"
-                    : hasPortraitPair ? "w-3/5" : "w-2/3";
+                    ? hasPortraitPair ? "w-1/3 md:w-1/6" : "w-3/4 md:w-3/16"
+                    : hasPortraitPair ? "w-3/5" : "w-3/4";
                   const edgeOffset = hasPortraitPair && !open ? (isLeader ? "25%" : "-25%") : "0%";
                   return (
                     <motion.div
                       key={role}
+                      dir={hasPortraitPair ? (isLeader ? "ltr" : "rtl") : undefined}
                       className={`absolute bottom-0 h-full transition-[width] duration-750 ease-[cubic-bezier(.22,.68,0,1)] motion-reduce:transition-none ${isLeader ? "right-0" : "left-0"} ${portraitWidth}`}
                       initial={false}
                       animate={{ x: edgeOffset }}
                       transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
                     >
-                      <motion.img
-                        className={`block h-full w-full object-contain ${!hasPortraitPair ? "object-bottom-right" : "object-bottom"}`}
-                        src={person.image?.trim() || "/images/unknown.png"}
-                        alt=""
-                        loading="lazy"
-                        animate={{
-                          scale: reduceMotion || highlighted ? 1 : 1.035,
-                          filter: open && hasPortraitPair
-                            ? "none"
-                            : highlighted
-                            ? "grayscale(0) brightness(.85)"
-                            : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
-                        }}
-                        transition={{
-                          scale: { duration: reduceMotion ? 0 : 0.9, ease: panelEase },
-                          filter: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
-                        }}
-                        onError={(event) => {
-                          if (!event.currentTarget.src.endsWith("/images/unknown.png")) {
-                            event.currentTarget.src = "/images/unknown.png";
-                          }
-                        }}
-                      />
+                      {hasPortraitPair ? (
+                        <CommitteePortrait
+                          image={person.image}
+                          isLeader={isLeader}
+                          open={open}
+                          highlighted={highlighted}
+                          reduceMotion={reduceMotion}
+                        />
+                      ) : (
+                        <motion.img
+                          className={`block h-full w-full object-contain ${!hasPortraitPair ? "object-bottom-right" : "object-bottom"}`}
+                          src={person.image?.trim() || "/images/unknown.png"}
+                          alt=""
+                          loading="lazy"
+                          animate={{
+                            scale: reduceMotion || highlighted ? 1 : 1.035,
+                            filter: open && hasPortraitPair
+                              ? "none"
+                              : highlighted
+                              ? "grayscale(0) brightness(.85)"
+                              : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
+                          }}
+                          transition={{
+                            scale: { duration: reduceMotion ? 0 : 0.9, ease: panelEase },
+                            filter: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
+                          }}
+                          onError={(event) => {
+                            if (!event.currentTarget.src.endsWith("/images/unknown.png")) {
+                              event.currentTarget.src = "/images/unknown.png";
+                            }
+                          }}
+                        />
+                      )}
                     </motion.div>
                   );
                 })}
