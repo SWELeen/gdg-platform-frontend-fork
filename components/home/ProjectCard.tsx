@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -173,18 +172,6 @@ export default function ProjectCard({
         }`}
         style={{ backgroundColor: project.committeeColor ?? "var(--surface-muted)" }}
       >
-        {project.img && (
-          <div className="pointer-events-none absolute inset-x-1 top-[2rem] bottom-[8rem] flex items-center justify-center">
-            <Image
-              src={project.img}
-              alt=""
-              aria-hidden="true"
-              fill
-              sizes="(max-width: 1023px) 72vw, 280px"
-              className="object-contain p-1 opacity-20 drop-shadow-xl"
-            />
-          </div>
-        )}
         {/* صورة المشروع */}
         {/* تدرج داكن في أسفل الكرت عشان يوضح النص */}
         <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-b from-transparent via-[color:var(--gdg-dark)]/55 to-[color:var(--gdg-dark)]/90" />
