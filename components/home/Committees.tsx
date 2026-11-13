@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import CommitteeCard, { type Committee } from "./CommitteeCard";
 import CommitteePortrait from "./CommitteePortrait";
+import MobileCommitteeAccordion from "./MobileCommitteeAccordion";
 import { committees } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -273,9 +274,13 @@ export default function Committees() {
         </motion.h2>
         <motion.p variants={textItem} className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</motion.p>
       </motion.div>
-      <div className="mx-auto w-full max-w-5xl space-y-8 md:w-11/12">
+      <div className="mx-auto hidden w-full max-w-5xl space-y-8 md:block md:w-11/12">
         <CommitteeGallery items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
         <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
+      </div>
+      <div className="mx-auto w-full max-w-5xl space-y-8 md:hidden">
+        <MobileCommitteeAccordion items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
+        <MobileCommitteeAccordion items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
     </section>
   );
