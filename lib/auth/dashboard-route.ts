@@ -29,9 +29,11 @@ export function dashboardWorkspacesFor(identity: AuthenticatedIdentity): Dashboa
     const entry = Object.entries(leaderCommitteeConfig).find(([, config]) => config.committeeCode === code);
     if (entry) workspaces.push({ kind: "committee", path: entry[1].routeBase, committee: entry[0] as LeaderCommittee });
   }
-  // The member workspace is the shared "My Tasks" view, available to every
-  // platform member, including leaders who also have one or more leader dashboards.
-  workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
+  // Group leadership uses its leadership workspace and does not receive My Tasks.
+  const isGroupLeader = identity.roles.includes("GROUP_LEADER") || identity.roles.includes("GROUP_CO_LEADER");
+  if (!isGroupLeader) {
+    workspaces.push({ kind: "member", path: "/dashboard/members-dashboard" });
+  }
   return workspaces;
 }
 
