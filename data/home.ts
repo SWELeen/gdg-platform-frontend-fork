@@ -137,7 +137,7 @@ const allCommittees = [
       "Where ideas become structured plans with clear owners, clear deadlines, and clear outcomes. We bring together planning, coordination, and follow through to turn vision into execution, and execution into results.",
     lead: {
       name: "Mohammed Elkasabgy",
-      image: "/images/PM-lead.png",
+      image: "/images/PM-Lead.png",
       linkedin: "https://www.linkedin.com/in/mohamed-elkasabgy-a610a4387?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
       x: "https://x.com/mksbji?s=11&t=O9bY4C0wj73A4Q7P5zDisA",
     },
