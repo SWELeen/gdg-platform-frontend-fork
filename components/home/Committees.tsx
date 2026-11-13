@@ -80,7 +80,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
       <h3 className="mb-4 text-2xl leading-snug font-semibold text-foreground">{label}</h3>
       <div
         ref={galleryRef}
-        className="relative isolate flex flex-col overflow-hidden bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row"
+        className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row"
         dir={dir}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
@@ -248,15 +248,31 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
 
 export default function Committees() {
   const t = useTranslations("home.committees");
+  const dir = useTextDirection();
+  const reduceMotion = useReducedMotion();
+  const textItem = {
+    hidden: { opacity: 0, x: reduceMotion ? 0 : (dir === "rtl" ? 1 : -1) * 40 },
+    visible: {
+      opacity: 1, x: 0,
+      transition: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" as const },
+    },
+  };
   return (
     <section id="committees" className="bg-background px-6 py-8">
-      <div className="pb-8 sm:pb-10">
-        <h2 className="text-start text-3xl leading-snug font-bold text-foreground">
+      <motion.div
+        initial={reduceMotion ? false : "hidden"}
+        animate={reduceMotion ? "visible" : undefined}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.12 } } }}
+        className="pb-8 sm:pb-10"
+      >
+        <motion.h2 variants={textItem} className="text-start text-3xl leading-snug font-bold text-foreground">
           {t("title")}{" "}
           <span className="bg-(image:--google-gradient) bg-clip-text pe-1 italic text-transparent rtl:not-italic">{t("highlight")}</span>
-        </h2>
-        <p className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</p>
-      </div>
+        </motion.h2>
+        <motion.p variants={textItem} className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</motion.p>
+      </motion.div>
       <div className="mx-auto w-full max-w-5xl space-y-8 md:w-11/12">
         <CommitteeGallery items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
         <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
