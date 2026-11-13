@@ -2,16 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import type { CSSProperties } from "react";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import CommitteePersonCard from "./CommitteePersonCard";
-
-const darkCommitteeAccent = [
-  "[html[data-theme=dark]_&]:bg-[var(--committee-accent)]",
-  "[html[data-theme=dark]_&]:text-white",
-  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:bg-[var(--committee-accent)]",
-  "[@media(prefers-color-scheme:dark)]:[html:not([data-theme])_&]:text-white",
-].join(" ");
 
 type Person = {
   name: string;
@@ -31,7 +23,7 @@ type SubCommittee = {
   coLeader?: Person;
 };
 
-type Committee = {
+export type Committee = {
   id: string;
   name: string;
   color: string;
@@ -58,7 +50,7 @@ export default function CommitteeCard({
 
   // Framer Motion x is physical: flip the switch animation in RTL.
   const sign = dir === "rtl" ? -1 : 1;
-  const offset = reduceMotion ? 0 : 20 * sign;
+  const offset = reduceMotion ? 0 : 5 * sign;
 
   const activeSubCommittee = committee.subCommittees?.find(
     (subCommittee) => subCommittee.id === initialSubCommitteeId,
@@ -77,7 +69,7 @@ export default function CommitteeCard({
   const coLeaderLabelKey = `${basePath}.coLeaderLabel`;
 
   const activeCoLeaderName = activeCommittee.coLeader
-    ? t(`items.${committee.id}.coLeaderName`)
+    ? t(`${basePath}.coLeaderName`)
     : null;
   const leaders = [
     {
@@ -112,22 +104,18 @@ export default function CommitteeCard({
 
   return (
     <article
-      className="group relative flex min-h-[clamp(32.5rem,42vw,48rem)] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-[var(--committee-card-surface)] p-[clamp(0.75rem,1.5vw,2rem)] shadow-sm transition-shadow duration-200 hover:shadow-md motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
-      style={{
-        borderTopColor: activeCommittee.color,
-        borderTopWidth: 3,
-        "--committee-accent": activeCommittee.color,
-      } as CSSProperties}
+      className="relative flex w-full flex-col overflow-hidden text-white"
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={activeCommittee.id}
-          initial={{ opacity: 0, x: offset }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -offset }}
+          initial={{ opacity: 0, x: `calc(var(--spacing) * ${offset})` }}
+          animate={{ opacity: 1, x: "calc(var(--spacing) * 0)" }}
+          exit={{ opacity: 0, x: `calc(var(--spacing) * ${-offset})` }}
           transition={{
-            duration: reduceMotion ? 0.01 : 0.35,
-            ease: "easeInOut",
+            duration: reduceMotion ? 0 : 0.45,
+            delay: reduceMotion ? 0 : 0.22,
+            ease: [0.22, 0.68, 0, 1],
           }}
           className="relative z-10 flex flex-1 flex-col gap-3"
         >
@@ -138,7 +126,7 @@ export default function CommitteeCard({
             <div className="text-center">
               <h3
                 dir={dir}
-                className={`mx-auto flex h-auto w-fit max-w-full items-center justify-center rounded-lg px-1.5 py-1 text-balance break-words text-center text-lg font-semibold leading-snug text-[var(--committee-accent)] sm:text-xl ${darkCommitteeAccent}`}
+                className="m-0 flex h-auto w-fit max-w-full items-center justify-start p-0 text-start text-2xl leading-snug font-semibold text-balance break-words text-white"
               >
                 {activeName}
               </h3>
@@ -148,7 +136,7 @@ export default function CommitteeCard({
             <div className="mt-3">
               <p
                 dir={dir}
-                className="min-h-24 max-w-full text-justify text-sm leading-6 text-foreground/75 sm:text-base sm:leading-6"
+                className="max-w-full text-start text-base leading-normal font-normal text-white/70"
                 style={{ textAlignLast: "start" }}
               >
                 {activeDescription}
@@ -159,8 +147,8 @@ export default function CommitteeCard({
           </div>
 
           {/* End / Bottom Side */}
-          <div className="mt-auto border-t border-foreground/10 pt-3">
-            <div className="grid w-full grid-cols-2 items-stretch justify-items-center gap-3">
+          <div className="mt-4 border-t border-white/20 pt-3">
+            <div dir={leaders.length > 1 ? "ltr" : dir} className="grid w-full grid-cols-1 items-stretch justify-items-center gap-3 sm:grid-cols-2">
               {leaders.map((leader, index) => (
                 <CommitteePersonCard
                   key={`${activeCommittee.id}-${leader.key}`}
@@ -175,7 +163,11 @@ export default function CommitteeCard({
                   x={leader.x}
                   imageScaleClass={leader.imageScaleClass}
                   imagePositionClass={leader.imagePositionClass}
-                  layoutClass={leaders.length === 1 ? "col-span-2 w-[calc(50%-0.375rem)]" : "w-full"}
+                  layoutClass={leaders.length === 1
+                    ? "w-full sm:col-span-2 sm:max-w-1/2"
+                    : leader.key === "lead"
+                      ? "w-full sm:col-start-2 sm:row-start-1"
+                      : "w-full sm:col-start-1 sm:row-start-1"}
                 />
               ))}
             </div>

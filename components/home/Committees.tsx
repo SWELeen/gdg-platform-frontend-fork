@@ -1,258 +1,288 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import CommitteeCard from "./CommitteeCard";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import CommitteeCard, { type Committee } from "./CommitteeCard";
+import CommitteePortrait from "./CommitteePortrait";
+import MobileCommitteeGrid from "./MobileCommitteeGrid";
 import { committees } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
-const directoryItems = committees.map((committee) => ({
-  key: committee.id,
-  committee,
-}));
+// Reference-specific motion: preserve the panel proportions and easing without
+// adding layout tokens or changing the shared design system.
+const panelEase = [0.22, 0.68, 0, 1] as const;
+const navigationButtonClass = "pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-full border border-white/50 bg-gdg-dark/25 text-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gdg-yellow";
 
-const developerDirectoryItems = directoryItems.filter(
-  (item) => "committee" in item && item.committee.id === "developers",
-);
-const mainDirectoryItems = directoryItems.filter(
-  (item) => !("committee" in item && item.committee.id === "developers"),
-);
+type GalleryItem = { committee: Committee; subId?: string };
+const mainItems = committees
+  .filter((item) => item.id !== "developers")
+  .map((committee) => ({ committee }));
+const developers: Committee | undefined = committees.find((item) => item.id === "developers");
+const developerItems: GalleryItem[] = developers?.subCommittees?.map((sub) => ({ committee: developers, subId: sub.id })) ?? [];
+// Match the Developer portrait's settled width ratio: 3/4 of a collapsed
+// panel versus 3/16 of an expanded panel. Apply it uniformly to normalized pairs.
+const developerExpandedShare = 5 / (5 + 0.28 * (developerItems.length - 1));
 
-type DeveloperSubCommittee = {
-  id: string;
-  color: string;
-};
+function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: string; id: string }) {
+  const t = useTranslations("home.committees");
+  const dir = useTextDirection();
+  const reduceMotion = useReducedMotion();
+  const [selected, setSelected] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [focused, setFocused] = useState<number | null>(null);
+  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [portraitTrack, setPortraitTrack] = useState<{ available: number; horizontal: boolean }>();
+
+  useEffect(() => {
+    if (!galleryRef.current) return;
+    const gallery = galleryRef.current;
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const borders = buttons.current.reduce((total, button) => {
+        if (!button?.parentElement) return total;
+        const style = getComputedStyle(button.parentElement);
+        return total + parseFloat(style.borderInlineStartWidth) + parseFloat(style.borderInlineEndWidth);
+      }, 0);
+      const available = Math.max(0, entry.contentRect.width - borders);
+      const horizontal = getComputedStyle(gallery).flexDirection === "row";
+      setPortraitTrack((current) => current?.available === available && current.horizontal === horizontal
+        ? current
+        : { available, horizontal });
+    });
+    observer.observe(gallery);
+    return () => observer.disconnect();
+  }, [id]);
+
+  // Resolve the settled flex share against the stable gallery track. Animating
+  // a panel-relative percentage would multiply two simultaneous width changes.
+  const panelGrow = (index: number) => selected !== null
+    ? selected === index ? 5 : 0.28
+    : hovered === index || focused === index ? 1.3 : 1;
+  const totalGrow = items.reduce((total, _, index) => total + panelGrow(index), 0);
+  // Lay text out at its final expanded width, independent of the animated
+  // panel. Keep mobile's full-width, vertically stacked layout unchanged.
+  const expandedContentWidth = portraitTrack?.horizontal
+    ? portraitTrack.available * 5 / (5 + 0.28 * (items.length - 1))
+    : undefined;
+
+  const step = (delta: number) => {
+    if (!items.length) return;
+    const next = ((selected ?? (delta > 0 ? -1 : 0)) + delta + items.length) % items.length;
+    setSelected(next);
+    buttons.current[next]?.focus({ preventScroll: true });
+  };
+
+  // Below xl, let text determine height. The query container keeps the
+  // portrait stage tied to the original 3:1 width rather than that extra height.
+  return (
+    <div className="min-w-0 md:max-xl:@container">
+      <h3 className="mb-4 text-2xl leading-snug font-semibold text-foreground">{label}</h3>
+      <div
+        ref={galleryRef}
+        className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row md:max-xl:aspect-auto md:max-xl:min-h-[calc(100cqw/3)]"
+        dir={dir}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setSelected(null);
+            buttons.current[selected ?? 0]?.focus({ preventScroll: true });
+          }
+          if (!buttons.current.some((button) => button === event.target)) return;
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+            event.preventDefault();
+            step((event.key === "ArrowRight" ? 1 : -1) * (dir === "rtl" ? -1 : 1));
+          }
+        }}
+      >
+        {items.map(({ committee, subId }, index) => {
+          const active = committee.subCommittees?.find((sub) => sub.id === subId) ?? committee;
+          const base = subId ? `items.${committee.id}.subCommittees.${subId}` : `items.${committee.id}`;
+          const name = t(`${base}.name`);
+          const open = selected === index;
+          const highlighted = open || hovered === index || focused === index;
+          const panelId = `${id}-${active.id}`;
+          const hasPortraitPair = Boolean(active.coLeader);
+
+          return (
+            <motion.div
+              key={active.id}
+              className="group/panel relative flex min-h-24 min-w-0 shrink-0 basis-auto flex-col overflow-hidden border-e border-white/15 bg-linear-to-br from-(--committee-accent) to-gdg-dark md:block md:flex-1"
+              style={{ "--committee-accent": active.color } as CSSProperties}
+              animate={{ flexGrow: selected !== null ? (open ? 5 : 0.28) : highlighted ? 1.3 : 1 }}
+              transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
+              onHoverStart={() => setHovered(index)}
+              onHoverEnd={() => setHovered(null)}
+              onFocusCapture={() => setFocused(index)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setFocused(null);
+              }}
+            >
+              <div
+                aria-hidden="true"
+                className={open
+                  ? `pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full md:max-xl:top-auto md:max-xl:max-h-[calc(100cqw/3)] ${hasPortraitPair ? "z-1" : ""}`
+                  : "pointer-events-none absolute inset-0 isolate h-full w-full overflow-hidden md:max-xl:top-auto md:max-xl:max-h-[calc(100cqw/3)]"}
+              >
+                {[{ role: "lead", person: active.lead }, ...(active.coLeader ? [{ role: "co-lead", person: active.coLeader }] : [])].map(({ role, person }) => {
+                  const isLeader = role === "lead";
+                  // Only real leadership pairs use edge clipping. Single portraits
+                  // stay fully inside the card in both states and both locales.
+                  const portraitWidth = open
+                    ? hasPortraitPair ? "w-1/3 md:w-1/6" : "w-3/4 md:w-3/16"
+                    : hasPortraitPair ? "w-3/5" : "w-3/4";
+                  const edgeOffset = hasPortraitPair && !open ? (isLeader ? "25%" : "-25%") : "0%";
+                  const isDeveloperSingle = id === "developer-committee" && !hasPortraitPair;
+                  const singleWidth = portraitTrack?.horizontal
+                    ? portraitTrack.available * panelGrow(index) / totalGrow * (open ? 3 / 16 : 3 / 4)
+                    : "75%";
+                  return (
+                    <motion.div
+                      key={role}
+                      dir={hasPortraitPair ? (isLeader ? "ltr" : "rtl") : undefined}
+                      className={`absolute bottom-0 h-full ${isDeveloperSingle ? "" : "transition-[width] duration-750 ease-[cubic-bezier(.22,.68,0,1)] motion-reduce:transition-none"} ${isLeader ? "right-0" : "left-0"} ${portraitWidth}`}
+                      initial={false}
+                      animate={{ x: edgeOffset, ...(isDeveloperSingle ? { width: singleWidth } : {}) }}
+                      transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
+                    >
+                      {hasPortraitPair ? (
+                        <CommitteePortrait
+                          image={person.image}
+                          isLeader={isLeader}
+                          open={open}
+                          highlighted={highlighted}
+                          reduceMotion={reduceMotion}
+                          horizontal={portraitTrack?.horizontal}
+                          sizeRatio={open ? 1 : Math.min(1, 4 * (selected === null
+                            ? highlighted ? 1.3 / (developerItems.length + 0.3) : 1 / developerItems.length
+                            : 0.28 / (5 + 0.28 * (developerItems.length - 1))) / developerExpandedShare)}
+                        />
+                      ) : (
+                        <motion.img
+                          className={`block h-full w-full object-contain ${!hasPortraitPair ? "object-bottom-right" : "object-bottom"}`}
+                          src={person.image?.trim() || "/images/unknown.png"}
+                          alt=""
+                          loading="lazy"
+                          animate={{
+                            scale: reduceMotion || highlighted ? 1 : 1.035,
+                            filter: open && hasPortraitPair
+                              ? "none"
+                              : highlighted
+                              ? "grayscale(0) brightness(.85)"
+                              : "grayscale(1) brightness(.55) sepia(.2) hue-rotate(155deg)",
+                          }}
+                          transition={{
+                            scale: { duration: reduceMotion ? 0 : 0.9, ease: panelEase },
+                            filter: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
+                          }}
+                          onError={(event) => {
+                            if (!event.currentTarget.src.endsWith("/images/unknown.png")) {
+                              event.currentTarget.src = "/images/unknown.png";
+                            }
+                          }}
+                        />
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+              <span
+                aria-hidden="true"
+                className={open
+                  ? "pointer-events-none absolute inset-0 bg-linear-to-t from-gdg-dark via-gdg-dark/50 to-transparent md:bg-linear-to-r md:from-transparent md:via-gdg-dark/50 md:to-gdg-dark md:ltr:bg-linear-to-l md:rtl:bg-linear-to-l"
+                  : "pointer-events-none absolute inset-0 bg-linear-to-t from-gdg-dark/80 to-transparent"}
+              />
+              <button
+                ref={(node) => { buttons.current[index] = node; }}
+                type="button"
+                className="absolute inset-0 z-10 h-full w-full cursor-pointer text-start text-white focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-gdg-yellow"
+                aria-expanded={open}
+                aria-controls={panelId}
+                aria-label={name}
+                onClick={() => setSelected(open ? null : index)}
+              >
+                <span
+                  className={`absolute start-4 bottom-4 text-3xl leading-none font-normal ${selected !== null && !open ? "md:opacity-0" : ""}`}
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {!open && (
+                  <span className="absolute start-20 end-4 top-5 ltr:start-4 ltr:end-20 md:start-auto md:end-5 md:ltr:start-5 md:ltr:end-auto">
+                    <span className="flex items-center justify-between gap-3 text-sm leading-none font-medium md:rotate-180 md:justify-normal md:[writing-mode:vertical-rl]">
+                      <span>{name}</span>
+                      <span className="text-2xl leading-none text-gdg-yellow" aria-hidden="true">+</span>
+                    </span>
+                  </span>
+                )}
+                {open && <X className="absolute top-5 end-5 size-7" strokeWidth={1} aria-hidden="true" />}
+              </button>
+              <div
+                id={panelId}
+                hidden={!open}
+                style={{ "--committee-content-width": expandedContentWidth === undefined ? undefined : `${expandedContentWidth}px` } as CSSProperties}
+                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:w-(--committee-content-width) md:grid-cols-6 md:px-8 md:py-8"
+              >
+                {open && (
+                  <div className="min-w-0 md:col-span-4 md:col-start-2">
+                    <CommitteeCard committee={committee} initialSubCommitteeId={subId} />
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
+        {items.length > 1 && (
+          <div className="pointer-events-none absolute inset-x-5 top-1/2 z-30 hidden -translate-y-1/2 justify-between md:flex">
+            <button className={navigationButtonClass} type="button" aria-label={t("previousCommittee")} onClick={() => step(-1)}>
+              <ChevronLeft className="size-6 rtl:rotate-180" strokeWidth={1.3} />
+            </button>
+            <button className={navigationButtonClass} type="button" aria-label={t("nextCommittee")} onClick={() => step(1)}>
+              <ChevronRight className="size-6 rtl:rotate-180" strokeWidth={1.3} />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function Committees() {
   const t = useTranslations("home.committees");
   const dir = useTextDirection();
   const reduceMotion = useReducedMotion();
-  const [selectedMainId, setSelectedMainId] = useState("");
-  const [selectedDeveloperSubCommitteeId, setSelectedDeveloperSubCommitteeId] = useState<string>();
-  const selectedMainItem = mainDirectoryItems.find((item) => item.key === selectedMainId);
-  const developersItem = developerDirectoryItems.find((item) => "committee" in item);
-  const developersCommittee =
-    developersItem && "committee" in developersItem ? developersItem.committee : undefined;
-  const developerSubCommittees: DeveloperSubCommittee[] =
-    developersCommittee && "subCommittees" in developersCommittee
-      ? (developersCommittee as { subCommittees: DeveloperSubCommittee[] }).subCommittees
-      : [];
-  const hasOpenDetails = Boolean(selectedMainItem || selectedDeveloperSubCommitteeId);
-  const firstDeveloperSubCommitteeId = developerSubCommittees[0]?.id;
-
-  useEffect(() => {
-    const desktopQuery = window.matchMedia("(min-width: 1280px)");
-    const openDefaultsOnDesktop = () => {
-      if (!desktopQuery.matches) {
-        setSelectedMainId("");
-        setSelectedDeveloperSubCommitteeId(undefined);
-        return;
-      }
-
-      setSelectedMainId((current) => current || mainDirectoryItems[0]?.key || "");
-      setSelectedDeveloperSubCommitteeId(
-        (current) => current ?? firstDeveloperSubCommitteeId,
-      );
-    };
-
-    openDefaultsOnDesktop();
-    desktopQuery.addEventListener("change", openDefaultsOnDesktop);
-    return () => desktopQuery.removeEventListener("change", openDefaultsOnDesktop);
-  }, [firstDeveloperSubCommitteeId]);
-
+  const textItem = {
+    hidden: { opacity: 0, x: reduceMotion ? 0 : (dir === "rtl" ? 1 : -1) * 40 },
+    visible: {
+      opacity: 1, x: 0,
+      transition: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" as const },
+    },
+  };
   return (
-    <section
-      id="committees"
-      className="bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]"
-    >
-      <div className="w-full">
-        <div className="pb-8 sm:pb-10">
-          <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
-            {t("title")}{" "}
-            <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
-              {t("highlight")}
-            </span>
-          </h2>
-
-          <p className="mt-4 max-w-[min(56rem,75%)] text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
-            {t("subtitle")}
-          </p>
-        </div>
-
-        <div
-          dir="ltr"
-          className={`grid w-full items-start gap-y-12 xl:grid-cols-2 xl:gap-y-0 ${hasOpenDetails ? "xl:gap-x-[clamp(2rem,4vw,5rem)]" : "xl:gap-x-[clamp(1rem,3vw,4rem)]"}`}
-        >
-          <section aria-label={t("developerCommitteesLabel")} dir={dir} className="mx-auto w-full md:max-w-[460px] order-2 xl:mx-0 xl:max-w-none xl:order-1">
-            <h3
-              dir="ltr"
-              style={selectedDeveloperSubCommitteeId ? { marginLeft: 196, marginRight: 0, width: "calc(100% - 196px)" } : undefined}
-              className={`mb-4 h-10 w-full items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground ${selectedDeveloperSubCommitteeId ? "hidden xl:flex xl:max-w-none" : "mx-auto flex max-w-[380px]"}`}
-            >
-              <span className="inline-flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-sm text-white">2</span>
-                <span dir={dir}>{t("developerCommitteesLabel")}</span>
-              </span>
-            </h3>
-            {selectedDeveloperSubCommitteeId && (
-              <h3 dir="ltr" className="mx-auto mb-4 flex h-10 w-full max-w-[380px] items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground xl:hidden">
-                <span className="inline-flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-sm text-white">2</span>
-                  <span dir={dir}>{t("developerCommitteesLabel")}</span>
-                </span>
-              </h3>
-            )}
-            <div
-              dir="ltr"
-              className={selectedDeveloperSubCommitteeId ? "xl:grid xl:grid-cols-[minmax(150px,180px)_minmax(0,1fr)] xl:items-start xl:gap-4" : ""}
-            >
-              <nav
-                aria-label={t("developerCommitteesLabel")}
-                dir={dir}
-                className={`mx-auto min-w-0 space-y-2 ${selectedDeveloperSubCommitteeId ? "w-full" : "max-w-[380px]"}`}
-              >
-                {developerSubCommittees.map((subCommittee) => {
-                  const isSelected = selectedDeveloperSubCommitteeId === subCommittee.id;
-                  return (
-                    <div key={subCommittee.id} className="space-y-2">
-                      <button
-                        type="button"
-                        aria-pressed={isSelected}
-                        onClick={() => setSelectedDeveloperSubCommitteeId((current) => current === subCommittee.id && window.matchMedia("(max-width: 1279px)").matches ? undefined : subCommittee.id)}
-                        className={`flex h-12 min-h-12 w-full items-center justify-center overflow-hidden rounded-xl border px-3 py-2 text-center text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-4 ${isSelected ? "border-transparent bg-foreground text-background shadow-sm" : "border-foreground/10 text-foreground hover:border-foreground/25 hover:bg-foreground/5"}`}
-                        style={{
-                          borderColor: subCommittee.color,
-                          borderInlineStartWidth: 4,
-                          borderInlineStartColor: subCommittee.color,
-                        }}
-                      >
-                        <span className="w-full min-w-0 truncate whitespace-nowrap text-center text-sm font-medium leading-snug sm:text-base" title={t(`items.${developersCommittee?.id}.subCommittees.${subCommittee.id}.name`)}>
-                          {t(`items.${developersCommittee?.id}.subCommittees.${subCommittee.id}.name`)}
-                        </span>
-                      </button>
-                      <AnimatePresence initial={false}>
-                        {isSelected && developersCommittee && (
-                          <motion.div
-                            key={`mobile-${subCommittee.id}`}
-                            initial={false}
-                            animate={{ opacity: 1 }}
-                            exit={reduceMotion ? undefined : { opacity: 0 }}
-                            transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                            className="mx-auto w-full min-w-0 sm:max-w-2xl xl:hidden"
-                          >
-                            <CommitteeCard committee={developersCommittee} initialSubCommitteeId={subCommittee.id} />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </nav>
-              <AnimatePresence mode="wait" initial={false}>
-                {selectedDeveloperSubCommitteeId && developersCommittee && (
-                    <motion.div
-                      key={selectedDeveloperSubCommitteeId}
-                      initial={false}
-                      animate={{ opacity: 1 }}
-                      exit={reduceMotion ? undefined : { opacity: 0 }}
-                      transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                      className="hidden min-w-0 xl:block"
-                    >
-                      <CommitteeCard committee={developersCommittee} initialSubCommitteeId={selectedDeveloperSubCommitteeId} />
-                    </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </section>
-
-          <section aria-label={t("mainCommitteesLabel")} dir={dir} className="mx-auto w-full md:max-w-[460px] order-1 xl:mx-0 xl:max-w-none xl:order-2">
-            <h3
-              dir="ltr"
-              style={selectedMainItem ? { marginLeft: 0, marginRight: 196, width: "calc(100% - 196px)" } : undefined}
-              className={`mb-4 mx-auto h-10 w-full items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground ${selectedMainItem ? "hidden xl:flex xl:max-w-none" : "flex max-w-[380px]"}`}
-            >
-              <span className="inline-flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[image:var(--committee-step-gradient)] text-sm text-white">1</span>
-                <span dir={dir}>{t("mainCommitteesLabel")}</span>
-              </span>
-            </h3>
-            {selectedMainItem && (
-              <h3 dir="ltr" className="mx-auto mb-4 flex h-10 w-full max-w-[380px] items-center justify-center gap-3 whitespace-nowrap text-lg font-semibold text-foreground xl:hidden">
-                <span className="inline-flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[image:var(--committee-step-gradient)] text-sm text-white">1</span>
-                  <span dir={dir}>{t("mainCommitteesLabel")}</span>
-                </span>
-              </h3>
-            )}
-            <div
-              dir="ltr"
-              className={selectedMainItem ? "xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(150px,180px)] xl:items-start xl:gap-4" : "flex justify-center xl:justify-end"}
-            >
-                <AnimatePresence mode="wait" initial={false}>
-                    {selectedMainItem && (
-                    <motion.div
-                      key={selectedMainItem.key}
-                      initial={false}
-                      animate={{ opacity: 1 }}
-                      exit={reduceMotion ? undefined : { opacity: 0 }}
-                      transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                      className="hidden min-w-0 xl:block"
-                    >
-                      <CommitteeCard committee={selectedMainItem.committee} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              <nav
-                aria-label={t("mainCommitteesLabel")}
-                dir={dir}
-                className={`mx-auto space-y-2 xl:mx-0 ${selectedMainItem ? "xl:w-full xl:min-w-0" : "w-full max-w-[380px]"}`}
-              >
-                {mainDirectoryItems.map((item) => {
-                  const isSelected = item.key === selectedMainId;
-                  const committee = item.committee;
-                  const accent = committee.color;
-
-                  return (
-                    <div key={item.key} className="space-y-2">
-                      <button
-                        type="button"
-                        aria-pressed={isSelected}
-                        onClick={() => {
-                          setSelectedMainId((current) => current === item.key && window.matchMedia("(max-width: 1279px)").matches ? "" : item.key);
-                        }}
-                        className={`flex h-12 min-h-12 w-full items-center justify-center overflow-hidden rounded-xl border px-3 py-2 text-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-4 ${isSelected ? "border-transparent bg-foreground text-background shadow-sm" : "border-foreground/10 text-foreground hover:border-foreground/25 hover:bg-foreground/5"}`}
-                        style={{
-                          borderColor: accent,
-                          borderInlineStartWidth: 4,
-                          borderInlineStartColor: accent,
-                        }}
-                      >
-                        <span className="w-full min-w-0 truncate whitespace-nowrap text-center text-sm font-medium leading-snug sm:text-base" title={t(`items.${committee.id}.name`)}>
-                          {t(`items.${committee.id}.name`)}
-                        </span>
-                      </button>
-                      <AnimatePresence initial={false}>
-                        {isSelected && (
-                          <motion.div
-                            key={`mobile-${item.key}`}
-                            initial={false}
-                            animate={{ opacity: 1 }}
-                            exit={reduceMotion ? undefined : { opacity: 0 }}
-                            transition={{ opacity: { duration: reduceMotion ? 0.01 : 0.2, ease: "easeOut" } }}
-                            className="mx-auto w-full min-w-0 sm:max-w-2xl xl:hidden"
-                          >
-                            <CommitteeCard committee={committee} />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </nav>
-            </div>
-          </section>
-        </div>
+    <section id="committees" className="bg-background px-6 py-8">
+      <motion.div
+        initial={reduceMotion ? false : "hidden"}
+        animate={reduceMotion ? "visible" : undefined}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.12 } } }}
+        className="pb-8 sm:pb-10"
+      >
+        <motion.h2 variants={textItem} className="text-start text-3xl leading-snug font-bold text-foreground">
+          {t("title")}{" "}
+          <span className="bg-(image:--google-gradient) bg-clip-text pe-1 italic text-transparent rtl:not-italic">{t("highlight")}</span>
+        </motion.h2>
+        <motion.p variants={textItem} className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</motion.p>
+      </motion.div>
+      <div className="mx-auto hidden w-full max-w-6xl space-y-8 md:block md:w-11/12">
+        <CommitteeGallery items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
+        <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
+      </div>
+      <div className="mx-auto w-full max-w-5xl space-y-8 md:hidden">
+        <MobileCommitteeGrid items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
+        <MobileCommitteeGrid items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
     </section>
   );
