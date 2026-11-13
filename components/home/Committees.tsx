@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import CommitteeCard, { type Committee } from "./CommitteeCard";
 import CommitteePortrait from "./CommitteePortrait";
-import MobileCommitteeAccordion from "./MobileCommitteeAccordion";
+import MobileCommitteeGrid from "./MobileCommitteeGrid";
 import { committees } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
@@ -279,8 +279,8 @@ export default function Committees() {
         <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
       <div className="mx-auto w-full max-w-5xl space-y-8 md:hidden">
-        <MobileCommitteeAccordion items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
-        <MobileCommitteeAccordion items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
+        <MobileCommitteeGrid items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
+        <MobileCommitteeGrid items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
     </section>
   );

@@ -163,6 +163,7 @@
     }
   },
   "committees": {
+    "closeDetails": "إغلاق تفاصيل اللجنة",
     "previousCommittee": "اللجنة السابقة",
     "nextCommittee": "اللجنة التالية",
     "advisorsLabel": "المستشارون",
