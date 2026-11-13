@@ -23,12 +23,16 @@ export default function CommitteePortrait({
   open,
   highlighted,
   reduceMotion,
+  horizontal,
+  sizeRatio,
 }: {
   image?: string;
   isLeader: boolean;
   open: boolean;
   highlighted: boolean;
   reduceMotion: boolean | null;
+  horizontal?: boolean;
+  sizeRatio: number;
 }) {
   const requestedSource = image?.trim() || FALLBACK_IMAGE;
   const [failure, setFailure] = useState<{ requestedSource: string; fallbackFailed: boolean }>();
@@ -48,6 +52,7 @@ export default function CommitteePortrait({
       preserveAspectRatio="xMidYMax meet"
       initial={false}
       animate={{
+        ...(horizontal === undefined ? {} : { height: `${(horizontal ? 3 / 5 : 1) * sizeRatio * 100}%` }),
         [isLeader ? "left" : "right"]: open ? "100%" : "0%",
         x: open ? (isLeader ? "-100%" : "100%") : "0%",
         scale: reduceMotion || highlighted ? 1 : 1.035,

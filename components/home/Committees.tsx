@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -21,6 +21,9 @@ const mainItems = committees
   .map((committee) => ({ committee }));
 const developers: Committee | undefined = committees.find((item) => item.id === "developers");
 const developerItems: GalleryItem[] = developers?.subCommittees?.map((sub) => ({ committee: developers, subId: sub.id })) ?? [];
+// Match the Developer portrait's settled width ratio: 3/4 of a collapsed
+// panel versus 3/16 of an expanded panel. Apply it uniformly to normalized pairs.
+const developerExpandedShare = 5 / (5 + 0.28 * (developerItems.length - 1));
 
 function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: string; id: string }) {
   const t = useTranslations("home.committees");
@@ -30,6 +33,41 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [portraitTrack, setPortraitTrack] = useState<{ available: number; horizontal: boolean }>();
+
+  useEffect(() => {
+    if (!galleryRef.current) return;
+    const gallery = galleryRef.current;
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const borders = buttons.current.reduce((total, button) => {
+        if (!button?.parentElement) return total;
+        const style = getComputedStyle(button.parentElement);
+        return total + parseFloat(style.borderInlineStartWidth) + parseFloat(style.borderInlineEndWidth);
+      }, 0);
+      const available = Math.max(0, entry.contentRect.width - borders);
+      const horizontal = getComputedStyle(gallery).flexDirection === "row";
+      setPortraitTrack((current) => current?.available === available && current.horizontal === horizontal
+        ? current
+        : { available, horizontal });
+    });
+    observer.observe(gallery);
+    return () => observer.disconnect();
+  }, [id]);
+
+  // Resolve the settled flex share against the stable gallery track. Animating
+  // a panel-relative percentage would multiply two simultaneous width changes.
+  const panelGrow = (index: number) => selected !== null
+    ? selected === index ? 5 : 0.28
+    : hovered === index || focused === index ? 1.3 : 1;
+  const totalGrow = items.reduce((total, _, index) => total + panelGrow(index), 0);
+  // Lay text out at its final expanded width, independent of the animated
+  // panel. Keep mobile's full-width, vertically stacked layout unchanged.
+  const expandedContentWidth = portraitTrack?.horizontal
+    ? portraitTrack.available * 5 / (5 + 0.28 * (items.length - 1))
+    : undefined;
+
   const step = (delta: number) => {
     if (!items.length) return;
     const next = ((selected ?? (delta > 0 ? -1 : 0)) + delta + items.length) % items.length;
@@ -41,6 +79,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
     <div className="min-w-0">
       <h3 className="mb-4 text-2xl leading-snug font-semibold text-foreground">{label}</h3>
       <div
+        ref={galleryRef}
         className="relative isolate flex flex-col overflow-hidden bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row"
         dir={dir}
         onKeyDown={(event) => {
@@ -92,13 +131,17 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                     ? hasPortraitPair ? "w-1/3 md:w-1/6" : "w-3/4 md:w-3/16"
                     : hasPortraitPair ? "w-3/5" : "w-3/4";
                   const edgeOffset = hasPortraitPair && !open ? (isLeader ? "25%" : "-25%") : "0%";
+                  const isDeveloperSingle = id === "developer-committee" && !hasPortraitPair;
+                  const singleWidth = portraitTrack?.horizontal
+                    ? portraitTrack.available * panelGrow(index) / totalGrow * (open ? 3 / 16 : 3 / 4)
+                    : "75%";
                   return (
                     <motion.div
                       key={role}
                       dir={hasPortraitPair ? (isLeader ? "ltr" : "rtl") : undefined}
-                      className={`absolute bottom-0 h-full transition-[width] duration-750 ease-[cubic-bezier(.22,.68,0,1)] motion-reduce:transition-none ${isLeader ? "right-0" : "left-0"} ${portraitWidth}`}
+                      className={`absolute bottom-0 h-full ${isDeveloperSingle ? "" : "transition-[width] duration-750 ease-[cubic-bezier(.22,.68,0,1)] motion-reduce:transition-none"} ${isLeader ? "right-0" : "left-0"} ${portraitWidth}`}
                       initial={false}
-                      animate={{ x: edgeOffset }}
+                      animate={{ x: edgeOffset, ...(isDeveloperSingle ? { width: singleWidth } : {}) }}
                       transition={{ duration: reduceMotion ? 0 : 0.75, ease: panelEase }}
                     >
                       {hasPortraitPair ? (
@@ -108,6 +151,10 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                           open={open}
                           highlighted={highlighted}
                           reduceMotion={reduceMotion}
+                          horizontal={portraitTrack?.horizontal}
+                          sizeRatio={open ? 1 : Math.min(1, 4 * (selected === null
+                            ? highlighted ? 1.3 / (developerItems.length + 0.3) : 1 / developerItems.length
+                            : 0.28 / (5 + 0.28 * (developerItems.length - 1))) / developerExpandedShare)}
                         />
                       ) : (
                         <motion.img
@@ -172,7 +219,8 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               <div
                 id={panelId}
                 hidden={!open}
-                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:grid-cols-6 md:px-8 md:py-8"
+                style={{ "--committee-content-width": expandedContentWidth === undefined ? undefined : `${expandedContentWidth}px` } as CSSProperties}
+                className="pointer-events-none relative z-20 grid grid-cols-1 gap-4 px-6 pt-4 pb-12 md:w-(--committee-content-width) md:grid-cols-6 md:px-8 md:py-8"
               >
                 {open && (
                   <div className="min-w-0 md:col-span-4 md:col-start-2">
