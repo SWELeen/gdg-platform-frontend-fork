@@ -76,12 +76,14 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
     buttons.current[next]?.focus({ preventScroll: true });
   };
 
+  // Below xl, let text determine height. The query container keeps the
+  // portrait stage tied to the original 3:1 width rather than that extra height.
   return (
-    <div className="min-w-0">
+    <div className="min-w-0 md:max-xl:@container">
       <h3 className="mb-4 text-2xl leading-snug font-semibold text-foreground">{label}</h3>
       <div
         ref={galleryRef}
-        className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row"
+        className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-gdg-dark shadow-xl md:aspect-3/1 md:min-h-min md:flex-row md:max-xl:aspect-auto md:max-xl:min-h-[calc(100cqw/3)]"
         dir={dir}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
@@ -121,8 +123,8 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
               <div
                 aria-hidden="true"
                 className={open
-                  ? `pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full ${hasPortraitPair ? "z-1" : ""}`
-                  : "pointer-events-none absolute inset-0 isolate h-full w-full overflow-hidden"}
+                  ? `pointer-events-none relative isolate order-last aspect-3/1 w-full overflow-hidden md:absolute md:inset-0 md:aspect-auto md:h-full md:max-xl:top-auto md:max-xl:max-h-[calc(100cqw/3)] ${hasPortraitPair ? "z-1" : ""}`
+                  : "pointer-events-none absolute inset-0 isolate h-full w-full overflow-hidden md:max-xl:top-auto md:max-xl:max-h-[calc(100cqw/3)]"}
               >
                 {[{ role: "lead", person: active.lead }, ...(active.coLeader ? [{ role: "co-lead", person: active.coLeader }] : [])].map(({ role, person }) => {
                   const isLeader = role === "lead";
@@ -274,7 +276,7 @@ export default function Committees() {
         </motion.h2>
         <motion.p variants={textItem} className="mt-4 max-w-4xl text-lg leading-normal font-normal text-foreground/60">{t("subtitle")}</motion.p>
       </motion.div>
-      <div className="mx-auto hidden w-full max-w-5xl space-y-8 md:block md:w-11/12">
+      <div className="mx-auto hidden w-full max-w-6xl space-y-8 md:block md:w-11/12">
         <CommitteeGallery items={mainItems} label={t("mainCommitteesLabel")} id="main-committee" />
         <CommitteeGallery items={developerItems} label={t("developerCommitteesLabel")} id="developer-committee" />
       </div>
