@@ -181,7 +181,7 @@ export default function ProjectCard({
               aria-hidden="true"
               fill
               sizes="(max-width: 1023px) 72vw, 280px"
-              className="object-contain p-1 opacity-60 drop-shadow-xl"
+              className="object-contain p-1 opacity-20 drop-shadow-xl"
             />
           </div>
         )}
