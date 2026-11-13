@@ -2,7 +2,7 @@
 export const projects = [
     {
       id: "gdg-gaming-platform",
-      img: "/images/project-placeholder.png",
+      img: "/images/GDG%20UJ%20Interactive%20Gaming%20Platform.png",
       committeeColor: "var(--committee-web-development)",
       detailsImg: "/images/GDG-game-project.png",
       detailsImages: [
@@ -11,7 +11,7 @@ export const projects = [
     },
     {
       id: "bracket-click",
-      img: "/images/project-placeholder.png",
+      img: "/images/BracketClick.png",
       committeeColor: "var(--committee-artificial-intelligence)",
       detailsImages: [
         "/images/BracketClick1.png",
@@ -19,43 +19,43 @@ export const projects = [
     },
     {
       id: "gdg-air-hockey",
-      img: "/images/project-placeholder.png",
+      img: "/images/GDG%20Air%20Hockey.png",
       committeeColor: "var(--committee-artificial-intelligence)",
       detailsImages: ["/images/GDG%20Air%20Hockey1.png"],
     },
     {
       id: "gdg-prompt-pilot",
-      img: "/images/project-placeholder.png",
+      img: "/images/GDG%20Prompt%20Pilot.png",
       committeeColor: "var(--committee-artificial-intelligence)",
       detailsImages: ["/images/GDG%20Prompt%20Pilot1.jpg"],
     },
     {
       id: "gdg-face-retrieval",
-      img: "/images/project-placeholder.png",
+      img: "/images/GDG%20Face%20Retrieval.png",
       committeeColor: "var(--committee-artificial-intelligence)",
       detailsImages: ["/images/GDG%20Face%20Retrieval1.png"],
     },
     {
       id: "applicant-evaluation-system",
-      img: "/images/project-placeholder.png",
+      img: "/images/Applicant%20Evaluation%20System.png",
       committeeColor: "var(--committee-automation)",
       detailsImages: ["/images/Applicant%20Evaluation%20System1.png"],
     },
     {
       id: "integrated-data-visualization-system",
-      img: "/images/project-placeholder.png",
+      img: "/images/Integrated%20Data%20Management%20and%20Visualization%20System2.png",
       committeeColor: "var(--committee-data-analysis)",
       detailsImages: ["/images/integrated%20data%20management%20and%20visualization%20system.png"],
     },
     {
       id: "internal-phishing-simulation",
-      img: "/images/project-placeholder.png",
+      img: "/images/Internal%20Phishing%20Simulation2.png",
       committeeColor: "var(--committee-cybersecurity)",
       detailsImages: ["/images/Internal%20Phishing%20Simulation.png"],
     },
     {
       id: "website-security-assessment",
-      img: "/images/project-placeholder.png",
+      img: "/images/Website%20Security%20Assessment%20%26%20Hardening.png",
       committeeColor: "var(--committee-cybersecurity)",
       detailsImages: ["/images/website%20security%20assesment.png"],
     },
