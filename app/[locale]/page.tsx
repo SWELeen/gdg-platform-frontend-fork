@@ -27,8 +27,8 @@ export default async function Home() {
         <UpcomingEvents/>
         <SponsorSection/>
         {/* <LeadershipTeam/> */}
-        <Committees/>
         <AdvisorsTeam />
+        <Committees/>
         <JoinCommunity/>
         <Footer/>
       </main>
