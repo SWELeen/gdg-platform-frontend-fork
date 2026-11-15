@@ -361,7 +361,7 @@ export async function createBadgeEngine(
   const wake = () => {
     still = 0;
     calm = false;
-    if (parked || !visible || raf) return;
+    if (parked || !visible || document.hidden || raf) return;
     last = performance.now();
     acc = 0;
     raf = requestAnimationFrame(frame);
@@ -420,6 +420,11 @@ export async function createBadgeEngine(
     else sleep();
   });
   seen.observe(stage);
+  const onVisibility = () => {
+    if (document.hidden) sleep();
+    else wake();
+  };
+  document.addEventListener("visibilitychange", onVisibility);
 
   // ─── Dragging: grab the card where you touch it ───────────
   // listened for on the window, since the canvas lets every click through
@@ -514,6 +519,7 @@ export async function createBadgeEngine(
       sleep();
       sizer.disconnect();
       seen.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onMove);

@@ -1,0 +1,16 @@
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('img[src$="/images/event-placeholder.png"]') to be visible
+
+    at /Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/scripts/perf/changed-features.mjs:36:18 {
+  log: [
+    `  - waiting for locator('img[src$="/images/event-placeholder.png"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v26.13.0

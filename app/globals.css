@@ -1295,3 +1295,9 @@ html[data-theme-transition="logo"]::view-transition-old(root) {
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

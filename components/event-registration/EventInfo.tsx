@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { SpeakerCard } from "./SpeakerCard";
 import type { EventInfoData } from "@/data/event-registration";
 import { useTranslations } from "next-intl";
@@ -14,8 +16,7 @@ export function EventInfo({ event }: EventInfoProps) {
     <section className="bg-surface-muted px-2 py-3 sm:px-4 lg:px-5 lg:py-7">
       <div className="mx-auto flex w-full max-w-xl flex-col">
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">
-          {/* eslint-disable-next-line @next/next/no-img-element -- Uploaded event images use API-provided hosts. */}
-          <img
+          <Image unoptimized fill sizes="(max-width: 1024px) 100vw, 45vw" fetchPriority="high" decoding="sync" preload
             src={event.imageSrc}
             alt={event.imageAlt}
             onError={(error) => { error.currentTarget.src = "/images/event-placeholder.png"; }}

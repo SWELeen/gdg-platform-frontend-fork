@@ -1,11 +1,20 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import Image from "next/image";
+import communityOne from "@/public/images/about-community-1.png";
+import communityTwo from "@/public/images/about-community-2.png";
+import communityThree from "@/public/images/about-community-3.png";
+
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { useEffect, useRef, useState } from "react";
 
+const MotionImage = motion.create(Image);
+const statTargets = { members: 165, events: 10, projects: 9, communities: 10 } as const;
+
 export default function AboutSection() {
+  const reduceMotion = useReducedMotion();
   const t = useTranslations("home.about");
   const dir = useTextDirection();
   // Framer Motion x is physical: flip slide-ins so text/images enter from their own side in RTL.
@@ -17,13 +26,6 @@ export default function AboutSection() {
     communities: 0,
   });
 
-  const statTargets = {
-    members: 165,
-    events: 10,
-    projects: 9,
-    communities: 10,
-  } as const;
-
   const statsRef = useRef(null);
   const isInView = useInView(statsRef, {
     once: true,
@@ -33,12 +35,13 @@ export default function AboutSection() {
   useEffect(() => {
     if (!isInView) return;
 
-    const duration = 1200;
+    const duration = reduceMotion ? 0 : 1200;
+    let frame = 0;
     const startTime = performance.now();
 
     const animateCounts = (currentTime: number) => {
       const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = duration ? Math.min(elapsed / duration, 1) : 1;
 
       // Smooth ease-out
       const easedProgress = 1 - Math.pow(1 - progress, 3);
@@ -51,12 +54,13 @@ export default function AboutSection() {
       });
 
       if (progress < 1) {
-        requestAnimationFrame(animateCounts);
+        frame = requestAnimationFrame(animateCounts);
       }
     };
 
-    requestAnimationFrame(animateCounts);
-  }, [isInView]);
+    frame = requestAnimationFrame(animateCounts);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView, reduceMotion]);
 
   return (
     <section id="about" className="px-6 py-[clamp(1rem,1.5vw,1.75rem)]">
@@ -93,8 +97,9 @@ export default function AboutSection() {
         </div>
 
         <div className="relative mx-auto mt-6 h-[clamp(19rem,28vw,35rem)] w-[94%] min-w-0 max-w-full lg:mx-0 lg:mt-0 lg:w-[90%] lg:max-w-[min(42vw,50rem)] lg:justify-self-end">
-          <motion.img
-            src="/images/about-community-1.png"
+          <MotionImage
+            src={communityOne}
+            sizes="(min-width: 1024px) 45vw, 90vw"
             alt={t("imageAlt", { number: 1 })}
             className="absolute top-0 end-0 h-[90px] w-full rounded-xl object-cover lg:h-1/3"
             initial={{ opacity: 0, x: 30 * sign }}
@@ -106,8 +111,9 @@ export default function AboutSection() {
             }}
           />
 
-          <motion.img
-            src="/images/about-community-2.png"
+          <MotionImage
+            src={communityTwo}
+            sizes="(min-width: 1024px) 45vw, 90vw"
             alt={t("imageAlt", { number: 2 })}
             className="absolute top-[100px] end-0 h-[150px] w-full rounded-xl object-cover lg:top-[calc(33.333%+clamp(0.625rem,1.2vw,1.25rem))] lg:h-[clamp(9rem,11vw,15rem)]"
             initial={{ opacity: 0, x: 30 * sign }}
@@ -120,8 +126,9 @@ export default function AboutSection() {
             }}
           />
 
-          <motion.img
-            src="/images/about-community-3.png"
+          <MotionImage
+            src={communityThree}
+            sizes="(min-width: 1024px) 168px, 36vw"
             alt={t("imageAlt", { number: 3 })}
             className="absolute bottom-[clamp(2rem,5vw,3rem)] start-[-10px] top-auto h-[clamp(7rem,24vw,8rem)] w-[40%] rounded-xl border-t-10 border-e-10 border-background object-cover lg:start-0 lg:h-[clamp(9rem,10vw,10.5rem)] lg:w-[clamp(7.5rem,10vw,10.5rem)] xl:start-[-24px]"            initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}

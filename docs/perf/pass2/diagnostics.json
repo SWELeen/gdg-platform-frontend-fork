@@ -1,0 +1,6009 @@
+[
+  {
+    "route": "/",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-IMG",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,0,SECTION,0,NAV,0,DIV,0,IMG",
+      "selector": "section#home > nav.fixed > div.lg:shrink-0 > img.h-[clamp(3.25rem,4vw,4.5rem)]",
+      "boundingRect": {
+        "top": 10,
+        "bottom": 62,
+        "left": 25,
+        "right": 326,
+        "width": 301,
+        "height": 52
+      },
+      "snippet": "<img alt=\"GDG on Campus University of Jeddah logo\" fetchpriority=\"high\" width=\"1992\" height=\"344\" decoding=\"sync\" data-nimg=\"1\" class=\"h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left\" style=\"color:transparent;aspect-ratio:1992 / 344\" src=\"/images/gdg-white-Logo.png\">",
+      "nodeLabel": "GDG on Campus University of Jeddah logo"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "imageDiscoveryTime": 11.20000000298023,
+      "imageLoadEnd": 14.70000000298023,
+      "imageLoadStart": 11.5,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "loadingAttr": "",
+      "navigationId": "87AE20E87C7DB40A089DE19241848B7D",
+      "nodeId": 131,
+      "nodeName": "IMG class='h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left'",
+      "performanceTimelineNavigationId": 5087,
+      "size": 15652,
+      "type": "image"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.765
+      },
+      {
+        "subpart": "resourceLoadDelay",
+        "label": "Resource load delay",
+        "duration": 6.378
+      },
+      {
+        "subpart": "resourceLoadDuration",
+        "label": "Resource load duration",
+        "duration": 3.495
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 1063.497
+      }
+    ],
+    "transferByType": {
+      "Document": 53204,
+      "Font": 37820,
+      "Image": 300635,
+      "Stylesheet": 36814,
+      "Script": 263097,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 1239.1879999999967
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 608.1000000000067
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 303.6280000000002
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 217.54399999998225
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 49.87199999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 35.10799999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 13.759999999999998
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "/",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-IMG",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,0,SECTION,0,NAV,0,DIV,0,IMG",
+      "selector": "section#home > nav.fixed > div.lg:shrink-0 > img.h-[clamp(3.25rem,4vw,4.5rem)]",
+      "boundingRect": {
+        "top": 10,
+        "bottom": 62,
+        "left": 86,
+        "right": 387,
+        "width": 301,
+        "height": 52
+      },
+      "snippet": "<img alt=\"شعار مجتمع مطوري جوجل في الحرم الجامعي - جامعة جدة\" fetchpriority=\"high\" width=\"1992\" height=\"344\" decoding=\"sync\" data-nimg=\"1\" class=\"h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left\" style=\"color:transparent;aspect-ratio:1992 / 344\" src=\"/images/gdg-white-Logo.png\">",
+      "nodeLabel": "شعار مجتمع مطوري جوجل في الحرم الجامعي - جامعة جدة"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "imageDiscoveryTime": 24.6000000089407,
+      "imageLoadEnd": 26.90000000596046,
+      "imageLoadStart": 24.90000000596046,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "loadingAttr": "",
+      "navigationId": "C5AAD6AC744C12309936C89624AF8C1F",
+      "nodeId": 131,
+      "nodeName": "IMG class='h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left'",
+      "performanceTimelineNavigationId": 8885,
+      "size": 15652,
+      "type": "image"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.135
+      },
+      {
+        "subpart": "resourceLoadDelay",
+        "label": "Resource load delay",
+        "duration": 20.428
+      },
+      {
+        "subpart": "resourceLoadDuration",
+        "label": "Resource load duration",
+        "duration": 2.36
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 66.088
+      }
+    ],
+    "transferByType": {
+      "Document": 59289,
+      "Font": 237164,
+      "Image": 300635,
+      "Stylesheet": 36814,
+      "Script": 263097,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 813.4600000000186
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 600.972000000003
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 314.1440000000002
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 209.5959999999781
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 49.37599999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 26.120000000000008
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 12.056
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "announcements",
+    "locale": "en",
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "D8C50F5DD6A006299EEBB7F7C35B88E9",
+      "nodeId": 12,
+      "nodeName": "P class='mt-5 text-base text-gray-500 lg:text-lg'",
+      "performanceTimelineNavigationId": 8367,
+      "size": 26180,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.525999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 35.548000015258786
+      }
+    ],
+    "transferByType": {
+      "Document": 37556,
+      "Font": 37820,
+      "Image": 213269,
+      "Stylesheet": 36814,
+      "Script": 371474,
+      "Other": 93151,
+      "Fetch": 35302
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 272.52400000000137
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 177.0719999999998
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 120.76000000000022
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 79.76400000000001
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 71.36799999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.155999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.256
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": [
+        {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "text",
+                "value": "Total"
+              },
+              "score": 0.2709481060293268
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-0-SECTION",
+                "path": "1,HTML,1,BODY,1,DIV,1,MAIN,6,SECTION",
+                "selector": "body.min-h-dvh > div.flex > main.flex > section.mx-auto",
+                "boundingRect": {
+                  "top": 591,
+                  "bottom": 994,
+                  "left": 8,
+                  "right": 404,
+                  "width": 396,
+                  "height": 403
+                },
+                "snippet": "<section aria-labelledby=\"announcements-cta-heading\" class=\"mx-auto w-full max-w-[min(96vw,112rem)] px-[var(--page-gutter)] py-16 lg:p…\">",
+                "nodeLabel": "Never miss an official announcement\n\nFollow us on social media for the highligh…"
+              },
+              "score": 0.2709481060293268
+            }
+          ]
+        }
+      ]
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "announcements",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-IMG",
+      "path": "1,HTML,1,BODY,1,DIV,0,NAV,0,DIV,0,IMG",
+      "selector": "div.flex > nav.fixed > div.lg:shrink-0 > img.h-[clamp(3.25rem,4vw,4.5rem)]",
+      "boundingRect": {
+        "top": 10,
+        "bottom": 62,
+        "left": 86,
+        "right": 387,
+        "width": 301,
+        "height": 52
+      },
+      "snippet": "<img alt=\"شعار مجتمع مطوري جوجل في الحرم الجامعي - جامعة جدة\" fetchpriority=\"high\" width=\"1992\" height=\"344\" decoding=\"sync\" data-nimg=\"1\" class=\"h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left\" style=\"color:transparent;aspect-ratio:1992 / 344\" src=\"/images/gdg-white-Logo.png\">",
+      "nodeLabel": "شعار مجتمع مطوري جوجل في الحرم الجامعي - جامعة جدة"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "imageDiscoveryTime": 17.5,
+      "imageLoadEnd": 20.19999998807907,
+      "imageLoadStart": 17.69999998807907,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "loadingAttr": "",
+      "navigationId": "F36F6FABA0FC5A0730711F6244C456B7",
+      "nodeId": 29,
+      "nodeName": "IMG class='h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left'",
+      "performanceTimelineNavigationId": 4220,
+      "size": 15652,
+      "type": "image"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.024
+      },
+      {
+        "subpart": "resourceLoadDelay",
+        "label": "Resource load delay",
+        "duration": 12.508
+      },
+      {
+        "subpart": "resourceLoadDuration",
+        "label": "Resource load duration",
+        "duration": 2.809
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 68.523
+      }
+    ],
+    "transferByType": {
+      "Document": 42937,
+      "Font": 200980,
+      "Image": 213269,
+      "Stylesheet": 36814,
+      "Script": 371474,
+      "Other": 93151,
+      "Fetch": 40572
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 292.7960000000019
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 156.90000000000006
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 88.89600000000002
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 68.43999999999998
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 55.300000000000004
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.635999999999997
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.059999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "event-registration",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-IMG",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,0,DIV,0,SECTION,0,DIV,0,DIV,0,IMG",
+      "selector": "section.bg-surface-muted > div.mx-auto > div.relative > img.size-full",
+      "boundingRect": {
+        "top": 12,
+        "bottom": 235,
+        "left": 8,
+        "right": 404,
+        "width": 396,
+        "height": 223
+      },
+      "snippet": "<img alt=\"Inside NOC event\" fetchpriority=\"high\" decoding=\"sync\" data-nimg=\"fill\" class=\"size-full object-cover\" style=\"position: absolute; height: 100%; width: 100%; inset: 0px;\" src=\"http://localhost:3100/images/event-image.png\">",
+      "nodeLabel": "Inside NOC event"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "imageDiscoveryTime": 20.29999999701977,
+      "imageLoadEnd": 23.20000000298023,
+      "imageLoadStart": 20.5,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "loadingAttr": "",
+      "navigationId": "3D8112CBE25AB035FE6F608B40DBD1AA",
+      "nodeId": 33,
+      "nodeName": "IMG class='size-full object-cover'",
+      "performanceTimelineNavigationId": 6460,
+      "size": 88209,
+      "type": "image"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.425
+      },
+      {
+        "subpart": "resourceLoadDelay",
+        "label": "Resource load delay",
+        "duration": 15.942
+      },
+      {
+        "subpart": "resourceLoadDuration",
+        "label": "Resource load duration",
+        "duration": 2.908
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 166.516
+      }
+    ],
+    "transferByType": {
+      "Document": 33933,
+      "Font": 91404,
+      "Image": 136536,
+      "Stylesheet": 36814,
+      "Script": 160364,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 117.80400000000058
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 89.90800000000029
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 35.687999999999995
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 32.431999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.7
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.099999999999994
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 5.728
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "event-registration",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-IMG",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,0,DIV,0,SECTION,0,DIV,0,DIV,0,IMG",
+      "selector": "section.bg-surface-muted > div.mx-auto > div.relative > img.size-full",
+      "boundingRect": {
+        "top": 12,
+        "bottom": 235,
+        "left": 8,
+        "right": 404,
+        "width": 396,
+        "height": 223
+      },
+      "snippet": "<img alt=\"Inside NOC event\" fetchpriority=\"high\" decoding=\"sync\" data-nimg=\"fill\" class=\"size-full object-cover\" style=\"position: absolute; height: 100%; width: 100%; inset: 0px;\" src=\"http://localhost:3100/images/event-image.png\">",
+      "nodeLabel": "Inside NOC event"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "imageDiscoveryTime": 28.5,
+      "imageLoadEnd": 31.30000001192093,
+      "imageLoadStart": 28.80000001192093,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "loadingAttr": "",
+      "navigationId": "69B6EDF1681CFF178822D1A8EB90AE4B",
+      "nodeId": 34,
+      "nodeName": "IMG class='size-full object-cover'",
+      "performanceTimelineNavigationId": 5320,
+      "size": 88209,
+      "type": "image"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.925
+      },
+      {
+        "subpart": "resourceLoadDelay",
+        "label": "Resource load delay",
+        "duration": 22.514
+      },
+      {
+        "subpart": "resourceLoadDuration",
+        "label": "Resource load duration",
+        "duration": 2.816
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 59.201
+      }
+    ],
+    "transferByType": {
+      "Document": 39041,
+      "Font": 237164,
+      "Image": 136536,
+      "Stylesheet": 36814,
+      "Script": 160364,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 162.49600000000086
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 93.73600000000012
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 78.82800000000003
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 33.779999999999994
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.784
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 6.375999999999996
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 5.511999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "login",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 86,
+        "right": 326,
+        "width": 240,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Continue with your email"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "2F355BF544107D2A1ECD2AE2DAA65C9E",
+      "nodeId": 36,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 4447,
+      "size": 6050,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.205
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 239.228
+      }
+    ],
+    "transferByType": {
+      "Document": 35907,
+      "Font": 37820,
+      "Image": 289054,
+      "Stylesheet": 36814,
+      "Script": 362899,
+      "Other": 93151,
+      "Fetch": 35302
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 273.32000000000033
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 225.11200000000005
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 64.87199999999989
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 64.42399999999999
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 60.22000000000001
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 17.56799999999999
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 10.611999999999998
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "login",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 78,
+        "right": 334,
+        "width": 257,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "تابع باستخدام بريدك الإلكتروني"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "876C263016B41EA84DAD9B234DF048C1",
+      "nodeId": 36,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 9843,
+      "size": 8547,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.262
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 105.949
+      }
+    ],
+    "transferByType": {
+      "Document": 41308,
+      "Font": 185588,
+      "Image": 289054,
+      "Stylesheet": 36814,
+      "Script": 362899,
+      "Other": 93151,
+      "Fetch": 40572
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 286.40000000000043
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 237.48400000000018
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 72.05599999999991
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 66.71999999999997
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 66.42400000000002
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.827999999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.155999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,0,SECTION,0,DIV,0,DIV,0,H1",
+      "selector": "section.relative > div.relative > div.flex > h1.text-center",
+      "boundingRect": {
+        "top": 263,
+        "bottom": 290,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Create your account"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "39B3EF5D26F86D253890A2EA343021EE",
+      "nodeId": 36,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 3851,
+      "size": 4900,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.642
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 104.021
+      }
+    ],
+    "transferByType": {
+      "Document": 36060,
+      "Font": 37820,
+      "Image": 289054,
+      "Stylesheet": 36814,
+      "Script": 362899,
+      "Other": 93151,
+      "Fetch": 35047
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 276.2000000000013
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 234.79200000000014
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 69.48799999999996
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 65.096
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 62.996
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.071999999999997
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.863999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,0,SECTION,0,DIV,0,DIV,0,H1",
+      "selector": "section.relative > div.relative > div.flex > h1.text-center",
+      "boundingRect": {
+        "top": 263,
+        "bottom": 290,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "أنشئ حسابك"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 3,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "079C1F0205962203BDD6E7830B67D4B8",
+      "nodeId": 42,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 5805,
+      "size": 3712,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 6.416999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 572.5680000152588
+      }
+    ],
+    "transferByType": {
+      "Document": 41462,
+      "Font": 185588,
+      "Image": 289054,
+      "Stylesheet": 36814,
+      "Script": 362899,
+      "Fetch": 40297,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 328.88000000000204
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 243.71999999999935
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 72.3399999999999
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 67.236
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 65.66800000000002
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 11.16799999999999
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.939999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/pending",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,1,P",
+      "selector": "main.flex > section.flex > div.relative > p.mt-2",
+      "boundingRect": {
+        "top": 436,
+        "bottom": 476,
+        "left": 51,
+        "right": 361,
+        "width": 310,
+        "height": 40
+      },
+      "snippet": "<p class=\"mt-2 text-center text-sm text-foreground/45\">",
+      "nodeLabel": "Your information is verified and your request is pending approval. Member acces…"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "5AEEA9651F91591E71CA1913C8FDCEB8",
+      "nodeId": 57,
+      "nodeName": "P class='mt-2 text-center text-sm text-foreground/45'",
+      "performanceTimelineNavigationId": 9064,
+      "size": 10268,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.53
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 362.591
+      }
+    ],
+    "transferByType": {
+      "Document": 36974,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 285428,
+      "Other": 93151,
+      "Fetch": 32233
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 492.3960000000006
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 282.9439999999998
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 216.58000000000104
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 99.72800000000092
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 52.02399999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.723999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.679999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/pending",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,1,P",
+      "selector": "main.flex > section.flex > div.relative > p.mt-2",
+      "boundingRect": {
+        "top": 436,
+        "bottom": 476,
+        "left": 51,
+        "right": 361,
+        "width": 310,
+        "height": 40
+      },
+      "snippet": "<p class=\"mt-2 text-center text-sm text-foreground/45\">",
+      "nodeLabel": "تم التحقق من بياناتك وطلبك بانتظار الموافقة. ستتاح لك صلاحيات العضوية بعد الموا…"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "92D6448BF6A1359A4479870ABCB4A497",
+      "nodeId": 56,
+      "nodeName": "P class='mt-2 text-center text-sm text-foreground/45'",
+      "performanceTimelineNavigationId": 1197,
+      "size": 11096,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 6.215000015258789
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 110.90199998474121
+      }
+    ],
+    "transferByType": {
+      "Document": 42393,
+      "Font": 149404,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 285428,
+      "Fetch": 37444,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 614.7759999999993
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 283.0680000000001
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 234.44800000000126
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 154.24400000000148
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 52.99199999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.343999999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.7559999999999985
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/verify",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,2,DIV,0,FORM,2,P",
+      "selector": "div.relative > div.flex > form.mt-8 > p.mt-3",
+      "boundingRect": {
+        "top": 495,
+        "bottom": 513,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 18
+      },
+      "snippet": "<p class=\"mt-3 text-center text-sm text-foreground/60\">",
+      "nodeLabel": "Enter the code sent to your personal email."
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "D27C2424BBE266B17AF14975CA53831D",
+      "nodeId": 37,
+      "nodeName": "P class='mt-3 text-center text-sm text-foreground/60'",
+      "performanceTimelineNavigationId": 4425,
+      "size": 3164,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.414
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 195.765
+      }
+    ],
+    "transferByType": {
+      "Document": 35925,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 287154,
+      "Other": 93151,
+      "Fetch": 32233
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 326.8600000000021
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 207.71200000000152
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 66.31999999999995
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 58.308000000000014
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 51.812
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 11.955999999999992
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.984
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/verify",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 348,
+        "bottom": 375,
+        "left": 139,
+        "right": 273,
+        "width": 134,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "التحقق من الرمز"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "26FAF4620B8B8A92B31E4BD302C4F2BD",
+      "nodeId": 35,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 3545,
+      "size": 4416,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.199999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 90.76300001525878
+      }
+    ],
+    "transferByType": {
+      "Document": 41317,
+      "Font": 185588,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 287154,
+      "Other": 93151,
+      "Fetch": 37444
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 286.68800000000124
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 218.9200000000009
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 74.71999999999997
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 67.124
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 53.13999999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 9.975999999999996
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.992
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/complete",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,2,FOOTER,3,DIV,0,SECTION,1,P",
+      "selector": "footer.relative > div.relative > section.flex > p.max-w-[min(42rem,100%)]",
+      "boundingRect": {
+        "top": 438,
+        "bottom": 478,
+        "left": 24,
+        "right": 388,
+        "width": 364,
+        "height": 40
+      },
+      "snippet": "<p dir=\"ltr\" class=\"max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem…\">",
+      "nodeLabel": "Connect. Learn. Build. Grow. — a student developer community at the University …"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "00FCF4206971CEB866105AC24474E3BE",
+      "nodeId": 10,
+      "nodeName": "P class='max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem_+_0.114vw,0.8906rem)] leading-relaxed text-foreground/70 dark:text-white/65'",
+      "performanceTimelineNavigationId": 4604,
+      "size": 12138,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.418
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 55.379
+      }
+    ],
+    "transferByType": {
+      "Document": 35169,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 366397,
+      "Other": 93151,
+      "Fetch": 36293
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 372.11200000000065
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 165.38400000000016
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 90.86399999999999
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 69.408
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 66.072
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.591999999999999
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.591999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "signup/complete",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,2,FOOTER,3,DIV,0,SECTION,1,P",
+      "selector": "footer.relative > div.relative > section.flex > p.max-w-[min(42rem,100%)]",
+      "boundingRect": {
+        "top": 438,
+        "bottom": 478,
+        "left": 182,
+        "right": 388,
+        "width": 206,
+        "height": 40
+      },
+      "snippet": "<p dir=\"rtl\" class=\"max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem…\">",
+      "nodeLabel": "مجموعة مطوّري جوجل بجامعة جدة\nنحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "B2565E85281097557838C853A0930A47",
+      "nodeId": 10,
+      "nodeName": "P class='max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem_+_0.114vw,0.8906rem)] leading-relaxed text-foreground/70 dark:text-white/65'",
+      "performanceTimelineNavigationId": 897,
+      "size": 8528,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.343
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 61.671
+      }
+    ],
+    "transferByType": {
+      "Document": 40528,
+      "Font": 185588,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 366397,
+      "Other": 93151,
+      "Fetch": 41592
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 315.984000000002
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 178.616
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 96.16000000000012
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 69.58000000000003
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 67.36799999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 12.339999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.455999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "forgot-password",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 348,
+        "bottom": 375,
+        "left": 119,
+        "right": 293,
+        "width": 175,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Forgot Password?"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "7730AEC2C081CF965738EE0F6531F3B4",
+      "nodeId": 32,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 1046,
+      "size": 4400,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.22
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 90.492
+      }
+    ],
+    "transferByType": {
+      "Document": 35817,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 355500,
+      "Other": 93151,
+      "Fetch": 35047
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 292.0520000000012
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 156.08
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 78.10399999999998
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 73.47999999999992
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 63.95199999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.615999999999993
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.596
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "forgot-password",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 348,
+        "bottom": 375,
+        "left": 125,
+        "right": 287,
+        "width": 163,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "نسيت كلمة المرور؟"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "0B591A25C6D8881F62A3D9DCC76DC402",
+      "nodeId": 31,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 8360,
+      "size": 5248,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.062
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 85.901
+      }
+    ],
+    "transferByType": {
+      "Document": 41178,
+      "Font": 185588,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 355500,
+      "Other": 93151,
+      "Fetch": 40297
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 304.6840000000015
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 161.74800000000064
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 77.55200000000005
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 73.97999999999992
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 65.39200000000001
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.059999999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 8.015999999999995
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "forgot-password/verify",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,2,DIV,0,FORM,2,P",
+      "selector": "div.relative > div.flex > form.mt-8 > p.mt-3",
+      "boundingRect": {
+        "top": 495,
+        "bottom": 513,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 18
+      },
+      "snippet": "<p class=\"mt-3 text-center text-sm text-foreground/60\">",
+      "nodeLabel": "Enter the code sent to your personal email."
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 3,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "D8939B7390CCBE09185248FD8F79F5CF",
+      "nodeId": 38,
+      "nodeName": "P class='mt-3 text-center text-sm text-foreground/60'",
+      "performanceTimelineNavigationId": 6828,
+      "size": 3164,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.489999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 567.6330000152587
+      }
+    ],
+    "transferByType": {
+      "Document": 35892,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 287047,
+      "Fetch": 32233,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 300.3080000000009
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 157.2680000000007
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 74.53599999999999
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 65.21199999999999
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 51.70799999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 9.883999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.775999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "forgot-password/verify",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 348,
+        "bottom": 375,
+        "left": 139,
+        "right": 273,
+        "width": 134,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "التحقق من الرمز"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "9F9C9001D10D39E575428AA0876EE18C",
+      "nodeId": 35,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 503,
+      "size": 4416,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.247
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 101.311
+      }
+    ],
+    "transferByType": {
+      "Document": 41286,
+      "Font": 185588,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 287047,
+      "Other": 93151,
+      "Fetch": 37444
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 333.05200000000247
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 156.41200000000063
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 72.77199999999986
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 68.65599999999999
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 51.95999999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 11.659999999999993
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.832
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "reset-password",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,2,DIV,0,FORM,1,DIV,0,P",
+      "selector": "div.flex > form.mt-9 > div.mt-3 > p",
+      "boundingRect": {
+        "top": 487,
+        "bottom": 504,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 18
+      },
+      "snippet": "<p>",
+      "nodeLabel": "This password reset link is invalid or expired. Request a new one."
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "017CCB6F5DCA12F8E06BF8DA337F2B85",
+      "nodeId": 37,
+      "nodeName": "P",
+      "performanceTimelineNavigationId": 3089,
+      "size": 4774,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.82
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 97.831
+      }
+    ],
+    "transferByType": {
+      "Document": 35863,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 290498,
+      "Other": 93151,
+      "Fetch": 35292
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 318.38400000000075
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 157.82800000000054
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 77.97599999999993
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 64.316
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 51.81999999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 13.09199999999999
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 8.116
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "reset-password",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 316,
+        "bottom": 343,
+        "left": 109,
+        "right": 303,
+        "width": 194,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "تعيين كلمة مرور جديدة"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "B26A667D047CF3B440DCF6DD21155AEF",
+      "nodeId": 35,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 9900,
+      "size": 6272,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.068
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 95.391
+      }
+    ],
+    "transferByType": {
+      "Document": 41263,
+      "Font": 185588,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 290498,
+      "Other": 93151,
+      "Fetch": 40594
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 315.52000000000135
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 162.26800000000028
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 79.03199999999993
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 66.08
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 52.83999999999997
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.712
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 6.579999999999998
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "activate",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 251,
+        "bottom": 278,
+        "left": 101,
+        "right": 311,
+        "width": 211,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Create your password"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "0BC20F8AAC82290221A6D39CDE91A706",
+      "nodeId": 15,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 796,
+      "size": 5300,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.320999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 73.76100001525879
+      }
+    ],
+    "transferByType": {
+      "Document": 33156,
+      "Font": 37820,
+      "Stylesheet": 36814,
+      "Script": 240628,
+      "Other": 93151,
+      "Fetch": 32674
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 138.3760000000008
+        },
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 105.39999999999996
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 43.451999999999984
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 20.943999999999996
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 12.251999999999995
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.168
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 5.172
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "activate",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.flex > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 251,
+        "bottom": 278,
+        "left": 134,
+        "right": 278,
+        "width": 143,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "أنشئ كلمة المرور"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "1E00DC66A25ABAC8779C4B67E95A0192",
+      "nodeId": 15,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 4698,
+      "size": 4704,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.547999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 79.76100001525879
+      }
+    ],
+    "transferByType": {
+      "Document": 38562,
+      "Font": 185588,
+      "Stylesheet": 36814,
+      "Script": 240628,
+      "Other": 93151,
+      "Fetch": 37975
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 160.8520000000008
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 142.2400000000009
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 45.35599999999998
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 26.860000000000007
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 12.759999999999996
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 7.1080000000000005
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.847999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "profile",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,2,FOOTER,3,DIV,0,SECTION,1,P",
+      "selector": "footer.relative > div.relative > section.flex > p.max-w-[min(42rem,100%)]",
+      "boundingRect": {
+        "top": 438,
+        "bottom": 478,
+        "left": 24,
+        "right": 388,
+        "width": 364,
+        "height": 40
+      },
+      "snippet": "<p dir=\"ltr\" class=\"max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem…\">",
+      "nodeLabel": "Connect. Learn. Build. Grow. — a student developer community at the University …"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "CEA66ADD0E6A5F49ED097624E2C7D429",
+      "nodeId": 11,
+      "nodeName": "P class='max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem_+_0.114vw,0.8906rem)] leading-relaxed text-foreground/70 dark:text-white/65'",
+      "performanceTimelineNavigationId": 3092,
+      "size": 12138,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.197
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 34.416
+      }
+    ],
+    "transferByType": {
+      "Document": 34869,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 331136,
+      "Other": 93151,
+      "Fetch": 36293
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 293.25200000000063
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 142.99600000000078
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 78.94399999999997
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 65.164
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 57.195999999999984
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.723999999999993
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.447999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": [
+        {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "text",
+                "value": "Total"
+              },
+              "score": 0.002082745436110289
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-P",
+                "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,0,P",
+                "selector": "div.flex > div.flex > main.flex > p.py-10",
+                "boundingRect": {
+                  "top": 81,
+                  "bottom": 185,
+                  "left": 16,
+                  "right": 396,
+                  "width": 380,
+                  "height": 104
+                },
+                "snippet": "<p role=\"alert\" class=\"py-10 text-center text-gdg-red\">",
+                "nodeLabel": "Could not load your profile. Please try again."
+              },
+              "score": 0.002082745436110289
+            }
+          ]
+        }
+      ]
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "profile",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,2,FOOTER,3,DIV,0,SECTION,1,P",
+      "selector": "footer.relative > div.relative > section.flex > p.max-w-[min(42rem,100%)]",
+      "boundingRect": {
+        "top": 438,
+        "bottom": 478,
+        "left": 182,
+        "right": 388,
+        "width": 206,
+        "height": 40
+      },
+      "snippet": "<p dir=\"rtl\" class=\"max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem…\">",
+      "nodeLabel": "مجموعة مطوّري جوجل بجامعة جدة\nنحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "159E2781B1EFCC589259B4DD44787DDF",
+      "nodeId": 11,
+      "nodeName": "P class='max-w-[min(42rem,100%)] whitespace-pre-line text-[clamp(0.7719rem,0.741rem_+_0.114vw,0.8906rem)] leading-relaxed text-foreground/70 dark:text-white/65'",
+      "performanceTimelineNavigationId": 9003,
+      "size": 8528,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.356
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 81.722
+      }
+    ],
+    "transferByType": {
+      "Document": 40217,
+      "Font": 149404,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 331136,
+      "Other": 93151,
+      "Fetch": 41592
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 354.16400000000226
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 146.51600000000062
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 75.11999999999998
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 60.50799999999996
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 58.24399999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 10.567999999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.328
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": [
+        {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "text",
+                "value": "Total"
+              },
+              "score": 0.001562059077082716
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-P",
+                "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,0,P",
+                "selector": "div.flex > div.flex > main.flex > p.py-10",
+                "boundingRect": {
+                  "top": 81,
+                  "bottom": 185,
+                  "left": 16,
+                  "right": 396,
+                  "width": 380,
+                  "height": 104
+                },
+                "snippet": "<p role=\"alert\" class=\"py-10 text-center text-gdg-red\">",
+                "nodeLabel": "تعذر تحميل ملفك الشخصي. حاول مرة أخرى."
+              },
+              "score": 0.001562059077082716
+            }
+          ]
+        }
+      ]
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "registrations",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-P",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,0,HEADER,0,DIV,1,P",
+      "selector": "main.w-full > header.mb-8 > div.min-w-0 > p.mt-2",
+      "boundingRect": {
+        "top": 124,
+        "bottom": 172,
+        "left": 16,
+        "right": 396,
+        "width": 380,
+        "height": 48
+      },
+      "snippet": "<p class=\"mt-2 max-w-2xl text-sm leading-6 text-muted\">",
+      "nodeLabel": "View your event and trip registrations, check their status, and confirm or canc…"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "D633582E6CDB0CE0D48334295533F164",
+      "nodeId": 11,
+      "nodeName": "P class='mt-2 max-w-2xl text-sm leading-6 text-muted'",
+      "performanceTimelineNavigationId": 837,
+      "size": 14288,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 4.294999984741211
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 54.90000001525879
+      }
+    ],
+    "transferByType": {
+      "Document": 36966,
+      "Font": 37820,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 227595,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 320.0520000000018
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 181.38000000000017
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 135.66400000000073
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 61.348
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 42.559999999999995
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 9.555999999999997
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.795999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "registrations",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H3",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,1,DIV,0,SECTION,1,DIV,0,ARTICLE,0,DIV,1,DIV,1,H3",
+      "selector": "article.flex > div.flex > div.min-w-0 > h3.text-base",
+      "boundingRect": {
+        "top": 386,
+        "bottom": 434,
+        "left": 37,
+        "right": 291,
+        "width": 254,
+        "height": 48
+      },
+      "snippet": "<h3 class=\"text-base font-bold leading-6 text-foreground sm:text-lg\">",
+      "nodeLabel": "ورشة أساسيات تحليل البيانات | Data Analysis Fundamentals"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 1,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "D1782746EDDC67C7E4308EC6F2A3DE2A",
+      "nodeId": 18,
+      "nodeName": "H3 class='text-base font-bold leading-6 text-foreground sm:text-lg'",
+      "performanceTimelineNavigationId": 2540,
+      "size": 10260,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 5.045000015258789
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 43.34299998474121
+      }
+    ],
+    "transferByType": {
+      "Document": 42222,
+      "Font": 237164,
+      "Image": 250188,
+      "Stylesheet": 36814,
+      "Script": 227595,
+      "Other": 93151
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 452
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 152
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 281.848000000001
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 203.9959999999999
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 132.34000000000054
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 70.57199999999999
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 44.087999999999994
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 11.751999999999988
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 7.659999999999999
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": [
+        {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "text",
+                "value": "Total"
+              },
+              "score": 0.038654450106828095
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-DIV",
+                "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,1,DIV",
+                "selector": "div.flex > div.flex > main.w-full > div.space-y-12",
+                "boundingRect": {
+                  "top": 270,
+                  "bottom": 2123,
+                  "left": 16,
+                  "right": 396,
+                  "width": 380,
+                  "height": 1853
+                },
+                "snippet": "<div class=\"space-y-12\">",
+                "nodeLabel": "الفعاليات\n\n5 تسجيلات\n\nأكتوبر\n18\nفعالية\nقيد المراجعة\nورشة أساسيات تحليل البيانات…"
+              },
+              "score": 0.03854368745698678,
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/3347fc7792f0b5ea-s.0c7ha31nuacbu.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/5ad8fdb5805e9b4a-s.0-uv4l43gdmt7.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/c9a0d344f313d307-s.3ik2qu-u9tgho.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/5d6231e6818a3930-s.2vs72h_x6qrve.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/441492499fc86682-s.1fbvi_fot8u4l.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/280fac012b00b901-s.3ihiqn4pviisd.woff2"
+                    },
+                    "cause": "Web font"
+                  },
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/84cd8d504984ae62-s.0iritm8hg8q1a.woff2"
+                    },
+                    "cause": "Web font"
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-6-BUTTON",
+                "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,MAIN,1,DIV,0,SECTION,1,DIV,1,ARTICLE,1,DIV,1,DIV,1,BUTTON",
+                "selector": "article.flex > div.mt-5 > div.mt-4 > button.rounded-lg",
+                "boundingRect": {
+                  "top": 733,
+                  "bottom": 773,
+                  "left": 177,
+                  "right": 275,
+                  "width": 98,
+                  "height": 40
+                },
+                "snippet": "<button type=\"button\" class=\"rounded-lg border border-border px-4 py-2.5 text-sm font-semibold text-for…\">",
+                "nodeLabel": "إلغاء التسجيل"
+              },
+              "score": 0.0001107626498413163,
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "extra": {
+                      "type": "url",
+                      "value": "http://localhost:3100/_next/static/media/ceec3e50f42c26e3-s.0da8nscnv1nkd.woff2"
+                    },
+                    "cause": "Web font"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "create-event",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 86,
+        "right": 326,
+        "width": 240,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Continue with your email"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "A3C8DD769A7ECB0364660B4DB5168D48",
+      "nodeId": 33,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 5350,
+      "size": 6050,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 11.76
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 117.577
+      }
+    ],
+    "transferByType": {
+      "undefined": 765,
+      "Document": 32301,
+      "Font": 37820,
+      "Stylesheet": 36814,
+      "Script": 401150,
+      "Fetch": 66021,
+      "Other": 93151,
+      "Image": 289054
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 322.9440000000027
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 222.35199999999975
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 93.23200000000001
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 74.23600000000006
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 69.35599999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.347999999999998
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 5.115999999999996
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "create-event",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 78,
+        "right": 334,
+        "width": 257,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "تابع باستخدام بريدك الإلكتروني"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "77F3F47FF661594A15C562BDAE3E0071",
+      "nodeId": 40,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 3241,
+      "size": 8547,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 10.174
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 390.336
+      }
+    ],
+    "transferByType": {
+      "undefined": 815,
+      "Document": 37529,
+      "Font": 185588,
+      "Stylesheet": 36814,
+      "Script": 401150,
+      "Fetch": 76558,
+      "Other": 93151,
+      "Image": 289054
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 361.07600000000247
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 218.80799999999982
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 94.66400000000004
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 74.25599999999997
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 73.7839999999999
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.879999999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 5.627999999999997
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "dashboard",
+    "locale": "en",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 86,
+        "right": 326,
+        "width": 240,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "Continue with your email"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "BEF0DCC85DC7A1F96BD1C3774AE19152",
+      "nodeId": 39,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 6549,
+      "size": 6050,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 8.471
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 394.424
+      }
+    ],
+    "transferByType": {
+      "undefined": 752,
+      "Document": 32207,
+      "Font": 37820,
+      "Stylesheet": 36814,
+      "Script": 389067,
+      "Fetch": 66001,
+      "Other": 93151,
+      "Image": 289054
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 358.2680000000009
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 212.01199999999932
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 89.276
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 74.52399999999987
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 68.36000000000001
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.387999999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 5.187999999999996
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  },
+  {
+    "route": "dashboard",
+    "locale": "ar",
+    "lcpElement": {
+      "type": "node",
+      "lhId": "page-0-H1",
+      "path": "1,HTML,1,BODY,1,DIV,0,DIV,1,DIV,0,MAIN,1,SECTION,0,DIV,0,H1",
+      "selector": "main.flex > section.relative > div.relative > h1.text-center",
+      "boundingRect": {
+        "top": 309,
+        "bottom": 336,
+        "left": 78,
+        "right": 334,
+        "width": 257,
+        "height": 27
+      },
+      "snippet": "<h1 class=\"text-center text-3xl font-bold leading-tight md:text-4xl\">",
+      "nodeLabel": "تابع باستخدام بريدك الإلكتروني"
+    },
+    "traceLcpCandidate": {
+      "candidateIndex": 2,
+      "isMainFrame": true,
+      "isOutermostMainFrame": true,
+      "navigationId": "4C8A129DC0E732FAE1741453AEC3181A",
+      "nodeId": 39,
+      "nodeName": "H1 class='text-center text-3xl font-bold leading-tight md:text-4xl'",
+      "performanceTimelineNavigationId": 5320,
+      "size": 8547,
+      "type": "text"
+    },
+    "observedTraceBreakdown": [
+      {
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte",
+        "duration": 10.524
+      },
+      {
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay",
+        "duration": 365.332
+      }
+    ],
+    "transferByType": {
+      "undefined": 802,
+      "Document": 37443,
+      "Font": 185588,
+      "Stylesheet": 36814,
+      "Script": 389067,
+      "Fetch": 76558,
+      "Other": 93151,
+      "Image": 289054
+    },
+    "renderBlocking": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "url",
+          "valueType": "url",
+          "label": "URL"
+        },
+        {
+          "key": "totalBytes",
+          "valueType": "bytes",
+          "label": "Transfer Size"
+        },
+        {
+          "key": "wastedMs",
+          "valueType": "timespanMs",
+          "label": "Duration"
+        }
+      ],
+      "items": [
+        {
+          "url": "http://localhost:3100/_next/static/chunks/2wxgszy0edp0v.css",
+          "totalBytes": 33929,
+          "wastedMs": 451
+        },
+        {
+          "url": "http://localhost:3100/_next/static/chunks/3a0ze88d8g_2w.css",
+          "totalBytes": 2885,
+          "wastedMs": 151
+        }
+      ]
+    },
+    "mainThread": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "groupLabel",
+          "valueType": "text",
+          "label": "Category"
+        },
+        {
+          "key": "duration",
+          "valueType": "ms",
+          "granularity": 1,
+          "label": "Time Spent"
+        }
+      ],
+      "items": [
+        {
+          "group": "other",
+          "groupLabel": "Other",
+          "duration": 303.7600000000012
+        },
+        {
+          "group": "scriptEvaluation",
+          "groupLabel": "Script Evaluation",
+          "duration": 223.0999999999996
+        },
+        {
+          "group": "scriptParseCompile",
+          "groupLabel": "Script Parsing & Compilation",
+          "duration": 92.57200000000005
+        },
+        {
+          "group": "paintCompositeRender",
+          "groupLabel": "Rendering",
+          "duration": 78.53999999999998
+        },
+        {
+          "group": "styleLayout",
+          "groupLabel": "Style & Layout",
+          "duration": 73.57599999999998
+        },
+        {
+          "group": "parseHTML",
+          "groupLabel": "Parse HTML & CSS",
+          "duration": 6.279999999999999
+        },
+        {
+          "group": "garbageCollection",
+          "groupLabel": "Garbage Collection",
+          "duration": 5.3999999999999995
+        }
+      ],
+      "sortedBy": [
+        "duration"
+      ]
+    },
+    "layoutShiftCulprits": {
+      "type": "list",
+      "items": []
+    },
+    "thirdParty": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "entity",
+          "valueType": "text",
+          "label": "3rd party",
+          "subItemsHeading": {
+            "key": "url",
+            "valueType": "url"
+          }
+        },
+        {
+          "key": "transferSize",
+          "granularity": 1,
+          "valueType": "bytes",
+          "label": "Transfer size",
+          "subItemsHeading": {
+            "key": "transferSize"
+          }
+        },
+        {
+          "key": "mainThreadTime",
+          "granularity": 1,
+          "valueType": "ms",
+          "label": "Main thread time",
+          "subItemsHeading": {
+            "key": "mainThreadTime"
+          }
+        }
+      ],
+      "items": []
+    }
+  }
+]

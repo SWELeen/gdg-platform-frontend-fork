@@ -1,0 +1,2434 @@
+[
+  {
+    "key": "en-home-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      6394
+    ],
+    "afterSize": [
+      1440,
+      6394
+    ],
+    "pixels": 4729,
+    "exactPixels": 1057699,
+    "ratio": 0.0005136108504500747,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-announcements-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1299
+    ],
+    "afterSize": [
+      1440,
+      1299
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-event-registration-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-login-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-pending-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-verify-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-complete-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-verify-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-reset-password-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-activate-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 9,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-profile-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-registrations-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1692
+    ],
+    "afterSize": [
+      1440,
+      1692
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-create-event-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-dashboard-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-home-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      6339
+    ],
+    "afterSize": [
+      1440,
+      6339
+    ],
+    "pixels": 541,
+    "exactPixels": 860,
+    "ratio": 0.00005926714693870397,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-announcements-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1250
+    ],
+    "afterSize": [
+      1440,
+      1250
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-event-registration-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-login-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-pending-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-verify-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-complete-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-verify-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-reset-password-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-activate-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-profile-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-registrations-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1692
+    ],
+    "afterSize": [
+      1440,
+      1692
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-create-event-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-dashboard-1440-light",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-home-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      7455
+    ],
+    "afterSize": [
+      390,
+      7455
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-announcements-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1482
+    ],
+    "afterSize": [
+      390,
+      1482
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-event-registration-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1397
+    ],
+    "afterSize": [
+      390,
+      1397
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-login-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-pending-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-verify-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-complete-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-verify-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-reset-password-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-activate-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-profile-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-registrations-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      2657
+    ],
+    "afterSize": [
+      390,
+      2657
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-create-event-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-dashboard-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-home-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      7106
+    ],
+    "afterSize": [
+      390,
+      7106
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-announcements-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1372
+    ],
+    "afterSize": [
+      390,
+      1372
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-event-registration-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1445
+    ],
+    "afterSize": [
+      390,
+      1445
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-login-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-pending-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-verify-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 102,
+    "exactPixels": 710,
+    "ratio": 0.0002905982905982906,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-verify-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-reset-password-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-activate-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-profile-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-registrations-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      2657
+    ],
+    "afterSize": [
+      390,
+      2657
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-create-event-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-dashboard-390-light",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1433
+    ],
+    "afterSize": [
+      390,
+      1433
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-home-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      6394
+    ],
+    "afterSize": [
+      1440,
+      6394
+    ],
+    "pixels": 574,
+    "exactPixels": 17987,
+    "ratio": 0.0000623414312028638,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-announcements-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1299
+    ],
+    "afterSize": [
+      1440,
+      1299
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-event-registration-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-login-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-pending-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-verify-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-complete-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-verify-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-reset-password-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-activate-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-profile-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-registrations-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1692
+    ],
+    "afterSize": [
+      1440,
+      1692
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-create-event-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-dashboard-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-home-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      6339
+    ],
+    "afterSize": [
+      1440,
+      6339
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-announcements-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1250
+    ],
+    "afterSize": [
+      1440,
+      1250
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-event-registration-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-login-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-pending-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-verify-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-complete-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-verify-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-reset-password-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-activate-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 12,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-profile-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      900
+    ],
+    "afterSize": [
+      1440,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-registrations-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1692
+    ],
+    "afterSize": [
+      1440,
+      1692
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-create-event-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-dashboard-1440-dark",
+    "sameSize": true,
+    "beforeSize": [
+      1440,
+      1206
+    ],
+    "afterSize": [
+      1440,
+      1206
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-home-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      7450
+    ],
+    "afterSize": [
+      390,
+      7450
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-announcements-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1477
+    ],
+    "afterSize": [
+      390,
+      1477
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-event-registration-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1397
+    ],
+    "afterSize": [
+      390,
+      1397
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-login-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-pending-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-verify-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-signup-complete-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-forgot-password-verify-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-reset-password-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-activate-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-profile-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-registrations-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      2652
+    ],
+    "afterSize": [
+      390,
+      2652
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-create-event-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "en-dashboard-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-home-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      7101
+    ],
+    "afterSize": [
+      390,
+      7101
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-announcements-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1367
+    ],
+    "afterSize": [
+      390,
+      1367
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-event-registration-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1445
+    ],
+    "afterSize": [
+      390,
+      1445
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-login-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-pending-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-verify-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-signup-complete-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-forgot-password-verify-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-reset-password-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-activate-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-profile-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      900
+    ],
+    "afterSize": [
+      390,
+      900
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-registrations-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      2652
+    ],
+    "afterSize": [
+      390,
+      2652
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-create-event-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  },
+  {
+    "key": "ar-dashboard-390-dark",
+    "sameSize": true,
+    "beforeSize": [
+      390,
+      1428
+    ],
+    "afterSize": [
+      390,
+      1428
+    ],
+    "pixels": 0,
+    "exactPixels": 0,
+    "ratio": 0,
+    "linksEqual": true,
+    "controlsEqual": true,
+    "textEqual": true,
+    "urlEqual": true
+  }
+]

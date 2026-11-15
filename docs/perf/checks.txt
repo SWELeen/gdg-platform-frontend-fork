@@ -1,0 +1,14 @@
+Baseline: origin/main 77646e3
+Candidate: perf/smoother-site
+
+npm run build (baseline and candidate): PASS, Next.js 16.3.4 Turbopack
+npm run typecheck: PASS
+node scripts/check-theme-toggle.mjs: PASS
+npm run lint baseline: 6 errors, 15 warnings
+npm run lint candidate: same 6 errors, 12 warnings
+Changed source files lint: 0 errors; existing unused HeroSection CX warning
+git diff --check: PASS
+
+Full route/browser and performance data are recorded separately.
+No test script is defined in baseline package.json.
+No environment files, package manifest or lockfile changes.

@@ -7,7 +7,7 @@ import type { CSSProperties } from "react";
 import {
   animate,
   motion,
-  useAnimationFrame,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useScroll,
@@ -444,62 +444,83 @@ function Ribbon({
 
   const reduce = useReducedMotion();
 
-  useAnimationFrame((time) => {
-    if (reduce) return;
+  useEffect(() => {
+    const path = baseRef.current;
+    if (!path || reduce) return;
+    let frame = 0;
+    let visible = false;
+    const draw = (time: number) => {
 
-    const s =
-      time / 1000 + index * 0.9;
+      const s =
+        time / 1000 + index * 0.9;
 
-    const waves = 1.3;
-    const k = 2 * Math.PI * waves;
+      const waves = 1.3;
+      const k = 2 * Math.PI * waves;
 
-    const speed =
-      (2 * Math.PI) /
-      (r.duration * 0.5);
+      const speed =
+        (2 * Math.PI) /
+        (r.duration * 0.5);
 
-    const amp = r.amp * 1.3;
+      const amp = r.amp * 1.3;
 
-    const d = ribbonPath(
-      r.pts,
-      r.w0,
-      1.2,
-      28,
-      (t) =>
-        amp *
-        Math.pow(1 - t, 0.9) *
-        Math.sin(
-          k * t - speed * s
-        )
-    );
+      const d = ribbonPath(
+        r.pts,
+        r.w0,
+        1.2,
+        28,
+        (t) =>
+          amp *
+          Math.pow(1 - t, 0.9) *
+          Math.sin(
+            k * t - speed * s
+          )
+      );
 
-    baseRef.current?.setAttribute(
-      "d",
-      d
-    );
+      baseRef.current?.setAttribute(
+        "d",
+        d
+      );
 
-    shineRef.current?.setAttribute(
-      "d",
-      d
-    );
+      shineRef.current?.setAttribute(
+        "d",
+        d
+      );
 
-    const p =
-      (s * 0.12 + index * 0.13) %
-      1;
+      const p =
+        (s * 0.12 + index * 0.13) %
+        1;
 
-    const c =
-      r.x1 +
-      (r.x2 - r.x1) * p;
+      const c =
+        r.x1 +
+        (r.x2 - r.x1) * p;
 
-    shineGrad.current?.setAttribute(
-      "x1",
-      String(c - 140)
-    );
+      shineGrad.current?.setAttribute(
+        "x1",
+        String(c - 140)
+      );
 
-    shineGrad.current?.setAttribute(
-      "x2",
-      String(c + 140)
-    );
-  });
+      shineGrad.current?.setAttribute(
+        "x2",
+        String(c + 140)
+      );
+      frame = requestAnimationFrame(draw);
+    };
+    const sync = () => {
+      cancelAnimationFrame(frame);
+      if (visible && !document.hidden) frame = requestAnimationFrame(draw);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(path.ownerSVGElement!);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, [r, index, reduce]);
 
   return (
     <g
@@ -572,6 +593,7 @@ export default function HeroSection() {
 
   // الحاوية الثابتة حق اللوقو: نراقبها هي بدل النصفين المزاحين برا الشاشة
   const heroRef = useRef<HTMLElement>(null);
+  const heroVisible = useInView(heroRef);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -675,7 +697,7 @@ export default function HeroSection() {
               backgroundColor: square.color,
               transformOrigin: "center",
             }}
-            animate={reduceMotion ? { opacity: 0.68 } : { opacity: [0.48, 0.78, 0.48], scale: [0.96, 1.02, 0.96] }}
+            animate={reduceMotion || !heroVisible ? { opacity: 0.68 } : { opacity: [0.48, 0.78, 0.48], scale: [0.96, 1.02, 0.96] }}
             transition={{ duration: 3.8 + index * 0.35, repeat: Infinity, ease: "easeInOut", delay: index * 0.42 }}
           />
         ))}
@@ -716,7 +738,7 @@ export default function HeroSection() {
               left: r.left,
               background: r.color,
             }}
-            animate={{
+            animate={reduceMotion || !heroVisible ? { opacity: r.o } : {
               opacity: [
                 r.o * 0.6,
                 r.o,
@@ -740,7 +762,7 @@ export default function HeroSection() {
             cy={p.y}
             r={p.r}
             fill={p.c}
-            animate={{ opacity: [p.o * 0.2, Math.min(p.o * 1.15, 1), p.o * 0.2] }}
+            animate={reduceMotion || !heroVisible ? { opacity: p.o } : { opacity: [p.o * 0.2, Math.min(p.o * 1.15, 1), p.o * 0.2] }}
             transition={{ duration: p.d, repeat: Infinity }}
           />
         ))}
@@ -836,7 +858,7 @@ export default function HeroSection() {
 
           <motion.div
             className="absolute inset-0"
-            animate={{
+            animate={reduceMotion || !heroVisible ? { y: 0 } : {
               y: [0, -6, 0],
             }}
             transition={{

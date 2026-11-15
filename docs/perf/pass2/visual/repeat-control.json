@@ -1,0 +1,62 @@
+[
+  {
+    "key": "en-home-1440-light",
+    "a": "before",
+    "b": "before-repeat",
+    "pixels": 0
+  },
+  {
+    "key": "en-home-1440-light",
+    "a": "after",
+    "b": "before-repeat",
+    "pixels": 4729
+  },
+  {
+    "key": "ar-home-1440-light",
+    "a": "before",
+    "b": "before-repeat",
+    "pixels": 541
+  },
+  {
+    "key": "ar-home-1440-light",
+    "a": "after",
+    "b": "before-repeat",
+    "pixels": 0
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "a": "before",
+    "b": "before-repeat",
+    "pixels": 102
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "a": "after",
+    "b": "before-repeat",
+    "pixels": 0
+  },
+  {
+    "key": "en-home-1440-dark",
+    "a": "before",
+    "b": "before-repeat",
+    "pixels": 574
+  },
+  {
+    "key": "en-home-1440-dark",
+    "a": "after",
+    "b": "before-repeat",
+    "pixels": 0
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "a": "after",
+    "b": "after-repeat",
+    "pixels": 0
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "a": "before-repeat",
+    "b": "after-repeat",
+    "pixels": 0
+  }
+]

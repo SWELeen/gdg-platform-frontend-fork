@@ -1,0 +1,1390 @@
+[
+  {
+    "key": "en-home-1440-light",
+    "locale": "en",
+    "route": "",
+    "width": 1440,
+    "theme": "light",
+    "captureAttempts": 2,
+    "url": "/en",
+    "dir": "ltr",
+    "overflow": false,
+    "links": [
+      {
+        "text": "Home",
+        "href": "/en#home"
+      },
+      {
+        "text": "About Us",
+        "href": "/en#about"
+      },
+      {
+        "text": "Projects",
+        "href": "/en#projects"
+      },
+      {
+        "text": "Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Announcements",
+        "href": "/en#announcements"
+      },
+      {
+        "text": "Community",
+        "href": "/en#committees"
+      },
+      {
+        "text": "Profile",
+        "href": "/en/profile"
+      },
+      {
+        "text": "Explore Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Join Us",
+        "href": "/en/signup"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/abdullah-misar"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/abmisar1"
+      },
+      {
+        "text": "View all announcements",
+        "href": "/en/announcements"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/fahd-aljudaibi?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/fahadjud?s=11&t=pZ38eq32A3fxP2lOWdg4Fg"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/ahmed-bawazeer-285160267"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/ahmedbawza"
+      },
+      {
+        "text": "",
+        "href": "/en"
+      },
+      {
+        "text": "Home",
+        "href": "/en#home"
+      },
+      {
+        "text": "About Us",
+        "href": "/en#about"
+      },
+      {
+        "text": "Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Announcements",
+        "href": "/en/announcements"
+      },
+      {
+        "text": "Projects",
+        "href": "/en#projects"
+      },
+      {
+        "text": "Community",
+        "href": "/en#committees"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/company/google-developer-student-club-uj/"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/gdguoj?s=11"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "العربية",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Switch to dark mode",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Open menu",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Jumanah Alshaibi - LinkedIn profile",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Jumanah Alshaibi - X profile",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01Content Writing+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02Project Management+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03Digital Media and Design+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04Public Relations+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01Artificial Intelligence+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02Robotics & IOT+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03Automation+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04Data Analysis+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "05Web Design & Development+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "06Cybersecurity+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Content Writing01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Project Management02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Digital Media and Design03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Public Relations04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Artificial Intelligence01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Robotics & IOT02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Automation03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Data Analysis04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Web Design & Development05",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Cybersecurity06",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Join Our Community!",
+        "disabled": false
+      }
+    ],
+    "text": "Home About Us Projects Events Announcements Community العربية Profile Google Developer Group on Campus | University of Jeddah Connect. Learn. Build. Grow. Explore Events Join Us About Our Group We are Google Developer Group on Campus at the University of Jeddah, a student technology community that brings together people passionate about technology, innovation, and learning in a collaborative environment that encourages creativity and the exchange of knowledge and experience. Through workshops, tech events, and hands-on projects, we empower our members to develop technical and leadership skills, explore new fields, and turn ideas into practical projects and solutions—helping build a generation of technologists ready to innovate and make an impact. +165 Members +10 Events +9 Projects 10 Committees What We Offer 1 Learn & Empower Workshops and events that build your skills and expand your knowledge. 2 3 4 Meet the Group Leaders Leaders united by a passion for technology and innovation, working together to bring our vision to life and create lasting impact. Abdullah Misar Google Developer Group Lead Jumanah Alshaibi Google Developer Group Co-Lead Made by Our Members Explore our members’ projects, from innovative ideas to real achievements that turn knowledge into impact. 01 GDG UJ Interactive Gaming Platform Web Design and Development Committee A customizable multiplayer gaming platform for GDG events. 02 BracketClick AI Committee An AI-powered photobooth triggered by hand gestures. 03 GDG Air Hockey AI Committee A touchless air hockey game controlled by hand movements. 04 GDG Prompt Pilot AI Committee A shared AI prompt library for GDG committees. 07 Integrated Data Management and Visualization System Data Analysis Committee A centralized database and live dashboards for GDG data. 08 Internal Phishing Simulation Cybersecurity Committee A controlled phishing campaign to assess security awareness. 09 Website Security Assessment & Hardening Cybersecurity Committee A security audit and hardening project for the GDG web platform. 01/09 Latest updates & Announcements View all announcements Stay tuned… UPCOMING EVENTS Discover What’s Next Join our events, build your skills, grow your network, and explore new opportunities with Google Developer Group on Campus at the University of Jeddah. Stay informed… Our Success Partners Our sponsors support our vision and empower our journey of learning, innovation, and impact. Meet the Google Developer Group Committees Our committees work together in different roles to develop ideas, empower talent, and create experiences that enrich our tech community and strengthen collaboration and innovation. Administrative Committees 01 Content Writing + 02 Project Management + 03 Digital Media and Design + 04 Public Relations + Developer Committees 01 Artificial Intelligence + 02 Robotics & IOT + 03 Automation + 04 Data Analysis + 05 Web Design & Development + 06 Cybersecurity + Meet Our Advisors Our advisors support the group’s goals and efforts by sharing guidance, experience, and knowledge to help us work more effectively. Fahad Aljudaibi Google Developer Group Advisor Ahmed Bawazeer Google Developer Group Advisor Ready to Be Part of Our Group? Join our group, share your passion, grow your skills, and create experiences and impact with us that go beyond ideas. Join Our Community! Connect. Learn. Build. Grow. — a student developer community at the University of Jeddah. Links Home About Us Events Announcements Projects Community Contact Us © 2026 GDG on Campus — University of Jeddah",
+    "errors": []
+  },
+  {
+    "key": "ar-home-1440-light",
+    "locale": "ar",
+    "route": "",
+    "width": 1440,
+    "theme": "light",
+    "captureAttempts": 5,
+    "url": "/ar",
+    "dir": "rtl",
+    "overflow": false,
+    "links": [
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar#announcements"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "الملف الشخصي",
+        "href": "/ar/profile"
+      },
+      {
+        "text": "استكشف الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "انضم إلينا",
+        "href": "/ar/signup"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/abdullah-misar"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/abmisar1"
+      },
+      {
+        "text": "عرض كل الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/fahd-aljudaibi?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/fahadjud?s=11&t=pZ38eq32A3fxP2lOWdg4Fg"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/ahmed-bawazeer-285160267"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/ahmedbawza"
+      },
+      {
+        "text": "",
+        "href": "/ar"
+      },
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/company/google-developer-student-club-uj/"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/gdguoj?s=11"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "English",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "التبديل إلى الوضع الداكن",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "فتح القائمة",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "جمانة الشيبي - الحساب على لينكدإن",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "جمانة الشيبي - الحساب على إكس",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "المشروع السابق",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "المشروع التالي",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "عرض المشروع",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "المشروع السابق",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "المشروع التالي",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01كتابة المحتوى+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02إدارة المشاريع+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03الإعلام الرقمي والتصميم+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04العلاقات العامة+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "اللجنة السابقة",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "اللجنة التالية",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01الذكاء الاصطناعي+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02الروبوتات وإنترنت الأشياء+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03الأتمتة+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04تحليل البيانات+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "05تصميم وتطوير الويب+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "06الأمن السيبراني+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "اللجنة السابقة",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "اللجنة التالية",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "كتابة المحتوى01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "إدارة المشاريع02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "الإعلام الرقمي والتصميم03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "العلاقات العامة04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "الذكاء الاصطناعي01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "الروبوتات وإنترنت الأشياء02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "الأتمتة03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "تحليل البيانات04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "تصميم وتطوير الويب05",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "الأمن السيبراني06",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "انضم إلى مجتمعنا!",
+        "disabled": false
+      }
+    ],
+    "text": "الرئيسية من نحن المشاريع الفعاليات الإعلانات المجتمع English الملف الشخصي مجموعة مطوّري جوجل بجامعة جدة نحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر استكشف الفعاليات انضم إلينا عن مجموعتنا نحن مجموعة مطوّري جوجل بجامعة جدة، مجموعة طلابية تقنية تجمع الشغوفين بالتقنية والابتكار والتعلّم في بيئة تعاونية تُحفّز الإبداع وتُعزّز تبادل المعرفة والخبرات. من خلال ورش العمل والفعاليات التقنية والمشاريع التطبيقية، نُمكّن أعضاءنا من تطوير مهاراتهم التقنية والقيادية، واستكشاف مجالات جديدة، وتحويل أفكارهم إلى مشاريع وحلول قابلة للتطبيق، بما يُسهم في بناء جيل تقني قادر على الابتكار وصناعة الأثر. +165 عضو +10 فعالية +9 مشروع 10 لجان ماذا نقدّم؟ 1 تعلّم، تمكين ورش وفعاليات تطوّر مهاراتك وتوسّع معرفتك. 2 3 4 تعرّف على قادة المجموعة قادةٌ يجمعهم الشغف بالتقنية والابتكار، ويعملون معًا لتحقيق الرؤية وصناعة أثر مُستدام. عبدالله معصار Google Developer Group القائد جمانة الشيبي Google Developer Group نائبة القائد من صُنع أعضائنا اكتشف مشاريع أعضائنا، من أفكار مبتكرة إلى منجزات واقعية تُجسّد المعرفة وتصنع الأثر. 01 GDG UJ Interactive Gaming Platform لجنة تصميم وتطوير الويب منصة ألعاب تفاعلية متعددة اللاعبين وقابلة للتخصيص لفعاليات GDG. 02 BracketClick لجنة الذكاء الاصطناعي كشك تصوير ذكي يعمل بإشارات اليد. 03 GDG Air Hockey لجنة الذكاء الاصطناعي لعبة هوكي تفاعلية تتحكم فيها بحركات اليد. 04 GDG Prompt Pilot لجنة الذكاء الاصطناعي مكتبة موحدة لقوالب أوامر الذكاء الاصطناعي للجان GDG. 07 Integrated Data Management and Visualization System لجنة تحليل البيانات قاعدة بيانات مركزية ولوحات معلومات تفاعلية لبيانات GDG. 08 Internal Phishing Simulation لجنة الأمن السيبراني محاكاة تصيّد إلكتروني لقياس الوعي الأمني للأعضاء. 09 Website Security Assessment & Hardening لجنة الأمن السيبراني تدقيق أمني وتحسين حماية منصة GDG الإلكترونية. 01/09 آخر التحديثات و الإعلانات عرض كل الإعلانات ترقبونا .. الفعاليات القادمة اكتشف القادم انضم إلى فعالياتنا، طوّر مهاراتك، نَمِّ علاقاتك، واكتشف آفاقًا جديدة مع مجموعة مطوّري جوجل بجامعة جدة. ابقوا على اطلاع .. رُعاة نجاحنا رُعاةٌ يدعمون رؤيتنا، ويسهمون في تمكين رحلتنا نحو التعلّم والابتكار وصناعة الأثر. تعرّف على لجان مجموعة مطوّري جوجل تتكامل جهود لجاننا وتتنوّع أدوارها لتطوير الأفكار، وتمكين المواهب، وصناعة تجارب تُثري مجموعتنا التقنية، وتُعزّز روح التعاون والابتكار. اللجان الإدارية 01 كتابة المحتوى + 02 إدارة المشاريع + 03 الإعلام الرقمي والتصميم + 04 العلاقات العامة + لجان المطورين 01 الذكاء الاصطناعي + 02 الروبوتات وإنترنت الأشياء + 03 الأتمتة + 04 تحليل البيانات + 05 تصميم وتطوير الويب + 06 الأمن السيبراني + تعرّف على المستشارين يُسهمون في دعم وتحقيق أهداف المجموعة ومساندة جهودها، من خلال تقديم المشورة ومشاركة الخبرات والمعارف، بما يُعزّز كفاءة العمل. فهد الجديبي Google Developer Group مستشار أحمد باوزير Google Developer Group مستشار هل أنت مستعد لتكون جزءًا من مجموعتنا؟ انضمّ إلى مجموعتنا، وشارك شغفك، وطوّر مهاراتك، واصنع معنا تجارب وأثرًا يتجاوز حدود الأفكار. انضم إلى مجتمعنا! مجموعة مطوّري جوجل بجامعة جدة نحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر روابط الرئيسية من نحن الفعاليات الإعلانات المشاريع المجتمع تواصل معنا 2026 مجموعة مطوّري جوجل بجامعة جدة",
+    "errors": []
+  },
+  {
+    "key": "ar-signup-complete-390-light",
+    "locale": "ar",
+    "route": "signup/complete",
+    "width": 390,
+    "theme": "light",
+    "captureAttempts": 2,
+    "url": "/ar/signup/complete",
+    "dir": "rtl",
+    "overflow": false,
+    "links": [
+      {
+        "text": "",
+        "href": "/ar#home"
+      },
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "الملف الشخصي",
+        "href": "/ar/profile"
+      },
+      {
+        "text": "",
+        "href": "/ar"
+      },
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/company/google-developer-student-club-uj/"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/gdguoj?s=11"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "التبديل إلى الوضع الداكن",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "English",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "فتح قائمة التنقل وإغلاقها",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "تسجيل الدخول",
+        "disabled": false
+      }
+    ],
+    "text": "English أكمل ملفك الشخصي أضف البيانات المطلوبة لإكمال تسجيلك في GDG. جلسة التسجيل عبر Google غير موجودة. ابدأ من جديد. تسجيل الدخول مجموعة مطوّري جوجل بجامعة جدة نحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر روابط الرئيسية من نحن الفعاليات الإعلانات المشاريع المجتمع تواصل معنا 2026 مجموعة مطوّري جوجل بجامعة جدة",
+    "errors": []
+  },
+  {
+    "key": "en-home-1440-dark",
+    "locale": "en",
+    "route": "",
+    "width": 1440,
+    "theme": "dark",
+    "captureAttempts": 2,
+    "url": "/en",
+    "dir": "ltr",
+    "overflow": false,
+    "links": [
+      {
+        "text": "Home",
+        "href": "/en#home"
+      },
+      {
+        "text": "About Us",
+        "href": "/en#about"
+      },
+      {
+        "text": "Projects",
+        "href": "/en#projects"
+      },
+      {
+        "text": "Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Announcements",
+        "href": "/en#announcements"
+      },
+      {
+        "text": "Community",
+        "href": "/en#committees"
+      },
+      {
+        "text": "Profile",
+        "href": "/en/profile"
+      },
+      {
+        "text": "Explore Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Join Us",
+        "href": "/en/signup"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/abdullah-misar"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/abmisar1"
+      },
+      {
+        "text": "View all announcements",
+        "href": "/en/announcements"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/fahd-aljudaibi?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/fahadjud?s=11&t=pZ38eq32A3fxP2lOWdg4Fg"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/in/ahmed-bawazeer-285160267"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/ahmedbawza"
+      },
+      {
+        "text": "",
+        "href": "/en"
+      },
+      {
+        "text": "Home",
+        "href": "/en#home"
+      },
+      {
+        "text": "About Us",
+        "href": "/en#about"
+      },
+      {
+        "text": "Events",
+        "href": "/en#events"
+      },
+      {
+        "text": "Announcements",
+        "href": "/en/announcements"
+      },
+      {
+        "text": "Projects",
+        "href": "/en#projects"
+      },
+      {
+        "text": "Community",
+        "href": "/en#committees"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/company/google-developer-student-club-uj/"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/gdguoj?s=11"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "العربية",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Switch to light mode",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Open menu",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Jumanah Alshaibi - LinkedIn profile",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Jumanah Alshaibi - X profile",
+        "disabled": true
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "View Project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next project",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01Content Writing+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02Project Management+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03Digital Media and Design+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04Public Relations+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "01Artificial Intelligence+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "02Robotics & IOT+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "03Automation+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "04Data Analysis+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "05Web Design & Development+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "06Cybersecurity+",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Previous committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Next committee",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Content Writing01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Project Management02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Digital Media and Design03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Public Relations04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Artificial Intelligence01",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Robotics & IOT02",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Automation03",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Data Analysis04",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Web Design & Development05",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Cybersecurity06",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "Join Our Community!",
+        "disabled": false
+      }
+    ],
+    "text": "Home About Us Projects Events Announcements Community العربية Profile Google Developer Group on Campus | University of Jeddah Connect. Learn. Build. Grow. Explore Events Join Us About Our Group We are Google Developer Group on Campus at the University of Jeddah, a student technology community that brings together people passionate about technology, innovation, and learning in a collaborative environment that encourages creativity and the exchange of knowledge and experience. Through workshops, tech events, and hands-on projects, we empower our members to develop technical and leadership skills, explore new fields, and turn ideas into practical projects and solutions—helping build a generation of technologists ready to innovate and make an impact. +165 Members +10 Events +9 Projects 10 Committees What We Offer 1 Learn & Empower Workshops and events that build your skills and expand your knowledge. 2 3 4 Meet the Group Leaders Leaders united by a passion for technology and innovation, working together to bring our vision to life and create lasting impact. Abdullah Misar Google Developer Group Lead Jumanah Alshaibi Google Developer Group Co-Lead Made by Our Members Explore our members’ projects, from innovative ideas to real achievements that turn knowledge into impact. 01 GDG UJ Interactive Gaming Platform Web Design and Development Committee A customizable multiplayer gaming platform for GDG events. 02 BracketClick AI Committee An AI-powered photobooth triggered by hand gestures. 03 GDG Air Hockey AI Committee A touchless air hockey game controlled by hand movements. 04 GDG Prompt Pilot AI Committee A shared AI prompt library for GDG committees. 07 Integrated Data Management and Visualization System Data Analysis Committee A centralized database and live dashboards for GDG data. 08 Internal Phishing Simulation Cybersecurity Committee A controlled phishing campaign to assess security awareness. 09 Website Security Assessment & Hardening Cybersecurity Committee A security audit and hardening project for the GDG web platform. 01/09 Latest updates & Announcements View all announcements Stay tuned… UPCOMING EVENTS Discover What’s Next Join our events, build your skills, grow your network, and explore new opportunities with Google Developer Group on Campus at the University of Jeddah. Stay informed… Our Success Partners Our sponsors support our vision and empower our journey of learning, innovation, and impact. Meet the Google Developer Group Committees Our committees work together in different roles to develop ideas, empower talent, and create experiences that enrich our tech community and strengthen collaboration and innovation. Administrative Committees 01 Content Writing + 02 Project Management + 03 Digital Media and Design + 04 Public Relations + Developer Committees 01 Artificial Intelligence + 02 Robotics & IOT + 03 Automation + 04 Data Analysis + 05 Web Design & Development + 06 Cybersecurity + Meet Our Advisors Our advisors support the group’s goals and efforts by sharing guidance, experience, and knowledge to help us work more effectively. Fahad Aljudaibi Google Developer Group Advisor Ahmed Bawazeer Google Developer Group Advisor Ready to Be Part of Our Group? Join our group, share your passion, grow your skills, and create experiences and impact with us that go beyond ideas. Join Our Community! Connect. Learn. Build. Grow. — a student developer community at the University of Jeddah. Links Home About Us Events Announcements Projects Community Contact Us © 2026 GDG on Campus — University of Jeddah",
+    "errors": []
+  }
+]

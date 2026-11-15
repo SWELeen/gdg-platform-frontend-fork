@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
@@ -52,8 +53,11 @@ export default function TeamCard({ member }: TeamCardProps) {
       {/* Photo */}
       <div className="relative isolate aspect-[4/4.5] w-full overflow-hidden bg-surface-muted">
         <div aria-hidden="true" className="absolute -inset-5 scale-110 opacity-20 blur-2xl" style={{ background: "var(--team-card-photo-glow)" }} />
-        <img
+        <Image
           src={member.image}
+          width={600}
+          height={675}
+          sizes="(min-width: 1024px) 24vw, 50vw"
           alt={t(`team.${member.id}.name`)}
           loading="lazy"
           className={`relative z-10 h-full w-full object-contain object-top transition-transform duration-500 ${member.imageScaleClass ?? "scale-[1.08]"} ${member.imagePositionClass ?? ""} ${member.imageHoverScaleClass ?? "group-hover:scale-[1.2]"}`}
@@ -65,8 +69,10 @@ export default function TeamCard({ member }: TeamCardProps) {
         dir={dir}
         className="relative -mt-[clamp(0.625rem,1vw,1.25rem)] overflow-hidden rounded-t-2xl bg-background px-[clamp(0.75rem,1vw,1.4rem)] pb-[clamp(0.75rem,1vw,1.4rem)] pt-[clamp(0.75rem,1vw,1.4rem)] text-start"
       >
-        <img
+        <Image
           src="/images/Google-design%20.png"
+          fill
+          sizes="(min-width: 1024px) 24vw, 50vw"
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70"

@@ -1,3 +1,4 @@
+import MotionPreferences from "@/components/ui/MotionPreferences";
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic, Roboto } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
@@ -11,14 +12,19 @@ import "../globals.css";
 // Google Sans isn't published on Google Fonts (Google keeps it proprietary); Roboto is the closest available match.
 const googleSans = Roboto({
   variable: "--font-google-sans",
-  weight: ["400", "500", "600", "700"],
+  // Roboto is variable: one file supplies all four UI weights.
   subsets: ["latin"],
+  display: "swap",
 });
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
   weight: ["400", "500", "600", "700"],
   subsets: ["arabic"],
+  // Avoid competing Arabic-weight preloads on English routes. Unicode-range
+  // font faces still load only the subsets/weights used by rendered text.
+  preload: false,
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -56,9 +62,11 @@ export default async function RootLayout({
     >
       <body className="min-h-dvh w-full flex flex-col items-stretch">
         <NextIntlClientProvider messages={messages}>
-          <div className="flex min-h-dvh w-full flex-1 flex-col">
-            {children}
-          </div>
+          <MotionPreferences>
+            <div className="flex min-h-dvh w-full flex-1 flex-col">
+              {children}
+            </div>
+          </MotionPreferences>
         </NextIntlClientProvider>
       </body>
     </html>

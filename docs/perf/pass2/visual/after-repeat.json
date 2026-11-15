@@ -1,0 +1,115 @@
+[
+  {
+    "key": "ar-signup-complete-390-light",
+    "locale": "ar",
+    "route": "signup/complete",
+    "width": 390,
+    "theme": "light",
+    "captureAttempts": 2,
+    "url": "/ar/signup/complete",
+    "dir": "rtl",
+    "overflow": false,
+    "links": [
+      {
+        "text": "",
+        "href": "/ar#home"
+      },
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "الملف الشخصي",
+        "href": "/ar/profile"
+      },
+      {
+        "text": "",
+        "href": "/ar"
+      },
+      {
+        "text": "الرئيسية",
+        "href": "/ar#home"
+      },
+      {
+        "text": "من نحن",
+        "href": "/ar#about"
+      },
+      {
+        "text": "الفعاليات",
+        "href": "/ar#events"
+      },
+      {
+        "text": "الإعلانات",
+        "href": "/ar/announcements"
+      },
+      {
+        "text": "المشاريع",
+        "href": "/ar#projects"
+      },
+      {
+        "text": "المجتمع",
+        "href": "/ar#committees"
+      },
+      {
+        "text": "",
+        "href": "https://www.linkedin.com/company/google-developer-student-club-uj/"
+      },
+      {
+        "text": "",
+        "href": "https://x.com/gdguoj?s=11"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "التبديل إلى الوضع الداكن",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "English",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "فتح قائمة التنقل وإغلاقها",
+        "disabled": false
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "name": "",
+        "text": "تسجيل الدخول",
+        "disabled": false
+      }
+    ],
+    "text": "English أكمل ملفك الشخصي أضف البيانات المطلوبة لإكمال تسجيلك في GDG. جلسة التسجيل عبر Google غير موجودة. ابدأ من جديد. تسجيل الدخول مجموعة مطوّري جوجل بجامعة جدة نحو آفاقٍ جديدة للتعلّم، والتطوير، وتمكين الأثر روابط الرئيسية من نحن الفعاليات الإعلانات المشاريع المجتمع تواصل معنا 2026 مجموعة مطوّري جوجل بجامعة جدة",
+    "errors": []
+  }
+]

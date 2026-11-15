@@ -14,7 +14,7 @@ function SponsorGroup({ hidden = false }: { hidden?: boolean }) {
           key={sponsor.id}
           className="size-[clamp(5rem,10vw,15rem)] shrink-0 overflow-hidden rounded-full border border-border"
         >
-          <img
+          <img loading="lazy" decoding="async"
             src={sponsor.image}
             alt={hidden ? "" : sponsor.name}
             className="h-full w-full scale-110 rounded-full object-cover"

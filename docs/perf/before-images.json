@@ -1,0 +1,206 @@
+[
+  {
+    "width": 1440,
+    "bytes": 21074777,
+    "resources": [
+      {
+        "url": "/images/gdg-white-Logo.png",
+        "bytes": 118726
+      },
+      {
+        "url": "/_next/image?url=%2Fgdg-logo-motion.png&w=256&q=75",
+        "bytes": 7454
+      },
+      {
+        "url": "/images/Google-design%20.png",
+        "bytes": 264464
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/about-community-3.png",
+        "bytes": 803354
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/about-community-1.png",
+        "bytes": 1682190
+      },
+      {
+        "url": "/images/about-community-2.png",
+        "bytes": 3120544
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/sameerah-preview.png",
+        "bytes": 288801
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/PR-colead.png",
+        "bytes": 1468631
+      },
+      {
+        "url": "/images/PM-Lead.png",
+        "bytes": 1700320
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/images/DMD-colead.png",
+        "bytes": 1339695
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/gdg-logo.png",
+        "bytes": 93978
+      },
+      {
+        "url": "/images/Jumanah-coleader.png",
+        "bytes": 1175745
+      },
+      {
+        "url": "/images/Abdullah-leader.png",
+        "bytes": 1664988
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "bytes": 18234044,
+    "resources": [
+      {
+        "url": "/_next/image?url=%2Fgdg-logo-motion.png&w=256&q=75",
+        "bytes": 7454
+      },
+      {
+        "url": "/images/gdg-white-Logo.png",
+        "bytes": 118726
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/Google-design%20.png",
+        "bytes": 264464
+      },
+      {
+        "url": "/images/about-community-3.png",
+        "bytes": 803354
+      },
+      {
+        "url": "/images/about-community-1.png",
+        "bytes": 1682190
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/about-community-2.png",
+        "bytes": 3120544
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/sameerah-preview.png",
+        "bytes": 288801
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/PR-colead.png",
+        "bytes": 1468631
+      },
+      {
+        "url": "/images/PM-Lead.png",
+        "bytes": 1700320
+      },
+      {
+        "url": "/images/DMD-colead.png",
+        "bytes": 1339695
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      },
+      {
+        "url": "/images/gdg-logo.png",
+        "bytes": 93978
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      }
+    ]
+  }
+]

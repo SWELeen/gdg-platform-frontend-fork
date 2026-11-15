@@ -1,0 +1,910 @@
+[
+  {
+    "locale": "en",
+    "reducedMotion": "no-preference",
+    "visible": 1920,
+    "offscreen": 0,
+    "resumed": 1920,
+    "switchMs": 1894,
+    "switchCls": 0,
+    "switchShiftAll": 0.0005557816116898148,
+    "interactionMax": 64,
+    "dir": "rtl",
+    "overflow": false,
+    "js": [
+      {
+        "url": "/_next/static/chunks/3yfl9fgvivx3-.js",
+        "bytes": 3593
+      },
+      {
+        "url": "/_next/static/chunks/0iuvremxbamjk.js",
+        "bytes": 8505
+      },
+      {
+        "url": "/_next/static/chunks/turbopack-0821zu5ffrrlc.js",
+        "bytes": 3853
+      },
+      {
+        "url": "/_next/static/chunks/1-ftivzyms8e4.js",
+        "bytes": 42675
+      },
+      {
+        "url": "/_next/static/chunks/12noz3xcdd4cz.js",
+        "bytes": 71594
+      },
+      {
+        "url": "/_next/static/chunks/0_z3o2kkp9xcb.js",
+        "bytes": 3662
+      },
+      {
+        "url": "/_next/static/chunks/36olbn0z1qt23.js",
+        "bytes": 639
+      },
+      {
+        "url": "/_next/static/chunks/074fpocg4c38n.js",
+        "bytes": 559
+      },
+      {
+        "url": "/_next/static/chunks/3zpv-smfm7y5p.js",
+        "bytes": 12027
+      },
+      {
+        "url": "/_next/static/chunks/414rua_vckme7.js",
+        "bytes": 9062
+      },
+      {
+        "url": "/_next/static/chunks/096-xqv9dlof5.js",
+        "bytes": 12752
+      },
+      {
+        "url": "/_next/static/chunks/32rnycvrjxcn7.js",
+        "bytes": 1697
+      },
+      {
+        "url": "/_next/static/chunks/36cmnaz3i_sns.js",
+        "bytes": 5763
+      },
+      {
+        "url": "/_next/static/chunks/0n8q2jn9biwzf.js",
+        "bytes": 36233
+      },
+      {
+        "url": "/_next/static/chunks/0vcn9fkwglaz9.js",
+        "bytes": 44463
+      },
+      {
+        "url": "/_next/static/chunks/07tblmah9yt-q.js",
+        "bytes": 2323
+      },
+      {
+        "url": "/_next/static/chunks/44_ftf9_5kie4.js",
+        "bytes": 13324
+      },
+      {
+        "url": "/_next/static/chunks/0xvnb_1qs8gxp.js",
+        "bytes": 9095
+      },
+      {
+        "url": "/_next/static/chunks/2ar4obc0_ui4e.js",
+        "bytes": 11064
+      },
+      {
+        "url": "/_next/static/chunks/26iy2_nd0scfw.js",
+        "bytes": 1398
+      },
+      {
+        "url": "/_next/static/chunks/112q2a6m1r9b-.js",
+        "bytes": 16565
+      },
+      {
+        "url": "/_next/static/chunks/3m7zdc5fn9xpu.js",
+        "bytes": 6901
+      },
+      {
+        "url": "/_next/static/chunks/176wrn67o91fz.js",
+        "bytes": 1407
+      },
+      {
+        "url": "/_next/static/chunks/2q_axyhhce5ub.js",
+        "bytes": 2388
+      }
+    ],
+    "images": [
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=384&q=75",
+        "bytes": 19950
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=384&q=75",
+        "bytes": 16348
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=384&q=75",
+        "bytes": 79996
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=750&q=75",
+        "bytes": 29904
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=750&q=75",
+        "bytes": 15366
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FFahad-advisor.png&w=384&q=75",
+        "bytes": 28880
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAhmed-advisor.png&w=384&q=75",
+        "bytes": 30980
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      },
+      {
+        "url": "/images/sameerah-preview.png",
+        "bytes": 288801
+      },
+      {
+        "url": "/images/PM-Lead.png",
+        "bytes": 1700320
+      },
+      {
+        "url": "/images/DMD-colead.png",
+        "bytes": 1339695
+      },
+      {
+        "url": "/images/PR-colead.png",
+        "bytes": 1468631
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      }
+    ],
+    "fonts": [
+      {
+        "url": "/_next/static/media/ce62453a442c7f35-s.p.0a0h245ktd4x0.woff2",
+        "bytes": 37520
+      },
+      {
+        "url": "/_next/static/media/3347fc7792f0b5ea-s.0c7ha31nuacbu.woff2",
+        "bytes": 14792
+      },
+      {
+        "url": "/_next/static/media/280fac012b00b901-s.3ihiqn4pviisd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/c9a0d344f313d307-s.3ik2qu-u9tgho.woff2",
+        "bytes": 33512
+      },
+      {
+        "url": "/_next/static/media/5ad8fdb5805e9b4a-s.0-uv4l43gdmt7.woff2",
+        "bytes": 33628
+      },
+      {
+        "url": "/_next/static/media/84cd8d504984ae62-s.0iritm8hg8q1a.woff2",
+        "bytes": 14208
+      },
+      {
+        "url": "/_next/static/media/5d6231e6818a3930-s.2vs72h_x6qrve.woff2",
+        "bytes": 13944
+      },
+      {
+        "url": "/_next/static/media/ceec3e50f42c26e3-s.0da8nscnv1nkd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/441492499fc86682-s.1fbvi_fot8u4l.woff2",
+        "bytes": 15092
+      }
+    ]
+  },
+  {
+    "locale": "ar",
+    "reducedMotion": "no-preference",
+    "visible": 1920,
+    "offscreen": 0,
+    "resumed": 1920,
+    "switchMs": 1902,
+    "switchCls": 0,
+    "switchShiftAll": 0,
+    "interactionMax": 48,
+    "dir": "ltr",
+    "overflow": false,
+    "js": [
+      {
+        "url": "/_next/static/chunks/3yfl9fgvivx3-.js",
+        "bytes": 3593
+      },
+      {
+        "url": "/_next/static/chunks/turbopack-0821zu5ffrrlc.js",
+        "bytes": 3853
+      },
+      {
+        "url": "/_next/static/chunks/0iuvremxbamjk.js",
+        "bytes": 8505
+      },
+      {
+        "url": "/_next/static/chunks/0_z3o2kkp9xcb.js",
+        "bytes": 3662
+      },
+      {
+        "url": "/_next/static/chunks/36olbn0z1qt23.js",
+        "bytes": 639
+      },
+      {
+        "url": "/_next/static/chunks/1-ftivzyms8e4.js",
+        "bytes": 42675
+      },
+      {
+        "url": "/_next/static/chunks/12noz3xcdd4cz.js",
+        "bytes": 71594
+      },
+      {
+        "url": "/_next/static/chunks/074fpocg4c38n.js",
+        "bytes": 559
+      },
+      {
+        "url": "/_next/static/chunks/3zpv-smfm7y5p.js",
+        "bytes": 12027
+      },
+      {
+        "url": "/_next/static/chunks/414rua_vckme7.js",
+        "bytes": 9062
+      },
+      {
+        "url": "/_next/static/chunks/32rnycvrjxcn7.js",
+        "bytes": 1697
+      },
+      {
+        "url": "/_next/static/chunks/096-xqv9dlof5.js",
+        "bytes": 12752
+      },
+      {
+        "url": "/_next/static/chunks/36cmnaz3i_sns.js",
+        "bytes": 5763
+      },
+      {
+        "url": "/_next/static/chunks/0n8q2jn9biwzf.js",
+        "bytes": 36233
+      },
+      {
+        "url": "/_next/static/chunks/0vcn9fkwglaz9.js",
+        "bytes": 44463
+      },
+      {
+        "url": "/_next/static/chunks/07tblmah9yt-q.js",
+        "bytes": 2323
+      },
+      {
+        "url": "/_next/static/chunks/0xvnb_1qs8gxp.js",
+        "bytes": 9095
+      },
+      {
+        "url": "/_next/static/chunks/44_ftf9_5kie4.js",
+        "bytes": 13324
+      },
+      {
+        "url": "/_next/static/chunks/2ar4obc0_ui4e.js",
+        "bytes": 11064
+      },
+      {
+        "url": "/_next/static/chunks/26iy2_nd0scfw.js",
+        "bytes": 1398
+      },
+      {
+        "url": "/_next/static/chunks/112q2a6m1r9b-.js",
+        "bytes": 16565
+      },
+      {
+        "url": "/_next/static/chunks/176wrn67o91fz.js",
+        "bytes": 1407
+      },
+      {
+        "url": "/_next/static/chunks/3m7zdc5fn9xpu.js",
+        "bytes": 6901
+      },
+      {
+        "url": "/_next/static/chunks/2q_axyhhce5ub.js",
+        "bytes": 2388
+      }
+    ],
+    "images": [
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=750&q=75",
+        "bytes": 15366
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=750&q=75",
+        "bytes": 29904
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=384&q=75",
+        "bytes": 19950
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=384&q=75",
+        "bytes": 79996
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=384&q=75",
+        "bytes": 16348
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FFahad-advisor.png&w=384&q=75",
+        "bytes": 28880
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAhmed-advisor.png&w=384&q=75",
+        "bytes": 30980
+      },
+      {
+        "url": "/images/sameerah-preview.png",
+        "bytes": 288801
+      },
+      {
+        "url": "/images/PM-Lead.png",
+        "bytes": 1700320
+      },
+      {
+        "url": "/images/DMD-colead.png",
+        "bytes": 1339695
+      },
+      {
+        "url": "/images/PR-colead.png",
+        "bytes": 1468631
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      }
+    ],
+    "fonts": [
+      {
+        "url": "/_next/static/media/ce62453a442c7f35-s.p.0a0h245ktd4x0.woff2",
+        "bytes": 37520
+      },
+      {
+        "url": "/_next/static/media/280fac012b00b901-s.3ihiqn4pviisd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/3347fc7792f0b5ea-s.0c7ha31nuacbu.woff2",
+        "bytes": 14792
+      },
+      {
+        "url": "/_next/static/media/5d6231e6818a3930-s.2vs72h_x6qrve.woff2",
+        "bytes": 13944
+      },
+      {
+        "url": "/_next/static/media/84cd8d504984ae62-s.0iritm8hg8q1a.woff2",
+        "bytes": 14208
+      },
+      {
+        "url": "/_next/static/media/c9a0d344f313d307-s.3ik2qu-u9tgho.woff2",
+        "bytes": 33512
+      },
+      {
+        "url": "/_next/static/media/5ad8fdb5805e9b4a-s.0-uv4l43gdmt7.woff2",
+        "bytes": 33628
+      },
+      {
+        "url": "/_next/static/media/441492499fc86682-s.1fbvi_fot8u4l.woff2",
+        "bytes": 15092
+      },
+      {
+        "url": "/_next/static/media/ceec3e50f42c26e3-s.0da8nscnv1nkd.woff2",
+        "bytes": 35884
+      }
+    ]
+  },
+  {
+    "locale": "en",
+    "reducedMotion": "reduce",
+    "visible": 0,
+    "offscreen": 0,
+    "resumed": 0,
+    "switchMs": 1885,
+    "switchCls": 0,
+    "switchShiftAll": 0.0005557816116898148,
+    "interactionMax": 40,
+    "dir": "rtl",
+    "overflow": false,
+    "js": [
+      {
+        "url": "/_next/static/chunks/3yfl9fgvivx3-.js",
+        "bytes": 3593
+      },
+      {
+        "url": "/_next/static/chunks/0iuvremxbamjk.js",
+        "bytes": 8505
+      },
+      {
+        "url": "/_next/static/chunks/turbopack-0821zu5ffrrlc.js",
+        "bytes": 3853
+      },
+      {
+        "url": "/_next/static/chunks/0_z3o2kkp9xcb.js",
+        "bytes": 3662
+      },
+      {
+        "url": "/_next/static/chunks/36olbn0z1qt23.js",
+        "bytes": 639
+      },
+      {
+        "url": "/_next/static/chunks/1-ftivzyms8e4.js",
+        "bytes": 42675
+      },
+      {
+        "url": "/_next/static/chunks/12noz3xcdd4cz.js",
+        "bytes": 71594
+      },
+      {
+        "url": "/_next/static/chunks/3zpv-smfm7y5p.js",
+        "bytes": 12027
+      },
+      {
+        "url": "/_next/static/chunks/074fpocg4c38n.js",
+        "bytes": 559
+      },
+      {
+        "url": "/_next/static/chunks/414rua_vckme7.js",
+        "bytes": 9062
+      },
+      {
+        "url": "/_next/static/chunks/32rnycvrjxcn7.js",
+        "bytes": 1697
+      },
+      {
+        "url": "/_next/static/chunks/096-xqv9dlof5.js",
+        "bytes": 12752
+      },
+      {
+        "url": "/_next/static/chunks/36cmnaz3i_sns.js",
+        "bytes": 5763
+      },
+      {
+        "url": "/_next/static/chunks/0n8q2jn9biwzf.js",
+        "bytes": 36233
+      },
+      {
+        "url": "/_next/static/chunks/0vcn9fkwglaz9.js",
+        "bytes": 44463
+      },
+      {
+        "url": "/_next/static/chunks/07tblmah9yt-q.js",
+        "bytes": 2323
+      },
+      {
+        "url": "/_next/static/chunks/44_ftf9_5kie4.js",
+        "bytes": 13324
+      },
+      {
+        "url": "/_next/static/chunks/0xvnb_1qs8gxp.js",
+        "bytes": 9095
+      },
+      {
+        "url": "/_next/static/chunks/2ar4obc0_ui4e.js",
+        "bytes": 11064
+      },
+      {
+        "url": "/_next/static/chunks/26iy2_nd0scfw.js",
+        "bytes": 1398
+      },
+      {
+        "url": "/_next/static/chunks/112q2a6m1r9b-.js",
+        "bytes": 16565
+      },
+      {
+        "url": "/_next/static/chunks/3m7zdc5fn9xpu.js",
+        "bytes": 6901
+      },
+      {
+        "url": "/_next/static/chunks/176wrn67o91fz.js",
+        "bytes": 1407
+      },
+      {
+        "url": "/_next/static/chunks/2q_axyhhce5ub.js",
+        "bytes": 2388
+      }
+    ],
+    "images": [
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=750&q=75",
+        "bytes": 15366
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=750&q=75",
+        "bytes": 29904
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=384&q=75",
+        "bytes": 79996
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=384&q=75",
+        "bytes": 19950
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=384&q=75",
+        "bytes": 16348
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FFahad-advisor.png&w=384&q=75",
+        "bytes": 28880
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAhmed-advisor.png&w=384&q=75",
+        "bytes": 30980
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      }
+    ],
+    "fonts": [
+      {
+        "url": "/_next/static/media/ce62453a442c7f35-s.p.0a0h245ktd4x0.woff2",
+        "bytes": 37520
+      },
+      {
+        "url": "/_next/static/media/280fac012b00b901-s.3ihiqn4pviisd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/3347fc7792f0b5ea-s.0c7ha31nuacbu.woff2",
+        "bytes": 14792
+      },
+      {
+        "url": "/_next/static/media/c9a0d344f313d307-s.3ik2qu-u9tgho.woff2",
+        "bytes": 33512
+      },
+      {
+        "url": "/_next/static/media/84cd8d504984ae62-s.0iritm8hg8q1a.woff2",
+        "bytes": 14208
+      },
+      {
+        "url": "/_next/static/media/5d6231e6818a3930-s.2vs72h_x6qrve.woff2",
+        "bytes": 13944
+      },
+      {
+        "url": "/_next/static/media/5ad8fdb5805e9b4a-s.0-uv4l43gdmt7.woff2",
+        "bytes": 33628
+      },
+      {
+        "url": "/_next/static/media/441492499fc86682-s.1fbvi_fot8u4l.woff2",
+        "bytes": 15092
+      },
+      {
+        "url": "/_next/static/media/ceec3e50f42c26e3-s.0da8nscnv1nkd.woff2",
+        "bytes": 35884
+      }
+    ]
+  },
+  {
+    "locale": "ar",
+    "reducedMotion": "reduce",
+    "visible": 0,
+    "offscreen": 0,
+    "resumed": 0,
+    "switchMs": 1882,
+    "switchCls": 0,
+    "switchShiftAll": 0,
+    "interactionMax": 40,
+    "dir": "ltr",
+    "overflow": false,
+    "js": [
+      {
+        "url": "/_next/static/chunks/3yfl9fgvivx3-.js",
+        "bytes": 3593
+      },
+      {
+        "url": "/_next/static/chunks/0iuvremxbamjk.js",
+        "bytes": 8505
+      },
+      {
+        "url": "/_next/static/chunks/turbopack-0821zu5ffrrlc.js",
+        "bytes": 3853
+      },
+      {
+        "url": "/_next/static/chunks/0_z3o2kkp9xcb.js",
+        "bytes": 3662
+      },
+      {
+        "url": "/_next/static/chunks/36olbn0z1qt23.js",
+        "bytes": 639
+      },
+      {
+        "url": "/_next/static/chunks/3zpv-smfm7y5p.js",
+        "bytes": 12027
+      },
+      {
+        "url": "/_next/static/chunks/414rua_vckme7.js",
+        "bytes": 9062
+      },
+      {
+        "url": "/_next/static/chunks/1-ftivzyms8e4.js",
+        "bytes": 42675
+      },
+      {
+        "url": "/_next/static/chunks/12noz3xcdd4cz.js",
+        "bytes": 71594
+      },
+      {
+        "url": "/_next/static/chunks/074fpocg4c38n.js",
+        "bytes": 559
+      },
+      {
+        "url": "/_next/static/chunks/32rnycvrjxcn7.js",
+        "bytes": 1697
+      },
+      {
+        "url": "/_next/static/chunks/096-xqv9dlof5.js",
+        "bytes": 12752
+      },
+      {
+        "url": "/_next/static/chunks/36cmnaz3i_sns.js",
+        "bytes": 5763
+      },
+      {
+        "url": "/_next/static/chunks/0n8q2jn9biwzf.js",
+        "bytes": 36233
+      },
+      {
+        "url": "/_next/static/chunks/0vcn9fkwglaz9.js",
+        "bytes": 44463
+      },
+      {
+        "url": "/_next/static/chunks/07tblmah9yt-q.js",
+        "bytes": 2323
+      },
+      {
+        "url": "/_next/static/chunks/44_ftf9_5kie4.js",
+        "bytes": 13324
+      },
+      {
+        "url": "/_next/static/chunks/0xvnb_1qs8gxp.js",
+        "bytes": 9095
+      },
+      {
+        "url": "/_next/static/chunks/2ar4obc0_ui4e.js",
+        "bytes": 11064
+      },
+      {
+        "url": "/_next/static/chunks/26iy2_nd0scfw.js",
+        "bytes": 1398
+      },
+      {
+        "url": "/_next/static/chunks/112q2a6m1r9b-.js",
+        "bytes": 16565
+      },
+      {
+        "url": "/_next/static/chunks/176wrn67o91fz.js",
+        "bytes": 1407
+      },
+      {
+        "url": "/_next/static/chunks/3m7zdc5fn9xpu.js",
+        "bytes": 6901
+      },
+      {
+        "url": "/_next/static/chunks/2q_axyhhce5ub.js",
+        "bytes": 2388
+      }
+    ],
+    "images": [
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=750&q=75",
+        "bytes": 15366
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=750&q=75",
+        "bytes": 29904
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=384&q=75",
+        "bytes": 19950
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=384&q=75",
+        "bytes": 16348
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=384&q=75",
+        "bytes": 79996
+      },
+      {
+        "url": "/images/unknown.png",
+        "bytes": 26463
+      },
+      {
+        "url": "/images/PM-colead.png",
+        "bytes": 969020
+      },
+      {
+        "url": "/images/Developers-Lead.png",
+        "bytes": 1927794
+      },
+      {
+        "url": "/images/web-lead.png",
+        "bytes": 2265797
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FFahad-advisor.png&w=384&q=75",
+        "bytes": 28880
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAhmed-advisor.png&w=384&q=75",
+        "bytes": 30980
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      }
+    ],
+    "fonts": [
+      {
+        "url": "/_next/static/media/ce62453a442c7f35-s.p.0a0h245ktd4x0.woff2",
+        "bytes": 37520
+      },
+      {
+        "url": "/_next/static/media/280fac012b00b901-s.3ihiqn4pviisd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/3347fc7792f0b5ea-s.0c7ha31nuacbu.woff2",
+        "bytes": 14792
+      },
+      {
+        "url": "/_next/static/media/84cd8d504984ae62-s.0iritm8hg8q1a.woff2",
+        "bytes": 14208
+      },
+      {
+        "url": "/_next/static/media/5d6231e6818a3930-s.2vs72h_x6qrve.woff2",
+        "bytes": 13944
+      },
+      {
+        "url": "/_next/static/media/c9a0d344f313d307-s.3ik2qu-u9tgho.woff2",
+        "bytes": 33512
+      },
+      {
+        "url": "/_next/static/media/5ad8fdb5805e9b4a-s.0-uv4l43gdmt7.woff2",
+        "bytes": 33628
+      },
+      {
+        "url": "/_next/static/media/ceec3e50f42c26e3-s.0da8nscnv1nkd.woff2",
+        "bytes": 35884
+      },
+      {
+        "url": "/_next/static/media/441492499fc86682-s.1fbvi_fot8u4l.woff2",
+        "bytes": 15092
+      }
+    ]
+  }
+]

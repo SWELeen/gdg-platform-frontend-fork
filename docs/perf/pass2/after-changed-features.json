@@ -1,0 +1,46 @@
+[
+  {
+    "locale": "en",
+    "width": 1440,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "earlyFailure": false,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "en",
+    "width": 390,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "earlyFailure": false,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "ar",
+    "width": 1440,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "earlyFailure": false,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "ar",
+    "width": 390,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "earlyFailure": false,
+    "errors": [],
+    "mutations": []
+  }
+]

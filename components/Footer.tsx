@@ -56,13 +56,15 @@ export default function Footer() {
       <div className="relative z-10 grid w-full gap-[clamp(2rem,4vw,4rem)] px-6 py-[clamp(1rem,2vw,2rem)] lg:grid-cols-[1.4fr_1fr_0.8fr]">
         <section className="flex flex-col items-start gap-7">
           <Link href="/" aria-label={t("nav.home")} className="inline-flex rounded-xl outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground dark:focus-visible:outline-white">
-            <img
+            <img loading="lazy" decoding="async"
               src="/images/black-logo-with-colors.png"
+              width={1252} height={199}
               alt={t("logoAlt")}
               className="footer-logo-light h-auto w-[clamp(14rem,20vw,26rem)] max-w-full object-contain"
             />
-            <img
+            <img loading="lazy" decoding="async"
               src="/images/gdg-logo.png"
+              width={1240} height={168}
               alt={t("logoAlt")}
               className="footer-logo-dark h-auto w-[clamp(14rem,20vw,26rem)] max-w-full object-contain"
             />

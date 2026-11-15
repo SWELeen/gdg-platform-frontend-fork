@@ -1,0 +1,45 @@
+{
+  "sourceHead": "02f411953f1f30324ebe6158c338ba2c4e1ad1c5",
+  "build": 0,
+  "typecheck": 0,
+  "themeTests": 0,
+  "lint": {
+    "exit": 1,
+    "existingErrors": 6,
+    "warnings": 11
+  },
+  "before": {
+    "urls": 192,
+    "functional": 8,
+    "motion": 4,
+    "changedFeatures": 4,
+    "visualCases": 128
+  },
+  "after": {
+    "urls": 192,
+    "functional": 8,
+    "motion": 4,
+    "changedFeatures": 4,
+    "visualCases": 128
+  },
+  "visual": {
+    "geometryAndInventoriesEqual": 128,
+    "exactRGBA": 122,
+    "zeroPerceptualDifference": 124,
+    "reviewedAnimationOrRasterDifferences": 4
+  },
+  "earlyImageFailure": {
+    "baseline": "fails before hydration",
+    "candidate": "4 cases pass"
+  },
+  "lighthouse": {
+    "before": 32,
+    "after": 96
+  },
+  "unverified": [
+    "Authenticated QR camera decoding",
+    "Authenticated 3D badge interaction",
+    "Real backend mutations/data",
+    "Valid recovery/invitation flows"
+  ]
+}

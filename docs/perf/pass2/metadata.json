@@ -1,0 +1,13 @@
+{
+  "baseline": "4022134b8f23cc04bd0b550fe49ece4e3dbf2828",
+  "candidateSource": "02f411953f1f30324ebe6158c338ba2c4e1ad1c5",
+  "main": "77646e36bea4ede15b4087b09aed1eee9e841c00",
+  "beforeRuns": 32,
+  "afterRuns": 96,
+  "mode": "production, demo API configuration, signed out",
+  "lighthouse": "13.6.0",
+  "chrome": "157.0.8103.51",
+  "playwright": "1.65.0",
+  "pixelmatch": "8.0.0",
+  "pngjs": "7.0.0"
+}

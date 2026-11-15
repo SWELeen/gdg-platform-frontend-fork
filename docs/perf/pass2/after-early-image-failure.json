@@ -1,0 +1,42 @@
+[
+  {
+    "locale": "en",
+    "width": 1440,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "en",
+    "width": 390,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "ar",
+    "width": 1440,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "errors": [],
+    "mutations": []
+  },
+  {
+    "locale": "ar",
+    "width": 390,
+    "demoConfirmDismiss": true,
+    "demoConfirmFeedback": true,
+    "demoCancelFeedback": true,
+    "eventImageFallback": true,
+    "errors": [],
+    "mutations": []
+  }
+]

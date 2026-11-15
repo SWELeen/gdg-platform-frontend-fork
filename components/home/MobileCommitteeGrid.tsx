@@ -110,7 +110,7 @@ export default function MobileCommitteeGrid({ items, label, id }: Props) {
                           {people.map(({ person, role }) => (
                             // Thumbnails never morph into the detail portraits.
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img key={role} src={person.image?.trim() || "/images/unknown.png"} alt="" className="h-full min-w-0 flex-1 object-contain object-bottom transition-[filter] duration-300 ease-out group-hover:brightness-105 group-focus-visible:brightness-105 group-active:brightness-105 motion-reduce:transition-none" onError={portraitFallback} />
+                            <img loading="lazy" decoding="async" key={role} src={person.image?.trim() || "/images/unknown.png"} alt="" className="h-full min-w-0 flex-1 object-contain object-bottom transition-[filter] duration-300 ease-out group-hover:brightness-105 group-focus-visible:brightness-105 group-active:brightness-105 motion-reduce:transition-none" onError={portraitFallback} />
                           ))}
                         </span>
                       </span>
@@ -170,7 +170,7 @@ export default function MobileCommitteeGrid({ items, label, id }: Props) {
                             />
                             <div className="h-40 w-full shrink-0 overflow-hidden sm:h-48">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src={person.image?.trim() || "/images/unknown.png"} alt="" className="h-full w-full object-contain object-bottom" onError={portraitFallback} />
+                              <img loading="lazy" decoding="async" src={person.image?.trim() || "/images/unknown.png"} alt="" className="h-full w-full object-contain object-bottom" onError={portraitFallback} />
                             </div>
                           </div>
                         ))}

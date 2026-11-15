@@ -1,0 +1,1 @@
+Theme toggle: both directions, system themes, settings synchronization, reduced motion, unsupported browsers, blocked storage, overlapping clicks and cleanup passed.

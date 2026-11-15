@@ -1,0 +1,150 @@
+[
+  {
+    "width": 1440,
+    "bytes": 2542949,
+    "resources": [
+      {
+        "url": "/_next/image?url=%2Fgdg-logo-motion.png&w=256&q=75",
+        "bytes": 7454
+      },
+      {
+        "url": "/images/gdg-white-Logo.png",
+        "bytes": 118726
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/gdg-logo.png",
+        "bytes": 93978
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=750&q=75",
+        "bytes": 15366
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=750&q=75",
+        "bytes": 29904
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=384&q=75",
+        "bytes": 19950
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=384&q=75",
+        "bytes": 79996
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=384&q=75",
+        "bytes": 16348
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "bytes": 2465023,
+    "resources": [
+      {
+        "url": "/_next/image?url=%2Fgdg-logo-motion.png&w=256&q=75",
+        "bytes": 7454
+      },
+      {
+        "url": "/images/gdg-white-Logo.png",
+        "bytes": 118726
+      },
+      {
+        "url": "/images/wadi.png",
+        "bytes": 229979
+      },
+      {
+        "url": "/images/sponsor-noosh.png",
+        "bytes": 135763
+      },
+      {
+        "url": "/images/sponsor-lahen.png",
+        "bytes": 213299
+      },
+      {
+        "url": "/images/sponsor-bakery.png",
+        "bytes": 208370
+      },
+      {
+        "url": "/images/sponsor-print.png",
+        "bytes": 362357
+      },
+      {
+        "url": "/images/sponsor-arena-beans.png",
+        "bytes": 160481
+      },
+      {
+        "url": "/images/black-logo-with-colors.png",
+        "bytes": 97854
+      },
+      {
+        "url": "/images/phone-image.png",
+        "bytes": 748710
+      },
+      {
+        "url": "/images/gdg-logo.png",
+        "bytes": 93978
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-1.1zelsp3wez9ch.png&w=384&q=75",
+        "bytes": 7280
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-3.2nbc3txf7jvvs.png&w=256&q=75",
+        "bytes": 4414
+      },
+      {
+        "url": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fabout-community-2.0awlfz3jyfxf0.png&w=384&q=75",
+        "bytes": 12530
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FJumanah-coleader.png&w=256&q=75",
+        "bytes": 9634
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FAbdullah-leader.png&w=256&q=75",
+        "bytes": 11448
+      },
+      {
+        "url": "/_next/image?url=%2Fimages%2FGoogle-design%2520.png&w=256&q=75",
+        "bytes": 42746
+      }
+    ]
+  }
+]

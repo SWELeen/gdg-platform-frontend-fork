@@ -61,8 +61,9 @@ export default function JoinCommunity() {
         </div>
 
         <div className="absolute -end-[clamp(0.5rem,1.5vw,0.875rem)] -top-[clamp(4rem,6vw,6rem)] hidden w-[clamp(12rem,18vw,21rem)] lg:block">
-          <img
+          <img loading="lazy" decoding="async"
             src="/images/phone-image.png"
+            width={1606} height={2352}
             alt={t("phoneAlt")}
             className="w-full"
           />

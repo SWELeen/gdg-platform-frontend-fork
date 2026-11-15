@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "locale": "en",
+      "width": 1440,
+      "theme": "light",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "width": 1440,
+      "theme": "dark",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "theme": "light",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "theme": "dark",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "ar",
+      "width": 1440,
+      "theme": "light",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "ar",
+      "width": 1440,
+      "theme": "dark",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "ar",
+      "width": 390,
+      "theme": "light",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    },
+    {
+      "locale": "ar",
+      "width": 390,
+      "theme": "dark",
+      "navigation": true,
+      "languageBothDirections": true,
+      "rtl": true,
+      "themeToggle": true,
+      "loginValidation": true,
+      "passwordVisibility": true,
+      "resetValidation": true,
+      "signupValidation": true,
+      "errors": []
+    }
+  ],
+  "notExercised": [
+    "Authenticated QR camera capture/decoding",
+    "Authenticated 3D badge interaction",
+    "Real backend-driven mutations and valid recovery/invitation links"
+  ]
+}

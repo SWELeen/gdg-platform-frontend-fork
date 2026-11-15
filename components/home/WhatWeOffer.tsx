@@ -20,9 +20,12 @@ export default function WhatWeOffer() {
     if (!section) return;
 
     let frame = 0;
+    const mobile = window.matchMedia("(max-width: 1023px)");
+    let visible = false;
     const updateActiveStep = () => {
-      cancelAnimationFrame(frame);
+      if (!mobile.matches || !visible || frame) return;
       frame = requestAnimationFrame(() => {
+        frame = 0;
         const viewportCenter = window.innerHeight / 2;
         let closestIndex = 0;
         let closestDistance = Number.POSITIVE_INFINITY;
@@ -44,10 +47,15 @@ export default function WhatWeOffer() {
       });
     };
 
-    updateActiveStep();
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) updateActiveStep();
+    });
+    observer.observe(section);
     window.addEventListener("scroll", updateActiveStep, { passive: true });
     window.addEventListener("resize", updateActiveStep);
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", updateActiveStep);
       window.removeEventListener("resize", updateActiveStep);

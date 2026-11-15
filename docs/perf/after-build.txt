@@ -1,0 +1,323 @@
+
+> gdg-main-platform-frontend@0.1.0 build
+> next build
+
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.ts took 58ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1173ms
+  Running TypeScript ...
+  Finished TypeScript in 1192ms ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/195) ...
+  Generating static pages using 9 workers (48/195) 
+  Generating static pages using 9 workers (97/195) 
+  Generating static pages using 9 workers (146/195) 
+✓ Generating static pages using 9 workers (195/195) in 771ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /_not-found
+├   /[locale]
+│ ├ ● /en
+│ └ ● /ar
+├   /[locale]/activate
+│ ├ ● /en/activate
+│ └ ● /ar/activate
+├   /[locale]/announcements
+│ ├ ● /en/announcements
+│ └ ● /ar/announcements
+├ ● /[locale]/announcements/[slug]
+├   /[locale]/auth/callback
+│ ├ ● /en/auth/callback
+│ └ ● /ar/auth/callback
+├   /[locale]/create-event
+│ ├ ● /en/create-event
+│ └ ● /ar/create-event
+├   /[locale]/dashboard
+│ ├ ● /en/dashboard
+│ └ ● /ar/dashboard
+├   /[locale]/dashboard/artificial-intelligence-dashboard
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard
+├   /[locale]/dashboard/artificial-intelligence-dashboard/events
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard/events
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard/events
+├   /[locale]/dashboard/artificial-intelligence-dashboard/members
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard/members
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard/members
+├   /[locale]/dashboard/artificial-intelligence-dashboard/points
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard/points
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard/points
+├   /[locale]/dashboard/artificial-intelligence-dashboard/settings
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard/settings
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard/settings
+├   /[locale]/dashboard/artificial-intelligence-dashboard/tasks
+│ ├ ● /en/dashboard/artificial-intelligence-dashboard/tasks
+│ └ ● /ar/dashboard/artificial-intelligence-dashboard/tasks
+├   /[locale]/dashboard/automation-ai-dashboard
+│ ├ ● /en/dashboard/automation-ai-dashboard
+│ └ ● /ar/dashboard/automation-ai-dashboard
+├ ƒ /[locale]/dashboard/automation-ai-dashboard/[...segments]
+├   /[locale]/dashboard/automation-dashboard
+│ ├ ● /en/dashboard/automation-dashboard
+│ └ ● /ar/dashboard/automation-dashboard
+├   /[locale]/dashboard/automation-dashboard/events
+│ ├ ● /en/dashboard/automation-dashboard/events
+│ └ ● /ar/dashboard/automation-dashboard/events
+├   /[locale]/dashboard/automation-dashboard/members
+│ ├ ● /en/dashboard/automation-dashboard/members
+│ └ ● /ar/dashboard/automation-dashboard/members
+├   /[locale]/dashboard/automation-dashboard/points
+│ ├ ● /en/dashboard/automation-dashboard/points
+│ └ ● /ar/dashboard/automation-dashboard/points
+├   /[locale]/dashboard/automation-dashboard/settings
+│ ├ ● /en/dashboard/automation-dashboard/settings
+│ └ ● /ar/dashboard/automation-dashboard/settings
+├   /[locale]/dashboard/automation-dashboard/tasks
+│ ├ ● /en/dashboard/automation-dashboard/tasks
+│ └ ● /ar/dashboard/automation-dashboard/tasks
+├   /[locale]/dashboard/club-leadership-dashboard
+│ ├ ● /en/dashboard/club-leadership-dashboard
+│ └ ● /ar/dashboard/club-leadership-dashboard
+├   /[locale]/dashboard/club-leadership-dashboard/announcements
+│ ├ ● /en/dashboard/club-leadership-dashboard/announcements
+│ └ ● /ar/dashboard/club-leadership-dashboard/announcements
+├   /[locale]/dashboard/club-leadership-dashboard/members
+│ ├ ● /en/dashboard/club-leadership-dashboard/members
+│ └ ● /ar/dashboard/club-leadership-dashboard/members
+├   /[locale]/dashboard/club-leadership-dashboard/points
+│ ├ ● /en/dashboard/club-leadership-dashboard/points
+│ └ ● /ar/dashboard/club-leadership-dashboard/points
+├   /[locale]/dashboard/club-leadership-dashboard/settings
+│ ├ ● /en/dashboard/club-leadership-dashboard/settings
+│ └ ● /ar/dashboard/club-leadership-dashboard/settings
+├   /[locale]/dashboard/club-leadership-dashboard/tasks
+│ ├ ● /en/dashboard/club-leadership-dashboard/tasks
+│ └ ● /ar/dashboard/club-leadership-dashboard/tasks
+├   /[locale]/dashboard/content-writing-dashboard
+│ ├ ● /en/dashboard/content-writing-dashboard
+│ └ ● /ar/dashboard/content-writing-dashboard
+├   /[locale]/dashboard/content-writing-dashboard/events
+│ ├ ● /en/dashboard/content-writing-dashboard/events
+│ └ ● /ar/dashboard/content-writing-dashboard/events
+├   /[locale]/dashboard/content-writing-dashboard/members
+│ ├ ● /en/dashboard/content-writing-dashboard/members
+│ └ ● /ar/dashboard/content-writing-dashboard/members
+├   /[locale]/dashboard/content-writing-dashboard/points
+│ ├ ● /en/dashboard/content-writing-dashboard/points
+│ └ ● /ar/dashboard/content-writing-dashboard/points
+├   /[locale]/dashboard/content-writing-dashboard/settings
+│ ├ ● /en/dashboard/content-writing-dashboard/settings
+│ └ ● /ar/dashboard/content-writing-dashboard/settings
+├   /[locale]/dashboard/content-writing-dashboard/tasks
+│ ├ ● /en/dashboard/content-writing-dashboard/tasks
+│ └ ● /ar/dashboard/content-writing-dashboard/tasks
+├   /[locale]/dashboard/cybersecurity-dashboard
+│ ├ ● /en/dashboard/cybersecurity-dashboard
+│ └ ● /ar/dashboard/cybersecurity-dashboard
+├   /[locale]/dashboard/cybersecurity-dashboard/events
+│ ├ ● /en/dashboard/cybersecurity-dashboard/events
+│ └ ● /ar/dashboard/cybersecurity-dashboard/events
+├   /[locale]/dashboard/cybersecurity-dashboard/members
+│ ├ ● /en/dashboard/cybersecurity-dashboard/members
+│ └ ● /ar/dashboard/cybersecurity-dashboard/members
+├   /[locale]/dashboard/cybersecurity-dashboard/points
+│ ├ ● /en/dashboard/cybersecurity-dashboard/points
+│ └ ● /ar/dashboard/cybersecurity-dashboard/points
+├   /[locale]/dashboard/cybersecurity-dashboard/settings
+│ ├ ● /en/dashboard/cybersecurity-dashboard/settings
+│ └ ● /ar/dashboard/cybersecurity-dashboard/settings
+├   /[locale]/dashboard/cybersecurity-dashboard/tasks
+│ ├ ● /en/dashboard/cybersecurity-dashboard/tasks
+│ └ ● /ar/dashboard/cybersecurity-dashboard/tasks
+├   /[locale]/dashboard/data-dashboard
+│ ├ ● /en/dashboard/data-dashboard
+│ └ ● /ar/dashboard/data-dashboard
+├   /[locale]/dashboard/data-dashboard/events
+│ ├ ● /en/dashboard/data-dashboard/events
+│ └ ● /ar/dashboard/data-dashboard/events
+├ ƒ /[locale]/dashboard/data-dashboard/events/[eventId]
+├   /[locale]/dashboard/data-dashboard/members
+│ ├ ● /en/dashboard/data-dashboard/members
+│ └ ● /ar/dashboard/data-dashboard/members
+├   /[locale]/dashboard/data-dashboard/points
+│ ├ ● /en/dashboard/data-dashboard/points
+│ └ ● /ar/dashboard/data-dashboard/points
+├   /[locale]/dashboard/data-dashboard/settings
+│ ├ ● /en/dashboard/data-dashboard/settings
+│ └ ● /ar/dashboard/data-dashboard/settings
+├   /[locale]/dashboard/data-dashboard/tasks
+│ ├ ● /en/dashboard/data-dashboard/tasks
+│ └ ● /ar/dashboard/data-dashboard/tasks
+├   /[locale]/dashboard/developer-committees-dashboard
+│ ├ ● /en/dashboard/developer-committees-dashboard
+│ └ ● /ar/dashboard/developer-committees-dashboard
+├   /[locale]/dashboard/developer-committees-dashboard/points
+│ ├ ● /en/dashboard/developer-committees-dashboard/points
+│ └ ● /ar/dashboard/developer-committees-dashboard/points
+├   /[locale]/dashboard/developer-committees-dashboard/tasks
+│ ├ ● /en/dashboard/developer-committees-dashboard/tasks
+│ └ ● /ar/dashboard/developer-committees-dashboard/tasks
+├   /[locale]/dashboard/digital-media-design-dashboard
+│ ├ ● /en/dashboard/digital-media-design-dashboard
+│ └ ● /ar/dashboard/digital-media-design-dashboard
+├   /[locale]/dashboard/digital-media-design-dashboard/events
+│ ├ ● /en/dashboard/digital-media-design-dashboard/events
+│ └ ● /ar/dashboard/digital-media-design-dashboard/events
+├   /[locale]/dashboard/digital-media-design-dashboard/members
+│ ├ ● /en/dashboard/digital-media-design-dashboard/members
+│ └ ● /ar/dashboard/digital-media-design-dashboard/members
+├   /[locale]/dashboard/digital-media-design-dashboard/points
+│ ├ ● /en/dashboard/digital-media-design-dashboard/points
+│ └ ● /ar/dashboard/digital-media-design-dashboard/points
+├   /[locale]/dashboard/digital-media-design-dashboard/settings
+│ ├ ● /en/dashboard/digital-media-design-dashboard/settings
+│ └ ● /ar/dashboard/digital-media-design-dashboard/settings
+├   /[locale]/dashboard/digital-media-design-dashboard/tasks
+│ ├ ● /en/dashboard/digital-media-design-dashboard/tasks
+│ └ ● /ar/dashboard/digital-media-design-dashboard/tasks
+├   /[locale]/dashboard/members-dashboard
+│ ├ ● /en/dashboard/members-dashboard
+│ └ ● /ar/dashboard/members-dashboard
+├   /[locale]/dashboard/members-dashboard/achievements
+│ ├ ● /en/dashboard/members-dashboard/achievements
+│ └ ● /ar/dashboard/members-dashboard/achievements
+├   /[locale]/dashboard/members-dashboard/events
+│ ├ ● /en/dashboard/members-dashboard/events
+│ └ ● /ar/dashboard/members-dashboard/events
+├ ƒ /[locale]/dashboard/members-dashboard/events/[eventId]
+├   /[locale]/dashboard/members-dashboard/help
+│ ├ ● /en/dashboard/members-dashboard/help
+│ └ ● /ar/dashboard/members-dashboard/help
+├   /[locale]/dashboard/members-dashboard/members
+│ ├ ● /en/dashboard/members-dashboard/members
+│ └ ● /ar/dashboard/members-dashboard/members
+├   /[locale]/dashboard/members-dashboard/settings
+│ ├ ● /en/dashboard/members-dashboard/settings
+│ └ ● /ar/dashboard/members-dashboard/settings
+├   /[locale]/dashboard/members-dashboard/tasks
+│ ├ ● /en/dashboard/members-dashboard/tasks
+│ └ ● /ar/dashboard/members-dashboard/tasks
+├   /[locale]/dashboard/members-dashboard/upcoming-events
+│ ├ ● /en/dashboard/members-dashboard/upcoming-events
+│ └ ● /ar/dashboard/members-dashboard/upcoming-events
+├ ƒ /[locale]/dashboard/members-dashboard/upcoming-events/[eventId]
+├   /[locale]/dashboard/pr-dashboard
+│ ├ ● /en/dashboard/pr-dashboard
+│ └ ● /ar/dashboard/pr-dashboard
+├   /[locale]/dashboard/pr-dashboard/blacklist
+│ ├ ● /en/dashboard/pr-dashboard/blacklist
+│ └ ● /ar/dashboard/pr-dashboard/blacklist
+├   /[locale]/dashboard/pr-dashboard/events
+│ ├ ● /en/dashboard/pr-dashboard/events
+│ └ ● /ar/dashboard/pr-dashboard/events
+├ ƒ /[locale]/dashboard/pr-dashboard/events/[eventId]
+├   /[locale]/dashboard/pr-dashboard/members
+│ ├ ● /en/dashboard/pr-dashboard/members
+│ └ ● /ar/dashboard/pr-dashboard/members
+├   /[locale]/dashboard/pr-dashboard/points
+│ ├ ● /en/dashboard/pr-dashboard/points
+│ └ ● /ar/dashboard/pr-dashboard/points
+├   /[locale]/dashboard/pr-dashboard/settings
+│ ├ ● /en/dashboard/pr-dashboard/settings
+│ └ ● /ar/dashboard/pr-dashboard/settings
+├   /[locale]/dashboard/pr-dashboard/tasks
+│ ├ ● /en/dashboard/pr-dashboard/tasks
+│ └ ● /ar/dashboard/pr-dashboard/tasks
+├   /[locale]/dashboard/project-management-dashboard
+│ ├ ● /en/dashboard/project-management-dashboard
+│ └ ● /ar/dashboard/project-management-dashboard
+├   /[locale]/dashboard/project-management-dashboard/events
+│ ├ ● /en/dashboard/project-management-dashboard/events
+│ └ ● /ar/dashboard/project-management-dashboard/events
+├   /[locale]/dashboard/project-management-dashboard/members
+│ ├ ● /en/dashboard/project-management-dashboard/members
+│ └ ● /ar/dashboard/project-management-dashboard/members
+├   /[locale]/dashboard/project-management-dashboard/points
+│ ├ ● /en/dashboard/project-management-dashboard/points
+│ └ ● /ar/dashboard/project-management-dashboard/points
+├   /[locale]/dashboard/project-management-dashboard/settings
+│ ├ ● /en/dashboard/project-management-dashboard/settings
+│ └ ● /ar/dashboard/project-management-dashboard/settings
+├   /[locale]/dashboard/project-management-dashboard/tasks
+│ ├ ● /en/dashboard/project-management-dashboard/tasks
+│ └ ● /ar/dashboard/project-management-dashboard/tasks
+├   /[locale]/dashboard/robotics-iot-dashboard
+│ ├ ● /en/dashboard/robotics-iot-dashboard
+│ └ ● /ar/dashboard/robotics-iot-dashboard
+├   /[locale]/dashboard/robotics-iot-dashboard/events
+│ ├ ● /en/dashboard/robotics-iot-dashboard/events
+│ └ ● /ar/dashboard/robotics-iot-dashboard/events
+├   /[locale]/dashboard/robotics-iot-dashboard/members
+│ ├ ● /en/dashboard/robotics-iot-dashboard/members
+│ └ ● /ar/dashboard/robotics-iot-dashboard/members
+├   /[locale]/dashboard/robotics-iot-dashboard/points
+│ ├ ● /en/dashboard/robotics-iot-dashboard/points
+│ └ ● /ar/dashboard/robotics-iot-dashboard/points
+├   /[locale]/dashboard/robotics-iot-dashboard/settings
+│ ├ ● /en/dashboard/robotics-iot-dashboard/settings
+│ └ ● /ar/dashboard/robotics-iot-dashboard/settings
+├   /[locale]/dashboard/robotics-iot-dashboard/tasks
+│ ├ ● /en/dashboard/robotics-iot-dashboard/tasks
+│ └ ● /ar/dashboard/robotics-iot-dashboard/tasks
+├   /[locale]/dashboard/web-development-dashboard
+│ ├ ● /en/dashboard/web-development-dashboard
+│ └ ● /ar/dashboard/web-development-dashboard
+├   /[locale]/dashboard/web-development-dashboard/events
+│ ├ ● /en/dashboard/web-development-dashboard/events
+│ └ ● /ar/dashboard/web-development-dashboard/events
+├   /[locale]/dashboard/web-development-dashboard/members
+│ ├ ● /en/dashboard/web-development-dashboard/members
+│ └ ● /ar/dashboard/web-development-dashboard/members
+├   /[locale]/dashboard/web-development-dashboard/points
+│ ├ ● /en/dashboard/web-development-dashboard/points
+│ └ ● /ar/dashboard/web-development-dashboard/points
+├   /[locale]/dashboard/web-development-dashboard/settings
+│ ├ ● /en/dashboard/web-development-dashboard/settings
+│ └ ● /ar/dashboard/web-development-dashboard/settings
+├   /[locale]/dashboard/web-development-dashboard/tasks
+│ ├ ● /en/dashboard/web-development-dashboard/tasks
+│ └ ● /ar/dashboard/web-development-dashboard/tasks
+├   /[locale]/event-registration
+│ ├ ● /en/event-registration
+│ └ ● /ar/event-registration
+├   /[locale]/forgot-password
+│ ├ ● /en/forgot-password
+│ └ ● /ar/forgot-password
+├   /[locale]/forgot-password/verify
+│ ├ ● /en/forgot-password/verify
+│ └ ● /ar/forgot-password/verify
+├   /[locale]/login
+│ ├ ● /en/login
+│ └ ● /ar/login
+├   /[locale]/profile
+│ ├ ● /en/profile
+│ └ ● /ar/profile
+├   /[locale]/registrations
+│ ├ ● /en/registrations
+│ └ ● /ar/registrations
+├   /[locale]/reset-password
+│ ├ ● /en/reset-password
+│ └ ● /ar/reset-password
+├   /[locale]/signup
+│ ├ ● /en/signup
+│ └ ● /ar/signup
+├   /[locale]/signup/complete
+│ ├ ● /en/signup/complete
+│ └ ● /ar/signup/complete
+├   /[locale]/signup/pending
+│ ├ ● /en/signup/pending
+│ └ ● /ar/signup/pending
+└   /[locale]/signup/verify
+  ├ ● /en/signup/verify
+  └ ● /ar/signup/verify
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,143 @@
+
+> gdg-main-platform-frontend@0.1.0 lint
+> eslint
+
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/app/[locale]/(auth)/signup/components/SignupCredentials.tsx
+  27:9  warning  'universityEmailError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/app/[locale]/(auth)/signup/components/SignupForm.tsx
+  668:9  warning  'toggleCommitteeSkill' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/app/[locale]/profile/page.tsx
+  95:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/app/[locale]/profile/page.tsx:95:7
+  93 |     let active = true;
+  94 |     if (!API_ENABLED) {
+> 95 |       setLoading(false);
+     |       ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  96 |       setLoadError(true);
+  97 |       return () => { active = false; };
+  98 |     }  react-hooks/set-state-in-effect
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/Footer.tsx
+  59:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  65:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/pr/PRBlacklistPage.tsx
+  38:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/pr/PRBlacklistPage.tsx:38:7
+  36 |     let active = true;
+  37 |     if (!API_ENABLED) {
+> 38 |       setLoading(false);
+     |       ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  39 |       return;
+  40 |     }
+  41 |     fetchRegistrationBlacklist()  react-hooks/set-state-in-effect
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/MembersSection.tsx
+  102:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/MembersSection.tsx:102:5
+  100 |
+  101 |   useEffect(() => {
+> 102 |     setPage((currentPage) => Math.min(currentPage, pageCount));
+      |     ^^^^^^^ Avoid calling setState() directly within an effect
+  103 |   }, [pageCount]);
+  104 |
+  105 |   const groupLabel = (group: MemberGroup) => {  react-hooks/set-state-in-effect
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/PointsModal.tsx
+  78:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/PointsModal.tsx:78:5
+  76 |
+  77 |   useEffect(() => {
+> 78 |     setScopeSelection(null);
+     |     ^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  79 |   }, [isOpen, member?.id, pointScopeSignature]);
+  80 |
+  81 |   if (!isOpen || !member || member.id === currentMember?.id) return null;  react-hooks/set-state-in-effect
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/RemoveClubMemberModal.tsx
+  45:7   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/RemoveClubMemberModal.tsx:45:7
+  43 |   useEffect(() => {
+  44 |     if (isOpen) {
+> 45 |       setEmail(initialEmail);
+     |       ^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |       setCommitteeCode("");
+  47 |       setError("");
+  48 |       setSaving(false);                                                                                                                                                         react-hooks/set-state-in-effect
+  53:90  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/RemoveClubMemberModal.tsx:53:90
+  51 |
+  52 |   useEffect(() => {
+> 53 |     if (committeeCode && !availableScopes.some((scope) => scope.code === committeeCode)) setCommitteeCode("");
+     |                                                                                          ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  54 |   }, [availableScopes, committeeCode]);
+  55 |
+  56 |   if (!isOpen) return null;  react-hooks/set-state-in-effect
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/dashboard/shared/pages/ClubMembersPage.tsx
+  20:9  warning  'filtersT' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/home/AnnouncementsSection.tsx
+  24:23  warning  'setCurrentPage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/home/EventCard.tsx
+  164:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/home/HeroSection.tsx
+  29:7  warning  'CX' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/home/JoinCommunity.tsx
+  64:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/components/home/SponsorsSection.tsx
+  17:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/m/Projects/Dev/Projects/GDG-Platform/frontend-perf/lib/committee-dashboard/api.ts
+  155:7  warning  'TASK_STATUS_FROM_API' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 17 problems (6 errors, 11 warnings)

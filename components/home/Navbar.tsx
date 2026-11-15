@@ -197,7 +197,15 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
             className="h-[clamp(2.25rem,3.5vw,3.75rem)] w-auto -translate-x-3"
           />
         ) : (
-          <img
+          <Image
+            unoptimized
+            width={1992}
+            style={{ aspectRatio: "1992 / 344" }}
+            height={344}
+            sizes="(max-width: 1024px) 302px, 420px"
+            fetchPriority="high"
+            decoding="sync"
+            preload
             src="/images/gdg-white-Logo.png"
             alt={tCommon("logoAlt")}
             className="h-[clamp(3.25rem,4vw,4.5rem)] w-auto lg:scale-x-[1.06] lg:origin-left"

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 
 const FALLBACK_IMAGE = "/images/unknown.png";
 
@@ -34,6 +34,10 @@ export default function CommitteePortrait({
   horizontal?: boolean;
   sizeRatio: number;
 }) {
+  const portraitRef = useRef<SVGSVGElement>(null);
+  // SVG image elements have no native lazy loading. Keep hidden layouts from
+  // fetching full-size portraits, and start visible ones before they scroll in.
+  const nearViewport = useInView(portraitRef, { once: true, margin: "400px" });
   const requestedSource = image?.trim() || FALLBACK_IMAGE;
   const [failure, setFailure] = useState<{ requestedSource: string; fallbackFailed: boolean }>();
   const currentFailure = failure?.requestedSource === requestedSource ? failure : undefined;
@@ -46,6 +50,7 @@ export default function CommitteePortrait({
 
   return (
     <motion.svg
+      ref={portraitRef}
       aria-hidden="true"
       className={`absolute inset-x-0 bottom-0 mx-auto h-full w-auto max-w-none overflow-visible md:h-3/5 ${currentFailure?.fallbackFailed ? "invisible" : ""}`}
       viewBox={viewBox}
@@ -70,7 +75,7 @@ export default function CommitteePortrait({
     >
       <image
         key={source}
-        href={source}
+        href={nearViewport ? source : undefined}
         width={geometry?.[0]}
         height={geometry?.[1]}
         onLoad={(event) => {
