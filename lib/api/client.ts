@@ -1,8 +1,6 @@
-// Shared client for the NestJS API. Pages keep working on demo data unless
-// NEXT_PUBLIC_USE_API=true, so turning the API on is an explicit choice.
-// Supabase Auth sessions are held only for the current browser tab and attached
-// here so protected API calls consistently use the existing auth integration.
+// Application APIs use server-verified HttpOnly Better Auth sessions.
 
+import { authClient } from "@/lib/auth/better-auth-client";
 import { clearAuthSession } from "@/lib/auth/session";
 import { clearApiSession } from "./session";
 
@@ -39,40 +37,15 @@ function requestHeaders(body: unknown): Record<string, string> {
   return headers;
 }
 
-let refreshPromise: Promise<boolean> | null = null;
-
-function refreshAuthSession(): Promise<boolean> {
-  if (refreshPromise) return refreshPromise;
-  refreshPromise = (async () => {
-  try {
-    const response = await fetch(`${API_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-      cache: "no-store",
-    });
-    const envelope = await response.json().catch(() => null) as ApiEnvelope<{ authenticated?: boolean }>;
-    if (!response.ok || !envelope?.success || !envelope.data?.authenticated) {
-      clearAuthSession();
-      return false;
-    }
-    return true;
-  } catch {
-    return false;
-  }
-  })().finally(() => { refreshPromise = null; });
-  return refreshPromise;
-}
-
 export async function apiRequest<T>(
   path: string,
-  init: { method?: string; body?: unknown; accessToken?: string } = {},
+  init: { method?: string; body?: unknown } = {},
 ): Promise<ApiResult<T>> {
   clearApiSession();
   const makeRequest = () => fetch(`${API_URL}${path}`, {
     method: init.method ?? "GET",
     headers: {
       ...requestHeaders(init.body),
-      ...(init.accessToken ? { Authorization: `Bearer ${init.accessToken}` } : {}),
     },
     body: init.body === undefined
       ? undefined
@@ -86,18 +59,7 @@ export async function apiRequest<T>(
   let response: Response;
   try {
     response = await makeRequest();
-    const skipRefreshRetry = [
-      "/auth/refresh",
-      "/auth/login",
-      "/auth/logout",
-      "/auth/google/session",
-      "/auth/google/complete-signup",
-      "/auth/setup-password",
-      "/auth/setup-password/complete",
-    ].includes(path);
-    if (response.status === 401 && !skipRefreshRetry && await refreshAuthSession()) {
-      response = await makeRequest();
-    }
+    if (response.status === 401) clearAuthSession();
   } catch {
     return { ok: false, status: 0, code: "NETWORK_ERROR", message: "The service is unavailable.", details: [] };
   }
@@ -114,7 +76,7 @@ export async function apiRequest<T>(
 }
 
 export async function logoutSession() {
-  const result = await apiRequest<{ authenticated: false }>("/auth/logout", { method: "POST" });
+  const result = await authClient.signOut();
   clearAuthSession();
-  return result;
+  return { ok: !result.error };
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { createSupabaseBrowserClient } from "@/lib/auth/supabase-browser";
+import { authClient } from "@/lib/auth/better-auth-client";
 
 export default function GoogleAuthButton({ className = "" }: { className?: string }) {
   const locale = useLocale();
@@ -15,14 +15,11 @@ export default function GoogleAuthButton({ className = "" }: { className?: strin
     setError("");
     setIsLoading(true);
     try {
-      const supabase = createSupabaseBrowserClient();
-      const redirectTo = `${window.location.origin}/${locale}/auth/callback`;
-      const { error: authError } = await supabase.auth.signInWithOAuth({
+      const { error: authError } = await authClient.signIn.social({
         provider: "google",
-        options: {
-          redirectTo,
-          queryParams: { prompt: "select_account" },
-        },
+        additionalData: { locale: locale === "ar" ? "ar" : "en" },
+        callbackURL: `${window.location.origin}/${locale}/auth/callback`,
+        errorCallbackURL: `${window.location.origin}/${locale}/auth/callback?error=oauth`,
       });
       if (authError) throw authError;
     } catch {

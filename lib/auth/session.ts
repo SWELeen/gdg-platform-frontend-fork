@@ -1,8 +1,5 @@
 export interface AuthSession {
   authenticated?: boolean;
-  accessToken?: string;
-  refreshToken?: string;
-  expiresAt?: number;
   universityEmailVerificationRequired?: boolean;
   registrationPendingApproval?: boolean;
 }

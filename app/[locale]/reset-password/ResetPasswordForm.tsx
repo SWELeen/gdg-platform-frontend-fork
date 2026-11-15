@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 import { type FormEvent, useEffect, useState } from "react"
 import { useRouter } from "@/i18n/navigation"
 import { Link } from "@/i18n/navigation"
-import { apiRequest } from "@/lib/api/client"
+import { authClient } from "@/lib/auth/better-auth-client"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import PasswordInput from "@/app/components/auth/PasswordInput"
 import {
@@ -33,39 +33,20 @@ export default function ResetPasswordForm({
   const [passwordError, setPasswordError] = useState("")
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [accessToken, setAccessToken] = useState("")
   const [tokenHash, setTokenHash] = useState("")
-  const [linkType, setLinkType] = useState<"recovery" | "invite" | "">("")
   const [requestMessage, setRequestMessage] = useState("")
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search)
-    const fragment = new URLSearchParams(window.location.hash.slice(1))
-    const hash = query.get("token_hash") ?? fragment.get("token_hash")
-    const bearerToken = fragment.get("access_token")
-    const receivedType = query.get("type") ?? fragment.get("type")
-    const errorCode = query.get("error_code") ?? fragment.get("error_code")
-    const errorDescription = query.get("error_description") ?? fragment.get("error_description")
-    const isValidType = receivedType === "recovery" || receivedType === "invite"
-    const isValidHashLink = Boolean(hash && isValidType)
-    const isLegacyAccessLink = Boolean(bearerToken && isValidType)
+    const token = query.get("token")
     const timer = window.setTimeout(() => {
-      if (isValidHashLink) {
-        setTokenHash(hash!)
-        setLinkType(receivedType as "recovery" | "invite")
-        // Delay removing credentials until this effect setup survives Strict Mode's
-        // development cleanup; otherwise the second setup would see no token.
+      if (token) {
+        setTokenHash(token)
         window.history.replaceState(null, "", window.location.pathname)
-      } else if (isLegacyAccessLink) {
-        setAccessToken(bearerToken!)
-        window.history.replaceState(null, "", window.location.pathname)
-      } else if (errorCode === "otp_expired" || errorDescription?.toLowerCase().includes("expired")) {
-        setRequestMessage("linkExpired")
       } else {
-        setRequestMessage("invalidLink")
+        setRequestMessage(query.has("error") ? "linkExpired" : "invalidLink")
       }
     }, 0)
-
     return () => window.clearTimeout(timer)
   }, [])
 
@@ -130,26 +111,17 @@ export default function ResetPasswordForm({
       return;
     }
 
-    if (!tokenHash && !accessToken) {
+    if (!tokenHash) {
       setRequestMessage("invalidLink");
       return;
     }
 
     setIsSubmitting(true);
     setRequestMessage("");
-    const result = tokenHash
-      ? await apiRequest<{ passwordUpdated: true }>("/auth/setup-password/complete", {
-          method: "POST",
-          body: { tokenHash, type: linkType, password },
-        })
-      : await apiRequest<{ authenticated: true }>("/auth/setup-password", {
-          method: "POST",
-          body: { password },
-          accessToken,
-        });
+    const result = await authClient.resetPassword({ token: tokenHash, newPassword: password });
     setIsSubmitting(false);
-    if (!result.ok) {
-      setRequestMessage(result.status === 401 || result.status === 403 ? "linkExpired" : "requestFailed");
+    if (result.error) {
+      setRequestMessage(result.error.status === 400 || result.error.status === 401 || result.error.status === 403 ? "linkExpired" : "requestFailed");
       return;
     }
     router.push("/login");
@@ -191,7 +163,7 @@ export default function ResetPasswordForm({
       {requestMessage ? (
         <div role="alert" className="mt-3 text-sm text-gdg-red">
           <p>{t(requestMessage)}</p>
-          {!accessToken && !tokenHash ? (
+          {!tokenHash ? (
             <Link href="/forgot-password" className="mt-1 inline-block font-medium text-blue hover:underline">
               {t("requestNewLink")}
             </Link>
@@ -232,7 +204,7 @@ export default function ResetPasswordForm({
 
       <button
         type="submit"
-        disabled={isSubmitting || (!accessToken && !tokenHash)}
+        disabled={isSubmitting || (!tokenHash)}
         className="mt-9.5 h-8.75 w-full rounded-[5px] bg-blue text-sm font-medium text-[var(--white)] transition-colors duration-200 hover:bg-blue/90 active:bg-blue/80 disabled:cursor-not-allowed disabled:bg-blue/70"
       >
         {isSubmitting ? t("submitting") : (submitLabel ?? t("submit"))}

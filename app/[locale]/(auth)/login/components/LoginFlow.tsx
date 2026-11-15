@@ -1,9 +1,10 @@
 "use client"
 
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { authClient } from "@/lib/auth/better-auth-client"
 import { useState } from "react"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
-import { storeAuthSession, type AuthSession } from "@/lib/auth/session"
+import { storeAuthSession } from "@/lib/auth/session"
 import { canReturnTo, dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route"
 import { useRouter } from "@/i18n/navigation"
 import AuthCard from "@/app/components/auth/AuthCard"
@@ -27,6 +28,7 @@ function dashboardReturnPath(): string | null {
 export default function LoginFlow() {
   const t = useTranslations("auth.login")
   const router = useRouter()
+  const locale = useLocale()
   const [step, setStep] = useState<1 | 2>(1)
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
@@ -98,18 +100,12 @@ export default function LoginFlow() {
       setIsSubmitting(false)
       return
     }
-    const result = await apiRequest<AuthSession>("/auth/login", {
-      method: "POST",
-      body: { email: normalizeText(email), password: nextPassword },
-    })
-    if (!result.ok) {
-      if (result.code === "EMAIL_NOT_VERIFIED") {
+    const result = await authClient.signIn.email({ email: normalizeText(email), password: nextPassword, callbackURL: `${window.location.origin}/${locale}/verify-email` })
+    if (result.error) {
+      if (result.error.code === "EMAIL_NOT_VERIFIED") {
         window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify({ email: normalizeText(email) }))
         router.push("/signup/verify")
-        setIsSubmitting(false)
-        return
-      }
-      if (result.status === 401) {
+      } else if (result.error.status === 401) {
         setPasswordError("invalidCredentials")
       } else {
         setSubmitError("authRequestFailed")
@@ -117,7 +113,12 @@ export default function LoginFlow() {
       setIsSubmitting(false)
       return
     }
-    storeAuthSession(result.data)
+    storeAuthSession({ authenticated: true })
+    const profile = await apiRequest<{ nextStep: string }>("/account/profile-status")
+    if (profile.ok && profile.data.nextStep === "COMPLETE_PROFILE") {
+      router.replace("/signup/complete")
+      return
+    }
     const identity = await apiRequest<AuthenticatedIdentity>("/me")
     if (!identity.ok) {
       setSubmitError("authRequestFailed")

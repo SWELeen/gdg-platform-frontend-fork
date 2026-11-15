@@ -22,7 +22,7 @@ import {
   roleOptions,
   universityOptions,
 } from "@/data/signup"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import SignupProgress from "./SignupProgress"
 import { useRouter } from "@/i18n/navigation"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
@@ -390,6 +390,7 @@ function CommitteeSkillsPicker({
 export default function SignupForm() {
   const t = useTranslations("auth.signup")
   const router = useRouter()
+  const locale = useLocale()
   const [step, setStep] = useState<0 | 1 | 2>(0)
   const [membership, setMembership] = useState<"member" | "nonMember" | "">("")
   const [membershipError, setMembershipError] = useState("")
@@ -528,13 +529,11 @@ export default function SignupForm() {
     }
 
     const result = await apiRequest<{
-      accessToken?: string;
-      refreshToken?: string;
-      expiresAt?: number;
       emailVerificationRequired?: boolean;
-    }>("/auth/signup", {
+    }>("/account/signup", {
       method: "POST",
       body: {
+        locale,
         fullName: values.fullName,
         email: values.personalEmail,
         universityEmail: values.universityEmail || undefined,

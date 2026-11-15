@@ -18,9 +18,8 @@ import {
 } from "@/data/signup";
 import { API_ENABLED, apiRequest } from "@/lib/api/client";
 import { storeAuthSession } from "@/lib/auth/session";
-import { createSupabaseBrowserClient } from "@/lib/auth/supabase-browser";
 
-type GoogleSignupProfile = { email: string; fullName: string; accessToken: string };
+type GoogleSignupProfile = { email: string; fullName: string };
 type RegistrationType = "MEMBER" | "NON_MEMBER";
 
 function Input({
@@ -105,21 +104,15 @@ export default function GoogleSignupCompletion() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const stored = window.sessionStorage.getItem("gdg.google-signup-profile");
-      if (!stored) return;
-      try {
-        const parsed = JSON.parse(stored) as GoogleSignupProfile;
-        if (parsed.email && parsed.accessToken) {
-          setProfile(parsed);
-          setFullName(parsed.fullName ?? "");
-        }
-      } catch {
-        window.sessionStorage.removeItem("gdg.google-signup-profile");
-      }
+    let active = true;
+    void apiRequest<{ profile: GoogleSignupProfile }>("/account/profile-status").then(result => {
+      if (!active) return;
+      if (!result.ok) { router.replace("/login"); return; }
+      setProfile(result.data.profile);
+      setFullName(result.data.profile.fullName ?? "");
     });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+    return () => { active = false; };
+  }, [router]);
 
   const updateCollege = (value: string) => {
     setCollege(value);
@@ -169,9 +162,8 @@ export default function GoogleSignupCompletion() {
     }
 
     setIsSubmitting(true);
-    const result = await apiRequest<{ registrationPendingApproval: boolean }>("/auth/google/complete-signup", {
+    const result = await apiRequest<{ registrationPendingApproval: boolean }>("/account/complete-profile", {
       method: "POST",
-      accessToken: profile.accessToken,
       body: {
         fullName,
         registrationType,
@@ -204,7 +196,7 @@ export default function GoogleSignupCompletion() {
     }
 
     try {
-      await createSupabaseBrowserClient().auth.signOut({ scope: "local" });
+
     } catch {
       // The backend session is already established; local Supabase cleanup is best effort.
     }

@@ -25,6 +25,7 @@ if (
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
+      { source: "/api/auth/:path*", destination: `${apiProxyTarget}/api/auth/:path*` },
       {
         source: "/api/:path*",
         destination: `${apiProxyTarget}/:path*`,

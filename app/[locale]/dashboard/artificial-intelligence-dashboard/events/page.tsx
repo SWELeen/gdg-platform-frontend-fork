@@ -1,1 +1,5 @@
-﻿export { EventReportsPanel as default } from "@/components/dashboard/data-analysis/EventReportsPanel";
+import { EventReportsPanel } from "@/components/dashboard/data-analysis/EventReportsPanel";
+
+export default function EventReportsPage() {
+  return <EventReportsPanel />;
+}

@@ -76,3 +76,11 @@ Each new decision should record: date, owner/approver, status, context, decision
 ## Legacy-source clarification
 
 Web Doc Final describes some Next.js full-stack capabilities, including Server Actions. For this platform's backend responsibilities, that guidance is superseded by the approved separate-repository architecture: Next.js is frontend only and NestJS is authoritative.
+
+## 2026-11-13 — Better Auth migration
+
+Owner-authorized migration replaces Supabase Auth with backend-owned Better Auth and Resend email. The Next.js frontend retains its existing same-origin API proxy and bilingual interface; it does not become an authentication authority. Base verified with fetch/prune and remote/PR inspection: origin/main `15c68e2914f5de63fb1c8ac73486dedf3a068d5a`, latest integration branch, no open PRs. See backend `docs/auth-migration-plan.md` for the coordinated plan. Implementation is in progress, not ready for deployment. No push or PR is authorized.
+
+Native Better Auth requests retain `/api/auth/*` through the Next rewrite. Application profile operations move to `/api/account/*` (backend `/account/*`) to avoid namespace collisions; credential operations use native Better Auth response shapes. See backend `docs/better-auth-openapi.yaml` and Better Auth's generated `/api/auth/open-api/generate-schema` contract. Frontend flow migration is still in progress.
+
+The frontend credential migration now uses Better Auth for password sign-in, Google OAuth initiation, session-aware callback, reset request/completion, verification resend and logout. Staged application signup stays backend-owned at `/account/signup`. Supabase browser SDK and temporary bearer token handoff were removed. Verification uses links instead of OTP entry; no magic-link sign-in is enabled.

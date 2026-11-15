@@ -52,10 +52,7 @@ export default function ForgotPasswordForm() {
     setIsSubmitting(true);
     setRequestMessage("");
     setRequestSucceeded(false);
-    const result = await apiRequest<null>("/auth/setup-password/request", {
-      method: "POST",
-      body: { email: normalizeText(email), locale },
-    });
+    const result = await apiRequest<null>("/account/request-password-reset", { method: "POST", body: { email: normalizeText(email), locale } });
     setIsSubmitting(false);
     setRequestSucceeded(result.ok);
     setRequestMessage(result.ok ? t("requestSent") : t("requestFailed"));

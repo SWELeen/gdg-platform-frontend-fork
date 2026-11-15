@@ -7,7 +7,6 @@ import AuthCard from "@/app/components/auth/AuthCard";
 import { apiRequest, API_ENABLED } from "@/lib/api/client";
 import { storeAuthSession } from "@/lib/auth/session";
 import { dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route";
-import { createSupabaseBrowserClient } from "@/lib/auth/supabase-browser";
 
 type GoogleSessionResult = {
   nextStep: "SIGNED_IN" | "COMPLETE_PROFILE";
@@ -35,44 +34,25 @@ export default function GoogleAuthCallbackPage() {
         setError(t("googleAuthFailed"));
         return;
       }
-      const code = params.get("code");
-      if (!code) {
-        setError(t("googleAuthFailed"));
-        return;
-      }
-
       try {
-        const supabase = createSupabaseBrowserClient();
-        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-        if (exchangeError || !data.session) throw exchangeError ?? new Error("Missing OAuth session");
-
-        const result = await apiRequest<GoogleSessionResult>("/auth/google/session", {
-          method: "POST",
-          body: {
-            accessToken: data.session.access_token,
-            refreshToken: data.session.refresh_token,
-          },
-        });
+        const result = await apiRequest<GoogleSessionResult>("/account/profile-status");
         if (!result.ok) {
           if (result.code === "GOOGLE_ACCOUNT_LINK_REQUIRED") {
             setError(t("googleAccountLinkRequired"));
           } else {
             setError(t("googleAuthFailed"));
           }
-          await supabase.auth.signOut({ scope: "local" });
           return;
         }
 
         if (result.data.nextStep === "COMPLETE_PROFILE" && result.data.profile) {
           window.sessionStorage.setItem("gdg.google-signup-profile", JSON.stringify({
             ...result.data.profile,
-            accessToken: data.session.access_token,
           }));
           router.replace("/signup/complete");
           return;
         }
 
-        await supabase.auth.signOut({ scope: "local" });
         storeAuthSession({ authenticated: true });
         const identity = await apiRequest<AuthenticatedIdentity>("/me");
         router.replace(identity.ok ? dashboardPathFor(identity.data) : "/login");
