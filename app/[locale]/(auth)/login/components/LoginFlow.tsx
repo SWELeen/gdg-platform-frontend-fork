@@ -1,6 +1,6 @@
 "use client"
 
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { authClient } from "@/lib/auth/better-auth-client"
 import { useState } from "react"
 import { API_ENABLED, apiRequest } from "@/lib/api/client"
@@ -28,7 +28,6 @@ function dashboardReturnPath(): string | null {
 export default function LoginFlow() {
   const t = useTranslations("auth.login")
   const router = useRouter()
-  const locale = useLocale()
   const [step, setStep] = useState<1 | 2>(1)
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
@@ -100,7 +99,7 @@ export default function LoginFlow() {
       setIsSubmitting(false)
       return
     }
-    const result = await authClient.signIn.email({ email: normalizeText(email), password: nextPassword, callbackURL: `${window.location.origin}/${locale}/verify-email` })
+    const result = await authClient.signIn.email({ email: normalizeText(email), password: nextPassword })
     if (result.error) {
       if (result.error.code === "EMAIL_NOT_VERIFIED") {
         window.sessionStorage.setItem("gdg.pending-signup", JSON.stringify({ email: normalizeText(email) }))
