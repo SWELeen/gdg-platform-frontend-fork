@@ -1,7 +1,7 @@
 "use client"
 
 import { FaChevronDown } from "react-icons/fa6";
-import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
+import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import GoogleAuthButton from "@/components/auth/GoogleAuthButton"
@@ -170,6 +170,7 @@ function TextField({
   required?: boolean
   className?: string
 }) {
+  const locale = useLocale()
   const errorId = `${id}-error`
   return (
     <label htmlFor={id} className={`relative block text-sm font-medium ${className}`}>
@@ -189,7 +190,7 @@ function TextField({
         autoComplete={autoComplete}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 ${type === "email" ? "text-left" : ""} ${error ? "border-gdg-red" : "border-foreground/15"}`}
+        className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 ${type === "email" ? locale === "ar" ? "text-right" : "text-left" : ""} ${error ? "border-gdg-red" : "border-foreground/15"}`}
       />
       <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
     </label>
@@ -251,29 +252,140 @@ function ChoiceField({
   onBlur: () => void
 }) {
   const errorId = `${id}-error`
+  const listboxId = `${id}-options`
+  const labelId = `${id}-label`
+  const valueId = `${id}-value`
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const optionRefs = useRef<Array<HTMLDivElement | null>>([])
+  const [isOpen, setIsOpen] = useState(false)
+  const selectedIndex = options.findIndex((item) => (typeof item === "string" ? item : item.value) === value)
+  const [activeIndex, setActiveIndex] = useState(Math.max(selectedIndex, 0))
+  const normalizedOptions = options.map((item) => typeof item === "string" ? { value: item, label: item } : item)
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false)
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [])
+
+  useEffect(() => {
+    if (isOpen) optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" })
+  }, [activeIndex, isOpen])
+
+  const openList = () => {
+    setActiveIndex(Math.max(selectedIndex, 0))
+    setIsOpen(true)
+  }
+
+  const chooseOption = (index: number) => {
+    const option = normalizedOptions[index]
+    if (!option) return
+    onChange(option.value)
+    onBlur()
+    setIsOpen(false)
+  }
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault()
+      const direction = event.key === "ArrowDown" ? 1 : -1
+      setIsOpen(true)
+      setActiveIndex((current) => {
+        if (!isOpen) return Math.max(selectedIndex, 0)
+        return (current + direction + normalizedOptions.length) % normalizedOptions.length
+      })
+      return
+    }
+
+    if (event.key === "Home" || event.key === "End") {
+      if (!isOpen) return
+      event.preventDefault()
+      setActiveIndex(event.key === "Home" ? 0 : normalizedOptions.length - 1)
+      return
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      if (isOpen) chooseOption(activeIndex)
+      else openList()
+      return
+    }
+
+    if (event.key === "Escape" && isOpen) {
+      event.preventDefault()
+      setIsOpen(false)
+      return
+    }
+
+    if (event.key === "Tab" && isOpen) setIsOpen(false)
+
+    if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey && normalizedOptions.length) {
+      const start = isOpen ? activeIndex + 1 : 0
+      for (let offset = 0; offset < normalizedOptions.length; offset += 1) {
+        const index = (start + offset) % normalizedOptions.length
+        if (normalizedOptions[index].label.toLocaleLowerCase().startsWith(event.key.toLocaleLowerCase())) {
+          setActiveIndex(index)
+          setIsOpen(true)
+          break
+        }
+      }
+    }
+  }
+
   return (
-    <div className="relative block text-sm font-medium">
-      <label htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
+    <div ref={containerRef} className="relative block text-sm font-medium">
+      <label id={labelId} htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
       <div className="relative mt-1.5">
-        <select
+        <button
           id={id}
-          name={id}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          onBlur={onBlur}
-          required
+          type="button"
+          role="combobox"
           disabled={disabled}
+          onClick={() => isOpen ? setIsOpen(false) : openList()}
+          onBlur={onBlur}
+          onKeyDown={handleKeyDown}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-controls={listboxId}
+          aria-activedescendant={isOpen ? `${listboxId}-${activeIndex}` : undefined}
+          aria-labelledby={`${labelId} ${valueId}`}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={`h-10 w-full appearance-none rounded-lg border bg-surface px-3 pe-11 text-sm font-normal outline-none transition focus-visible:ring-2 focus-visible:ring-blue ${error ? "border-gdg-red" : "border-foreground/15 hover:border-foreground/30"}`}
+          className={`flex h-10 w-full items-center justify-between rounded-lg border bg-surface px-3 pe-11 text-start text-sm font-normal outline-none transition focus-visible:ring-2 focus-visible:ring-blue disabled:cursor-not-allowed disabled:opacity-60 ${error ? "border-gdg-red" : "border-foreground/15 hover:border-foreground/30"}`}
         >
-          <option value="">{placeholder}</option>
-          {options.map((item) => {
-            const option = typeof item === "string" ? { value: item, label: item } : item
-            return <option key={option.value} value={option.value}>{option.label}</option>
-          })}
-        </select>
-        <FaChevronDown aria-hidden="true" className="pointer-events-none absolute end-3.5 top-1/2 size-3.5 -translate-y-1/2 text-foreground/60" />
+          <span id={valueId} className={value ? "text-foreground" : "text-foreground/45"}>
+            {normalizedOptions.find((option) => option.value === value)?.label ?? placeholder}
+          </span>
+          <FaChevronDown aria-hidden="true" className={`absolute end-3.5 size-3.5 text-foreground/60 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        </button>
+
+        {isOpen && (
+          <div
+            id={listboxId}
+            role="listbox"
+            aria-labelledby={labelId}
+            className="absolute inset-x-0 top-full z-40 mt-2 max-h-64 overflow-y-auto rounded-xl border border-foreground/10 bg-[var(--surface)] p-1.5 shadow-xl shadow-black/25 ring-1 ring-black/5"
+          >
+            <div className="px-3 py-2 text-xs font-medium text-foreground/45">{placeholder}</div>
+            {normalizedOptions.map((option, index) => (
+              <div
+                key={option.value}
+                id={`${listboxId}-${index}`}
+                ref={(node) => { optionRefs.current[index] = node }}
+                role="option"
+                aria-selected={value === option.value}
+                onPointerMove={() => setActiveIndex(index)}
+                onClick={() => chooseOption(index)}
+                className={`flex min-h-10 cursor-pointer items-center rounded-lg px-3 py-2 text-start text-sm transition ${activeIndex === index ? "bg-blue/15 text-foreground" : "text-foreground hover:bg-foreground/5"} ${value === option.value ? "font-semibold" : ""}`}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
     </div>
@@ -648,13 +760,6 @@ export default function SignupForm() {
       ...current,
       [role === "DEVELOPER_COMMITTEES_LEADER" ? "developerCommitteesLeaderSkills" : "advisorSkills"]: skills.length ? undefined : current[role === "DEVELOPER_COMMITTEES_LEADER" ? "developerCommitteesLeaderSkills" : "advisorSkills"] ? "committeeSkillRequired" : undefined,
     }))
-  }
-
-  const toggleCommitteeSkill = (committee: string, skill: string, checked: boolean) => {
-    const selected = new Set(values.committeeSkills[committee] ?? [])
-    if (checked) selected.add(skill)
-    else selected.delete(skill)
-    updateCommitteeSkills(committee, [...selected])
   }
 
   const field = (id: FieldName, label: string, placeholder: string, options: readonly (string | { value: string; label: string })[]) => (
