@@ -32,6 +32,8 @@
   "levelRequired": "Please select your level.",
   "roleRequired": "Please select your role.",
   "committeeRequired": "Please select at least one committee.",
+  "signupRoleRequired": "Please select at least one committee or global role.",
+  "skillsRequired": "Please select at least one skill for each role you selected.",
   "committeeRoleRequired": "Please select a role.",
   "committeeSkillRequired": "Please select at least one skill for this committee.",
   "formIncomplete": "Please complete all required fields.",
