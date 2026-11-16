@@ -173,8 +173,10 @@ function TextField({
   const locale = useLocale()
   const errorId = `${id}-error`
   return (
-    <label htmlFor={id} className={`relative block text-sm font-medium ${className}`}>
-      {label} {required && <span className="text-gdg-red" aria-hidden="true">*</span>}
+    <div className={`block text-sm font-medium ${className}`}>
+      <label htmlFor={id}>
+        {label} {required && <span className="text-gdg-red" aria-hidden="true">*</span>}
+      </label>
       <input
         id={id}
         name={id}
@@ -192,8 +194,8 @@ function TextField({
         aria-describedby={error ? errorId : undefined}
         className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 ${type === "email" ? locale === "ar" ? "text-right" : "text-left" : ""} ${error ? "border-gdg-red" : "border-foreground/15"}`}
       />
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
-    </label>
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
+    </div>
   )
 }
 
@@ -216,8 +218,8 @@ function PasswordField({
 }) {
   const errorId = `${id}-error`
   return (
-    <label htmlFor={id} className="relative block text-sm font-medium">
-      {label} <span className="text-gdg-red" aria-hidden="true">*</span>
+    <div className="block text-sm font-medium">
+      <label htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
       <PasswordInput
         id={id}
         name={id}
@@ -233,8 +235,8 @@ function PasswordField({
         aria-describedby={error ? errorId : undefined}
         className={`mt-1.5 h-8 w-full rounded-md border px-2.75 pe-9 text-sm font-normal outline-none placeholder:text-foreground/40 ${error ? "border-gdg-red" : "border-foreground/15"}`}
       />
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
-    </label>
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
+    </div>
   )
 }
 
@@ -284,7 +286,6 @@ function ChoiceField({
     const option = normalizedOptions[index]
     if (!option) return
     onChange(option.value)
-    onBlur()
     setIsOpen(false)
   }
 
@@ -387,7 +388,7 @@ function ChoiceField({
           </div>
         )}
       </div>
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
     </div>
   )
 }
