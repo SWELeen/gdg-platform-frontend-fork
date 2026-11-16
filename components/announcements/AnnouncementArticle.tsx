@@ -1,6 +1,4 @@
-import { ArrowRight } from "lucide-react";
 import type { Announcement, AnnouncementBlock, RichText } from "@/lib/announcements/types";
-import { PillAction } from "./PillAction";
 
 const bulletColors = ["bg-gdg-blue", "bg-gdg-red", "bg-gdg-yellow", "bg-gdg-green"];
 
@@ -58,28 +56,12 @@ function Block({ block }: { block: AnnouncementBlock }) {
 
 // Article body. Falls back to the excerpt when the announcement has no structured body.
 export function AnnouncementArticle({ announcement }: { announcement: Announcement }) {
-  const { body, excerpt, primaryAction } = announcement;
+  const { body, excerpt } = announcement;
 
   return (
     <article className="flex min-w-0 flex-col gap-4 text-base text-gray-500">
       {body?.length ? body.map((block, index) => <Block key={index} block={block} />) : <p>{excerpt}</p>}
 
-      {primaryAction && (
-        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border pt-6">
-          <PillAction href={primaryAction.href} external>
-            {primaryAction.label}
-          </PillAction>
-          <a
-            href={primaryAction.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 break-all rounded-sm text-sm font-medium text-gdg-blue hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gdg-blue"
-          >
-            {primaryAction.href.replace(/^https?:\/\//, "")}
-            <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 rtl:-scale-x-100" />
-          </a>
-        </div>
-      )}
     </article>
   );
 }

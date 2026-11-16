@@ -259,6 +259,7 @@ function ChoiceField({
   const valueId = `${id}-value`
   const containerRef = useRef<HTMLDivElement | null>(null)
   const optionRefs = useRef<Array<HTMLDivElement | null>>([])
+  const selectingOptionRef = useRef(false)
   const [isOpen, setIsOpen] = useState(false)
   const selectedIndex = options.findIndex((item) => (typeof item === "string" ? item : item.value) === value)
   const [activeIndex, setActiveIndex] = useState(Math.max(selectedIndex, 0))
@@ -286,6 +287,7 @@ function ChoiceField({
     const option = normalizedOptions[index]
     if (!option) return
     onChange(option.value)
+    selectingOptionRef.current = false
     setIsOpen(false)
   }
 
@@ -346,7 +348,9 @@ function ChoiceField({
           role="combobox"
           disabled={disabled}
           onClick={() => isOpen ? setIsOpen(false) : openList()}
-          onBlur={onBlur}
+          onBlur={() => {
+            if (!selectingOptionRef.current) onBlur()
+          }}
           onKeyDown={handleKeyDown}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
@@ -378,6 +382,9 @@ function ChoiceField({
                 ref={(node) => { optionRefs.current[index] = node }}
                 role="option"
                 aria-selected={value === option.value}
+                onPointerDown={() => { selectingOptionRef.current = true }}
+                onPointerUp={() => { window.setTimeout(() => { selectingOptionRef.current = false }, 0) }}
+                onPointerCancel={() => { selectingOptionRef.current = false }}
                 onPointerMove={() => setActiveIndex(index)}
                 onClick={() => chooseOption(index)}
                 className={`flex min-h-10 cursor-pointer items-center rounded-lg px-3 py-2 text-start text-sm transition ${activeIndex === index ? "bg-blue/15 text-foreground" : "text-foreground hover:bg-foreground/5"} ${value === option.value ? "font-semibold" : ""}`}
