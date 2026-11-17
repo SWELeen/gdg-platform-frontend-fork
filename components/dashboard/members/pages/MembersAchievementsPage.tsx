@@ -9,6 +9,7 @@ import { PillAction } from "@/components/announcements/PillAction";
 import { TaskBadge } from "@/components/dashboard/members/TaskBadge";
 import { statusStyles } from "@/components/dashboard/members/task-styles";
 import { useMemberWorkspace } from "@/components/dashboard/members/MemberWorkspaceContext";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "@/components/dashboard/shared/HistoryPagination";
 import {
   memberCompletedTasks,
   memberPointHistory,
@@ -19,8 +20,6 @@ type LoadState = "loading" | "error" | "loaded";
 
 const rangeOptions: RangeFilter[] = ["allTime", "thisMonth", "last30Days", "thisYear"];
 const UTC_DAY_MS = 24 * 60 * 60 * 1000;
-const INITIAL_VISIBLE_COUNT = 4;
-const VISIBLE_COUNT_INCREMENT = 4;
 
 function getUtcMonthKey(date: Date): string {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -104,8 +103,8 @@ export function MembersAchievementsPage(): ReactElement {
   const taskFilterId = useId();
   const [pointRange, setPointRange] = useState<RangeFilter>("allTime");
   const [taskRange, setTaskRange] = useState<RangeFilter>("allTime");
-  const [visiblePointCount, setVisiblePointCount] = useState(INITIAL_VISIBLE_COUNT);
-  const [visibleTaskCount, setVisibleTaskCount] = useState(INITIAL_VISIBLE_COUNT);
+  const [pointPage, setPointPage] = useState(1);
+  const [taskPage, setTaskPage] = useState(1);
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [retryCount, setRetryCount] = useState(0);
 
@@ -178,8 +177,10 @@ export function MembersAchievementsPage(): ReactElement {
   const visibleTasks = memberCompletedTasks.filter((task) =>
     matchesRange(task.date, taskRange, now),
   );
-  const displayedPointEntries = visiblePointEntries.slice(0, visiblePointCount);
-  const displayedTasks = visibleTasks.slice(0, visibleTaskCount);
+  const pointPageCount = Math.ceil(visiblePointEntries.length / HISTORY_PAGE_SIZE);
+  const taskPageCount = Math.ceil(visibleTasks.length / HISTORY_PAGE_SIZE);
+  const displayedPointEntries = visiblePointEntries.slice((pointPage - 1) * HISTORY_PAGE_SIZE, pointPage * HISTORY_PAGE_SIZE);
+  const displayedTasks = visibleTasks.slice((taskPage - 1) * HISTORY_PAGE_SIZE, taskPage * HISTORY_PAGE_SIZE);
   const pointListLabel = t("history.title");
   const taskListLabel = t("tasks.title");
 
@@ -242,7 +243,7 @@ export function MembersAchievementsPage(): ReactElement {
                 value={pointRange}
                 onChange={(event) => {
                   setPointRange(event.target.value as RangeFilter);
-                  setVisiblePointCount(INITIAL_VISIBLE_COUNT);
+                  setPointPage(1);
                 }}
                 className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
               >
@@ -298,19 +299,7 @@ export function MembersAchievementsPage(): ReactElement {
                 })}
               </ul>
             )}
-            {visiblePointEntries.length > displayedPointEntries.length && (
-              <div className="mt-4 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisiblePointCount((count) => count + VISIBLE_COUNT_INCREMENT)
-                  }
-                  className="rounded-lg px-4 py-2 text-sm font-semibold text-gdg-blue transition-colors hover:bg-[var(--dashboard-blue-bg)]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
-                >
-                  {t("showMore")}
-                </button>
-              </div>
-            )}
+            <HistoryPagination page={pointPage} pageCount={pointPageCount} onPageChange={setPointPage} />
           </section>}
 
           <section
@@ -332,7 +321,7 @@ export function MembersAchievementsPage(): ReactElement {
                 value={taskRange}
                 onChange={(event) => {
                   setTaskRange(event.target.value as RangeFilter);
-                  setVisibleTaskCount(INITIAL_VISIBLE_COUNT);
+                  setTaskPage(1);
                 }}
                 className="h-9 min-w-0 rounded-xl border border-border bg-surface px-3 text-xs font-medium text-foreground focus-visible:border-gdg-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
               >
@@ -371,19 +360,7 @@ export function MembersAchievementsPage(): ReactElement {
                 ))}
               </ul>
             )}
-            {visibleTasks.length > displayedTasks.length && (
-              <div className="mt-4 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleTaskCount((count) => count + VISIBLE_COUNT_INCREMENT)
-                  }
-                  className="rounded-lg px-4 py-2 text-sm font-semibold text-gdg-blue transition-colors hover:bg-[var(--dashboard-blue-bg)]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gdg-blue/30"
-                >
-                  {t("showMore")}
-                </button>
-              </div>
-            )}
+            <HistoryPagination page={taskPage} pageCount={taskPageCount} onPageChange={setTaskPage} />
           </section>
         </>
       )}

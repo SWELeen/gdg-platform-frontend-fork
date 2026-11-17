@@ -11,6 +11,7 @@ import {
 } from "@/lib/membership-requests/api";
 import { leaderCommitteeConfig } from "./committee-config";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "./HistoryPagination";
 
 function decisionOrder(status: MembershipDecision) {
   return status === "PENDING" ? 0 : status === "APPROVED" ? 1 : 2;
@@ -26,6 +27,7 @@ export function MembershipRequestsPanel() {
   const [loadError, setLoadError] = useState("");
   const [actionError, setActionError] = useState("");
   const [savingId, setSavingId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     let active = true;
@@ -59,6 +61,8 @@ export function MembershipRequestsPanel() {
     }),
     [items],
   );
+  const pageCount = Math.ceil(sortedItems.length / HISTORY_PAGE_SIZE);
+  const displayedItems = sortedItems.slice((page - 1) * HISTORY_PAGE_SIZE, page * HISTORY_PAGE_SIZE);
 
   async function decide(item: MembershipRequest, decision: "APPROVED" | "REJECTED") {
     if (savingId !== null || item.committeeDecision?.status !== "PENDING") return;
@@ -103,7 +107,7 @@ export function MembershipRequestsPanel() {
           <p role="alert" className="rounded-lg border border-rose-300 bg-rose-50 p-4 text-sm text-rose-800 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-200">{t(loadError)}</p>
         ) : sortedItems.length === 0 ? (
           <p className="rounded-lg border border-border p-4 text-sm text-muted">{t("empty")}</p>
-        ) : sortedItems.map((item) => {
+        ) : displayedItems.map((item) => {
           const ownDecision = item.committeeDecision?.status ?? "PENDING";
           const details = item.applicant.details;
           return (
@@ -161,6 +165,7 @@ export function MembershipRequestsPanel() {
             </article>
           );
         })}
+        {!loading && !loadError && <HistoryPagination page={page} pageCount={pageCount} onPageChange={setPage} />}
       </div>
     </section>
   );
