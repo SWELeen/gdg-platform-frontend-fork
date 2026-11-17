@@ -60,6 +60,8 @@ type FieldName =
   | "description"
   | "date"
   | "time"
+  | "endDate"
+  | "endTime"
   | "location"
   | "mapsLink"
   | "capacity"
@@ -72,6 +74,8 @@ const fieldOrder: FieldName[] = [
   "description",
   "date",
   "time",
+  "endDate",
+  "endTime",
   "location",
   "mapsLink",
   "capacity",
@@ -88,6 +92,8 @@ interface FormValues {
   speakers: string;
   date: string;
   time: string;
+  endDate: string;
+  endTime: string;
   location: string;
   mapsLink: string;
   capacity: string;
@@ -102,6 +108,8 @@ const emptyValues: FormValues = {
   speakers: "",
   date: "",
   time: "",
+  endDate: "",
+  endTime: "",
   location: "",
   mapsLink: "",
   capacity: "",
@@ -120,20 +128,24 @@ interface CreateEventFormProps {
   onUploadImage?: (file: File) => Promise<string>;
   initialDetails?: CommitteeEventDetails;
   onUpdate?: (event: CreateEventInput, schedule: EventSchedule, imageUrl: string | null) => Promise<void>;
+  requireEndTime?: boolean;
 }
 
 type CreateEventHandler = (event: CreateEventInput, schedule: EventSchedule) => string | void | Promise<string | void>;
 
-// The form has no end time yet, so events last two hours.
+// Forms that do not request an explicit end time keep the two-hour default.
 const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000;
 
 /** Local date and time inputs → the exact instants the backend stores. Registration closes at the end of the chosen day, never after the start. */
-function toSchedule(values: FormValues, durationMs = DEFAULT_DURATION_MS): EventSchedule {
+function toSchedule(values: FormValues, durationMs = DEFAULT_DURATION_MS, requireEndTime = false): EventSchedule {
   const startsAt = new Date(`${values.date}T${values.time}:00+03:00`);
   const deadlineEnd = new Date(`${values.registrationDeadline}T23:59:59+03:00`);
+  const endsAt = requireEndTime
+    ? new Date(`${values.endDate}T${values.endTime}:00+03:00`)
+    : new Date(startsAt.getTime() + durationMs);
   return {
     startsAt: startsAt.toISOString(),
-    endsAt: new Date(startsAt.getTime() + durationMs).toISOString(),
+    endsAt: endsAt.toISOString(),
     registrationDeadline: new Date(Math.min(deadlineEnd.getTime(), startsAt.getTime())).toISOString(),
   };
 }
@@ -153,6 +165,7 @@ function dateTimeInput(value: string) {
 function eventFormValues(details?: CommitteeEventDetails): FormValues {
   if (!details) return emptyValues;
   const start = dateTimeInput(details.startsAt);
+  const end = dateTimeInput(details.endsAt);
   return {
     title: details.name,
     type: (details.eventType as EventType | null) ?? "Workshop",
@@ -160,6 +173,8 @@ function eventFormValues(details?: CommitteeEventDetails): FormValues {
     speakers: details.speakers ?? "",
     date: start.date,
     time: start.time,
+    endDate: end.date,
+    endTime: end.time,
     location: details.location ?? "",
     mapsLink: details.mapsLink ?? "",
     capacity: String(details.capacity),
@@ -187,15 +202,17 @@ export function CreateEventModal({
   onCreate,
   onViewEvent,
   onUploadImage,
+  requireEndTime = false,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onCreate: CreateEventHandler;
   onViewEvent?: (eventId: string) => void;
   onUploadImage?: (file: File) => Promise<string>;
+  requireEndTime?: boolean;
 }) {
   if (!isOpen) return null;
-  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} onViewEvent={onViewEvent} onUploadImage={onUploadImage} />;
+  return <CreateEventForm isModal onClose={onClose} onCreate={onCreate} onViewEvent={onViewEvent} onUploadImage={onUploadImage} requireEndTime={requireEndTime} />;
 }
 
 export function EditDraftEventModal({
@@ -204,15 +221,17 @@ export function EditDraftEventModal({
   details,
   onUpdate,
   onUploadImage,
+  requireEndTime = false,
 }: {
   isOpen: boolean;
   onClose: () => void;
   details: CommitteeEventDetails | null;
   onUpdate: NonNullable<CreateEventFormProps["onUpdate"]>;
   onUploadImage?: (file: File) => Promise<string>;
+  requireEndTime?: boolean;
 }) {
   if (!isOpen || !details) return null;
-  return <CreateEventForm key={details.id} isModal onClose={onClose} initialDetails={details} onUpdate={onUpdate} onUploadImage={onUploadImage} />;
+  return <CreateEventForm key={details.id} isModal onClose={onClose} initialDetails={details} onUpdate={onUpdate} onUploadImage={onUploadImage} requireEndTime={requireEndTime} />;
 }
 
 function Field({
@@ -251,7 +270,7 @@ function Field({
   );
 }
 
-function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUploadImage, initialDetails, onUpdate }: CreateEventFormProps) {
+function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUploadImage, initialDetails, onUpdate, requireEndTime = false }: CreateEventFormProps) {
   const t = useTranslations("dashboard.leader.createEvent");
   const tf = useTranslations("dashboard.leader.eventForm");
 
@@ -328,6 +347,16 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
     else if (current.date < today && (!initialDetails || current.date !== eventFormValues(initialDetails).date)) next.date = t("errors.datePast");
 
     if (!current.time) next.time = tf("errors.timeRequired");
+
+    if (requireEndTime) {
+      if (!current.endDate) next.endDate = tf("errors.endDateRequired");
+      if (!current.endTime) next.endTime = tf("errors.endTimeRequired");
+      if (current.date && current.time && current.endDate && current.endTime) {
+        const startsAt = new Date(`${current.date}T${current.time}:00+03:00`);
+        const endsAt = new Date(`${current.endDate}T${current.endTime}:00+03:00`);
+        if (endsAt <= startsAt) next.endTime = tf("errors.endAfterStart");
+      }
+    }
 
     const location = current.location.trim();
     if (!location) next.location = tf("errors.locationRequired");
@@ -510,7 +539,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       const duration = initialDetails
         ? new Date(initialDetails.endsAt).getTime() - new Date(initialDetails.startsAt).getTime()
         : DEFAULT_DURATION_MS;
-      const schedule = toSchedule(values, duration);
+      const schedule = toSchedule(values, duration, requireEndTime);
       if (initialDetails && onUpdate) {
         await onUpdate(eventData, schedule, eventData.imageUrl ?? null);
         setShowPreview(false);
@@ -662,6 +691,36 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                 />
               </Field>
             </div>
+
+            {requireEndTime && (
+              <div className={`${styles.row} mt-1`}>
+                <Field name="endDate" label={tf("fields.endDate")} required error={errors.endDate}>
+                  <input
+                    id={fieldId("endDate")}
+                    className={inputClass("endDate")}
+                    type="date"
+                    min={values.date || today}
+                    value={values.endDate}
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.endDate)}
+                    aria-describedby={describedBy("endDate")}
+                    onChange={(event) => setValue("endDate", event.target.value)}
+                  />
+                </Field>
+                <Field name="endTime" label={tf("fields.endTime")} required error={errors.endTime}>
+                  <input
+                    id={fieldId("endTime")}
+                    className={inputClass("endTime")}
+                    type="time"
+                    value={values.endTime}
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.endTime)}
+                    aria-describedby={describedBy("endTime")}
+                    onChange={(event) => setValue("endTime", event.target.value)}
+                  />
+                </Field>
+              </div>
+            )}
 
             <div className={styles.row}>
               <Field name="location" label={t("fields.location")} required error={errors.location}>
