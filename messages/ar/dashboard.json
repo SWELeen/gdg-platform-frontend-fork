@@ -1,4 +1,10 @@
 {
+  "pagination": {
+    "label": "صفحات السجل",
+    "pageOf": "صفحة {page} من {pages}",
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية"
+  },
   "leadershipTasks": {
     "clubTitle": "مهام قيادة المجموعة",
     "developerTitle": "مهام لجان المطورين",

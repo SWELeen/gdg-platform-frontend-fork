@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { decideLeadershipApplication, fetchLeadershipApplications, type LeadershipApplication } from "@/lib/membership-requests/api";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "./HistoryPagination";
 
 // A failed decision explains itself instead of reading as a failed load.
 function decisionErrorKey(status: number) {
@@ -18,11 +19,15 @@ export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER
   const [loadFailed, setLoadFailed] = useState(false);
   const [decisionError, setDecisionError] = useState("");
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const pageCount = Math.ceil(items.length / HISTORY_PAGE_SIZE);
+  const displayedItems = items.slice((page - 1) * HISTORY_PAGE_SIZE, page * HISTORY_PAGE_SIZE);
 
   const load = useCallback(async () => {
     setLoading(true);
     const result = await fetchLeadershipApplications(scope);
     if (result.ok) setItems(result.data);
+    if (result.ok) setPage(1);
     setLoadFailed(!result.ok);
     setLoading(false);
   }, [scope]);
@@ -49,7 +54,7 @@ export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER
       {decisionError && <p className="mt-4 text-sm text-gdg-red" role="alert">{t(decisionError)}</p>}
       {!loading && !loadFailed && items.length === 0 && <p className="mt-4 text-sm text-foreground/60">{t("empty")}</p>}
       <div className="mt-4 space-y-4">
-        {items.map((item, index) => (
+        {displayedItems.map((item, index) => (
           <article key={`${item.id}-${item.type}-${item.committee?.committeeCode ?? item.role?.roleCode ?? index}`} className="rounded-xl border border-border p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -65,6 +70,7 @@ export function LeadershipApprovalsPanel({ scope }: { scope: "CLUB" | "DEVELOPER
           </article>
         ))}
       </div>
+      {!loading && !loadFailed && <HistoryPagination page={page} pageCount={pageCount} onPageChange={setPage} />}
     </section>
   );
 }

@@ -1,4 +1,10 @@
 {
+  "pagination": {
+    "label": "History pages",
+    "pageOf": "Page {page} of {pages}",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
   "leadershipTasks": {
     "clubTitle": "Leadership tasks",
     "developerTitle": "Developer committee tasks",

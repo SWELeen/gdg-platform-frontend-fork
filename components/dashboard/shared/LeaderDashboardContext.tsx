@@ -252,12 +252,12 @@ export function LeaderDashboardProvider({
       const leadersByMember = new Map<string, CommitteeMember>();
       for (const item of result.data.committees) {
         for (const leader of item.leaders) {
-          const membership = { code: item.code, name: item.name, role: leader.role, points: leader.points, pointsVisible: leader.pointsVisible };
+          const membership = { code: item.code, name: item.name, role: leader.role, points: leader.pointsVisible === false ? 0 : leader.points, pointsVisible: leader.pointsVisible };
           const existing = leadersByMember.get(leader.id);
           if (existing) {
             existing.committees = [...(existing.committees ?? []), membership];
-            existing.points += leader.points;
-            existing.pointsVisible = existing.pointsVisible !== false || leader.pointsVisible !== false;
+            if (leader.pointsVisible !== false) existing.points += leader.points;
+            existing.pointsVisible = existing.pointsVisible !== false && leader.pointsVisible !== false;
             existing.role = [...new Set(`${existing.role} / ${leader.role}`.split(" / "))].join(" / ");
           } else {
             leadersByMember.set(leader.id, {
