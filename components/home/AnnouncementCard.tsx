@@ -297,8 +297,6 @@ export default function AnnouncementCard({
             flex
             items-center
             justify-between
-            border-t
-            border-border
             pt-5
           "
         >
