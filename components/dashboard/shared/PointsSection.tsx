@@ -15,6 +15,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
   const { members, pointHistory, canManagePoints, currentMember, clubLeadership, developerCommitteesLeader, developerCommitteesOverview } = useLeaderDashboard();
   const committees = useClubCommittees();
   const t = useTranslations("dashboard.leader");
+  const tRoles = useTranslations("dashboard.leader.groupFilters");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -30,6 +31,17 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
   const filtersActive = committeeFilter !== ALL || Boolean(search);
   const selectedCommitteeName = committees.find((item) => item.code === committeeFilter)?.name;
   const totalPoints = filteredMembers.reduce((sum, m) => sum + pointsFor(m, committeeFilter), 0);
+  const roleLabel = (role: string) => {
+    const labels: Record<string, string> = {
+      Leader: tRoles("roleLeader"),
+      "Co-Leader": tRoles("roleCoLeader"),
+      DEVELOPER_COMMITTEES_LEADER: tRoles("roleDeveloperLeader"),
+      ADVISOR: tRoles("roleAdvisor"),
+      GROUP_LEADER: tRoles("roleGroupLeadership"),
+      GROUP_CO_LEADER: tRoles("roleGroupLeadership"),
+    };
+    return labels[role] ?? role;
+  };
 
   return (
     <div className="space-y-6">
@@ -112,7 +124,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3.5 text-muted">{member.role}</td>
+                  <td className="px-4 py-3.5 text-muted">{member.role.split(" / ").map(roleLabel).join(" / ")}</td>
                   <td className="px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 text-sm">
                     {member.pointsVisible === false ? "—" : pointsFor(member, committeeFilter).toLocaleString()}
                   </td>

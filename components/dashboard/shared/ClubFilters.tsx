@@ -41,7 +41,8 @@ export function useClubCommittees(): CommitteeOption[] {
 /** Translated committee name by code, falling back to the backend name. */
 export function useCommitteeName() {
   const names = new Map(useClubCommittees().map((item) => [item.code, item.name]));
-  return (code?: string, fallback?: string) => (code && names.get(code)) || fallback || code || "";
+  return (code?: string, fallback?: string) =>
+    (code === "GLOBAL" ? names.get("DEV") : code && names.get(code)) || fallback || code || "";
 }
 
 const SELECT_CLASS =
