@@ -18,7 +18,7 @@ export default function Footer() {
     { label: t("nav.events"), href: sectionHref("#events") },
     { label: t("nav.announcements"), href: "/announcements", route: true },
     { label: t("nav.projects"), href: sectionHref("#projects") },
-    { label: t("nav.community"), href: sectionHref("#committees") },
+    { label: t("footer.group"), href: sectionHref("#committees") },
   ];
 
   return (
