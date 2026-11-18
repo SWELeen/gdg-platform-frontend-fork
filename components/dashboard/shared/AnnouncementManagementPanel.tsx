@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowUpRight, Eye, ImagePlus, Megaphone, Pencil, Send, Trash2 } from "lucide-react";
+import { ArrowUpRight, Eye, ImagePlus, Megaphone, Pencil, Send, Trash2, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { API_ENABLED } from "@/lib/api/client";
@@ -34,6 +34,7 @@ export function AnnouncementManagementPanel() {
   const t = useTranslations("dashboard.announcements");
   const tValidation = useTranslations("dashboard.validation");
   const tCategories = useTranslations("announcements.categories");
+  const tAnnouncementMeta = useTranslations("announcements.card");
   const dir = useTextDirection();
   const [items, setItems] = useState<Announcement[]>([]);
   const [form, setForm] = useState(emptyForm);
@@ -389,6 +390,7 @@ export function AnnouncementManagementPanel() {
                       <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${item.publicationStatus === "DRAFT" ? "bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-200" : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-200"}`}>{t(`status.${item.publicationStatus ?? "PUBLISHED"}`)}</span>
                       <p className="mt-1 text-xs text-muted">{tCategories(item.category)}</p>
                       <p className="mt-1 text-xs text-muted">{t(item.publicationStatus === "DRAFT" ? "updatedOn" : "publishedOn", { date: item.publicationStatus === "DRAFT" ? item.updatedAt ?? item.publishedAt : item.publishedAt })}</p>
+                      {item.publishedBy && <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-muted"><UserRound aria-hidden="true" className="size-3.5" />{tAnnouncementMeta("publishedBy")} {item.publishedBy}</p>}
                     </div>
                     {item.publicationStatus === "DRAFT" ? (
                       <button type="button" onClick={() => void publishDraft(item)} disabled={publishingDraftId === item.id} className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:underline disabled:opacity-50 dark:text-emerald-400">
