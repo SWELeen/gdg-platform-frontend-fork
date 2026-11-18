@@ -142,6 +142,22 @@ export const committeeOptions = [
 
 export type CommitteeOption = (typeof committeeOptions)[number];
 
+export const coreCommitteeOptions = [
+  "Project Management Committee",
+  "Public Relations Committee",
+  "Digital Media and Design Committee",
+  "Content Writing Committee",
+] as const satisfies readonly CommitteeOption[];
+
+export const developerCommitteeOptions = [
+  "Artificial Intelligence Committee",
+  "Data Analytics Committee",
+  "Cybersecurity Committee",
+  "Robotics Committee",
+  "Automation Committee",
+  "Web design and development",
+] as const satisfies readonly CommitteeOption[];
+
 // Committee codes from the backend committee table.
 export const committeeCodes: Record<CommitteeOption, string> = {
   "Project Management Committee": "PM",

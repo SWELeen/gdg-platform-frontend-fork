@@ -5,14 +5,18 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import AuthCard from "@/app/components/auth/AuthCard";
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage";
+import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel";
+import AuthFormPanel from "@/app/components/auth/AuthFormPanel";
 import {
   branchOptions,
   collegeOptions,
   committeeCodes,
   committeeOptions,
+  committeeSkillOptions,
   genderOptions,
   getMajorOptions,
   levelOptions,
+  roleOptions,
   universityOptions,
   type CommitteeOption,
 } from "@/data/signup";
@@ -21,6 +25,47 @@ import { storeAuthSession } from "@/lib/auth/session";
 
 type GoogleSignupProfile = { email: string; fullName: string };
 type RegistrationType = "MEMBER" | "NON_MEMBER";
+type GlobalRole = "DEVELOPER_COMMITTEES_LEADER" | "ADVISOR";
+
+const globalRoleSkillOptions: Record<GlobalRole, readonly string[]> = {
+  DEVELOPER_COMMITTEES_LEADER: ["Workflow Automation", "No-Code Tools", "Process Mapping", "System Integration", "Optimization"],
+  ADVISOR: ["Leadership", "Mentorship", "Planning", "Strategy", "Community Support"],
+};
+
+function SkillsPicker({
+  id, label, options, value, onChange, error,
+}: {
+  id: string;
+  label: string;
+  options: readonly string[];
+  value: string[];
+  onChange: (skills: string[]) => void;
+  error?: boolean;
+}) {
+  const t = useTranslations("auth.signup.fields.skills");
+  return (
+    <fieldset className="space-y-2">
+      <legend className="text-sm font-medium">{label} <span className="text-gdg-red" aria-hidden="true">*</span></legend>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {options.map((skill) => (
+          <label key={skill} className="flex items-center gap-2 text-sm font-normal">
+            <input
+              type="checkbox"
+              checked={value.includes(skill)}
+              onChange={(event) => onChange(event.target.checked
+                ? [...value, skill]
+                : value.filter((selected) => selected !== skill))}
+              aria-describedby={error ? `${id}-error` : undefined}
+            />
+            {skill}
+          </label>
+        ))}
+      </div>
+      <p className="text-xs text-foreground/55">{t("placeholder")}</p>
+      <AuthErrorMessage id={`${id}-error`} message={error ? "skillsRequired" : ""} />
+    </fieldset>
+  );
+}
 
 function Input({
   id, label, value, onChange, type = "text", placeholder, readOnly = false, required = true, maxLength = 255,
@@ -100,6 +145,12 @@ export default function GoogleSignupCompletion() {
   const [gender, setGender] = useState("");
   const [selectedCommittees, setSelectedCommittees] = useState<CommitteeOption[]>([]);
   const [committeeRoles, setCommitteeRoles] = useState<Record<string, string>>({});
+  const [committeeSkills, setCommitteeSkills] = useState<Record<string, string[]>>({});
+  const [requestedGlobalRoles, setRequestedGlobalRoles] = useState<GlobalRole[]>([]);
+  const [globalRoleSkills, setGlobalRoleSkills] = useState<Record<GlobalRole, string[]>>({
+    DEVELOPER_COMMITTEES_LEADER: [],
+    ADVISOR: [],
+  });
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -120,10 +171,20 @@ export default function GoogleSignupCompletion() {
   };
 
   const toggleCommittee = (committee: CommitteeOption) => {
-    setSelectedCommittees((current) => current.includes(committee)
+    const removing = selectedCommittees.includes(committee);
+    setSelectedCommittees((current) => removing
       ? current.filter((item) => item !== committee)
       : [...current, committee]);
-    setCommitteeRoles((roles) => ({ ...roles, [committee]: roles[committee] || "Member" }));
+    if (removing) {
+      setCommitteeRoles((current) => { const next = { ...current }; delete next[committee]; return next; });
+      setCommitteeSkills((current) => { const next = { ...current }; delete next[committee]; return next; });
+    }
+  };
+
+  const toggleGlobalRole = (role: GlobalRole) => {
+    setRequestedGlobalRoles((current) => current.includes(role)
+      ? current.filter((item) => item !== role)
+      : [...current, role]);
   };
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
@@ -156,9 +217,25 @@ export default function GoogleSignupCompletion() {
         return;
       }
     }
-    if (registrationType === "MEMBER" && selectedCommittees.length === 0) {
-      setFormError("committeeRequired");
+    if (registrationType === "MEMBER" && !selectedCommittees.length && !requestedGlobalRoles.length) {
+      setFormError("signupRoleRequired");
       return;
+    }
+    if (registrationType === "MEMBER") {
+      const hasMissingCommitteeRole = selectedCommittees.some((committee) => !roleOptions.includes(committeeRoles[committee] as typeof roleOptions[number]));
+      if (hasMissingCommitteeRole) {
+        setFormError("roleRequired");
+        return;
+      }
+      const hasMissingCommitteeSkills = selectedCommittees.some((committee) => !(committeeSkills[committee]?.length));
+      if (hasMissingCommitteeSkills) {
+        setFormError("skillsRequired");
+        return;
+      }
+      if (requestedGlobalRoles.some((role) => !globalRoleSkills[role].length)) {
+        setFormError("skillsRequired");
+        return;
+      }
     }
 
     setIsSubmitting(true);
@@ -176,12 +253,22 @@ export default function GoogleSignupCompletion() {
           major,
           level,
           gender,
+          ...(registrationType === "MEMBER" ? {
+            skillsByCommittee: {
+              ...Object.fromEntries(selectedCommittees
+                .filter((committee) => committeeSkills[committee]?.length)
+                .map((committee) => [committeeCodes[committee], committeeSkills[committee]])),
+              ...Object.fromEntries(requestedGlobalRoles
+                .filter((role) => globalRoleSkills[role].length)
+                .map((role) => [role, globalRoleSkills[role]])),
+            },
+          } : {}),
         },
         committees: registrationType === "MEMBER" ? selectedCommittees.map((committee) => ({
           committeeCode: committeeCodes[committee],
           requestedRole: committeeRoles[committee] || "Member",
         })) : [],
-        requestedGlobalRoles: [],
+        requestedGlobalRoles: registrationType === "MEMBER" ? requestedGlobalRoles : [],
       },
     });
 
@@ -212,22 +299,24 @@ export default function GoogleSignupCompletion() {
   );
 
   return (
-    <main className="flex w-full flex-1 justify-center bg-background px-4 py-8 md:items-center md:px-6">
-      <AuthCard
-        size="lg"
-        title={t("completeProfile.title")}
-        description={t("completeProfile.description")}
-        className="my-auto w-full max-w-3xl !px-5 !py-8 md:!max-w-3xl md:!px-8"
-      >
-        {!profile ? (
-          <div className="w-full">
-            <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
-            <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
-              {t("signIn")}
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={submit} className="mt-6 grid w-full grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
+      <AuthVisualPanel side="start" animateOnMount />
+      <AuthFormPanel scrollableOnDesktop>
+        <AuthCard
+          size="lg"
+          title={t("completeProfile.title")}
+          description={t("completeProfile.description")}
+          className="my-auto w-full max-w-3xl !px-5 !py-8 md:!max-w-3xl md:!px-8"
+        >
+          {!profile ? (
+            <div className="w-full">
+              <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
+              <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
+                {t("signIn")}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="mt-6 grid w-full grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <AuthErrorMessage message={formError} className="col-span-full" />
             <fieldset className="col-span-full">
               <legend className="mb-3 text-sm font-medium">{t("membershipQuestion")} <span className="text-gdg-red">*</span></legend>
@@ -264,15 +353,46 @@ export default function GoogleSignupCompletion() {
                       {committee}
                     </label>
                   ))}
-                </div>
-                {selectedCommittees.length > 0 && <p className="mt-3 text-xs text-muted">{t("fields.committeeRolesInstruction")}</p>}
-                {selectedCommittees.map((committee) => (
-                  <label key={committee} className="mt-3 flex items-center justify-between gap-3 text-sm">
-                    <span>{committee}</span>
-                    <select value={committeeRoles[committee] || "Member"} onChange={(event) => setCommitteeRoles((current) => ({ ...current, [committee]: event.target.value }))} className="h-8 rounded-md border border-foreground/15 bg-surface px-2">
-                      {["Member", "Co-Leader", "Leader"].map((role) => <option key={role} value={role}>{role}</option>)}
-                    </select>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={requestedGlobalRoles.includes("DEVELOPER_COMMITTEES_LEADER")} onChange={() => toggleGlobalRole("DEVELOPER_COMMITTEES_LEADER")} />
+                    {t("fields.developerCommitteesLeader.label")}
                   </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={requestedGlobalRoles.includes("ADVISOR")} onChange={() => toggleGlobalRole("ADVISOR")} />
+                    {t("fields.role.advisor")}
+                  </label>
+                </div>
+                {(selectedCommittees.length > 0 || requestedGlobalRoles.length > 0) && <p className="mt-3 text-xs text-muted">{t("fields.committeeRolesInstruction")}</p>}
+                {selectedCommittees.map((committee) => (
+                  <div key={committee} className="mt-4 space-y-3 rounded-md border border-foreground/10 p-3">
+                    <label className="flex items-center justify-between gap-3 text-sm">
+                      <span>{committee}</span>
+                      <select required value={committeeRoles[committee] ?? ""} onChange={(event) => setCommitteeRoles((current) => ({ ...current, [committee]: event.target.value }))} className="h-8 rounded-md border border-foreground/15 bg-surface px-2">
+                        <option value="">{t("fields.role.placeholder")}</option>
+                        {roleOptions.map((role) => <option key={role} value={role}>{role}</option>)}
+                      </select>
+                    </label>
+                    <SkillsPicker
+                      id={`google-committee-skills-${committeeCodes[committee]}`}
+                      label={`${fieldLabel("skills")}: ${committee.replace(/ Committee$/, "")}`}
+                      options={committeeSkillOptions[committee]}
+                      value={committeeSkills[committee] ?? []}
+                      onChange={(skills) => setCommitteeSkills((current) => ({ ...current, [committee]: skills }))}
+                      error={!committeeSkills[committee]?.length && Boolean(formError === "skillsRequired")}
+                    />
+                  </div>
+                ))}
+                {requestedGlobalRoles.map((role) => (
+                  <div key={role} className="col-span-full mt-4 rounded-md border border-foreground/10 p-3">
+                    <SkillsPicker
+                      id={`google-global-role-skills-${role.toLowerCase()}`}
+                      label={role === "ADVISOR" ? t("fields.role.advisor") : t("fields.developerCommitteesLeader.label")}
+                      options={globalRoleSkillOptions[role]}
+                      value={globalRoleSkills[role]}
+                      onChange={(skills) => setGlobalRoleSkills((current) => ({ ...current, [role]: skills }))}
+                      error={!globalRoleSkills[role].length && Boolean(formError === "skillsRequired")}
+                    />
+                  </div>
                 ))}
               </fieldset>
             )}
@@ -280,9 +400,10 @@ export default function GoogleSignupCompletion() {
             <button type="submit" disabled={isSubmitting} className="col-span-full mt-2 h-9 rounded-md bg-blue text-sm font-medium text-white transition hover:bg-blue/90 disabled:cursor-wait disabled:opacity-60">
               {isSubmitting ? t("creatingAccount") : t("completeProfile.submit")}
             </button>
-          </form>
-        )}
-      </AuthCard>
+            </form>
+          )}
+        </AuthCard>
+      </AuthFormPanel>
     </main>
   );
 }

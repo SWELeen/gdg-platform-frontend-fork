@@ -115,7 +115,7 @@ function mapDashboardData(data: RawCommitteeDashboardData): CommitteeDashboardDa
         accessExpiresAt: null,
         initials: member.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase(),
         avatarBgColor: "bg-blue-100 text-blue-700",
-        lastActivity: member.lastActivity ? relativeTime(member.lastActivity) : "â€”",
+        lastActivity: member.lastActivity ? relativeTime(member.lastActivity) : "—",
       })),
       events: data.events.map((event): CommitteeEvent => ({
         id: event.id,

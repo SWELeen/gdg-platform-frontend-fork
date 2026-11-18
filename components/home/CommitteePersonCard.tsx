@@ -40,7 +40,7 @@ export default function CommitteePersonCard({
       transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.22, 0.68, 0, 1], delay: reduceMotion ? 0 : 0.3 + index * 0.08 }}
       className={`relative flex min-w-0 flex-col py-2 text-center ${layoutClass}`}
     >
-      <div dir={dir} className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div dir={dir} className="relative flex min-h-0 min-w-0 flex-1 flex-col">
         <div className="relative z-10 mx-auto w-full max-w-full px-1 py-1">
           <div className="flex items-center justify-center">
             <p className="w-fit max-w-full text-xs leading-none font-medium text-white/60">

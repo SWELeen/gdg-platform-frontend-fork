@@ -8,6 +8,8 @@
   "levelRequired": "يرجى اختيار المستوى.",
   "roleRequired": "يرجى اختيار الدور.",
   "committeeRequired": "يرجى اختيار لجنة واحدة على الأقل.",
+  "signupRoleRequired": "يرجى اختيار لجنة واحدة على الأقل أو دور عام.",
+  "skillsRequired": "يرجى اختيار مهارة واحدة على الأقل لكل دور اخترته.",
   "committeeRoleRequired": "يرجى اختيار دور لكل لجنة اخترتها.",
   "committeeSkillRequired": "يرجى اختيار مهارة واحدة على الأقل لهذه اللجنة.",
   "emailRequired": "يرجى إدخال بريدك الإلكتروني.",

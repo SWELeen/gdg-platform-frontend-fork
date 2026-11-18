@@ -1,7 +1,7 @@
 "use client"
 
 import { FaChevronDown } from "react-icons/fa6";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react"
+import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react"
 import AuthStepTransition from "@/app/components/auth/AuthStepTransition"
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage"
 import GoogleAuthButton from "@/components/auth/GoogleAuthButton"
@@ -13,6 +13,8 @@ import {
   collegeOptions,
   committeeCodes,
   committeeOptions,
+  coreCommitteeOptions,
+  developerCommitteeOptions,
   committeeSkillOptions,
   type CommitteeOption,
   genderOptions,
@@ -168,14 +170,18 @@ function TextField({
   required?: boolean
   className?: string
 }) {
+  const locale = useLocale()
   const errorId = `${id}-error`
   return (
-    <label htmlFor={id} className={`relative block text-sm font-medium ${className}`}>
-      {label} {required && <span className="text-gdg-red" aria-hidden="true">*</span>}
+    <div className={`block text-sm font-medium ${className}`}>
+      <label htmlFor={id}>
+        {label} {required && <span className="text-gdg-red" aria-hidden="true">*</span>}
+      </label>
       <input
         id={id}
         name={id}
         type={type}
+        dir={type === "email" ? "ltr" : undefined}
         inputMode={inputMode}
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -186,10 +192,10 @@ function TextField({
         autoComplete={autoComplete}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 ${error ? "border-gdg-red" : "border-foreground/15"}`}
+        className={`mt-1.5 h-8 w-full rounded-md border px-2.75 text-sm font-normal outline-none placeholder:text-foreground/40 ${type === "email" ? locale === "ar" ? "text-right" : "text-left" : ""} ${error ? "border-gdg-red" : "border-foreground/15"}`}
       />
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
-    </label>
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
+    </div>
   )
 }
 
@@ -212,8 +218,8 @@ function PasswordField({
 }) {
   const errorId = `${id}-error`
   return (
-    <label htmlFor={id} className="relative block text-sm font-medium">
-      {label} <span className="text-gdg-red" aria-hidden="true">*</span>
+    <div className="block text-sm font-medium">
+      <label htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
       <PasswordInput
         id={id}
         name={id}
@@ -229,8 +235,8 @@ function PasswordField({
         aria-describedby={error ? errorId : undefined}
         className={`mt-1.5 h-8 w-full rounded-md border px-2.75 pe-9 text-sm font-normal outline-none placeholder:text-foreground/40 ${error ? "border-gdg-red" : "border-foreground/15"}`}
       />
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
-    </label>
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
+    </div>
   )
 }
 
@@ -248,28 +254,148 @@ function ChoiceField({
   onBlur: () => void
 }) {
   const errorId = `${id}-error`
+  const listboxId = `${id}-options`
+  const labelId = `${id}-label`
+  const valueId = `${id}-value`
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const optionRefs = useRef<Array<HTMLDivElement | null>>([])
+  const selectingOptionRef = useRef(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const selectedIndex = options.findIndex((item) => (typeof item === "string" ? item : item.value) === value)
+  const [activeIndex, setActiveIndex] = useState(Math.max(selectedIndex, 0))
+  const normalizedOptions = options.map((item) => typeof item === "string" ? { value: item, label: item } : item)
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false)
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [])
+
+  useEffect(() => {
+    if (isOpen) optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" })
+  }, [activeIndex, isOpen])
+
+  const openList = () => {
+    setActiveIndex(Math.max(selectedIndex, 0))
+    setIsOpen(true)
+  }
+
+  const chooseOption = (index: number) => {
+    const option = normalizedOptions[index]
+    if (!option) return
+    onChange(option.value)
+    selectingOptionRef.current = false
+    setIsOpen(false)
+  }
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault()
+      const direction = event.key === "ArrowDown" ? 1 : -1
+      setIsOpen(true)
+      setActiveIndex((current) => {
+        if (!isOpen) return Math.max(selectedIndex, 0)
+        return (current + direction + normalizedOptions.length) % normalizedOptions.length
+      })
+      return
+    }
+
+    if (event.key === "Home" || event.key === "End") {
+      if (!isOpen) return
+      event.preventDefault()
+      setActiveIndex(event.key === "Home" ? 0 : normalizedOptions.length - 1)
+      return
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      if (isOpen) chooseOption(activeIndex)
+      else openList()
+      return
+    }
+
+    if (event.key === "Escape" && isOpen) {
+      event.preventDefault()
+      setIsOpen(false)
+      return
+    }
+
+    if (event.key === "Tab" && isOpen) setIsOpen(false)
+
+    if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey && normalizedOptions.length) {
+      const start = isOpen ? activeIndex + 1 : 0
+      for (let offset = 0; offset < normalizedOptions.length; offset += 1) {
+        const index = (start + offset) % normalizedOptions.length
+        if (normalizedOptions[index].label.toLocaleLowerCase().startsWith(event.key.toLocaleLowerCase())) {
+          setActiveIndex(index)
+          setIsOpen(true)
+          break
+        }
+      }
+    }
+  }
+
   return (
-    <div className="relative block text-sm font-medium">
-      <label htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
-      <select
-        id={id}
-        name={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        onBlur={onBlur}
-        required
-        disabled={disabled}
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? errorId : undefined}
-        className={`mt-1.5 h-8 w-full rounded-md border bg-surface px-2.75 text-sm font-normal outline-none ${error ? "border-gdg-red" : "border-foreground/15"}`}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((item) => {
-          const option = typeof item === "string" ? { value: item, label: item } : item
-          return <option key={option.value} value={option.value}>{option.label}</option>
-        })}
-      </select>
-      <AuthErrorMessage id={errorId} message={error ?? ""} className="absolute start-0 top-full mt-0.5" />
+    <div ref={containerRef} className="relative block text-sm font-medium">
+      <label id={labelId} htmlFor={id}>{label} <span className="text-gdg-red" aria-hidden="true">*</span></label>
+      <div className="relative mt-1.5">
+        <button
+          id={id}
+          type="button"
+          role="combobox"
+          disabled={disabled}
+          onClick={() => isOpen ? setIsOpen(false) : openList()}
+          onBlur={() => {
+            if (!selectingOptionRef.current) onBlur()
+          }}
+          onKeyDown={handleKeyDown}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-controls={listboxId}
+          aria-activedescendant={isOpen ? `${listboxId}-${activeIndex}` : undefined}
+          aria-labelledby={`${labelId} ${valueId}`}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
+          className={`flex h-10 w-full items-center justify-between rounded-lg border bg-surface px-3 pe-11 text-start text-sm font-normal outline-none transition focus-visible:ring-2 focus-visible:ring-blue disabled:cursor-not-allowed disabled:opacity-60 ${error ? "border-gdg-red" : "border-foreground/15 hover:border-foreground/30"}`}
+        >
+          <span id={valueId} className={value ? "text-foreground" : "text-foreground/45"}>
+            {normalizedOptions.find((option) => option.value === value)?.label ?? placeholder}
+          </span>
+          <FaChevronDown aria-hidden="true" className={`absolute end-3.5 size-3.5 text-foreground/60 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        </button>
+
+        {isOpen && (
+          <div
+            id={listboxId}
+            role="listbox"
+            aria-labelledby={labelId}
+            className="absolute inset-x-0 top-full z-40 mt-2 max-h-64 overflow-y-auto rounded-xl border border-foreground/10 bg-[var(--surface)] p-1.5 shadow-xl shadow-black/25 ring-1 ring-black/5"
+          >
+            <div className="px-3 py-2 text-xs font-medium text-foreground/45">{placeholder}</div>
+            {normalizedOptions.map((option, index) => (
+              <div
+                key={option.value}
+                id={`${listboxId}-${index}`}
+                ref={(node) => { optionRefs.current[index] = node }}
+                role="option"
+                aria-selected={value === option.value}
+                onPointerDown={() => { selectingOptionRef.current = true }}
+                onPointerUp={() => { window.setTimeout(() => { selectingOptionRef.current = false }, 0) }}
+                onPointerCancel={() => { selectingOptionRef.current = false }}
+                onPointerMove={() => setActiveIndex(index)}
+                onClick={() => chooseOption(index)}
+                className={`flex min-h-10 cursor-pointer items-center rounded-lg px-3 py-2 text-start text-sm transition ${activeIndex === index ? "bg-blue/15 text-foreground" : "text-foreground hover:bg-foreground/5"} ${value === option.value ? "font-semibold" : ""}`}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <AuthErrorMessage id={errorId} message={error ?? ""} className="mt-1" />
     </div>
   )
 }
@@ -290,99 +416,79 @@ function CommitteeSkillsPicker({
   const t = useTranslations("auth.signup")
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const pickerId = useId()
 
   useEffect(() => {
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false)
     }
 
-    document.addEventListener("mousedown", handlePointerDown)
-    return () => document.removeEventListener("mousedown", handlePointerDown)
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
   }, [])
 
-  const removeSkill = (skill: string) => {
-    onChange(value.filter((item) => item !== skill))
-  }
-
   const toggleSkill = (skill: string, checked: boolean) => {
-    const next = checked ? [...value, skill] : value.filter((item) => item !== skill)
-    onChange(next)
+    onChange(checked ? [...value, skill] : value.filter((item) => item !== skill))
   }
 
   return (
-    <div ref={containerRef} className="relative block text-sm font-medium">
-      <label className="block">
+    <div
+      ref={containerRef}
+      className="relative block text-sm font-medium"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && isOpen) {
+          event.preventDefault()
+          setIsOpen(false)
+          triggerRef.current?.focus()
+        }
+      }}
+    >
+      <span id={`${pickerId}-label`} className="block">
         {label} <span className="text-gdg-red" aria-hidden="true">*</span>
-      </label>
+      </span>
 
       <div className="relative mt-1.5">
-        <div
-          className={`flex min-h-8 w-full flex-col justify-center rounded-md border bg-surface px-2.75 py-1.5 transition ${error ? "border-gdg-red" : "border-foreground/15"}`}
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen((current) => !current)}
+          className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border bg-surface px-3 py-2 pe-11 text-start text-sm font-normal outline-none transition focus-visible:ring-2 focus-visible:ring-blue ${error ? "border-gdg-red" : "border-foreground/15 hover:border-foreground/30"}`}
+          aria-labelledby={`${pickerId}-label ${pickerId}-value`}
+          aria-expanded={isOpen}
+          aria-controls={`${pickerId}-options`}
+          aria-describedby={error ? `${pickerId}-error` : undefined}
         >
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex max-h-[80px] min-w-0 flex-1 items-center gap-1.5 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-1">
-              {value.length === 0 ? (
-                <span className="text-sm text-foreground/40">{t("fields.skills.placeholder")}</span>
-              ) : (
-                value.map((skill) => (
-                  <span
-                    key={skill}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-foreground/15 bg-foreground/5 px-1.5 py-0.5 text-[11px] text-foreground"
-                  >
-                    <span className="truncate">{skill}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeSkill(skill)}
-                      className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[9px] text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
-                      aria-label={t("fields.skills.remove", { skill })}
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsOpen((current) => !current)}
-              className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded text-xs text-foreground/70 outline-none"
-              aria-expanded={isOpen}
-              aria-label={isOpen ? t("fields.skills.close") : t("fields.skills.open")}
-            >
-              <span className="pointer-events-none"><FaChevronDown /></span>
-            </button>
-          </div>
-        </div>
+          <span id={`${pickerId}-value`} className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+            {value.length === 0 ? (
+              <span className="text-foreground/45">{t("fields.skills.placeholder")}</span>
+            ) : (
+              value.map((skill) => (
+                <span key={skill} className="max-w-full truncate rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-xs text-foreground">{skill}</span>
+              ))
+            )}
+          </span>
+          <FaChevronDown aria-hidden="true" className={`absolute end-3.5 size-3.5 text-foreground/60 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        </button>
 
         {isOpen && (
-          <div className="mt-1 rounded-md border border-foreground/15 bg-[var(--surface)] p-2 shadow-lg shadow-black/20">
-            <div className="max-h-[220px] overflow-y-auto pr-1">
-              {options.map((skill) => {
-                const checked = value.includes(skill)
-                return (
-                  <label
-                    key={skill}
-                    className="flex cursor-pointer items-center gap-3 rounded px-2 py-2 text-sm text-foreground transition hover:bg-white/5"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={(event) => toggleSkill(skill, event.target.checked)}
-                      className="h-4 w-4 accent-foreground"
-                    />
-                    <span>{skill}</span>
-                  </label>
-                )
-              })}
-            </div>
+          <div
+            id={`${pickerId}-options`}
+            role="group"
+            aria-label={label}
+            className="absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-xl border border-foreground/10 bg-[var(--surface)] p-2 shadow-xl shadow-black/20"
+          >
+            {options.map((skill) => (
+              <label key={skill} className="flex cursor-pointer items-center justify-between gap-4 rounded-lg px-3 py-2.5 text-sm font-normal text-foreground transition hover:bg-foreground/5 focus-within:bg-foreground/5">
+                <span>{skill}</span>
+                <input type="checkbox" checked={value.includes(skill)} onChange={(event) => toggleSkill(skill, event.target.checked)} className="size-4 shrink-0 accent-blue" />
+              </label>
+            ))}
           </div>
         )}
       </div>
 
-      <AuthErrorMessage id={`${label}-skill-error`} message={error ?? ""} className="mt-1" />
+      <AuthErrorMessage id={`${pickerId}-error`} message={error ?? ""} className="mt-1" />
     </div>
   )
 }
@@ -664,13 +770,6 @@ export default function SignupForm() {
     }))
   }
 
-  const toggleCommitteeSkill = (committee: string, skill: string, checked: boolean) => {
-    const selected = new Set(values.committeeSkills[committee] ?? [])
-    if (checked) selected.add(skill)
-    else selected.delete(skill)
-    updateCommitteeSkills(committee, [...selected])
-  }
-
   const field = (id: FieldName, label: string, placeholder: string, options: readonly (string | { value: string; label: string })[]) => (
     <ChoiceField
       id={id}
@@ -783,35 +882,42 @@ export default function SignupForm() {
                 aria-describedby={errors.committees ? "committees-error" : undefined}
               >
                 <legend className="mb-2 text-sm font-medium">{t("fields.committees.label")} <span className="text-gdg-red" aria-hidden="true">*</span></legend>
-                <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
-                  {committeeOptions.map((committee) => (
-                    <label key={committee} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        name="committees"
-                        value={committee}
-                        checked={values.committees.includes(committee)}
-                        onChange={(event) => toggleCommittee(committee, event.target.checked)}
-                      />
-                      {committee.replace(/ Committee$/, "")}
-                    </label>
-                  ))}
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(values.developerCommitteesLeader)}
-                      onChange={(event) => setValues((current) => ({ ...current, developerCommitteesLeader: event.target.checked }))}
-                    />
-                    Developer Committees Leader
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(values.advisor)}
-                      onChange={(event) => setValues((current) => ({ ...current, advisor: event.target.checked }))}
-                    />
-                    Advisor
-                  </label>
+                <div className="space-y-4">
+                  <section className="rounded-xl border border-foreground/10 bg-surface/50 p-3 sm:p-4" aria-labelledby="core-committees-heading">
+                    <h3 id="core-committees-heading" className="mb-3 text-sm font-semibold text-foreground">{t("fields.committees.coreGroup")}</h3>
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                      {coreCommitteeOptions.map((committee) => (
+                        <label key={committee} className="flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm transition hover:bg-foreground/5">
+                          <span>{committee.replace(/ Committee$/, "")}</span>
+                          <input type="checkbox" name="committees" value={committee} checked={values.committees.includes(committee)} onChange={(event) => toggleCommittee(committee, event.target.checked)} className="size-4 shrink-0 accent-blue" />
+                        </label>
+                      ))}
+                    </div>
+                  </section>
+                  <section className="rounded-xl border border-foreground/10 bg-surface/50 p-3 sm:p-4" aria-labelledby="developer-committees-heading">
+                    <h3 id="developer-committees-heading" className="mb-3 text-sm font-semibold text-foreground">{t("fields.committees.developerGroup")}</h3>
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                      {developerCommitteeOptions.map((committee) => (
+                        <label key={committee} className="flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm transition hover:bg-foreground/5">
+                          <span>{committee.replace(/ Committee$/, "")}</span>
+                          <input type="checkbox" name="committees" value={committee} checked={values.committees.includes(committee)} onChange={(event) => toggleCommittee(committee, event.target.checked)} className="size-4 shrink-0 accent-blue" />
+                        </label>
+                      ))}
+                    </div>
+                  </section>
+                  <section className="rounded-xl border border-foreground/10 bg-surface/50 p-3 sm:p-4" aria-labelledby="global-roles-heading">
+                    <h3 id="global-roles-heading" className="mb-3 text-sm font-semibold text-foreground">{t("fields.committees.globalRoles")}</h3>
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                      <label className="flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm transition hover:bg-foreground/5">
+                        <span>{t("fields.developerCommitteesLeader.label")}</span>
+                        <input type="checkbox" checked={Boolean(values.developerCommitteesLeader)} onChange={(event) => setValues((current) => ({ ...current, developerCommitteesLeader: event.target.checked }))} className="size-4 shrink-0 accent-blue" />
+                      </label>
+                      <label className="flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm transition hover:bg-foreground/5">
+                        <span>{t("fields.role.advisor")}</span>
+                        <input type="checkbox" checked={Boolean(values.advisor)} onChange={(event) => setValues((current) => ({ ...current, advisor: event.target.checked }))} className="size-4 shrink-0 accent-blue" />
+                      </label>
+                    </div>
+                  </section>
                 </div>
                 <AuthErrorMessage id="committees-error" message={errors.committees ?? ""} className="mt-1" />
                 {values.committees.length > 0 && (

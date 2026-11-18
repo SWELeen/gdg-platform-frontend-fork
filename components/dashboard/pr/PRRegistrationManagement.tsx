@@ -536,7 +536,7 @@ export function PREventsList() {
       </div>
       <ConfirmModal isOpen={Boolean(draftToDelete)} onClose={() => setDraftToDelete(null)} onConfirm={() => { if (draftToDelete) removeDraft(draftToDelete.id); }} title={t("eventManagement.deleteDraft")} message={t("eventManagement.deleteDraftConfirm", { title: draftToDelete?.title ?? "" })} confirmText={t("eventManagement.deleteDraft")} cancelText={t("members.cancel")} danger />
       {draftPreview && <EventPreviewModal data={draftPreview.data} editLabel={t("eventManagement.closePreview")} onEdit={() => setDraftPreview(null)} onPublish={() => { const id = draftPreview.id; setDraftPreview(null); publish(id); }} />}
-      <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} />
+      <CreateEventModal isOpen={createEventOpen} onClose={() => setCreateEventOpen(false)} onCreate={addEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} onViewEvent={(eventId) => { setCreateEventOpen(false); router.push(`/dashboard/pr-dashboard/events/${eventId}`); }} requireEndTime />
       {editingEvent?.details?.status === "PUBLISHED" ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <button type="button" aria-label={t("eventForm.cancel")} onClick={() => setEditingEvent(null)} className="fixed inset-0 bg-black/60 backdrop-blur-xs" />
@@ -559,7 +559,7 @@ export function PREventsList() {
           </form>
         </div>
       ) : (
-        <EditDraftEventModal isOpen={Boolean(editingEvent)} onClose={() => setEditingEvent(null)} details={editingEvent?.details ?? null} onUpdate={saveDraftEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} />
+        <EditDraftEventModal isOpen={Boolean(editingEvent)} onClose={() => setEditingEvent(null)} details={editingEvent?.details ?? null} onUpdate={saveDraftEvent} onUploadImage={API_ENABLED ? uploadEventImage : undefined} requireEndTime />
       )}
     </div>
   );

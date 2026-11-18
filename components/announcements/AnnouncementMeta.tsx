@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, UserRound } from "lucide-react";
+import { CalendarDays, Clock } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { Announcement } from "@/lib/announcements/types";
 
@@ -28,7 +28,7 @@ export function PublishedDate({ date }: { date: string }) {
   );
 }
 
-// Date, publisher and reading time — each shown only when the data has it.
+// Public announcement metadata: date and reading time only.
 export function AnnouncementMeta({
   announcement,
   className = "",
@@ -43,13 +43,6 @@ export function AnnouncementMeta({
       className={`flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500 ${className}`}
     >
       <PublishedDate date={announcement.publishedAt} />
-
-      {announcement.publishedBy && (
-        <span className="inline-flex items-center gap-1.5">
-          <UserRound aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-          {announcement.publishedBy}
-        </span>
-      )}
 
       {announcement.readTimeMinutes !== undefined && (
         <span className="inline-flex items-center gap-1.5">

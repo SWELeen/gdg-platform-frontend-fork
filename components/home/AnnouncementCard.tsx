@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Announcement } from "@/lib/announcements/types";
+import { PillAction } from "@/components/announcements/PillAction";
 
 type AnnouncementCardProps = {
   announcement: Announcement;
@@ -278,6 +279,17 @@ export default function AnnouncementCard({
           {announcement.excerpt}
         </p>
 
+        {announcement.primaryAction && (
+          <PillAction
+            href={announcement.primaryAction.href}
+            external
+            variant="blue"
+            className="mt-5 w-full"
+          >
+            {announcement.primaryAction.label}
+          </PillAction>
+        )}
+
         {/* Bottom */}
         <div
           className="
@@ -285,8 +297,6 @@ export default function AnnouncementCard({
             flex
             items-center
             justify-between
-            border-t
-            border-border
             pt-5
           "
         >

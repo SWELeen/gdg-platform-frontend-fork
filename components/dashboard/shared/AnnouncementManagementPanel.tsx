@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { ArrowUpRight, Eye, ImagePlus, Megaphone, Pencil, Send, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { ArrowUpRight, Eye, ImagePlus, Megaphone, Pencil, Send, Trash2, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { API_ENABLED } from "@/lib/api/client";
 import { deleteAnnouncement, fetchManagedAnnouncements, publishAnnouncement, updateAnnouncement, uploadAnnouncementImage, type CreateAnnouncementInput } from "@/lib/announcements/api";
 import { announcementCategories, type Announcement, type AnnouncementCategory } from "@/lib/announcements/types";
-import { useTextDirection } from "@/i18n/useTextDirection";
-import { CategoryBadge } from "@/components/announcements/CategoryBadge";
+import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
+import { PinnedAnnouncementCard } from "@/components/announcements/PinnedAnnouncementCard";
 import { ConfirmModal } from "@/components/dashboard/shared/ConfirmModal";
+import { AnnouncementImageCropper, createCroppedAnnouncementImage, DEFAULT_CROP, type AnnouncementImageCrop } from "@/components/dashboard/shared/AnnouncementImageCropper";
 
 const emptyForm = {
   title: "",
@@ -34,11 +35,15 @@ export function AnnouncementManagementPanel() {
   const t = useTranslations("dashboard.announcements");
   const tValidation = useTranslations("dashboard.validation");
   const tCategories = useTranslations("announcements.categories");
-  const dir = useTextDirection();
+  const tAnnouncementMeta = useTranslations("announcements.details.info");
   const [items, setItems] = useState<Announcement[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageCrop, setImageCrop] = useState<AnnouncementImageCrop>(DEFAULT_CROP);
+  const [croppedPreviewUrl, setCroppedPreviewUrl] = useState<string | null>(null);
+  const [croppedPreviewSource, setCroppedPreviewSource] = useState<string | null>(null);
+  const croppedPreviewUrlRef = useRef<string | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -52,6 +57,33 @@ export function AnnouncementManagementPanel() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"title" | "excerpt" | "body" | "actionLabel" | "actionHref", string>>>({});
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (!imageFile || !imagePreview) {
+      if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+      croppedPreviewUrlRef.current = null;
+      return;
+    }
+    let active = true;
+    const timer = setTimeout(() => {
+      void createCroppedAnnouncementImage(imageFile, imageCrop).then((file) => {
+        const url = URL.createObjectURL(file);
+        if (!active) {
+          URL.revokeObjectURL(url);
+          return;
+        }
+        if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+        croppedPreviewUrlRef.current = url;
+        setCroppedPreviewUrl(url);
+        setCroppedPreviewSource(imagePreview);
+      }).catch(() => undefined);
+    }, 180);
+    return () => { active = false; clearTimeout(timer); };
+  }, [imageFile, imagePreview, imageCrop]);
+
+  useEffect(() => () => {
+    if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+  }, []);
 
   useEffect(() => {
     if (!API_ENABLED) return;
@@ -95,7 +127,15 @@ export function AnnouncementManagementPanel() {
     setPublishing(true);
     let imageUrl = currentImageUrl;
     if (imageFile) {
-      const upload = await uploadAnnouncementImage(imageFile);
+      let croppedImage: File;
+      try {
+        croppedImage = await createCroppedAnnouncementImage(imageFile, imageCrop);
+      } catch {
+        setPublishing(false);
+        setError(t("imageCropError"));
+        return;
+      }
+      const upload = await uploadAnnouncementImage(croppedImage);
       if (!upload.ok) {
         setPublishing(false);
         setError(upload.status === 403 ? t("forbidden") : upload.status === 401 ? t("unauthorized") : t("imageUploadError"));
@@ -132,6 +172,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setEditingId(null);
@@ -159,6 +200,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(item.media.type === "image" ? item.media.src : null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setError("");
@@ -173,6 +215,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setIsCreating(false);
@@ -217,6 +260,7 @@ export function AnnouncementManagementPanel() {
     }
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImageFile(file);
+    setImageCrop(DEFAULT_CROP);
     setImagePreview(URL.createObjectURL(file));
     setError("");
   }
@@ -225,6 +269,7 @@ export function AnnouncementManagementPanel() {
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     setCurrentImageUrl(null);
   }
 
@@ -241,6 +286,22 @@ export function AnnouncementManagementPanel() {
     if (editingId === item.id) cancelEditing();
     setSuccess(t("deleted"));
   }
+
+  const previewImageUrl = imagePreview
+    ? croppedPreviewSource === imagePreview ? croppedPreviewUrl ?? imagePreview : imagePreview
+    : currentImageUrl;
+  const previewAnnouncement: Announcement = {
+    id: editingId ?? "announcement-preview",
+    slug: "announcement-preview",
+    title: form.title.trim() || t("preview.titlePlaceholder"),
+    excerpt: form.excerpt.trim() || t("preview.excerptPlaceholder"),
+    category: form.category,
+    media: previewImageUrl
+      ? { type: "image", src: previewImageUrl, alt: t("imagePreviewAlt") }
+      : { type: "artwork", artwork: "navy" },
+    publishedAt: new Date().toISOString().slice(0, 10),
+    pinned: form.pinned,
+  };
 
   return (
     <>
@@ -292,14 +353,30 @@ export function AnnouncementManagementPanel() {
 
             <section className="grid gap-4 rounded-2xl border border-border border-s-gdg-green bg-surface-muted/40 p-4 sm:p-5">
               <h3 className="text-base font-bold text-foreground">{t("sections.image")}</h3>
-              {imagePreview || currentImageUrl ? (
-                <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 sm:flex-row sm:items-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
-                  <img src={imagePreview ?? currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="h-40 w-full rounded-lg object-cover sm:h-28 sm:w-44" />
+              {imagePreview ? (
+                <div className="grid gap-3 rounded-xl border border-border bg-surface p-3">
+                  <AnnouncementImageCropper
+                    src={imagePreview}
+                    alt={t("imagePreviewAlt")}
+                    crop={imageCrop}
+                    onChange={setImageCrop}
+                    instruction={t("imageCropInstruction")}
+                    zoomLabel={t("imageCropZoom")}
+                    aspectLabel={t("imageCropAspect")}
+                  />
                   <div className="flex flex-wrap items-center gap-2">
                     <label htmlFor="announcement-image" className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-2 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5">{t("replaceImage")}</label>
                     <button type="button" onClick={removeImage} className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30">{t("removeImage")}</button>
-                    {imageFile && <span className="w-full truncate text-xs text-muted">{imageFile.name}</span>}
+                    <span className="w-full truncate text-xs text-muted">{imageFile?.name}</span>
+                  </div>
+                </div>
+              ) : currentImageUrl ? (
+                <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 sm:flex-row sm:items-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
+                  <img src={currentImageUrl} alt={t("imagePreviewAlt")} className="h-40 w-full rounded-lg object-cover sm:h-28 sm:w-44" />
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label htmlFor="announcement-image" className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-2 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5">{t("replaceImage")}</label>
+                    <button type="button" onClick={removeImage} className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30">{t("removeImage")}</button>
                   </div>
                 </div>
               ) : (
@@ -339,23 +416,20 @@ export function AnnouncementManagementPanel() {
             </section>
 
             {isPreviewing && (
-              <section aria-label={t("preview.title")} className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-                <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-muted/50 px-4 py-3">
+              <section aria-label={t("preview.title")} className="grid gap-4 rounded-2xl border border-border bg-background p-4 shadow-sm sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <h3 className="font-bold text-foreground">{t("preview.title")}</h3>
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">{t("preview.unpublished")}</span>
                 </div>
-                {(imagePreview || currentImageUrl) ? (
-                  <div className="relative h-52 overflow-hidden bg-surface-muted sm:h-64">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
-                    <img src={imagePreview ?? currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="size-full object-cover" />
+                <div className="grid items-start gap-5 xl:grid-cols-2">
+                  <div className="grid content-start gap-2">
+                    <h4 className="text-sm font-semibold text-foreground">{t("preview.homePage")}</h4>
+                    <div className="pointer-events-none"><AnnouncementCard announcement={previewAnnouncement} /></div>
                   </div>
-                ) : <div aria-hidden="true" className="h-3 bg-[image:var(--google-gradient)]" />}
-                <div className="grid gap-3 p-5 sm:p-7">
-                  <CategoryBadge category={form.category} />
-                  <h4 className="text-2xl font-bold text-foreground">{form.title.trim() || t("preview.titlePlaceholder")}</h4>
-                  <p className="text-muted">{form.excerpt.trim() || t("preview.excerptPlaceholder")}</p>
-                  {form.body.trim().split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index} className="whitespace-pre-wrap leading-7 text-foreground/85">{paragraph}</p>)}
-                  {form.actionLabel.trim() && form.actionHref.trim() && <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 font-semibold text-white">{form.actionLabel}<ArrowUpRight aria-hidden="true" className={`size-4 ${dir === "rtl" ? "-scale-x-100" : ""}`} /></span>}
+                  <div className="grid content-start gap-2">
+                    <h4 className="text-sm font-semibold text-foreground">{t("preview.announcementsPage")}</h4>
+                    <div className="pointer-events-none">{form.pinned ? <PinnedAnnouncementCard announcement={previewAnnouncement} /> : <AnnouncementCard announcement={previewAnnouncement} />}</div>
+                  </div>
                 </div>
               </section>
             )}
@@ -389,6 +463,7 @@ export function AnnouncementManagementPanel() {
                       <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${item.publicationStatus === "DRAFT" ? "bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-200" : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-200"}`}>{t(`status.${item.publicationStatus ?? "PUBLISHED"}`)}</span>
                       <p className="mt-1 text-xs text-muted">{tCategories(item.category)}</p>
                       <p className="mt-1 text-xs text-muted">{t(item.publicationStatus === "DRAFT" ? "updatedOn" : "publishedOn", { date: item.publicationStatus === "DRAFT" ? item.updatedAt ?? item.publishedAt : item.publishedAt })}</p>
+                      {item.publishedBy && <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-muted"><UserRound aria-hidden="true" className="size-3.5" />{tAnnouncementMeta("publishedBy")} {item.publishedBy}</p>}
                     </div>
                     {item.publicationStatus === "DRAFT" ? (
                       <button type="button" onClick={() => void publishDraft(item)} disabled={publishingDraftId === item.id} className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:underline disabled:opacity-50 dark:text-emerald-400">

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import type { CommitteeMember } from "./types";
 import { ALL, CommitteeFilterSelect, CommitteeTag, matchesCommittee, pointsFor, useClubCommittees } from "./ClubFilters";
 import { ArrowUpRight, ArrowDownRight, History, Search } from "lucide-react";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "./HistoryPagination";
 
 interface PointsSectionProps {
   onOpenUpdatePoints: (member: CommitteeMember) => void;
@@ -15,8 +16,10 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
   const { members, pointHistory, canManagePoints, currentMember, clubLeadership, developerCommitteesLeader, developerCommitteesOverview } = useLeaderDashboard();
   const committees = useClubCommittees();
   const t = useTranslations("dashboard.leader");
+  const tRoles = useTranslations("dashboard.leader.groupFilters");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
   const [searchTerm, setSearchTerm] = useState("");
+  const [historyPage, setHistoryPage] = useState(1);
 
   const search = searchTerm.trim().toLowerCase();
   const filteredMembers = members.filter(
@@ -29,7 +32,21 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
   );
   const filtersActive = committeeFilter !== ALL || Boolean(search);
   const selectedCommitteeName = committees.find((item) => item.code === committeeFilter)?.name;
-  const totalPoints = filteredMembers.reduce((sum, m) => sum + pointsFor(m, committeeFilter), 0);
+  const totalPoints = filteredMembers.reduce((sum, m) => sum + (m.pointsVisible === false ? 0 : pointsFor(m, committeeFilter)), 0);
+  const roleLabel = (role: string) => {
+    const labels: Record<string, string> = {
+      Leader: tRoles("roleLeader"),
+      "Co-Leader": tRoles("roleCoLeader"),
+      DEVELOPER_COMMITTEES_LEADER: tRoles("roleDeveloperLeader"),
+      ADVISOR: tRoles("roleAdvisor"),
+      GROUP_LEADER: tRoles("roleGroupLeadership"),
+      GROUP_CO_LEADER: tRoles("roleGroupLeadership"),
+    };
+    return labels[role] ?? role;
+  };
+  const visibleHistory = filteredHistory.filter((item) => item.memberId !== currentMember?.id);
+  const historyPageCount = Math.ceil(visibleHistory.length / HISTORY_PAGE_SIZE);
+  const displayedHistory = visibleHistory.slice((historyPage - 1) * HISTORY_PAGE_SIZE, historyPage * HISTORY_PAGE_SIZE);
 
   return (
     <div className="space-y-6">
@@ -58,14 +75,14 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => { setSearchTerm(e.target.value); setHistoryPage(1); }}
                   placeholder={t("groupFilters.searchMember")}
                   className="h-9 rounded-xl border border-border bg-surface-muted/40 ps-8 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
                 />
               </div>
               <CommitteeFilterSelect
                 value={committeeFilter}
-                onChange={setCommitteeFilter}
+                onChange={(value) => { setCommitteeFilter(value); setHistoryPage(1); }}
                 options={developerCommitteesLeader ? developerCommitteesOverview.map(({ code, name }) => ({ code, name })) : undefined}
               />
             </div>
@@ -112,9 +129,25 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3.5 text-muted">{member.role}</td>
+                  <td className="px-4 py-3.5 text-muted">{member.role.split(" / ").map(roleLabel).join(" / ")}</td>
                   <td className="px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 text-sm">
-                    {member.pointsVisible === false ? "—" : pointsFor(member, committeeFilter).toLocaleString()}
+                    {member.pointsVisible === false ? "—" : (
+                      <div>
+                        <span>{pointsFor(member, committeeFilter).toLocaleString()}</span>
+                        {committeeFilter === ALL && (member.committees?.some((item) => item.pointsVisible !== false) || member.globalPointsVisible) && (
+                          <ul className="mt-1 space-y-1 text-[11px] font-normal leading-snug text-muted">
+                            {member.committees?.filter((item) => item.pointsVisible !== false).map((item) => (
+                              <li key={item.code}>
+                                {committees.find((committee) => committee.code === item.code)?.name ?? item.name} · {roleLabel(item.role)}: {item.points.toLocaleString()}
+                              </li>
+                            ))}
+                            {member.globalPointsVisible && (
+                              <li>{committees.find((committee) => committee.code === "DEV")?.name ?? roleLabel("DEVELOPER_COMMITTEES_LEADER")}: {member.globalPoints?.toLocaleString() ?? 0}</li>
+                            )}
+                          </ul>
+                        )}
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3.5 text-foreground/80">{member.tasksCompleted}</td>
                   <td className="px-4 py-3.5 text-muted">{member.lastActivity}</td>
@@ -145,9 +178,9 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
         </div>
 
         <div className="mt-3 divide-y divide-border/60 text-xs">
-          {filteredHistory.length === 0 ? (
+          {visibleHistory.length === 0 ? (
             <p className="py-4 text-sm text-muted">{filtersActive ? t("groupFilters.noHistory") : t("points.emptyHistory")}</p>
-          ) : filteredHistory.map((item) => (
+          ) : displayedHistory.map((item) => (
             <div
               key={item.id}
               className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between"
@@ -190,6 +223,7 @@ export function PointsSection({ onOpenUpdatePoints }: PointsSectionProps) {
             </div>
           ))}
         </div>
+        <HistoryPagination page={historyPage} pageCount={historyPageCount} onPageChange={setHistoryPage} />
       </div>
     </div>
   );

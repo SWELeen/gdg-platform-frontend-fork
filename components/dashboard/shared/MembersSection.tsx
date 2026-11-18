@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useLeaderDashboard } from "./LeaderDashboardContext";
 import type { CommitteeMember } from "./types";
 import { leaderCommitteeConfig } from "./committee-config";
-import { ALL, CommitteeBadges, CommitteeFilterSelect, RoleFilterSelect, matchesCommittee, matchesRole, pointsFor } from "./ClubFilters";
+import { ALL, CommitteeBadges, CommitteeFilterSelect, RoleFilterSelect, matchesCommittee, matchesRole, pointsFor, useCommitteeName } from "./ClubFilters";
 import {
   ShieldAlert,
   ShieldCheck,
@@ -65,13 +65,26 @@ export function MembersSection({
   onOpenUpdatePoints,
 }: MembersSectionProps) {
   const t = useTranslations("dashboard.leader");
+  const tRoles = useTranslations("dashboard.leader.groupFilters");
   const { members, canManageMembers, canAddMembers, canManagePoints, currentMember, committeeName, committee, clubLeadership, developerCommitteesLeader } = useLeaderDashboard();
+  const getCommitteeLabel = useCommitteeName();
   const showTemporaryAccess = !clubLeadership && leaderCommitteeConfig[committee].canGrantTemporaryAccess;
   const [searchTerm, setSearchTerm] = useState("");
   const [committeeFilter, setCommitteeFilter] = useState(ALL);
   const [roleFilter, setRoleFilter] = useState(ALL);
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const [page, setPage] = useState(1);
+  const roleLabel = (role: string) => {
+    const labels: Record<string, string> = {
+      Leader: tRoles("roleLeader"),
+      "Co-Leader": tRoles("roleCoLeader"),
+      DEVELOPER_COMMITTEES_LEADER: tRoles("roleDeveloperLeader"),
+      ADVISOR: tRoles("roleAdvisor"),
+      GROUP_LEADER: tRoles("roleGroupLeadership"),
+      GROUP_CO_LEADER: tRoles("roleGroupLeadership"),
+    };
+    return labels[role] ?? role;
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(Date.now()), 10000);
@@ -330,8 +343,23 @@ export function MembersSection({
                     </td>}
 
                     {/* POINTS */}
-                    <td className="px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
-                      {member.pointsVisible === false || (committeeFilter !== ALL && member.committees?.find((item) => item.code === committeeFilter)?.pointsVisible === false)
+                    <td className={`px-4 py-3.5 font-bold text-blue-600 dark:text-blue-400 ${clubLeadership ? "min-w-52" : "whitespace-nowrap"}`}>
+                      {member.pointsVisible === false ? "—" : clubLeadership ? (
+                        <div className="flex flex-col items-start gap-1.5">
+                          {(member.committees ?? [])
+                            .filter((item) => committeeFilter === ALL || item.code === committeeFilter)
+                            .map((item) => (
+                              <span key={item.code} className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-semibold leading-relaxed text-blue-700 dark:text-blue-300">
+                                {getCommitteeLabel(item.code, item.name)} · {roleLabel(item.role)}: {item.pointsVisible === false ? "—" : t("members.pointsUnit", { count: item.points.toLocaleString() })}
+                              </span>
+                            ))}
+                          {globalDeveloperLeader && (committeeFilter === ALL || committeeFilter === "DEV") && (
+                            <span className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-semibold leading-relaxed text-blue-700 dark:text-blue-300">
+                              {tRoles("roleDeveloperLeader")}: {member.globalPointsVisible === false ? "—" : t("members.pointsUnit", { count: (member.globalPoints ?? 0).toLocaleString() })}
+                            </span>
+                          )}
+                        </div>
+                      ) : (committeeFilter !== ALL && member.committees?.find((item) => item.code === committeeFilter)?.pointsVisible === false)
                         ? "—"
                         : t("members.pointsUnit", { count: pointsFor(member, committeeFilter).toLocaleString() })}
                     </td>
@@ -372,7 +400,7 @@ export function MembersSection({
                         )}
 
                         {/* Remove Member */}
-                        {clubLeadership && canManageMembers && onOpenRemoveMember && (
+                        {clubLeadership && canManageMembers && onOpenRemoveMember && member.id !== currentMember?.id && (
                           <button
                             type="button"
                             title={t("members.remove")}

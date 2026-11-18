@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import AuthCard from "@/app/components/auth/AuthCard";
+import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel";
+import AuthFormPanel from "@/app/components/auth/AuthFormPanel";
 import { apiRequest, API_ENABLED } from "@/lib/api/client";
 import { storeAuthSession } from "@/lib/auth/session";
 import { dashboardPathFor, type AuthenticatedIdentity } from "@/lib/auth/dashboard-route";
@@ -65,17 +67,22 @@ export default function GoogleAuthCallbackPage() {
   }, [router, t]);
 
   return (
-    <AuthCard size="md" compact title={error ? t("googleErrorTitle") : t("googleLoading")}>
-      {error ? (
-        <div className="mt-4 w-full text-center">
-          <p role="alert" className="text-sm text-gdg-red">{error}</p>
-          <button type="button" onClick={() => router.replace("/login")} className="mt-5 text-sm font-medium text-blue hover:underline">
-            {t("googleBackToLogin")}
-          </button>
-        </div>
-      ) : (
-        <p className="mt-4 text-sm text-foreground/65">{t("googleLoading")}</p>
-      )}
-    </AuthCard>
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
+      <AuthVisualPanel side="start" animateOnMount />
+      <AuthFormPanel>
+        <AuthCard size="md" compact title={error ? t("googleErrorTitle") : t("googleLoading")}>
+          {error ? (
+            <div className="mt-4 w-full text-center">
+              <p role="alert" className="text-sm text-gdg-red">{error}</p>
+              <button type="button" onClick={() => router.replace("/login")} className="mt-5 text-sm font-medium text-blue hover:underline">
+                {t("googleBackToLogin")}
+              </button>
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-foreground/65">{t("googleLoading")}</p>
+          )}
+        </AuthCard>
+      </AuthFormPanel>
+    </main>
   );
 }
