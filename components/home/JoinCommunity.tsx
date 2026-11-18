@@ -16,7 +16,7 @@ export default function JoinCommunity() {
         className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-[60vw] items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
         style={{
           background:
-            "linear-gradient(to right, var(--join-blue), var(--join-orange), var(--join-green))",
+            "linear-gradient(100deg, var(--gdg-blue) 0%, color-mix(in srgb, var(--gdg-blue) 40%, var(--gdg-red)) 28%, var(--gdg-red) 52%, var(--gdg-yellow) 78%, var(--gdg-green) 100%)",
         }}
       >
         <div className="relative z-10 max-w-[min(52rem,74%)] max-lg:max-w-full">
