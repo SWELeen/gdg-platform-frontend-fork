@@ -6,10 +6,16 @@ export interface AnnouncementImageCrop {
   x: number;
   y: number;
   zoom: number;
+  aspect: number;
 }
 
-const ASPECT = 16 / 9;
-const DEFAULT_CROP: AnnouncementImageCrop = { x: 0.5, y: 0.5, zoom: 1 };
+export const ANNOUNCEMENT_CROP_ASPECTS = [3 / 4, 1, 4 / 3, 16 / 10, 16 / 9, 21 / 9] as const;
+const DEFAULT_CROP: AnnouncementImageCrop = { x: 0.5, y: 0.5, zoom: 1, aspect: 16 / 9 };
+
+function getCropBounds(width: number, height: number, aspect: number, zoom: number) {
+  const cropWidth = Math.min(width, height * aspect) / zoom;
+  return { cropWidth, cropHeight: cropWidth / aspect };
+}
 
 export function AnnouncementImageCropper({
   src,
@@ -18,6 +24,7 @@ export function AnnouncementImageCropper({
   onChange,
   instruction,
   zoomLabel,
+  aspectLabel,
   interactive = true,
   showControls = true,
 }: {
@@ -27,6 +34,7 @@ export function AnnouncementImageCropper({
   onChange: (crop: AnnouncementImageCrop) => void;
   instruction: string;
   zoomLabel: string;
+  aspectLabel: string;
   interactive?: boolean;
   showControls?: boolean;
 }) {
@@ -45,10 +53,9 @@ export function AnnouncementImageCropper({
     return () => observer.disconnect();
   }, []);
 
-  const baseCropWidth = image.width && image.height ? Math.min(image.width, image.height * ASPECT) : 0;
-  const baseCropHeight = baseCropWidth ? baseCropWidth / ASPECT : 0;
-  const cropWidth = baseCropWidth / crop.zoom;
-  const cropHeight = baseCropHeight / crop.zoom;
+  const { cropWidth, cropHeight } = image.width && image.height
+    ? getCropBounds(image.width, image.height, crop.aspect, crop.zoom)
+    : { cropWidth: 0, cropHeight: 0 };
   const renderedWidth = cropWidth && frame.width ? (image.width / cropWidth) * frame.width : frame.width;
   const renderedHeight = cropHeight && frame.height ? (image.height / cropHeight) * frame.height : frame.height;
   const imageStyle = image.width && image.height ? {
@@ -61,11 +68,21 @@ export function AnnouncementImageCropper({
   function changeZoom(zoom: number) {
     if (!image.width || !image.height) return;
     const nextZoom = Math.max(1, Math.min(3, zoom));
-    const width = Math.min(image.width, image.height * ASPECT) / nextZoom;
-    const height = width / ASPECT;
+    const { cropWidth: width, cropHeight: height } = getCropBounds(image.width, image.height, crop.aspect, nextZoom);
     const x = width / image.width / 2;
     const y = height / image.height / 2;
-    onChange({ x: Math.max(x, Math.min(1 - x, crop.x)), y: Math.max(y, Math.min(1 - y, crop.y)), zoom: nextZoom });
+    onChange({ x: Math.max(x, Math.min(1 - x, crop.x)), y: Math.max(y, Math.min(1 - y, crop.y)), zoom: nextZoom, aspect: crop.aspect });
+  }
+
+  function changeAspect(aspect: number) {
+    if (!image.width || !image.height) {
+      onChange({ ...crop, aspect });
+      return;
+    }
+    const { cropWidth, cropHeight } = getCropBounds(image.width, image.height, aspect, crop.zoom);
+    const x = cropWidth / image.width / 2;
+    const y = cropHeight / image.height / 2;
+    onChange({ ...crop, aspect, x: Math.max(x, Math.min(1 - x, crop.x)), y: Math.max(y, Math.min(1 - y, crop.y)) });
   }
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
@@ -91,7 +108,8 @@ export function AnnouncementImageCropper({
     <div className="grid gap-3">
       <div
         ref={frameRef}
-        className={`relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-black ${interactive ? "touch-none cursor-grab active:cursor-grabbing" : ""}`}
+        className={`relative w-full overflow-hidden rounded-xl border border-border bg-black ${interactive ? "touch-none cursor-grab active:cursor-grabbing" : ""}`}
+        style={{ aspectRatio: crop.aspect }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={(event) => { if (dragRef.current?.pointerId === event.pointerId) dragRef.current = null; }}
@@ -107,9 +125,29 @@ export function AnnouncementImageCropper({
           className="pointer-events-none absolute max-w-none select-none"
           style={imageStyle}
         />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/50 shadow-[inset_0_0_0_999px_rgba(0,0,0,0.08)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/80 shadow-[inset_0_0_0_999px_rgba(0,0,0,0.07)]">
+          <span className="absolute inset-y-0 left-1/3 border-s border-white/35" />
+          <span className="absolute inset-y-0 left-2/3 border-s border-white/35" />
+          <span className="absolute inset-x-0 top-1/3 border-t border-white/35" />
+          <span className="absolute inset-x-0 top-2/3 border-t border-white/35" />
+          <span className="absolute -left-0.5 -top-0.5 size-4 border-l-2 border-t-2 border-white" />
+          <span className="absolute -right-0.5 -top-0.5 size-4 border-r-2 border-t-2 border-white" />
+          <span className="absolute -bottom-0.5 -left-0.5 size-4 border-b-2 border-l-2 border-white" />
+          <span className="absolute -bottom-0.5 -right-0.5 size-4 border-b-2 border-r-2 border-white" />
+        </div>
       </div>
       {showControls && <>
+        <fieldset className="grid gap-1.5 text-xs font-medium text-foreground">
+          <legend>{aspectLabel}</legend>
+          <input type="range" min="0.75" max={21 / 9} step="0.01" value={crop.aspect} onChange={(event) => changeAspect(Number(event.target.value))} className="w-full accent-blue-600" aria-label={`${aspectLabel}: ${crop.aspect.toFixed(2)}:1`} />
+          <div className="flex flex-wrap gap-2 pt-1">
+            {ANNOUNCEMENT_CROP_ASPECTS.map((aspect) => {
+              const label = aspect === 3 / 4 ? "3:4" : aspect === 1 ? "1:1" : aspect === 4 / 3 ? "4:3" : aspect === 16 / 10 ? "16:10" : aspect === 16 / 9 ? "16:9" : "21:9";
+              const selected = Math.abs(crop.aspect - aspect) < 0.005;
+              return <button key={label} type="button" aria-pressed={selected} onClick={() => changeAspect(aspect)} className={`rounded-lg border px-3 py-1.5 ${selected ? "border-blue-500 bg-blue-500/10 text-blue-700 dark:text-blue-300" : "border-border text-muted hover:bg-surface-muted"}`}>{label}</button>;
+            })}
+          </div>
+        </fieldset>
         <label className="grid gap-1.5 text-xs font-medium text-foreground">
           <span>{zoomLabel}</span>
           <input type="range" min="1" max="3" step="0.01" value={crop.zoom} onChange={(event) => changeZoom(Number(event.target.value))} className="w-full accent-blue-600" />
@@ -128,14 +166,12 @@ export async function createCroppedAnnouncementImage(file: File, crop: Announcem
     await image.decode();
     const sourceWidth = image.naturalWidth;
     const sourceHeight = image.naturalHeight;
-    const widthAtZoomOne = Math.min(sourceWidth, sourceHeight * ASPECT);
-    const sourceWidthCrop = widthAtZoomOne / crop.zoom;
-    const sourceHeightCrop = sourceWidthCrop / ASPECT;
+    const { cropWidth: sourceWidthCrop, cropHeight: sourceHeightCrop } = getCropBounds(sourceWidth, sourceHeight, crop.aspect, crop.zoom);
     const sourceX = Math.max(0, Math.min(sourceWidth - sourceWidthCrop, crop.x * sourceWidth - sourceWidthCrop / 2));
     const sourceY = Math.max(0, Math.min(sourceHeight - sourceHeightCrop, crop.y * sourceHeight - sourceHeightCrop / 2));
     const canvas = document.createElement("canvas");
     canvas.width = 1600;
-    canvas.height = 900;
+    canvas.height = Math.max(1, Math.round(canvas.width / crop.aspect));
     const context = canvas.getContext("2d");
     if (!context) throw new Error("Image processing is unavailable in this browser.");
     context.fillStyle = "#fff";

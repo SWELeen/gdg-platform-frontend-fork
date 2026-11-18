@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, Eye, ImagePlus, Megaphone, Pencil, Send, Trash2, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { API_ENABLED } from "@/lib/api/client";
 import { deleteAnnouncement, fetchManagedAnnouncements, publishAnnouncement, updateAnnouncement, uploadAnnouncementImage, type CreateAnnouncementInput } from "@/lib/announcements/api";
 import { announcementCategories, type Announcement, type AnnouncementCategory } from "@/lib/announcements/types";
-import { useTextDirection } from "@/i18n/useTextDirection";
-import { CategoryBadge } from "@/components/announcements/CategoryBadge";
+import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
+import { PinnedAnnouncementCard } from "@/components/announcements/PinnedAnnouncementCard";
 import { ConfirmModal } from "@/components/dashboard/shared/ConfirmModal";
 import { AnnouncementImageCropper, createCroppedAnnouncementImage, DEFAULT_CROP, type AnnouncementImageCrop } from "@/components/dashboard/shared/AnnouncementImageCropper";
 
@@ -36,12 +36,14 @@ export function AnnouncementManagementPanel() {
   const tValidation = useTranslations("dashboard.validation");
   const tCategories = useTranslations("announcements.categories");
   const tAnnouncementMeta = useTranslations("announcements.details.info");
-  const dir = useTextDirection();
   const [items, setItems] = useState<Announcement[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageCrop, setImageCrop] = useState<AnnouncementImageCrop>(DEFAULT_CROP);
+  const [croppedPreviewUrl, setCroppedPreviewUrl] = useState<string | null>(null);
+  const [croppedPreviewSource, setCroppedPreviewSource] = useState<string | null>(null);
+  const croppedPreviewUrlRef = useRef<string | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -55,6 +57,33 @@ export function AnnouncementManagementPanel() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"title" | "excerpt" | "body" | "actionLabel" | "actionHref", string>>>({});
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (!imageFile || !imagePreview) {
+      if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+      croppedPreviewUrlRef.current = null;
+      return;
+    }
+    let active = true;
+    const timer = setTimeout(() => {
+      void createCroppedAnnouncementImage(imageFile, imageCrop).then((file) => {
+        const url = URL.createObjectURL(file);
+        if (!active) {
+          URL.revokeObjectURL(url);
+          return;
+        }
+        if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+        croppedPreviewUrlRef.current = url;
+        setCroppedPreviewUrl(url);
+        setCroppedPreviewSource(imagePreview);
+      }).catch(() => undefined);
+    }, 180);
+    return () => { active = false; clearTimeout(timer); };
+  }, [imageFile, imagePreview, imageCrop]);
+
+  useEffect(() => () => {
+    if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+  }, []);
 
   useEffect(() => {
     if (!API_ENABLED) return;
@@ -258,6 +287,22 @@ export function AnnouncementManagementPanel() {
     setSuccess(t("deleted"));
   }
 
+  const previewImageUrl = imagePreview
+    ? croppedPreviewSource === imagePreview ? croppedPreviewUrl ?? imagePreview : imagePreview
+    : currentImageUrl;
+  const previewAnnouncement: Announcement = {
+    id: editingId ?? "announcement-preview",
+    slug: "announcement-preview",
+    title: form.title.trim() || t("preview.titlePlaceholder"),
+    excerpt: form.excerpt.trim() || t("preview.excerptPlaceholder"),
+    category: form.category,
+    media: previewImageUrl
+      ? { type: "image", src: previewImageUrl, alt: t("imagePreviewAlt") }
+      : { type: "artwork", artwork: "navy" },
+    publishedAt: new Date().toISOString().slice(0, 10),
+    pinned: form.pinned,
+  };
+
   return (
     <>
     <section aria-labelledby="announcements-management-heading" className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-7">
@@ -317,6 +362,7 @@ export function AnnouncementManagementPanel() {
                     onChange={setImageCrop}
                     instruction={t("imageCropInstruction")}
                     zoomLabel={t("imageCropZoom")}
+                    aspectLabel={t("imageCropAspect")}
                   />
                   <div className="flex flex-wrap items-center gap-2">
                     <label htmlFor="announcement-image" className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-2 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5">{t("replaceImage")}</label>
@@ -370,36 +416,20 @@ export function AnnouncementManagementPanel() {
             </section>
 
             {isPreviewing && (
-              <section aria-label={t("preview.title")} className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-                <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-muted/50 px-4 py-3">
+              <section aria-label={t("preview.title")} className="grid gap-4 rounded-2xl border border-border bg-background p-4 shadow-sm sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <h3 className="font-bold text-foreground">{t("preview.title")}</h3>
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">{t("preview.unpublished")}</span>
                 </div>
-                {(imagePreview || currentImageUrl) ? (
-                  <div className={`relative overflow-hidden bg-surface-muted ${imagePreview ? "" : "h-52 sm:h-64"}`}>
-                    {imagePreview ? (
-                      <AnnouncementImageCropper
-                        src={imagePreview}
-                        alt={t("imagePreviewAlt")}
-                        crop={imageCrop}
-                        onChange={() => undefined}
-                        instruction=""
-                        zoomLabel=""
-                        interactive={false}
-                        showControls={false}
-                      />
-                    ) : (
-                      // eslint-disable-next-line @next/next/no-img-element -- existing announcement image preview.
-                      <img src={currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="size-full object-cover" />
-                    )}
+                <div className="grid items-start gap-5 xl:grid-cols-2">
+                  <div className="grid content-start gap-2">
+                    <h4 className="text-sm font-semibold text-foreground">{t("preview.homePage")}</h4>
+                    <div className="pointer-events-none"><AnnouncementCard announcement={previewAnnouncement} /></div>
                   </div>
-                ) : <div aria-hidden="true" className="h-3 bg-[image:var(--google-gradient)]" />}
-                <div className="grid gap-3 p-5 sm:p-7">
-                  <CategoryBadge category={form.category} />
-                  <h4 className="text-2xl font-bold text-foreground">{form.title.trim() || t("preview.titlePlaceholder")}</h4>
-                  <p className="text-muted">{form.excerpt.trim() || t("preview.excerptPlaceholder")}</p>
-                  {form.body.trim().split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index} className="whitespace-pre-wrap leading-7 text-foreground/85">{paragraph}</p>)}
-                  {form.actionLabel.trim() && form.actionHref.trim() && <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 font-semibold text-white">{form.actionLabel}<ArrowUpRight aria-hidden="true" className={`size-4 ${dir === "rtl" ? "-scale-x-100" : ""}`} /></span>}
+                  <div className="grid content-start gap-2">
+                    <h4 className="text-sm font-semibold text-foreground">{t("preview.announcementsPage")}</h4>
+                    <div className="pointer-events-none">{form.pinned ? <PinnedAnnouncementCard announcement={previewAnnouncement} /> : <AnnouncementCard announcement={previewAnnouncement} />}</div>
+                  </div>
                 </div>
               </section>
             )}
