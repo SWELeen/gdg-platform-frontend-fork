@@ -176,14 +176,6 @@
     "leadLabel": "Committee Lead",
     "coLeaderLabel": "Committee Co-Leader",
     "items": {
-      "advisors": {
-        "name": "Advisors",
-        "description": "Our advisors support the group’s goals and efforts by sharing guidance, experience, and knowledge to help us work more effectively.",
-        "leadName": "Fahad Aljudaibi",
-        "coLeaderName": "Ahmed Bawazeer",
-        "leadLabel": "Advisor",
-        "coLeaderLabel": "Advisor"
-      },
       "content-writing": {
         "name": "Content Writing",
         "description": "Creates, writes, and edits the group’s content, including technical, educational, and informational materials, ensuring accuracy, quality, and alignment with the group’s identity and goals.",
