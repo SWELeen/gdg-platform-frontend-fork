@@ -1277,7 +1277,12 @@
         "replace": "Replace image",
         "remove": "Remove image",
         "currentImage": "Current event image",
-        "previewAlt": "Selected event image"
+        "previewAlt": "Selected event image",
+        "cropTitle": "Adjust event image",
+        "cropInstruction": "Drag the image to position it, then choose a crop shape and zoom level.",
+        "cropZoom": "Zoom",
+        "cropAspect": "Crop frame shape",
+        "finalPreview": "Final image preview"
       },
       "registration": {
         "description": "These profile details, including membership status, are shown read-only to the attendee and PR team. Add any event-specific questions below.",

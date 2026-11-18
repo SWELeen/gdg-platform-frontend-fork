@@ -22,6 +22,7 @@ import type { EventSchedule } from "@/lib/committee-dashboard/api";
 import type { CommitteeEventDetails } from "@/lib/committee-dashboard/api";
 import { EventPreviewModal } from "./EventPreviewModal";
 import { EventPublishedModal } from "./EventPublishedModal";
+import { AnnouncementImageCropper, createCroppedAnnouncementImage, DEFAULT_CROP, type AnnouncementImageCrop } from "../shared/AnnouncementImageCropper";
 import {
   choiceQuestionTypes,
   questionTypeKeys,
@@ -276,6 +277,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
 
   const [values, setValues] = useState<FormValues>(() => eventFormValues(initialDetails));
   const [image, setImage] = useState<{ file: File; url: string } | null>(null);
+  const [imageCrop, setImageCrop] = useState<AnnouncementImageCrop>(DEFAULT_CROP);
+  const [croppedPreviewUrl, setCroppedPreviewUrl] = useState<string | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(initialDetails?.imageUrl ?? null);
   const [isDraggingImage, setIsDraggingImage] = useState(false);
   const [questions, setQuestions] = useState<DraftQuestion[]>(() => eventQuestions(initialDetails));
@@ -301,12 +304,38 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
   // The selected image's blob URL is revoked when replaced or when the form unmounts,
   // except after publishing, when the stored event keeps using it for this session.
   const imageUrlRef = useRef<string | null>(null);
+  const croppedPreviewUrlRef = useRef<string | null>(null);
   useEffect(() => {
     return () => {
       const url = imageUrlRef.current;
       if (url) URL.revokeObjectURL(url);
+      if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (!image) {
+      if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+      croppedPreviewUrlRef.current = null;
+      return;
+    }
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      void createCroppedAnnouncementImage(image.file, imageCrop).then((croppedFile) => {
+        if (cancelled) return;
+        const nextUrl = URL.createObjectURL(croppedFile);
+        if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+        croppedPreviewUrlRef.current = nextUrl;
+        setCroppedPreviewUrl(nextUrl);
+      }).catch(() => {
+        if (!cancelled) setCroppedPreviewUrl(image.url);
+      });
+    }, 120);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [image, imageCrop]);
 
   const isDirty =
     questions.length > 0 ||
@@ -416,6 +445,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
     imageUrlRef.current = url;
     const nextImage = { file, url };
     setImage(nextImage);
+    setCroppedPreviewUrl(null);
+    setImageCrop(DEFAULT_CROP);
     setErrors((current) => (submitAttempted ? validate(values, nextImage) : { ...current, image: undefined }));
   };
 
@@ -423,6 +454,10 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
     if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
     imageUrlRef.current = null;
     setImage(null);
+    if (croppedPreviewUrlRef.current) URL.revokeObjectURL(croppedPreviewUrlRef.current);
+    croppedPreviewUrlRef.current = null;
+    setCroppedPreviewUrl(null);
+    setImageCrop(DEFAULT_CROP);
     setExistingImageUrl(null);
     if (submitAttempted) setErrors(validate(values, null));
   };
@@ -515,7 +550,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
     setSaving(true);
     setSaveError("");
     try {
-    const uploadedImageUrl = image ? await onUploadImage?.(image.file) : null;
+    const croppedImage = image ? await createCroppedAnnouncementImage(image.file, imageCrop) : null;
+    const uploadedImageUrl = croppedImage ? await onUploadImage?.(croppedImage) : null;
     const eventData: CreateEventInput = {
       title: values.title.trim(),
       description: values.description.trim(),
@@ -528,7 +564,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       capacity: Number(values.capacity),
       registrationDeadline: formatEventDate(values.registrationDeadline),
       requirements: values.requirements.trim(),
-      imageUrl: uploadedImageUrl ?? (image ? image.url : existingImageUrl ?? undefined),
+      imageUrl: uploadedImageUrl ?? (image ? (croppedPreviewUrl ?? image.url) : existingImageUrl ?? undefined),
       registered: 0,
       status: isDraft ? "Draft" : "Upcoming",
       isDraft,
@@ -565,7 +601,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
   const describedBy = (name: FieldName) => (errors[name] ? `${fieldId(name)}-error` : undefined);
 
   const errorCount = fieldOrder.filter((name) => errors[name]).length;
-  const displayedImageUrl = image?.url ?? existingImageUrl;
+  const displayedImageUrl = image ? (croppedPreviewUrl ?? image.url) : existingImageUrl;
 
   return (
     <div
@@ -823,14 +859,14 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
               </span>
 
               {displayedImageUrl ? (
-                <div className="flex flex-col gap-3 rounded-2xl border border-border p-3 sm:flex-row sm:items-center">
+                <div className="flex flex-col gap-3 rounded-2xl border border-border p-3">
                   {/* eslint-disable-next-line @next/next/no-img-element -- local blob: URL of the selected file; next/image cannot optimize it. */}
                   <img
                     src={displayedImageUrl}
                     alt={t("upload.previewAlt")}
-                    className="h-32 w-full rounded-xl object-cover sm:h-24 sm:w-40"
+                    className="h-40 w-full rounded-xl object-cover sm:h-56"
                   />
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-foreground">{image?.file.name ?? t("upload.currentImage")}</p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <label
@@ -848,6 +884,23 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                       </button>
                     </div>
                   </div>
+                  {image && <div className="grid gap-3 border-t border-border pt-3">
+                    <p className="text-sm font-semibold text-foreground">{t("upload.cropTitle")}</p>
+                    <AnnouncementImageCropper
+                      src={image.url}
+                      alt={t("upload.previewAlt")}
+                      crop={imageCrop}
+                      onChange={setImageCrop}
+                      instruction={t("upload.cropInstruction")}
+                      zoomLabel={t("upload.cropZoom")}
+                      aspectLabel={t("upload.cropAspect")}
+                    />
+                    <p className="text-xs text-muted">{t("upload.finalPreview")}</p>
+                    <div className="overflow-hidden rounded-xl border border-border">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- local crop preview URL. */}
+                      <img src={croppedPreviewUrl ?? image.url} alt={t("upload.previewAlt")} className="h-44 w-full object-cover sm:h-56" />
+                    </div>
+                  </div>}
                 </div>
               ) : (
                 <label
