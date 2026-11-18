@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import CommitteeCard, { type Committee } from "./CommitteeCard";
 import CommitteePortrait from "./CommitteePortrait";
 import MobileCommitteeGrid from "./MobileCommitteeGrid";
-import { committees } from "@/data/home";
+import { committees, teamMembers } from "@/data/home";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
 // Reference-specific motion: preserve the panel proportions and easing without
@@ -22,6 +22,15 @@ const mainItems = committees
   .map((committee) => ({ committee }));
 const developers: Committee | undefined = committees.find((item) => item.id === "developers");
 const developerItems: GalleryItem[] = developers?.subCommittees?.map((sub) => ({ committee: developers, subId: sub.id })) ?? [];
+const advisorMembers = teamMembers.filter((member) => member.type === "advisor");
+const advisorCommittee: Committee = {
+  id: "advisors",
+  name: "Advisors",
+  color: "var(--gdg-blue)",
+  description: "",
+  lead: { name: advisorMembers[0]?.name ?? "", image: advisorMembers[0]?.image ?? "/images/unknown.png", linkedin: advisorMembers[0]?.linkedin, x: advisorMembers[0]?.x },
+  coLeader: advisorMembers[1] ? { name: advisorMembers[1].name, image: advisorMembers[1].image, linkedin: advisorMembers[1].linkedin, x: advisorMembers[1].x } : undefined,
+};
 // Match the Developer portrait's settled width ratio: 3/4 of a collapsed
 // panel versus 3/16 of an expanded panel. Apply it uniformly to normalized pairs.
 const developerExpandedShare = 5 / (5 + 0.28 * (developerItems.length - 1));
@@ -246,6 +255,37 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
         )}
       </div>
     </div>
+  );
+}
+
+export function AdvisorsCommitteeGallery() {
+  const t = useTranslations("home.committees");
+  const leadershipT = useTranslations("home.leadership.advisors");
+  const dir = useTextDirection();
+  const reduceMotion = useReducedMotion();
+  const headingMotion = {
+    hidden: { opacity: 0, x: reduceMotion ? 0 : (dir === "rtl" ? 1 : -1) * 40 },
+    visible: { opacity: 1, x: 0, transition: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" as const } },
+  };
+
+  return (
+    <section id="advisors" className="bg-background px-6 py-8">
+      <motion.div
+        initial={reduceMotion ? false : "hidden"}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.12 } } }}
+        className="mx-auto w-full max-w-6xl pb-8 sm:pb-10 md:w-11/12"
+      >
+        <motion.h2 variants={headingMotion} className="text-start text-3xl leading-snug font-bold text-foreground">
+          {leadershipT("eyebrow")} {" "}
+          <span className="bg-(image:--google-gradient) bg-clip-text pe-1 italic text-transparent rtl:not-italic">{leadershipT("title")}</span>
+        </motion.h2>
+      </motion.div>
+      <div className="mx-auto w-full max-w-6xl md:w-11/12">
+        <CommitteeGallery items={[{ committee: advisorCommittee }]} label={t("advisorsLabel")} id="advisors-gallery" />
+      </div>
+    </section>
   );
 }
 
