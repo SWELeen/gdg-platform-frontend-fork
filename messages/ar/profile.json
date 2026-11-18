@@ -11,16 +11,46 @@
     "next": "بطاقة العضوية التالية",
     "committeeRoles": {
       "member": "عضو",
-      "leader": "قائد",
-      "coLeader": "كوليدر"
+      "leader": {
+        "female": "قائدة",
+        "male": "قائد"
+      },
+      "coLeader": {
+        "female": {
+          "female": "نائبة القائدة",
+          "male": "نائبة القائد"
+        },
+        "male": {
+          "female": "نائب القائدة",
+          "male": "نائب القائد"
+        }
+      }
     },
     "globalRoles": {
-      "groupLeader": "قائد المجموعة",
-      "groupCoLeader": "نائبة قائد المجموعة",
+      "groupLeader": {
+        "female": "قائدة المجموعة",
+        "male": "قائد المجموعة"
+      },
+      "groupCoLeader": {
+        "female": {
+          "female": "نائبة قائدة المجموعة",
+          "male": "نائبة قائد المجموعة"
+        },
+        "male": {
+          "female": "نائب قائدة المجموعة",
+          "male": "نائب قائد المجموعة"
+        }
+      },
       "groupLeadership": "قيادة المجموعة",
-      "developerCommitteesLeader": "قائد لجان المطورين",
+      "developerCommitteesLeader": {
+        "female": "قائدة لجان المطورين",
+        "male": "قائد لجان المطورين"
+      },
       "developerCommittees": "لجنة المطورين",
-      "advisor": "مستشار"
+      "advisor": {
+        "female": "مستشارة",
+        "male": "مستشار"
+      }
     }
   },
   "bio": {

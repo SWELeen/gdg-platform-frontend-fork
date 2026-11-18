@@ -14,6 +14,8 @@ export type BadgeAssets = {
   font: string;
   pattern: HTMLImageElement | null;
   photo: HTMLImageElement | null;
+  frontLogo: HTMLImageElement | null;
+  backLogo: HTMLImageElement | null;
 };
 
 const loadImage = (src: string) =>
@@ -26,12 +28,14 @@ const loadImage = (src: string) =>
 
 /** Waits for the font and images a badge needs, so the first paint is the final one. */
 export async function loadBadgeAssets(data: BadgeData, theme: BadgeTheme, font: string): Promise<BadgeAssets> {
-  const [pattern, photo] = await Promise.all([
+  const [pattern, photo, frontLogo, backLogo] = await Promise.all([
     theme.patternUrl ? loadImage(theme.patternUrl) : null,
     data.photoUrl ? loadImage(data.photoUrl) : null,
+    loadImage("/images/gdg-white-Logo.png"),
+    loadImage("/gdg-logo-motion.png"),
     Promise.all([400, 600, 700].map((w) => document.fonts.load(`${w} 12px ${font}`))).catch(() => {}),
   ]);
-  return { font, pattern, photo };
+  return { font, pattern, photo, frontLogo, backLogo };
 }
 
 // ─── Helpers ───────────────────────────────────────────────
@@ -42,9 +46,6 @@ const PERSON: Record<Gender, string> = {
   female: "M50 16C31 16 22 30 22 48C22 58 24 66 21 75C28 79 36 80 42 78L42 84C24 87 10 96 8 125L92 125C90 96 76 87 58 84L58 78C64 80 72 79 79 75C76 66 78 58 78 48C78 30 69 16 50 16Z",
   male: "M47 15C55 12 66 16 69 26C71 32 70 38 69 44C72 44 73 48 72 52C71 56 69 58 67 57C65 64 61 69 58 71L58 79C63 82 72 85 82 88C89 91 92 97 92 104L92 125L8 125L8 104C8 97 11 91 18 88C28 85 37 82 42 79L42 71C39 69 35 64 33 57C31 58 29 56 28 52C27 48 28 44 31 44C30 37 30 30 33 25C36 19 41 16 47 15Z",
 };
-// the chapter mark: the GDG brackets
-const GDG_MARK = "M14 3 4 10l10 7M20 3l10 7-10 7";
-
 function begin(cv: HTMLCanvasElement) {
   const ctx = cv.getContext("2d")!;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -112,12 +113,13 @@ function balance(ctx: CanvasRenderingContext2D, text: string, max: number) {
   return best;
 }
 
-function strokeMark(ctx: CanvasRenderingContext2D, ink: string) {
-  ctx.strokeStyle = ink;
-  ctx.lineWidth = 5.5;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.stroke(new Path2D(GDG_MARK));
+function drawContain(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, x: number, y: number, w: number, h: number) {
+  if (!img) return;
+  const scale = Math.min(w / img.width, h / img.height);
+  const width = img.width * scale;
+  const height = img.height * scale;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, x + (w - width) / 2, y + (h - height) / 2, width, height);
 }
 
 // ─── Faces ─────────────────────────────────────────────────
@@ -171,41 +173,15 @@ export function paintFront(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme
   ctx.font = `700 21px ${font}`;
   ctx.fillText(data.name, CARD_W / 2, 330, CARD_W - 32);
 
-  // Preserve the GDG chapter mark and school details at the bottom of the card.
-  ctx.font = `400 10.5px ${font}`;
-  const w1 = ctx.measureText(data.chapter).width;
-  ctx.font = `400 8.5px ${font}`;
-  const w2 = ctx.measureText(data.university).width;
-  const x0 = (CARD_W - (34 + 8 + Math.max(w1, w2))) / 2;
-  ctx.save();
-  ctx.translate(x0, 391);
-  strokeMark(ctx, t.ink);
-  ctx.restore();
-  ctx.textAlign = "left";
-  ctx.font = `400 10.5px ${font}`;
-  ctx.fillText(data.chapter, x0 + 42, 400);
-  ctx.font = `400 8.5px ${font}`;
-  ctx.fillText(data.university, x0 + 42, 412);
+  // Use the fixed white GDG chapter logo at the bottom of the front face.
+  drawContain(ctx, assets.frontLogo, 48, 385, 204, 32);
   finish(ctx);
 }
 
-// the back: the committee's colour with the chapter mark
-export function paintBack(cv: HTMLCanvasElement, data: BadgeData, t: BadgeTheme, assets: BadgeAssets) {
-  const { font } = assets;
+// The back uses only the fixed GDG motion mark over the committee colour.
+export function paintBack(cv: HTMLCanvasElement, _data: BadgeData, t: BadgeTheme, assets: BadgeAssets) {
   const ctx = begin(cv);
   paintBackground(ctx, t);
-  ctx.save();
-  ctx.translate(CARD_W / 2 - 51, 160);
-  ctx.scale(3, 3);
-  strokeMark(ctx, t.ink);
-  ctx.restore();
-  ctx.textAlign = "center";
-  ctx.fillStyle = t.ink;
-  ctx.font = `600 15px ${font}`;
-  ctx.fillText(data.chapter, CARD_W / 2, 250, CARD_W - 40);
-  ctx.globalAlpha = 0.75;
-  ctx.font = `400 12px ${font}`;
-  ctx.fillText(data.university, CARD_W / 2, 270);
-  ctx.globalAlpha = 1;
+  drawContain(ctx, assets.backLogo, 67, 132, 166, 166);
   finish(ctx);
 }

@@ -11,16 +11,46 @@
     "next": "Next membership card",
     "committeeRoles": {
       "member": "Member",
-      "leader": "Leader",
-      "coLeader": "Co-Leader"
+      "leader": {
+        "female": "Leader",
+        "male": "Leader"
+      },
+      "coLeader": {
+        "female": {
+          "female": "Co-Leader",
+          "male": "Co-Leader"
+        },
+        "male": {
+          "female": "Co-Leader",
+          "male": "Co-Leader"
+        }
+      }
     },
     "globalRoles": {
-      "groupLeader": "Group Leader",
-      "groupCoLeader": "Group Co-Leader",
+      "groupLeader": {
+        "female": "Group Leader",
+        "male": "Group Leader"
+      },
+      "groupCoLeader": {
+        "female": {
+          "female": "Group Co-Leader",
+          "male": "Group Co-Leader"
+        },
+        "male": {
+          "female": "Group Co-Leader",
+          "male": "Group Co-Leader"
+        }
+      },
       "groupLeadership": "Group Leadership",
-      "developerCommitteesLeader": "Developer Committees Leader",
+      "developerCommitteesLeader": {
+        "female": "Developer Committees Leader",
+        "male": "Developer Committees Leader"
+      },
       "developerCommittees": "Developer Committees",
-      "advisor": "Advisor"
+      "advisor": {
+        "female": "Advisor",
+        "male": "Advisor"
+      }
     }
   },
   "bio": {
