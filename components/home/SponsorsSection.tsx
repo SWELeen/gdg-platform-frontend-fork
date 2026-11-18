@@ -29,7 +29,7 @@ export default function SponsorsSection() {
   const t = useTranslations("home.sponsors");
 
   return (
-    <section id="sponsors" className="bg-sponsor-gray px-6 py-[clamp(1.25rem,2vw,2rem)]">
+    <section id="sponsors" className="bg-sponsor-gray px-6 py-[clamp(3rem,6vw,6rem)]">
       <div className="w-full">
       <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("title")}{" "}
