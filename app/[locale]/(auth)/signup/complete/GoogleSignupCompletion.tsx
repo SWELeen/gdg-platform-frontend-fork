@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import AuthCard from "@/app/components/auth/AuthCard";
 import AuthErrorMessage from "@/app/components/auth/AuthErrorMessage";
+import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel";
+import AuthFormPanel from "@/app/components/auth/AuthFormPanel";
 import {
   branchOptions,
   collegeOptions,
@@ -297,22 +299,24 @@ export default function GoogleSignupCompletion() {
   );
 
   return (
-    <main className="flex w-full flex-1 justify-center bg-background px-4 py-8 md:items-center md:px-6">
-      <AuthCard
-        size="lg"
-        title={t("completeProfile.title")}
-        description={t("completeProfile.description")}
-        className="my-auto w-full max-w-3xl !px-5 !py-8 md:!max-w-3xl md:!px-8"
-      >
-        {!profile ? (
-          <div className="w-full">
-            <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
-            <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
-              {t("signIn")}
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={submit} className="mt-6 grid w-full grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
+      <AuthVisualPanel side="start" animateOnMount />
+      <AuthFormPanel scrollableOnDesktop>
+        <AuthCard
+          size="lg"
+          title={t("completeProfile.title")}
+          description={t("completeProfile.description")}
+          className="my-auto w-full max-w-3xl !px-5 !py-8 md:!max-w-3xl md:!px-8"
+        >
+          {!profile ? (
+            <div className="w-full">
+              <p className="text-sm text-foreground/70">{t("completeProfile.missingSession")}</p>
+              <button type="button" onClick={() => router.replace("/login")} className="mt-5 h-9 w-full rounded-md bg-blue text-sm font-medium text-white">
+                {t("signIn")}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="mt-6 grid w-full grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <AuthErrorMessage message={formError} className="col-span-full" />
             <fieldset className="col-span-full">
               <legend className="mb-3 text-sm font-medium">{t("membershipQuestion")} <span className="text-gdg-red">*</span></legend>
@@ -396,9 +400,10 @@ export default function GoogleSignupCompletion() {
             <button type="submit" disabled={isSubmitting} className="col-span-full mt-2 h-9 rounded-md bg-blue text-sm font-medium text-white transition hover:bg-blue/90 disabled:cursor-wait disabled:opacity-60">
               {isSubmitting ? t("creatingAccount") : t("completeProfile.submit")}
             </button>
-          </form>
-        )}
-      </AuthCard>
+            </form>
+          )}
+        </AuthCard>
+      </AuthFormPanel>
     </main>
   );
 }
