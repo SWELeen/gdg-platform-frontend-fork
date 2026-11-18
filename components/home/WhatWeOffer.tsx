@@ -108,12 +108,12 @@ export default function WhatWeOffer() {
           const isActive = activeStep === offer.number;
 
           return (
-            <div
+            <motion.div
               key={offer.number}
               onMouseEnter={() => setActiveStep(offer.number)}
-              className={`flex h-full min-w-0 cursor-pointer flex-col transition-[flex] duration-500 ease-out ${
-                isActive ? "flex-[2]" : "flex-1"
-              }`}
+              animate={{ flexGrow: isActive ? 2 : 1 }}
+              transition={{ duration: 0.65, ease: [0.22, 0.68, 0, 1] }}
+              className="flex h-full min-w-0 basis-0 cursor-pointer flex-col"
             >
               {/* Top Line */}
               <motion.div
@@ -121,8 +121,8 @@ export default function WhatWeOffer() {
                   width: isActive ? "100%" : "80px",
                 }}
                 transition={{
-                  duration: 0.35,
-                  ease: "easeOut",
+                  duration: 0.65,
+                  ease: [0.22, 0.68, 0, 1],
                 }}
                 className="h-[2px]"
                 style={{
@@ -159,13 +159,13 @@ export default function WhatWeOffer() {
                       }}
                       exit={{
                         opacity: 0,
-                        x: -15 * sign,
-                        transition: { duration: 0 },
+                        x: -6 * sign,
+                        transition: { duration: 0.2, ease: "easeOut" },
                       }}
                       transition={{
-                        duration: 0.35,
-                        delay: 0.5,
-                        ease: "easeOut",
+                        duration: 0.4,
+                        delay: 0.08,
+                        ease: [0.22, 0.68, 0, 1],
                       }}
                       className="min-w-0 overflow-hidden"
                     >
@@ -180,7 +180,7 @@ export default function WhatWeOffer() {
                   )}
                 </AnimatePresence>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
