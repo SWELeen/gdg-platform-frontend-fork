@@ -24,7 +24,10 @@ type MemberBadgeInput = {
 
 const isCommitteeCode = (code: string): code is CommitteeCode => Object.hasOwn(badgeCommitteeThemes, code);
 const rank = (position: string) => committeeRoles.indexOf(position as CommitteeRole);
-const allHomeCommittees: HomeCommittee[] = homeCommittees.flatMap((committee) => [committee, ...(committee.subCommittees ?? [])]);
+const allHomeCommittees: HomeCommittee[] = homeCommittees.flatMap((committee) => [
+  committee,
+  ...("subCommittees" in committee ? committee.subCommittees ?? [] : []),
+]);
 
 function getCommitteeLeaderGender(committeeId: string): Gender | undefined {
   const homeCommitteeId = committeeId === "pr" ? "public-relations"
