@@ -13,7 +13,7 @@ export default function JoinCommunity() {
   return (
     <section className="mt-[clamp(2.5rem,5vw,5rem)] py-[clamp(1rem,1.5vw,1.5rem)]">
       <div
-        className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-[60vw] items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
+        className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-[96vw] items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
         style={{
           background:
             "linear-gradient(100deg, var(--gdg-blue) 0%, color-mix(in srgb, var(--gdg-blue) 40%, var(--gdg-red)) 28%, var(--gdg-red) 52%, var(--gdg-yellow) 78%, var(--gdg-green) 100%)",
