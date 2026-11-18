@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { useRouter } from "@/i18n/navigation";
+import { announcementsContainer } from "@/components/announcements/styles";
 
 export default function JoinCommunity() {
   const t = useTranslations("home.joinCommunity");
@@ -11,9 +12,9 @@ export default function JoinCommunity() {
   const router = useRouter();
 
   return (
-    <section className="mt-[clamp(2.5rem,5vw,5rem)] py-[clamp(1rem,1.5vw,1.5rem)]">
+    <section className={`mt-[clamp(2.5rem,5vw,5rem)] py-[clamp(1rem,1.5vw,1.5rem)] ${announcementsContainer}`}>
       <div
-        className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-[60vw] items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
+        className="relative mx-auto flex min-h-[clamp(15rem,20vw,22rem)] w-full items-center overflow-visible rounded-2xl px-[clamp(1.125rem,3vw,3.5rem)] py-[clamp(1.5rem,2vw,2.5rem)]"
         style={{
           background:
             "linear-gradient(100deg, var(--gdg-blue) 0%, color-mix(in srgb, var(--gdg-blue) 40%, var(--gdg-red)) 28%, var(--gdg-red) 52%, var(--gdg-yellow) 78%, var(--gdg-green) 100%)",
