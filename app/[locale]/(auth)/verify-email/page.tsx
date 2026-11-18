@@ -5,6 +5,8 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import AuthCard from "@/app/components/auth/AuthCard";
+import AuthVisualPanel from "@/app/components/auth/AuthVisualPanel";
+import AuthFormPanel from "@/app/components/auth/AuthFormPanel";
 
 function VerificationResult() {
   const t = useTranslations("auth.verificationEmail");
@@ -17,4 +19,15 @@ function VerificationResult() {
     </div>
   </AuthCard>;
 }
-export default function VerifyEmailPage() { return <Suspense><VerificationResult /></Suspense>; }
+export default function VerifyEmailPage() {
+  return (
+    <main className="flex min-h-screen min-w-0 flex-col bg-background text-foreground lg:h-screen lg:min-h-0 lg:flex-row">
+      <AuthVisualPanel side="start" animateOnMount />
+      <AuthFormPanel>
+        <Suspense fallback={<AuthCard size="sm" title=""><div className="min-h-32" /></AuthCard>}>
+          <VerificationResult />
+        </Suspense>
+      </AuthFormPanel>
+    </main>
+  );
+}
