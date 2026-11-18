@@ -33,7 +33,7 @@ export function AnnouncementInfoCard({ announcement }: { announcement: Announcem
   const t = useTranslations("announcements.details");
   const tCategories = useTranslations("announcements.categories");
   const formatDate = useAnnouncementDate();
-  const { deadline, status, primaryAction, publishedBy } = announcement;
+  const { deadline, status, primaryAction } = announcement;
 
   return (
     <aside
@@ -54,7 +54,6 @@ export function AnnouncementInfoCard({ announcement }: { announcement: Announcem
           </time>
         </Row>
         <Row label={t("info.category")}>{tCategories(announcement.category)}</Row>
-        {publishedBy && <Row label={t("info.publishedBy")}>{publishedBy}</Row>}
         {deadline && (
           <Row label={deadline.label}>
             <time dateTime={deadline.date}>{formatDate(deadline.date, "numeric")}</time>
