@@ -10,6 +10,7 @@ import { announcementCategories, type Announcement, type AnnouncementCategory } 
 import { useTextDirection } from "@/i18n/useTextDirection";
 import { CategoryBadge } from "@/components/announcements/CategoryBadge";
 import { ConfirmModal } from "@/components/dashboard/shared/ConfirmModal";
+import { AnnouncementImageCropper, createCroppedAnnouncementImage, DEFAULT_CROP, type AnnouncementImageCrop } from "@/components/dashboard/shared/AnnouncementImageCropper";
 
 const emptyForm = {
   title: "",
@@ -34,12 +35,13 @@ export function AnnouncementManagementPanel() {
   const t = useTranslations("dashboard.announcements");
   const tValidation = useTranslations("dashboard.validation");
   const tCategories = useTranslations("announcements.categories");
-  const tAnnouncementMeta = useTranslations("announcements.card");
+  const tAnnouncementMeta = useTranslations("announcements.details.info");
   const dir = useTextDirection();
   const [items, setItems] = useState<Announcement[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageCrop, setImageCrop] = useState<AnnouncementImageCrop>(DEFAULT_CROP);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -96,7 +98,15 @@ export function AnnouncementManagementPanel() {
     setPublishing(true);
     let imageUrl = currentImageUrl;
     if (imageFile) {
-      const upload = await uploadAnnouncementImage(imageFile);
+      let croppedImage: File;
+      try {
+        croppedImage = await createCroppedAnnouncementImage(imageFile, imageCrop);
+      } catch {
+        setPublishing(false);
+        setError(t("imageCropError"));
+        return;
+      }
+      const upload = await uploadAnnouncementImage(croppedImage);
       if (!upload.ok) {
         setPublishing(false);
         setError(upload.status === 403 ? t("forbidden") : upload.status === 401 ? t("unauthorized") : t("imageUploadError"));
@@ -133,6 +143,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setEditingId(null);
@@ -160,6 +171,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(item.media.type === "image" ? item.media.src : null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setError("");
@@ -174,6 +186,7 @@ export function AnnouncementManagementPanel() {
     setFieldErrors({});
     setCurrentImageUrl(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setIsCreating(false);
@@ -218,6 +231,7 @@ export function AnnouncementManagementPanel() {
     }
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImageFile(file);
+    setImageCrop(DEFAULT_CROP);
     setImagePreview(URL.createObjectURL(file));
     setError("");
   }
@@ -226,6 +240,7 @@ export function AnnouncementManagementPanel() {
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(null);
     setImageFile(null);
+    setImageCrop(DEFAULT_CROP);
     setCurrentImageUrl(null);
   }
 
@@ -293,14 +308,29 @@ export function AnnouncementManagementPanel() {
 
             <section className="grid gap-4 rounded-2xl border border-border border-s-gdg-green bg-surface-muted/40 p-4 sm:p-5">
               <h3 className="text-base font-bold text-foreground">{t("sections.image")}</h3>
-              {imagePreview || currentImageUrl ? (
-                <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 sm:flex-row sm:items-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
-                  <img src={imagePreview ?? currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="h-40 w-full rounded-lg object-cover sm:h-28 sm:w-44" />
+              {imagePreview ? (
+                <div className="grid gap-3 rounded-xl border border-border bg-surface p-3">
+                  <AnnouncementImageCropper
+                    src={imagePreview}
+                    alt={t("imagePreviewAlt")}
+                    crop={imageCrop}
+                    onChange={setImageCrop}
+                    instruction={t("imageCropInstruction")}
+                    zoomLabel={t("imageCropZoom")}
+                  />
                   <div className="flex flex-wrap items-center gap-2">
                     <label htmlFor="announcement-image" className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-2 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5">{t("replaceImage")}</label>
                     <button type="button" onClick={removeImage} className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30">{t("removeImage")}</button>
-                    {imageFile && <span className="w-full truncate text-xs text-muted">{imageFile.name}</span>}
+                    <span className="w-full truncate text-xs text-muted">{imageFile?.name}</span>
+                  </div>
+                </div>
+              ) : currentImageUrl ? (
+                <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 sm:flex-row sm:items-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
+                  <img src={currentImageUrl} alt={t("imagePreviewAlt")} className="h-40 w-full rounded-lg object-cover sm:h-28 sm:w-44" />
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label htmlFor="announcement-image" className="cursor-pointer rounded-lg border border-gdg-blue px-3 py-2 text-sm font-semibold text-gdg-blue transition hover:bg-gdg-blue/5">{t("replaceImage")}</label>
+                    <button type="button" onClick={removeImage} className="rounded-lg border border-red-300 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/30">{t("removeImage")}</button>
                   </div>
                 </div>
               ) : (
@@ -346,9 +376,22 @@ export function AnnouncementManagementPanel() {
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">{t("preview.unpublished")}</span>
                 </div>
                 {(imagePreview || currentImageUrl) ? (
-                  <div className="relative h-52 overflow-hidden bg-surface-muted sm:h-64">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- local preview URL or public uploaded image. */}
-                    <img src={imagePreview ?? currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="size-full object-cover" />
+                  <div className={`relative overflow-hidden bg-surface-muted ${imagePreview ? "" : "h-52 sm:h-64"}`}>
+                    {imagePreview ? (
+                      <AnnouncementImageCropper
+                        src={imagePreview}
+                        alt={t("imagePreviewAlt")}
+                        crop={imageCrop}
+                        onChange={() => undefined}
+                        instruction=""
+                        zoomLabel=""
+                        interactive={false}
+                        showControls={false}
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element -- existing announcement image preview.
+                      <img src={currentImageUrl ?? ""} alt={t("imagePreviewAlt")} className="size-full object-cover" />
+                    )}
                   </div>
                 ) : <div aria-hidden="true" className="h-3 bg-[image:var(--google-gradient)]" />}
                 <div className="grid gap-3 p-5 sm:p-7">
