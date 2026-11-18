@@ -81,6 +81,7 @@ export const teamMembers = [
     imagePositionClass: "translate-y-1",
     role: "Co-Lead",
     name: "Jumanah Alshaibi",
+    linkedin: "https://www.linkedin.com/in/jumanah-al-shaibi-408a8925a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
   },
   {
     id: "3",
@@ -178,6 +179,8 @@ const allCommittees = [
     lead: {
       name: "Layan Mashraie",
       image: "/images/unknown.png",
+      linkedin: "http://linkedin.com/in/layan-mashraie",
+      x: "https://x.com/cybergist0?s=11",
     },
     coLeader:{
       name: "Abdullah Saif",
@@ -210,6 +213,8 @@ const allCommittees = [
           image: "/images/web-lead.png",
           imageScaleClass: "scale-125",
           imagePositionClass: "translate-y-6",
+          linkedin: "https://www.linkedin.com/in/swe-leen-alghamdi?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+          x: "https://x.com/Leen_Alghamdixx",
         },
     },
 
@@ -262,6 +267,7 @@ const allCommittees = [
         lead: {
           name: "Asma Aldossari",
           image: "/images/unknown.png",
+          linkedin: "https://www.linkedin.com/in/asma-aldossari-767796235?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
         },
       },
 
@@ -274,6 +280,8 @@ const allCommittees = [
         lead: {
           name: "Shahad Almazrui",
           image: "/images/PM-colead.png",
+          linkedin: "https://www.linkedin.com/in/shahad-almazrui-b50b882a0?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+          x: "https://x.com/IT_ShahadA",
         },
       },
     // ],
