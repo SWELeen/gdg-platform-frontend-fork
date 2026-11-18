@@ -70,6 +70,7 @@ export const teamMembers = [
     imagePositionClass: "translate-x-2 translate-y-4",
     role: "Lead",
     name: "Abdullah Misar",
+    gender: "male",
     linkedin: "https://www.linkedin.com/in/abdullah-misar",
     x: "https://x.com/abmisar1",
   },
@@ -81,6 +82,7 @@ export const teamMembers = [
     imagePositionClass: "translate-y-1",
     role: "Co-Lead",
     name: "Jumanah Alshaibi",
+    gender: "female",
     linkedin: "https://www.linkedin.com/in/jumanah-al-shaibi-408a8925a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
   },
   {
@@ -118,6 +120,7 @@ const allCommittees = [
       "Creates and manages the group’s written and media content, ensuring content quality, consistency in style and identity, and clarity of messaging across various platforms.",
     lead: {
       name: "Asma Alhasani",
+      gender: "female",
       image: "/images/unknown.png",
       linkedin: "https://www.linkedin.com/in/asma-alhasani-2b12a1317",
       x: "https://x.com/asma_ibrahim8?s=11",
@@ -138,6 +141,7 @@ const allCommittees = [
       "Where ideas become structured plans with clear owners, clear deadlines, and clear outcomes. We bring together planning, coordination, and follow through to turn vision into execution, and execution into results.",
     lead: {
       name: "Mohammed Elkasabgy",
+      gender: "male",
       image: "/images/PM-Lead.png",
       linkedin: "https://www.linkedin.com/in/mohamed-elkasabgy-a610a4387?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
       x: "https://x.com/mksbji?s=11&t=O9bY4C0wj73A4Q7P5zDisA",
@@ -158,6 +162,7 @@ const allCommittees = [
       "A space where ideas transform into creativity through innovative designs, visual storytelling, and purposeful digital content. We bring together design, photography, video editing, and marketing to create content that reflects ideas and leaves an impact.",
     lead: {
       name: "Joud Abdullah",
+      gender: "female",
       image: "/images/unknown.png",
       x: "https://x.com/iiovull?s=11&t=pZ38eq32A3fxP2lOWdg4Fg",
     },
@@ -178,6 +183,7 @@ const allCommittees = [
       "Representing the group externally, building strong relationships, and strengthening its image with partners, stakeholders, and the wider community.",
     lead: {
       name: "Layan Mashraie",
+      gender: "female",
       image: "/images/unknown.png",
       linkedin: "http://linkedin.com/in/layan-mashraie",
       x: "https://x.com/cybergist0?s=11",
@@ -198,6 +204,7 @@ const allCommittees = [
       "A space for builders, problem-solvers, and technology enthusiasts to learn, create, and build meaningful solutions together.",
     lead: {
       name: "Shadi Alnajar",
+      gender: "male",
       image: "/images/Developers-Lead.png",
       linkedin: "https://www.linkedin.com/in/engshadi/",
     },
@@ -210,6 +217,7 @@ const allCommittees = [
           " A creative space for developers passionate about building modern web experiences. Members explore frontend and backend development, from design to deployment. The committee works with modern technologies to create functional and responsive websites. It encourages collaboration, problem solving, and clean development practices. Members turn ideas into real digital experiences and practical projects. ",
         lead: {
           name: "Leen Alghamdi",
+          gender: "female",
           image: "/images/web-lead.png",
           imageScaleClass: "scale-125",
           imagePositionClass: "translate-y-6",
@@ -226,6 +234,7 @@ const allCommittees = [
           "A space for exploring the world of artificial intelligence and emerging technologies. Members learn about AI concepts, machine learning, and intelligent applications. The committee encourages experimentation with AI tools and real-world use cases. Members collaborate on innovative projects that use AI to solve meaningful problems. It aims to make AI more accessible, practical, and impactful. ",
         lead: {
           name: "Atheer Alzahrani",
+          gender: "female",
           image: "/images/unknown.png",
           linkedin: "https://www.linkedin.com/in/atheer-mohammad-39a77a302?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
         },
@@ -239,6 +248,7 @@ const allCommittees = [
           "A hands-on space for building smart systems that connect the physical and digital worlds. Members explore robotics, sensors, embedded systems, and Internet of Things technologies. The committee encourages experimentation, prototyping, and practical problem-solving. Members work together to design and build interactive and connected solutions. It turns ideas into real-world systems through technology and creativity. ",
         lead: {
           name: "Saeed Alghamdi",
+          gender: "male",
           image: "/images/unknown.png",
           linkedin: "https://www.linkedin.com/in/saeed-alghamdi-511bb9348?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
           x: "https://x.com/sa707_p?s=11",
@@ -253,6 +263,7 @@ const allCommittees = [
           "A space for learning how to protect systems, applications, networks, and digital information. Members explore cybersecurity concepts, security practices, and common digital threats. The committee promotes awareness of secure development and responsible technology use. Members practice identifying vulnerabilities and understanding how systems can be protected. It builds a strong foundation for creating safer and more secure digital environments. ",
         lead: {
           name: "Shadi Alnajar",
+          gender: "male",
           image: "/images/Developers-Lead.png",
           linkedin: "https://www.linkedin.com/in/engshadi/",
         },
@@ -266,6 +277,7 @@ const allCommittees = [
           " A space focused on using technology to simplify tasks and improve workflows. Members explore automation tools, scripting, APIs, and process optimization. The committee encourages finding repetitive tasks that can be transformed into efficient solutions. Members collaborate to build automated workflows and practical productivity tools. It helps turn time-consuming processes into smarter and more efficient systems. ",
         lead: {
           name: "Asma Aldossari",
+          gender: "female",
           image: "/images/unknown.png",
           linkedin: "https://www.linkedin.com/in/asma-aldossari-767796235?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
         },
@@ -279,6 +291,7 @@ const allCommittees = [
           "A space for turning raw data into meaningful insights and informed decisions. Members explore data collection, cleaning, analysis, visualization, and interpretation. The committee works with real-world datasets to understand patterns and trends. Members develop analytical thinking and learn how to communicate insights effectively. It connects data with practical solutions, helping transform information into knowledge. ",
         lead: {
           name: "Shahad Almazrui",
+          gender: "female",
           image: "/images/PM-colead.png",
           linkedin: "https://www.linkedin.com/in/shahad-almazrui-b50b882a0?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
           x: "https://x.com/IT_ShahadA",
