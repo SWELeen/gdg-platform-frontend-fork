@@ -26,7 +26,6 @@ const LOGO_SRC = "/gdg-logo-motion.png";
 const LOGO_W = 240;
 const LOGO_H = 145;
 
-const CX = 835;
 const CY = 395;
 
 const RIBBON_VIEWBOX_WIDTH = 1672;
@@ -433,78 +432,38 @@ function Ribbon({
   r: RibbonShape;
   index: number;
 }) {
-  const baseRef =
-    useRef<SVGPathElement>(null);
-
-  const shineRef =
-    useRef<SVGPathElement>(null);
-
-  const shineGrad =
-    useRef<SVGLinearGradientElement>(null);
-
+  const baseRef = useRef<SVGPathElement>(null);
+  const shineRef = useRef<SVGPathElement>(null);
+  const shineGrad = useRef<SVGLinearGradientElement>(null);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     const path = baseRef.current;
     if (!path || reduce) return;
+
     let frame = 0;
     let visible = false;
+
     const draw = (time: number) => {
-
-      const s =
-        time / 1000 + index * 0.9;
-
+      const s = time / 1000 + index * 0.9;
       const waves = 1.3;
       const k = 2 * Math.PI * waves;
-
-      const speed =
-        (2 * Math.PI) /
-        (r.duration * 0.5);
-
+      const speed = (2 * Math.PI) / (r.duration * 0.5);
       const amp = r.amp * 1.3;
-
-      const d = ribbonPath(
-        r.pts,
-        r.w0,
-        1.2,
-        28,
-        (t) =>
-          amp *
-          Math.pow(1 - t, 0.9) *
-          Math.sin(
-            k * t - speed * s
-          )
+      const d = ribbonPath(r.pts, r.w0, 1.2, 28, (t) =>
+        amp * Math.pow(1 - t, 0.9) * Math.sin(k * t - speed * s),
       );
 
-      baseRef.current?.setAttribute(
-        "d",
-        d
-      );
+      baseRef.current?.setAttribute("d", d);
+      shineRef.current?.setAttribute("d", d);
 
-      shineRef.current?.setAttribute(
-        "d",
-        d
-      );
-
-      const p =
-        (s * 0.12 + index * 0.13) %
-        1;
-
-      const c =
-        r.x1 +
-        (r.x2 - r.x1) * p;
-
-      shineGrad.current?.setAttribute(
-        "x1",
-        String(c - 140)
-      );
-
-      shineGrad.current?.setAttribute(
-        "x2",
-        String(c + 140)
-      );
+      const p = (s * 0.12 + index * 0.13) % 1;
+      const center = r.x1 + (r.x2 - r.x1) * p;
+      shineGrad.current?.setAttribute("x1", String(center - 140));
+      shineGrad.current?.setAttribute("x2", String(center + 140));
       frame = requestAnimationFrame(draw);
     };
+
     const sync = () => {
       cancelAnimationFrame(frame);
       if (visible && !document.hidden) frame = requestAnimationFrame(draw);
@@ -515,6 +474,7 @@ function Ribbon({
     });
     observer.observe(path.ownerSVGElement!);
     document.addEventListener("visibilitychange", sync);
+
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
@@ -538,37 +498,13 @@ function Ribbon({
           x2="-1900"
           y2="0"
         >
-          <stop
-            offset="0"
-            stopColor="var(--hero-white)"
-            stopOpacity="0"
-          />
-
-          <stop
-            offset="0.5"
-            stopColor="var(--hero-white)"
-            stopOpacity="0.9"
-          />
-
-          <stop
-            offset="1"
-            stopColor="var(--hero-white)"
-            stopOpacity="0"
-          />
+          <stop offset="0" stopColor="var(--hero-white)" stopOpacity="0" />
+          <stop offset="0.5" stopColor="var(--hero-white)" stopOpacity="0.9" />
+          <stop offset="1" stopColor="var(--hero-white)" stopOpacity="0" />
         </linearGradient>
       </defs>
-
-      <path
-        ref={baseRef}
-        d={r.d0}
-        fill={`url(#grad-${r.id})`}
-      />
-
-      <path
-        ref={shineRef}
-        d={r.d0}
-        fill={`url(#shine-${r.id})`}
-      />
+      <path ref={baseRef} d={r.d0} fill={`url(#grad-${r.id})`} />
+      <path ref={shineRef} d={r.d0} fill={`url(#shine-${r.id})`} />
     </g>
   );
 }
@@ -598,9 +534,7 @@ export default function HeroSection() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const logoSpread = useTransform(scrollYProgress, [0, 0.75], [0, LOGO_W * 0.2], {
-    clamp: true,
-  });
+  const logoSpread = useTransform(scrollYProgress, [0, 0.75], [0, LOGO_W * 0.2], { clamp: true });
   const reduceMotion = useReducedMotion();
   const introSpread = useMotionValue(LOGO_W * 0.65);
   const [introComplete, setIntroComplete] = useState(false);
@@ -612,16 +546,13 @@ export default function HeroSection() {
       introSpread.set(0);
       return;
     }
-
     const animation = animate(introSpread, 0, {
       duration: 1.35,
       ease: "easeInOut",
       onComplete: () => setIntroComplete(true),
     });
-
     return () => animation.stop();
   }, [introSpread, reduceMotion]);
-
   const sectionStyle = {
     ...(metrics
       ? {
@@ -685,8 +616,8 @@ export default function HeroSection() {
           { x: 865, y: 790, size: 10, color: "var(--gdg-yellow)" },
           { x: 600, y: 455, size: 10, color: "var(--gdg-yellow)" },
 
-        ].map((square, index) => (
-          <motion.div
+        ].map((square) => (
+          <div
             key={`${square.x}-${square.y}`}
             className="absolute"
             style={{
@@ -696,9 +627,8 @@ export default function HeroSection() {
               height: square.size,
               backgroundColor: square.color,
               transformOrigin: "center",
+              opacity: 0.68,
             }}
-            animate={reduceMotion || !heroVisible ? { opacity: 0.68 } : { opacity: [0.48, 0.78, 0.48], scale: [0.96, 1.02, 0.96] }}
-            transition={{ duration: 3.8 + index * 0.35, repeat: Infinity, ease: "easeInOut", delay: index * 0.42 }}
           />
         ))}
       </div>
@@ -731,24 +661,13 @@ export default function HeroSection() {
             o: 0.13,
           },
         ].map((r, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute top-[22%] h-[62%] w-[10%] rounded-full blur-3xl"
             style={{
               left: r.left,
               background: r.color,
-            }}
-            animate={reduceMotion || !heroVisible ? { opacity: r.o } : {
-              opacity: [
-                r.o * 0.6,
-                r.o,
-                r.o * 0.6,
-              ],
-            }}
-            transition={{
-              duration: 5 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
+              opacity: r.o,
             }}
           />
         ))}
@@ -756,14 +675,13 @@ export default function HeroSection() {
 
       <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
         {DUST.map((p, i) => (
-          <motion.circle
+          <circle
             key={i}
             cx={p.x}
             cy={p.y}
             r={p.r}
             fill={p.c}
-            animate={reduceMotion || !heroVisible ? { opacity: p.o } : { opacity: [p.o * 0.2, Math.min(p.o * 1.15, 1), p.o * 0.2] }}
-            transition={{ duration: p.d, repeat: Infinity }}
+            opacity={p.o}
           />
         ))}
       </svg>
@@ -810,17 +728,9 @@ export default function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
           />
 
-          {/* LEFT HALF */}
-
           <motion.div
             className="absolute inset-0 overflow-hidden"
-            style={{
-              x: leftLogoSpread,
-              clipPath:
-                "inset(0 50% 0 0)",
-              WebkitClipPath:
-                "inset(0 50% 0 0)",
-            }}
+            style={{ x: leftLogoSpread, clipPath: "inset(0 50% 0 0)", WebkitClipPath: "inset(0 50% 0 0)" }}
           >
             <Image
               src={LOGO_SRC}
@@ -832,42 +742,19 @@ export default function HeroSection() {
             />
           </motion.div>
 
-          {/* RIGHT HALF */}
-
           <motion.div
             className="absolute inset-0 overflow-hidden"
-            style={{
-              x: activeLogoSpread,
-              clipPath:
-                "inset(0 0 0 50%)",
-              WebkitClipPath:
-                "inset(0 0 0 50%)",
-            }}
+            style={{ x: activeLogoSpread, clipPath: "inset(0 0 0 50%)", WebkitClipPath: "inset(0 0 0 50%)" }}
           >
-            <Image
-              src={LOGO_SRC}
-              alt=""
-              width={LOGO_W}
-              height={LOGO_H}
-              priority
-              className="h-full w-full object-contain"
-            />
+            <Image src={LOGO_SRC} alt="" width={LOGO_W} height={LOGO_H} priority className="h-full w-full object-contain" />
           </motion.div>
-
-          {/* floating motion */}
 
           <motion.div
             className="absolute inset-0"
-            animate={reduceMotion || !heroVisible ? { y: 0 } : {
-              y: [0, -6, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1.3,
-            }}
+            animate={reduceMotion || !heroVisible ? { y: 0 } : { y: [0, -6, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.3 }}
           />
+
         </div>
       </div>
 
@@ -887,23 +774,10 @@ export default function HeroSection() {
         <motion.h1
           dir={dir}
           className="max-w-[min(88vw,88rem)] text-balance text-center text-[clamp(1.55rem,1.32rem_+_1vw,3.15rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[var(--hero-white)]"
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: false,
-            amount: 0.3,
-          }}
-          transition={{
-            duration: 0.8,
-            delay: 0.2,
-            ease: "easeOut",
-          }}
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
         >
           {locale === "ar" ? "مجموعة مطوّري جوجل" : "Google Developer Group"}
         </motion.h1>
@@ -913,22 +787,10 @@ export default function HeroSection() {
         <motion.p
           dir={dir}
           className="mt-4 text-balance text-center text-[clamp(0.9215rem,0.874rem_+_0.456vw,1.5675rem)] font-normal leading-snug text-[var(--hero-white-muted)]"
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: false,
-            amount: 0.3,
-          }}
-          transition={{
-            duration: 0.7,
-            delay: 0.35,
-          }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
         >
           {locale === "ar" ? "بجامعة جدة" : "on Campus | University of Jeddah"}
         </motion.p>
@@ -938,22 +800,10 @@ export default function HeroSection() {
         <motion.p
           dir={dir}
           className="mt-3 max-w-[min(80vw,64rem)] text-balance text-center text-[clamp(0.798rem,0.779rem_+_0.228vw,1.14rem)] leading-relaxed tracking-[0.06em] text-[var(--hero-white-muted)] sm:max-w-[min(80vw,64rem)]"
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: false,
-            amount: 0.3,
-          }}
-          transition={{
-            duration: 0.7,
-            delay: 0.45,
-          }}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.45 }}
         >
           {t("tagline")}
         </motion.p>
@@ -962,22 +812,10 @@ export default function HeroSection() {
 
         <motion.div
           className="mt-6 flex w-full flex-col items-center justify-center gap-3.5 sm:mt-7 sm:w-auto sm:flex-row"
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: false,
-            amount: 0.3,
-          }}
-          transition={{
-            duration: 0.7,
-            delay: 0.55,
-          }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.55 }}
         >
           {/* EXPLORE EVENTS */}
 

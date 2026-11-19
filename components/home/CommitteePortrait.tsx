@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { getImageProps } from "next/image";
 
 const FALLBACK_IMAGE = "/images/unknown.png";
 
@@ -35,14 +36,23 @@ export default function CommitteePortrait({
   sizeRatio: number;
 }) {
   const portraitRef = useRef<SVGSVGElement>(null);
-  // SVG image elements have no native lazy loading. Keep hidden layouts from
-  // fetching full-size portraits, and start visible ones before they scroll in.
-  const nearViewport = useInView(portraitRef, { once: true, margin: "400px" });
+  // SVG image elements have no native lazy loading. Optimize large portraits
+  // and defer fetching them until the gallery is close to the viewport.
+  const nearViewport = useInView(portraitRef, { once: true, margin: "200px" });
   const requestedSource = image?.trim() || FALLBACK_IMAGE;
   const [failure, setFailure] = useState<{ requestedSource: string; fallbackFailed: boolean }>();
   const currentFailure = failure?.requestedSource === requestedSource ? failure : undefined;
   const source = currentFailure ? FALLBACK_IMAGE : requestedSource;
   const geometry = portraitGeometry[source];
+  const optimizedSource = geometry
+    ? getImageProps({
+        src: source,
+        alt: "",
+        width: 640,
+        height: Math.round(640 * geometry[1] / geometry[0]),
+        quality: 75,
+      }).props.src
+    : source;
   const viewBox = geometry
     // Keep the PM co-leader's relative headroom for every visible person.
     ? `${geometry[2]} ${geometry[3] - geometry[5] * reference[3] / reference[5]} ${geometry[4]} ${geometry[5] * reference[1] / reference[5]}`
@@ -75,7 +85,7 @@ export default function CommitteePortrait({
     >
       <image
         key={source}
-        href={nearViewport ? source : undefined}
+        href={nearViewport ? optimizedSource : undefined}
         width={geometry?.[0]}
         height={geometry?.[1]}
         onLoad={(event) => {

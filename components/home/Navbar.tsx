@@ -179,7 +179,7 @@ export default function Navbar({ variant = "overlay" }: NavbarProps = {}) {
   // --home-nav-height (globals.css) is the space it takes at the top; sticky sections offset by it.
   return (
     <nav
-      className={`fixed inset-x-[clamp(0.5rem,1vw,1.5rem)] top-[clamp(0.5rem,1vw,1.5rem)] z-[200] mx-auto flex h-[clamp(3.5rem,4vw,5rem)] items-center justify-between gap-[clamp(1rem,2.5vw,3rem)] rounded-full border ps-[clamp(1rem,2vw,2.5rem)] pe-[clamp(0.75rem,1.5vw,2rem)] shadow-lg backdrop-blur-xl backdrop-saturate-150 ${
+      className={`fixed inset-x-[clamp(0.5rem,1vw,1.5rem)] top-[clamp(0.5rem,1vw,1.5rem)] z-[200] mx-auto flex h-[clamp(3.5rem,4vw,5rem)] items-center justify-between gap-[clamp(1rem,2.5vw,3rem)] rounded-full border ps-[clamp(1rem,2vw,2.5rem)] pe-[clamp(0.75rem,1.5vw,2rem)] shadow-lg backdrop-blur-md backdrop-saturate-150 ${
         variant === "light"
           ? "border-border bg-surface/85 text-foreground shadow-black/5"
           : "border-white/20 bg-gdg-dark/35 text-[var(--white)] shadow-black/25"
