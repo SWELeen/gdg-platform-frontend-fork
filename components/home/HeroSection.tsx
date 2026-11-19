@@ -810,12 +810,8 @@ export default function HeroSection() {
 
         {/* BUTTONS */}
 
-        <motion.div
+        <div
           className="mt-6 flex w-full flex-col items-center justify-center gap-3.5 sm:mt-7 sm:w-auto sm:flex-row"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.7, delay: 0.55 }}
         >
           {/* EXPLORE EVENTS */}
 
@@ -926,7 +922,7 @@ export default function HeroSection() {
               </svg>
             </span>
           </motion.a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

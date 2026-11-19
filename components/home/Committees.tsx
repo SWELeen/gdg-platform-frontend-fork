@@ -164,7 +164,7 @@ function CommitteeGallery({ items, label, id }: { items: GalleryItem[]; label: s
                           className={`block h-full w-full object-contain ${!hasPortraitPair ? "object-bottom-right" : "object-bottom"}`}
                           src={person.image?.trim() || "/images/unknown.png"}
                           alt=""
-                          loading="lazy"
+                          loading="eager"
                           animate={{
                             scale: reduceMotion || highlighted ? 1 : 1.035,
                             filter: open && hasPortraitPair
