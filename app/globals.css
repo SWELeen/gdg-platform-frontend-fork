@@ -1244,7 +1244,7 @@ html[data-theme-transition="logo"]::view-transition-old(root) {
   }
 
   to {
-    transform: translateX(-16.666667%);
+    transform: translateX(-33.333333%);
   }
 }
 
@@ -1260,7 +1260,7 @@ html[data-theme-transition="logo"]::view-transition-old(root) {
   }
 
   to {
-    transform: translateX(16.666667%);
+    transform: translateX(33.333333%);
   }
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { sponsors } from "@/data/home";
 import { useTranslations } from "next-intl";
 
@@ -12,11 +13,14 @@ function SponsorGroup({ hidden = false }: { hidden?: boolean }) {
       {sponsors.map((sponsor) => (
         <div
           key={sponsor.id}
-          className="size-[clamp(5rem,10vw,15rem)] shrink-0 overflow-hidden rounded-full border border-border"
+          className="relative size-[clamp(5rem,10vw,15rem)] shrink-0 overflow-hidden rounded-full border border-border"
         >
-          <img loading="lazy" decoding="async"
+          <Image
             src={sponsor.image}
             alt={hidden ? "" : sponsor.name}
+            fill
+            sizes="(max-width: 640px) 80px, (max-width: 2400px) 10vw, 240px"
+            loading="lazy"
             className="h-full w-full scale-110 rounded-full object-cover"
           />
         </div>
@@ -46,9 +50,6 @@ export default function SponsorsSection() {
       <div className="mt-[clamp(2.5rem,5vw,5rem)] overflow-hidden">
         <div className="sponsors-marquee flex w-max">
           <SponsorGroup />
-          <SponsorGroup hidden />
-          <SponsorGroup hidden />
-          <SponsorGroup hidden />
           <SponsorGroup hidden />
           <SponsorGroup hidden />
         </div>
