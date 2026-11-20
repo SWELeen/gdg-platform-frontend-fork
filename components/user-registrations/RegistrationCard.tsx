@@ -67,10 +67,10 @@ export function RegistrationCard({
       <div className="flex flex-1 items-start gap-4">
         <div className={`flex h-[76px] w-[68px] shrink-0 flex-col items-center justify-center rounded-xl text-current ring-1 ${dateAccentClasses[dateAccent]}`}>
           <span className="text-xs font-medium">
-            {format.dateTime(startsAt, { month: "short" })}
+            {format.dateTime(startsAt, { month: "short", timeZone: "Asia/Riyadh" })}
           </span>
           <span className="mt-0.5 text-2xl font-semibold leading-none">
-            {format.dateTime(startsAt, { day: "2-digit" })}
+            {format.dateTime(startsAt, { day: "2-digit", timeZone: "Asia/Riyadh" })}
           </span>
         </div>
         <div className="min-w-0 flex-1">
@@ -85,7 +85,7 @@ export function RegistrationCard({
             {registration.title}
           </h3>
           <p className="mt-2 text-sm text-muted">
-            {format.dateTime(startsAt, { timeStyle: "short" })}
+            {format.dateTime(startsAt, { timeStyle: "short", timeZone: "Asia/Riyadh" })}
             <span aria-hidden="true" className="mx-2">·</span>
             {registration.location}
           </p>
@@ -103,6 +103,7 @@ export function RegistrationCard({
                   date: format.dateTime(new Date(registration.attendanceConfirmedAt), {
                     dateStyle: "medium",
                     timeStyle: "short",
+                    timeZone: "Asia/Riyadh",
                   }),
                 })}
               </p>
@@ -113,6 +114,7 @@ export function RegistrationCard({
                   date: format.dateTime(new Date(registration.checkedInAt), {
                     dateStyle: "medium",
                     timeStyle: "short",
+                    timeZone: "Asia/Riyadh",
                   }),
                 })}
               </p>
