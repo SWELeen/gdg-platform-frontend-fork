@@ -137,17 +137,17 @@ type CreateEventHandler = (event: CreateEventInput, schedule: EventSchedule) => 
 // Forms that do not request an explicit end time keep the two-hour default.
 const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000;
 
-/** Local date and time inputs → the exact instants the backend stores. Registration closes at the end of the chosen day, never after the start. */
+/** Local date and time inputs → the exact Saudi-time instants the backend stores. */
 function toSchedule(values: FormValues, durationMs = DEFAULT_DURATION_MS, requireEndTime = false): EventSchedule {
   const startsAt = new Date(`${values.date}T${values.time}:00+03:00`);
-  const deadlineEnd = new Date(`${values.registrationDeadline}T23:59:59+03:00`);
+  const registrationDeadline = new Date(`${values.registrationDeadline}:00+03:00`);
   const endsAt = requireEndTime
     ? new Date(`${values.endDate}T${values.endTime}:00+03:00`)
     : new Date(startsAt.getTime() + durationMs);
   return {
     startsAt: startsAt.toISOString(),
     endsAt: endsAt.toISOString(),
-    registrationDeadline: new Date(Math.min(deadlineEnd.getTime(), startsAt.getTime())).toISOString(),
+    registrationDeadline: registrationDeadline.toISOString(),
   };
 }
 
@@ -179,7 +179,10 @@ function eventFormValues(details?: CommitteeEventDetails): FormValues {
     location: details.location ?? "",
     mapsLink: details.mapsLink ?? "",
     capacity: String(details.capacity),
-    registrationDeadline: dateTimeInput(details.registrationDeadline).date,
+    registrationDeadline: (() => {
+      const deadline = dateTimeInput(details.registrationDeadline);
+      return `${deadline.date}T${deadline.time}`;
+    })(),
     requirements: details.requirements ?? "",
   };
 }
@@ -414,9 +417,17 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
     }
 
     if (!current.registrationDeadline) next.registrationDeadline = t("errors.deadlineRequired");
-    else if (current.registrationDeadline < today && (!initialDetails || current.registrationDeadline !== eventFormValues(initialDetails).registrationDeadline)) next.registrationDeadline = t("errors.deadlinePast");
-    else if (current.date && current.registrationDeadline > current.date) {
-      next.registrationDeadline = t("errors.deadlineAfterEvent");
+    else {
+      const registrationDeadline = new Date(`${current.registrationDeadline}:00+03:00`).getTime();
+      const initialDeadline = initialDetails
+        ? new Date(`${eventFormValues(initialDetails).registrationDeadline}:00+03:00`).getTime()
+        : Number.NaN;
+      if (registrationDeadline < Date.now() && (!initialDetails || registrationDeadline !== initialDeadline)) {
+        next.registrationDeadline = t("errors.deadlinePast");
+      } else if (current.date && current.time) {
+        const startsAt = new Date(`${current.date}T${current.time}:00+03:00`).getTime();
+        if (registrationDeadline > startsAt) next.registrationDeadline = t("errors.deadlineAfterEvent");
+      }
     }
 
     if (!currentImage && !existingImageUrl && !API_ENABLED) next.image = t("errors.imageRequired");
@@ -562,7 +573,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       speakers: values.speakers.trim(),
       mapsLink: values.mapsLink.trim(),
       capacity: Number(values.capacity),
-      registrationDeadline: formatEventDate(values.registrationDeadline),
+      registrationDeadline: formatEventDate(values.registrationDeadline.slice(0, 10)),
       requirements: values.requirements.trim(),
       imageUrl: uploadedImageUrl ?? (image ? (croppedPreviewUrl ?? image.url) : existingImageUrl ?? undefined),
       registered: 0,
@@ -826,9 +837,8 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                 <input
                   id={fieldId("registrationDeadline")}
                   className={inputClass("registrationDeadline")}
-                  type="date"
-                  min={today}
-                  max={values.date || undefined}
+                  type="datetime-local"
+                  max={values.date && values.time ? `${values.date}T${values.time}` : undefined}
                   value={values.registrationDeadline}
                   aria-required="true"
                   aria-invalid={Boolean(errors.registrationDeadline)}

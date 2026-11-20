@@ -1362,7 +1362,7 @@
         "capacityRequired": "Capacity is required.",
         "deadlineRequired": "Registration deadline is required.",
         "deadlinePast": "Registration deadline cannot be in the past.",
-        "deadlineAfterEvent": "Registration deadline cannot be after the event date.",
+        "deadlineAfterEvent": "Registration must close before the event starts.",
         "imageRequired": "Event image is required.",
         "imageType": "Choose an image file (for example PNG, JPG, or WebP).",
         "imageSize": "Choose an image smaller than 5 MB.",

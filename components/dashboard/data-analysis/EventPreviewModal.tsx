@@ -27,7 +27,7 @@ export interface EventPreviewData {
   mapsLink: string;
   speakers: string;
   capacity: string;
-  registrationDeadline: string; // ISO yyyy-mm-dd
+  registrationDeadline: string; // Local datetime, yyyy-mm-ddTHH:mm
   requirements: string;
   imageUrl: string | null;
   questions: DraftQuestion[];
@@ -46,6 +46,7 @@ export function toEventPreviewData(event: CommitteeEventDetails): EventPreviewDa
   const date = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: RIYADH }).format(new Date(iso));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: RIYADH, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
     .format(new Date(event.startsAt));
+  const deadline = `${date(event.registrationDeadline)}T${timeFor(event.registrationDeadline)}`;
   return {
     title: event.name,
     description: event.description ?? "",
@@ -55,7 +56,7 @@ export function toEventPreviewData(event: CommitteeEventDetails): EventPreviewDa
     mapsLink: event.mapsLink ?? "",
     speakers: event.speakers ?? "",
     capacity: String(event.capacity),
-    registrationDeadline: date(event.registrationDeadline),
+    registrationDeadline: deadline,
     requirements: event.requirements ?? "",
     imageUrl: event.imageUrl,
     questions: event.questions.map((question) => ({
@@ -66,6 +67,11 @@ export function toEventPreviewData(event: CommitteeEventDetails): EventPreviewDa
       ...(question.options ? { options: question.options } : {}),
     })),
   };
+}
+
+function timeFor(iso: string) {
+  return new Intl.DateTimeFormat("en-GB", { timeZone: RIYADH, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .format(new Date(iso));
 }
 
 function PreviewDetail({
@@ -108,7 +114,8 @@ export function EventPreviewModal({
   const dialogRef = useDialog<HTMLDivElement>(onEdit);
 
   const eventDate = parseEventDate(data.date);
-  const deadlineDate = parseEventDate(data.registrationDeadline);
+  const deadlineDate = parseEventDate(data.registrationDeadline.slice(0, 10));
+  const deadlineInstant = new Date(`${data.registrationDeadline}:00+03:00`);
   const [hours, minutes] = data.time.split(":").map(Number);
   const timeDate = eventDate && Number.isFinite(hours) && Number.isFinite(minutes)
     ? new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), hours, minutes)
@@ -190,7 +197,7 @@ export function EventPreviewModal({
               {t("preview.capacityValue", { count: Number(data.capacity) })}
             </PreviewDetail>
             <PreviewDetail icon={<CalendarClock className="size-4" />} label={t("preview.deadline")}>
-              {deadlineDate ? format.dateTime(deadlineDate, dateOptions) : data.registrationDeadline}
+              {deadlineDate ? format.dateTime(deadlineInstant, { dateStyle: "long", timeStyle: "short", timeZone: RIYADH, numberingSystem: "latn" }) : data.registrationDeadline}
             </PreviewDetail>
           </div>
 
