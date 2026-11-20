@@ -7,6 +7,7 @@ import type { CommitteeEvent, EventRegistration } from "../shared/types";
 import { checkInAttendance, type AttendanceCheckInResult } from "@/lib/attendance/repository";
 import { useLeaderDashboard } from "@/components/dashboard/shared/LeaderDashboardContext";
 import { retryRegistrationEmail } from "@/lib/pr-registrations/api";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "../shared/HistoryPagination";
 
 function AttendanceScanner({ onToken }: { onToken: (token: string) => Promise<void> }) {
   const t = useTranslations("attendance");
@@ -194,6 +195,7 @@ export function PRAttendancePanel({
   const { reloadRegistrations } = useLeaderDashboard();
   const [memberFilter, setMemberFilter] = useState("all");
   const [attendanceFilter, setAttendanceFilter] = useState("all");
+  const [attendeePage, setAttendeePage] = useState(1);
   const [retryingId, setRetryingId] = useState<string | null>(null);
   const [emailError, setEmailError] = useState(false);
   const [verificationState, setVerificationState] = useState<
@@ -207,6 +209,12 @@ export function PRAttendancePanel({
   const filtered = registrations.filter((item) =>
     (memberFilter === "all" || item.isMember === (memberFilter === "member")) &&
     (attendanceFilter === "all" || (item.checkInStatus === "CheckedIn") === (attendanceFilter === "checkedIn")),
+  );
+  const attendeePageCount = Math.ceil(filtered.length / HISTORY_PAGE_SIZE);
+  const currentAttendeePage = Math.min(attendeePage, Math.max(1, attendeePageCount));
+  const visibleAttendees = filtered.slice(
+    (currentAttendeePage - 1) * HISTORY_PAGE_SIZE,
+    currentAttendeePage * HISTORY_PAGE_SIZE,
   );
   const attendanceRate = confirmed.length
     ? Math.round((checkedIn.length / confirmed.length) * 100)
@@ -317,7 +325,7 @@ export function PRAttendancePanel({
           <div className="grid gap-3 border-b border-border p-4 sm:grid-cols-2">
             <label className="grid gap-1 text-sm text-foreground">
               {t("filters.participant")}
-              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={memberFilter} onChange={(event) => setMemberFilter(event.target.value)}>
+              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={memberFilter} onChange={(event) => { setMemberFilter(event.target.value); setAttendeePage(1); }}>
                 <option value="all">{t("filters.all")}</option>
                 <option value="member">{t("filters.member")}</option>
                 <option value="guest">{t("filters.guest")}</option>
@@ -325,7 +333,7 @@ export function PRAttendancePanel({
             </label>
             <label className="grid gap-1 text-sm text-foreground">
               {t("table.attendance")}
-              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={attendanceFilter} onChange={(event) => setAttendanceFilter(event.target.value)}>
+              <select className="min-h-10 rounded-md border border-border bg-surface px-2" value={attendanceFilter} onChange={(event) => { setAttendanceFilter(event.target.value); setAttendeePage(1); }}>
                 <option value="all">{t("filters.all")}</option>
                 <option value="checkedIn">{t("table.checkedIn")}</option>
                 <option value="notCheckedIn">{t("table.notCheckedIn")}</option>
@@ -336,8 +344,9 @@ export function PRAttendancePanel({
           {filtered.length === 0 ? (
             <p className="p-5 text-sm text-muted">{t("table.empty")}</p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[740px] text-start text-xs">
+            <div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[740px] text-start text-xs">
                 <thead>
                   <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wide text-muted">
                     <th className="px-4 py-3 text-start">{t("table.person")}</th>
@@ -348,7 +357,7 @@ export function PRAttendancePanel({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/70">
-                  {filtered.map((registration) => (
+                  {visibleAttendees.map((registration) => (
                     <tr key={registration.id} className="align-top hover:bg-surface-muted/20">
                       <td className="px-4 py-3.5">
                         <span className="block font-semibold text-foreground">{registration.applicantName}</span>
@@ -375,7 +384,9 @@ export function PRAttendancePanel({
                     </tr>
                   ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
+              <HistoryPagination page={currentAttendeePage} pageCount={attendeePageCount} onPageChange={setAttendeePage} />
             </div>
           )}
         </div>

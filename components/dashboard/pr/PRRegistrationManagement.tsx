@@ -15,6 +15,7 @@ import {
   prRegistrationStatusFilterOptions,
 } from "./mock-data";
 import { ConfirmModal } from "../shared/ConfirmModal";
+import { HISTORY_PAGE_SIZE, HistoryPagination } from "../shared/HistoryPagination";
 import { PRAttendancePanel } from "./PRAttendancePanel";
 import { CreateEventModal, EditDraftEventModal, type CreateEventInput } from "../data-analysis/CreateEventForm";
 import { EventPreviewModal, toEventPreviewData, type EventPreviewData } from "../data-analysis/EventPreviewModal";
@@ -570,6 +571,7 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [applicantPage, setApplicantPage] = useState(1);
   const [selectedRegistration, setSelectedRegistration] = useState<EventRegistration | null>(null);
   const [decisionRegistration, setDecisionRegistration] = useState<EventRegistration | null>(null);
   const [decision, setDecision] = useState<RegistrationStatus | null>(null);
@@ -607,6 +609,12 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
       (statusFilter === "awaiting-confirmation" && awaitingConfirmation);
     return matchesSearch && matchesStatus;
   });
+  const applicantPageCount = Math.ceil(filteredRegistrations.length / HISTORY_PAGE_SIZE);
+  const currentApplicantPage = Math.min(applicantPage, Math.max(1, applicantPageCount));
+  const visibleRegistrations = filteredRegistrations.slice(
+    (currentApplicantPage - 1) * HISTORY_PAGE_SIZE,
+    currentApplicantPage * HISTORY_PAGE_SIZE,
+  );
 
   if (!event) {
     return (
@@ -686,14 +694,14 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
               <input
                 type="search"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => { setSearch(e.target.value); setApplicantPage(1); }}
                 placeholder={t("registrations.searchApplicant")}
                 className="h-9 w-full min-w-0 rounded-xl border border-border bg-surface-muted/40 ps-9 pe-3 text-xs text-foreground outline-none focus:border-blue-500"
               />
             </div>
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => { setStatusFilter(e.target.value); setApplicantPage(1); }}
               aria-label={t("registrations.filterRegistrations")}
               className="h-9 w-full min-w-0 rounded-xl border border-border bg-surface px-3 text-xs text-foreground outline-none focus:border-blue-500 sm:w-44"
             >
@@ -731,8 +739,9 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-max text-start text-sm md:min-w-full md:text-xs">
+          <div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-max text-start text-sm md:min-w-full md:text-xs">
               <thead>
                 <tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted">
                   <th className="px-5 py-3.5 text-start">{t("registrations.applicant")}</th>
@@ -742,7 +751,7 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
-                {filteredRegistrations.map((registration) => (
+                {visibleRegistrations.map((registration) => (
                   <tr key={registration.id} className="hover:bg-surface-muted/30">
                     <td className="px-5 py-3.5">
                       <span className="flex flex-wrap items-center gap-1.5 font-semibold text-foreground">
@@ -783,7 +792,9 @@ export function PREventRegistrations({ eventId }: { eventId: string }) {
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table>
+            </div>
+            <HistoryPagination page={currentApplicantPage} pageCount={applicantPageCount} onPageChange={setApplicantPage} />
           </div>
         )}
       </section>
