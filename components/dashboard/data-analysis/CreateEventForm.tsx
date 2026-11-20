@@ -730,7 +730,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
 
             {requireEndTime && (
               <div className={`${styles.row} mt-1`}>
-                <Field name="endDate" label={tf("fields.endDate")} required error={errors.endDate}>
+                <Field name="endDate" label={tf("endDate")} required error={errors.endDate}>
                   <input
                     id={fieldId("endDate")}
                     className={inputClass("endDate")}
@@ -743,7 +743,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                     onChange={(event) => setValue("endDate", event.target.value)}
                   />
                 </Field>
-                <Field name="endTime" label={tf("fields.endTime")} required error={errors.endTime}>
+                <Field name="endTime" label={tf("endTime")} required error={errors.endTime}>
                   <input
                     id={fieldId("endTime")}
                     className={inputClass("endTime")}
