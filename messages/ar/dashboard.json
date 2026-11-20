@@ -1159,6 +1159,7 @@
     "eventForm": {
       "publishedStartsAt": "بداية الفعالية بتوقيت السعودية",
       "publishedEndsAt": "نهاية الفعالية بتوقيت السعودية",
+      "registrationClosesAt": "موعد إغلاق التسجيل (بتوقيت السعودية)",
       "create": "إنشاء فعالية جديدة",
       "publish": "نشر",
       "edit": "تعديل الفعالية",

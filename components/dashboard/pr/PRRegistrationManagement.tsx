@@ -268,7 +268,7 @@ export function PREventsList() {
   const [eventError, setEventError] = useState("");
   const [editingEvent, setEditingEvent] = useState<{ event: CommitteeEvent; details: CommitteeEventDetails | null } | null>(null);
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
-  const [deadlineDate, setDeadlineDate] = useState("");
+  const [registrationDeadlineLocal, setRegistrationDeadlineLocal] = useState("");
   const [publishedStart, setPublishedStart] = useState("");
   const [publishedEnd, setPublishedEnd] = useState("");
   const [savingSchedule, setSavingSchedule] = useState(false);
@@ -315,7 +315,8 @@ export function PREventsList() {
       const details = await loadEventDetails(event.id);
       const { date, time } = riyadhDateTime(details.startsAt);
       const end = riyadhDateTime(details.endsAt);
-      setDeadlineDate(riyadhDateTime(details.registrationDeadline).date);
+      const registrationDeadline = riyadhDateTime(details.registrationDeadline);
+      setRegistrationDeadlineLocal(`${registrationDeadline.date}T${registrationDeadline.time}`);
       setPublishedStart(`${date}T${time}`);
       setPublishedEnd(`${end.date}T${end.time}`);
       setEditingEvent({
@@ -326,7 +327,7 @@ export function PREventsList() {
           type: (details.eventType as CommitteeEvent["type"] | null) ?? "Workshop",
           date,
           time,
-          registrationDeadline: riyadhDateTime(details.registrationDeadline).date,
+          registrationDeadline: `${registrationDeadline.date}T${registrationDeadline.time}`,
           location: details.location ?? "",
           capacity: details.capacity,
           description: details.description ?? "",
@@ -385,7 +386,7 @@ export function PREventsList() {
     });
   };
   const savePublishedSchedule = async () => {
-    if (!editingEvent?.details || !deadlineDate || !publishedStart || !publishedEnd || savingSchedule) return;
+    if (!editingEvent?.details || !registrationDeadlineLocal || !publishedStart || !publishedEnd || savingSchedule) return;
     const { details } = editingEvent;
     const oldStart = riyadhDateTime(details.startsAt);
     const oldEnd = riyadhDateTime(details.endsAt);
@@ -393,10 +394,12 @@ export function PREventsList() {
       ? details.startsAt : new Date(`${publishedStart}:00+03:00`).toISOString();
     const endsAt = publishedEnd === `${oldEnd.date}T${oldEnd.time}`
       ? details.endsAt : new Date(`${publishedEnd}:00+03:00`).toISOString();
-    const deadlineAtEndOfDay = new Date(`${deadlineDate}T23:59:59+03:00`).getTime();
-    const currentDeadline = deadlineDate === riyadhDateTime(details.registrationDeadline).date
-      ? new Date(details.registrationDeadline).getTime() : deadlineAtEndOfDay;
-    const registrationDeadline = new Date(Math.min(currentDeadline, new Date(startsAt).getTime())).toISOString();
+    const previousDeadline = riyadhDateTime(details.registrationDeadline);
+    const deadlineUnchanged = registrationDeadlineLocal === `${previousDeadline.date}T${previousDeadline.time}`;
+    const requestedDeadline = deadlineUnchanged
+      ? new Date(details.registrationDeadline).getTime()
+      : new Date(`${registrationDeadlineLocal}:00+03:00`).getTime();
+    const registrationDeadline = new Date(Math.min(requestedDeadline, new Date(startsAt).getTime())).toISOString();
     setEventError("");
     setSavingSchedule(true);
     try {
@@ -550,8 +553,9 @@ export function PREventsList() {
             <label htmlFor="published-event-end" className="mt-4 block text-sm font-semibold text-foreground">{t("eventForm.publishedEndsAt")}</label>
             <input id="published-event-end" type="datetime-local" value={publishedEnd} onChange={(event) => setPublishedEnd(event.target.value)} required
               className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground" />
-            <label htmlFor="published-event-deadline" className="mt-5 block text-sm font-semibold text-foreground">{t("eventForm.deadline")}</label>
-            <input id="published-event-deadline" type="date" value={deadlineDate} onChange={(event) => setDeadlineDate(event.target.value)} className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
+            <label htmlFor="published-event-deadline" className="mt-5 block text-sm font-semibold text-foreground">{t("eventForm.registrationClosesAt")}</label>
+            <input id="published-event-deadline" type="datetime-local" value={registrationDeadlineLocal} onChange={(event) => setRegistrationDeadlineLocal(event.target.value)} required
+              className="mt-2 h-11 w-full rounded-xl border border-border bg-surface-muted/30 px-3 text-sm text-foreground outline-none focus:border-blue-500" />
             {eventError && <p role="alert" className="mt-2 text-xs text-rose-600">{eventError}</p>}
             <div className="mt-5 flex justify-end gap-2 border-t border-border pt-4">
               <button type="button" onClick={() => setEditingEvent(null)} className="rounded-xl border border-border px-4 py-2 text-xs font-medium text-foreground hover:bg-surface-muted">{t("eventForm.cancel")}</button>
