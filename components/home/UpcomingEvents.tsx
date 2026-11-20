@@ -28,8 +28,12 @@ export default function UpcomingEvents() {
   useEffect(() => {
     if (!API_ENABLED) return;
     let active = true;
-    void apiRequest<ApiEvent[]>("/events")
-      .then((result) => {
+    let loading = false;
+    const loadEvents = async () => {
+      if (loading || document.visibilityState === "hidden") return;
+      loading = true;
+      try {
+        const result = await apiRequest<ApiEvent[]>("/events");
         if (!active) return;
         if (!result.ok) {
           setEventsStatus("error");
@@ -52,11 +56,21 @@ export default function UpcomingEvents() {
             })),
         );
         setEventsStatus("loaded");
-      })
-      .catch(() => {
+      } catch {
         if (active) setEventsStatus("error");
-      });
-    return () => { active = false; };
+      } finally {
+        loading = false;
+      }
+    };
+    const refreshWhenVisible = () => { void loadEvents(); };
+    void loadEvents();
+    window.addEventListener("focus", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
   }, []);
   const homepageEvents = apiEvents;
 
