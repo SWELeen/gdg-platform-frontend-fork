@@ -1159,6 +1159,7 @@
     "eventForm": {
       "publishedStartsAt": "Event start (Saudi time)",
       "publishedEndsAt": "Event end (Saudi time)",
+      "registrationClosesAt": "Registration closes (Saudi time)",
       "create": "Create New Event",
       "publish": "Publish",
       "edit": "Edit Event",
