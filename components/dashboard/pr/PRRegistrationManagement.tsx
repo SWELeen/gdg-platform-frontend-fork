@@ -399,7 +399,7 @@ export function PREventsList() {
     const requestedDeadline = deadlineUnchanged
       ? new Date(details.registrationDeadline).getTime()
       : new Date(`${registrationDeadlineLocal}:00+03:00`).getTime();
-    const registrationDeadline = new Date(Math.min(requestedDeadline, new Date(startsAt).getTime())).toISOString();
+    const registrationDeadline = new Date(requestedDeadline).toISOString();
     setEventError("");
     setSavingSchedule(true);
     try {
