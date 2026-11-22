@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useTextDirection } from "@/i18n/useTextDirection";
 import type { Announcement } from "@/lib/announcements/types";
 import AnnouncementCard from "./AnnouncementCard";
 
@@ -21,6 +22,7 @@ export default function AnnouncementsSection({
   announcementsHref = "/announcements",
 }: AnnouncementsSectionProps) {
   const t = useTranslations("home.announcements");
+  const dir = useTextDirection();
   const [currentPage, setCurrentPage] = useState(0);
 
   const totalPages = Math.ceil(
@@ -97,6 +99,7 @@ export default function AnnouncementsSection({
         {/* Header */}
 
         <div
+          dir={dir}
           className="
             mb-12
             flex
@@ -108,7 +111,7 @@ export default function AnnouncementsSection({
           "
         >
           <div className="w-full max-w-[min(72rem,85vw)]">
-<h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
+<h2 className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("title")}{" "}
         <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("highlight")}

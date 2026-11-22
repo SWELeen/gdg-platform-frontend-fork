@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { sponsors } from "@/data/home";
 import { useTranslations } from "next-intl";
+import { useTextDirection } from "@/i18n/useTextDirection";
 
 function SponsorGroup({ hidden = false }: { hidden?: boolean }) {
   return (
@@ -31,18 +32,19 @@ function SponsorGroup({ hidden = false }: { hidden?: boolean }) {
 
 export default function SponsorsSection() {
   const t = useTranslations("home.sponsors");
+  const dir = useTextDirection();
 
   return (
-    <section id="sponsors" className="bg-sponsor-gray px-6 py-[clamp(3rem,6vw,6rem)]">
+    <section id="sponsors" dir={dir} className="bg-sponsor-gray px-6 py-[clamp(3rem,6vw,6rem)]">
       <div className="w-full">
-      <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
+      <h2 className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("title")}{" "}
         <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("highlight")}
         </span>
       </h2>
 
-      <p className="mt-4 max-w-[min(56rem,75%)] text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
+      <p className="mt-4 max-w-[min(56rem,75%)] text-start text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
         {t("subtitle")}
       </p>
       </div>

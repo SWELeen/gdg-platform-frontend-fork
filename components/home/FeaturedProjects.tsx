@@ -83,6 +83,7 @@ export default function FeaturedProjects() {
   return (
 <section
   id="projects"
+  dir={dir}
   className="relative isolate overflow-hidden bg-background px-6 py-[clamp(1.25rem,2vw,2rem)]"
 >
   {/* ===== الخلفية ===== */}
@@ -115,14 +116,14 @@ export default function FeaturedProjects() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="text-start"
     >
-      <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
+      <h2 className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground">
         {t("titleStart")}{" "}
         <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
           {t("titleHighlight")}
         </span>
       </h2>
 
-      <p className="mt-4 max-w-[min(56rem,75%)] text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
+      <p className="mt-4 max-w-[min(56rem,75%)] text-start text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-foreground/60 max-sm:max-w-full">
         {t("subtitle")}
       </p>
     </motion.div>

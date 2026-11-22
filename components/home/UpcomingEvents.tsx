@@ -159,7 +159,7 @@ export default function UpcomingEvents() {
 
         <h2
           dir={dir}
-          className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground"
+          className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug text-foreground"
         >
           {t("title")}{" "}
           <span className="bg-[image:var(--google-gradient)] bg-clip-text pe-1 italic text-transparent rtl:not-italic">
@@ -167,7 +167,7 @@ export default function UpcomingEvents() {
           </span>
         </h2>
 
-        <p dir={dir} className="mt-4 max-w-[min(56rem,100%)] text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-muted">
+        <p dir={dir} className="mt-4 max-w-[min(56rem,100%)] text-start text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] leading-relaxed text-muted">
           {t("subtitle")}
         </p>
       </div>
