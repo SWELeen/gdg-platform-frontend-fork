@@ -64,11 +64,11 @@ export default function AboutSection() {
 
   return (
     <section id="about" className="px-6 py-[clamp(1rem,1.5vw,1.75rem)]">
-      <div dir="ltr" className="grid w-full min-w-0 grid-cols-1 gap-[clamp(1.5rem,2vw,2.5rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
-        <div className="w-full min-w-0 text-left">
+      <div dir={dir} className="grid w-full min-w-0 grid-cols-1 gap-[clamp(1.5rem,2vw,2.5rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
+        <div className="w-full min-w-0 text-start">
           <motion.h2
             dir={dir}
-            className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug"
+            className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-snug"
             initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -82,7 +82,7 @@ export default function AboutSection() {
 
           <motion.p
             dir={dir}
-            className="mt-5 whitespace-pre-line text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-normal leading-relaxed"
+            className="mt-5 whitespace-pre-line text-start text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-normal leading-relaxed"
             initial={{ opacity: 0, x: -30 * sign }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
