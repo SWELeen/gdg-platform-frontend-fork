@@ -697,9 +697,9 @@ export default function HeroSection() {
         "
       />
 
-      {/* Keep the colored background behind the same soft hero wash from the first paint. */}
+      {/* Soften the color wash while keeping the higher-layer side ribbons crisp. */}
       <div
-        className="pointer-events-none absolute inset-0 z-[2]"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundColor: "color-mix(in srgb, var(--hero-background) 55%, transparent)",
           backdropFilter: "blur(18px)",

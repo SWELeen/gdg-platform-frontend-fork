@@ -5,7 +5,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import { localeMetadata } from "@/i18n/locale-metadata";
 import "../globals.css";
@@ -61,16 +60,13 @@ export default async function RootLayout({
       dir={localeMetadata[locale].dir}
       className={`${googleSans.variable} ${ibmPlexSansArabic.variable} h-full antialiased`}
     >
-      <Script id="gdg-theme-bootstrap" strategy="beforeInteractive">
-        {`try {
-          var savedTheme = localStorage.getItem("theme");
-          if (savedTheme === "light" || savedTheme === "dark") {
-            document.documentElement.dataset.theme = savedTheme;
-          } else {
-            delete document.documentElement.dataset.theme;
-          }
-        } catch {}`}
-      </Script>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var theme=localStorage.getItem("theme");if(theme==="light"||theme==="dark"){document.documentElement.dataset.theme=theme;}else{delete document.documentElement.dataset.theme;}}catch(_){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-dvh w-full flex flex-col items-stretch">
         <NextIntlClientProvider messages={messages}>
           <MotionPreferences>
