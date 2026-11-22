@@ -616,8 +616,8 @@ export default function HeroSection() {
           { x: 865, y: 790, size: 10, color: "var(--gdg-yellow)" },
           { x: 600, y: 455, size: 10, color: "var(--gdg-yellow)" },
 
-        ].map((square) => (
-          <div
+        ].map((square, index) => (
+          <motion.div
             key={`${square.x}-${square.y}`}
             className="absolute"
             style={{
@@ -627,8 +627,9 @@ export default function HeroSection() {
               height: square.size,
               backgroundColor: square.color,
               transformOrigin: "center",
-              opacity: 0.68,
             }}
+            animate={reduceMotion || !heroVisible ? { opacity: 0.68 } : { opacity: [0.48, 0.78, 0.48], scale: [0.96, 1.02, 0.96] }}
+            transition={{ duration: 3.8 + index * 0.35, repeat: Infinity, ease: "easeInOut", delay: index * 0.42 }}
           />
         ))}
       </div>
@@ -661,27 +662,29 @@ export default function HeroSection() {
             o: 0.13,
           },
         ].map((r, i) => (
-          <div
+          <motion.div
             key={i}
             className="absolute top-[22%] h-[62%] w-[10%] rounded-full blur-3xl"
             style={{
               left: r.left,
               background: r.color,
-              opacity: r.o,
             }}
+            animate={reduceMotion || !heroVisible ? { opacity: r.o } : { opacity: [r.o * 0.6, r.o, r.o * 0.6] }}
+            transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}
       </div>
 
       <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
         {DUST.map((p, i) => (
-          <circle
+          <motion.circle
             key={i}
             cx={p.x}
             cy={p.y}
             r={p.r}
             fill={p.c}
-            opacity={p.o}
+            animate={reduceMotion || !heroVisible ? { opacity: p.o } : { opacity: [p.o * 0.2, Math.min(p.o * 1.15, 1), p.o * 0.2] }}
+            transition={{ duration: p.d, repeat: Infinity }}
           />
         ))}
       </svg>
@@ -810,8 +813,12 @@ export default function HeroSection() {
 
         {/* BUTTONS */}
 
-        <div
+        <motion.div
           className="mt-6 flex w-full flex-col items-center justify-center gap-3.5 sm:mt-7 sm:w-auto sm:flex-row"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.55 }}
         >
           {/* EXPLORE EVENTS */}
 
@@ -922,7 +929,7 @@ export default function HeroSection() {
               </svg>
             </span>
           </motion.a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
