@@ -8,7 +8,21 @@
 export type ThemeChoice = "light" | "dark" | "system";
 
 const STORAGE_KEY = "theme";
+const THEME_COOKIE = "gdg-theme";
 const CHANGE_EVENT = "gdg-theme-change";
+
+export function syncThemeCookie(choice: ThemeChoice): void {
+  try {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    if (choice === "system") {
+      document.cookie = `${THEME_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax${secure}`;
+    } else {
+      document.cookie = `${THEME_COOKIE}=${choice}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+    }
+  } catch {
+    // The selected theme still applies to this page if cookies are blocked.
+  }
+}
 
 export function readThemeChoice(): ThemeChoice {
   try {
@@ -32,6 +46,7 @@ export function applyThemeChoice(choice: ThemeChoice): void {
   } catch {
     // Storage blocked: the choice still applies for this page view.
   }
+  syncThemeCookie(choice);
   if (choice === "system") delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = choice;
   window.dispatchEvent(new Event(CHANGE_EVENT));

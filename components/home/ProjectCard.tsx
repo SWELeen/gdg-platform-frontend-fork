@@ -1,7 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
 /* ============================================================
@@ -11,6 +13,7 @@ import { useTextDirection } from "@/i18n/useTextDirection";
 export type Project = {
   id: string;
   img: string;
+  cardImage?: string;
   committeeColor?: string;
   detailsImg?: string;
   detailsImages?: string[];
@@ -128,6 +131,21 @@ export default function ProjectCard({
   const committeeKey = `items.${project.id}.committee`;
   const projectDescription = t.has(descriptionKey) ? t(descriptionKey) : "";
   const projectCommittee = t.has(committeeKey) ? t(committeeKey) : "";
+  const coverImage = project.cardImage ?? project.detailsImages?.[0] ?? project.detailsImg ?? project.img;
+  const [coverFrameSize, setCoverFrameSize] = useState({
+    width: CARD_W - 16,
+    height: 392 * 0.47,
+  });
+
+  const fitCoverFrame = (image: HTMLImageElement) => {
+    const maxWidth = CARD_W - 16;
+    const maxHeight = 392 * 0.47;
+    const scale = Math.min(maxWidth / image.naturalWidth, maxHeight / image.naturalHeight, 1);
+    setCoverFrameSize({
+      width: image.naturalWidth * scale,
+      height: image.naturalHeight * scale,
+    });
+  };
 
   // abs = بُعد الكرت عن المنتصف، side = جهته (-1 يسار، 1 يمين)
   const abs = Math.min(Math.abs(position), MAX_SIDE);
@@ -174,7 +192,23 @@ export default function ProjectCard({
       >
         {/* صورة المشروع */}
         {/* تدرج داكن في أسفل الكرت عشان يوضح النص */}
-        <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-b from-transparent via-[color:var(--gdg-dark)]/55 to-[color:var(--gdg-dark)]/90" />
+        <div
+          className="absolute left-1/2 top-9 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/35 bg-black/10 shadow-md"
+          style={{ width: coverFrameSize.width, height: coverFrameSize.height }}
+        >
+          <Image
+            src={coverImage}
+            alt=""
+            fill
+            sizes="280px"
+            unoptimized={Boolean(project.cardImage)}
+            className="rounded-3xl object-contain object-center p-1"
+            onLoad={(event) => fitCoverFrame(event.currentTarget)}
+          />
+        </div>
+
+        {/* Keep the text area dark enough to read. */}
+        <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-b from-transparent via-[color:var(--gdg-dark)]/55 to-[color:var(--gdg-dark)]/90" />
 
         {/* طبقة تغميق للكروت الجانبية (كل ما ابتعدت زادت) */}
         <motion.div
