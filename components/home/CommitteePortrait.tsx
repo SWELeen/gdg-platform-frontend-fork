@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { getImageProps } from "next/image";
+import { motion, useInView } from "framer-motion";
 
 const FALLBACK_IMAGE = "/images/unknown.png";
 
@@ -35,20 +34,13 @@ export default function CommitteePortrait({
   horizontal?: boolean;
   sizeRatio: number;
 }) {
+  const portraitRef = useRef<SVGSVGElement>(null);
+  const nearViewport = useInView(portraitRef, { once: true, margin: "400px" });
   const requestedSource = image?.trim() || FALLBACK_IMAGE;
   const [failure, setFailure] = useState<{ requestedSource: string; fallbackFailed: boolean }>();
   const currentFailure = failure?.requestedSource === requestedSource ? failure : undefined;
   const source = currentFailure ? FALLBACK_IMAGE : requestedSource;
   const geometry = portraitGeometry[source];
-  const optimizedSource = geometry
-    ? getImageProps({
-        src: source,
-        alt: "",
-        width: 640,
-        height: Math.round(640 * geometry[1] / geometry[0]),
-        quality: 75,
-      }).props.src
-    : source;
   const viewBox = geometry
     // Keep the PM co-leader's relative headroom for every visible person.
     ? `${geometry[2]} ${geometry[3] - geometry[5] * reference[3] / reference[5]} ${geometry[4]} ${geometry[5] * reference[1] / reference[5]}`
@@ -56,6 +48,7 @@ export default function CommitteePortrait({
 
   return (
     <motion.svg
+      ref={portraitRef}
       aria-hidden="true"
       className={`absolute inset-x-0 bottom-0 mx-auto h-full w-auto max-w-none overflow-visible md:h-3/5 ${currentFailure?.fallbackFailed ? "invisible" : ""}`}
       viewBox={viewBox}
@@ -80,7 +73,7 @@ export default function CommitteePortrait({
     >
       <image
         key={source}
-        href={optimizedSource}
+        href={nearViewport ? source : undefined}
         width={geometry?.[0]}
         height={geometry?.[1]}
         onLoad={(event) => {
