@@ -32,6 +32,7 @@ export const projects = [
     {
       id: "gdg-face-retrieval",
       img: "/images/GDG%20Face%20Retrieval.png",
+      cardImage: "/images/face%20detection.png?v=2",
       committeeColor: "var(--committee-artificial-intelligence)",
       detailsImages: ["/images/GDG%20Face%20Retrieval1.png"],
     },

@@ -59,7 +59,7 @@ function TeamGroup({
   return (
     <div
       id={id}
-      dir="ltr"
+      dir={dir}
       className={`flex flex-col gap-10 lg:items-center lg:justify-between lg:gap-[clamp(3rem,6vw,7rem)] ${
         reverse ? "lg:flex-row-reverse" : "lg:flex-row"
       }`}
@@ -71,9 +71,9 @@ function TeamGroup({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="w-full max-w-[clamp(24rem,38vw,48rem)] text-left lg:flex-1"
+        className="w-full max-w-[clamp(24rem,38vw,48rem)] text-start lg:flex-1"
       >
-        <h2 className="text-left text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-tight">
+        <h2 className="text-start text-[clamp(1.75rem,1.5rem_+_0.75vw,3rem)] font-bold leading-tight">
           <motion.span variants={textItem} className="block text-foreground">
             {eyebrow}
           </motion.span>
@@ -87,7 +87,7 @@ function TeamGroup({
 
         <motion.p
           variants={textItem}
-          className="mt-4 text-left text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-bold leading-snug text-foreground"
+          className="mt-4 text-start text-[clamp(0.9025rem,0.855rem_+_0.3135vw,1.235rem)] font-bold leading-snug text-foreground"
         >
           {description}
         </motion.p>

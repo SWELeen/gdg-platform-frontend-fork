@@ -4,6 +4,7 @@ import { IBM_Plex_Sans_Arabic, Roboto } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { localeMetadata } from "@/i18n/locale-metadata";
@@ -46,27 +47,23 @@ export default async function RootLayout({
     notFound();
   }
 
-  // Enables static rendering for this locale.
+  // Set the locale for next-intl before loading localized messages.
   setRequestLocale(locale);
 
-  const messages = await getMessages();
+  const [messages, cookieStore] = await Promise.all([getMessages(), cookies()]);
+  const themeCookie = cookieStore.get("gdg-theme")?.value;
+  const theme = themeCookie === "light" || themeCookie === "dark" ? themeCookie : undefined;
 
   return (
     <html
       lang={locale}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
+      data-theme={theme}
       // Arabic mirrors the whole layout; use logical classes (ms-/pe-/start-/end-) so components flip with it.
       dir={localeMetadata[locale].dir}
       className={`${googleSans.variable} ${ibmPlexSansArabic.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var theme=localStorage.getItem("theme");if(theme==="light"||theme==="dark"){document.documentElement.dataset.theme=theme;}else{delete document.documentElement.dataset.theme;}}catch(_){}})();`,
-          }}
-        />
-      </head>
       <body className="min-h-dvh w-full flex flex-col items-stretch">
         <NextIntlClientProvider messages={messages}>
           <MotionPreferences>

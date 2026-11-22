@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { applyThemeChoice, readThemeChoice, resolveTheme, subscribeToTheme } from "@/lib/theme";
+import { applyThemeChoice, readThemeChoice, resolveTheme, subscribeToTheme, syncThemeCookie } from "@/lib/theme";
 
 type Theme = "light" | "dark";
 
@@ -25,6 +25,7 @@ export default function ThemeToggle({ onDark = false }: ThemeToggleProps = {}) {
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.dataset.theme = savedTheme;
     }
+    syncThemeCookie(savedTheme);
 
     const frame = window.requestAnimationFrame(() => {
       setTheme(resolveTheme(savedTheme));
