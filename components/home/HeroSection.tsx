@@ -697,6 +697,17 @@ export default function HeroSection() {
         "
       />
 
+      {/* Keep the colored background behind the same soft hero wash from the first paint. */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[2]"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--hero-background) 55%, transparent)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* ========================================================= */}
       {/* STAGE                                                     */}
       {/* ========================================================= */}
