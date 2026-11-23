@@ -536,7 +536,7 @@ export default function HeroSection() {
   });
   const logoSpread = useTransform(scrollYProgress, [0, 0.75], [0, LOGO_W * 0.2], { clamp: true });
   const reduceMotion = useReducedMotion();
-  const introSpread = useMotionValue(LOGO_W * 0.65);
+  const introSpread = useMotionValue(LOGO_W * 3);
   const [introComplete, setIntroComplete] = useState(false);
   const activeLogoSpread = introComplete || reduceMotion ? logoSpread : introSpread;
   const leftLogoSpread = useTransform(activeLogoSpread, (value) => -value);
@@ -547,7 +547,7 @@ export default function HeroSection() {
       return;
     }
     const animation = animate(introSpread, 0, {
-      duration: 1.35,
+      duration: 1.6,
       ease: "easeInOut",
       onComplete: () => setIntroComplete(true),
     });
@@ -634,47 +634,6 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {[
-          {
-            left: "18%",
-            color: "var(--gdg-red)",
-            o: 0.16,
-          },
-          {
-            left: "40%",
-            color: "var(--gdg-blue)",
-            o: 0.24,
-          },
-          {
-            left: "54%",
-            color: "var(--gdg-yellow)",
-            o: 0.21,
-          },
-          {
-            left: "73%",
-            color: "var(--gdg-green)",
-            o: 0.18,
-          },
-          {
-            left: "80%",
-            color: "var(--gdg-yellow-accent)",
-            o: 0.13,
-          },
-        ].map((r, i) => (
-          <motion.div
-            key={i}
-            className="absolute top-[22%] h-[62%] w-[10%] rounded-full blur-3xl"
-            style={{
-              left: r.left,
-              background: r.color,
-            }}
-            animate={reduceMotion || !heroVisible ? { opacity: r.o } : { opacity: [r.o * 0.6, r.o, r.o * 0.6] }}
-            transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
-      </div>
-
       <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
         {DUST.map((p, i) => (
           <motion.circle
@@ -695,17 +654,6 @@ export default function HeroSection() {
           absolute inset-0 z-0
           bg-[radial-gradient(ellipse_at_center,transparent_55%,var(--hero-vignette)_100%)]
         "
-      />
-
-      {/* Soften the color wash while keeping the higher-layer side ribbons crisp. */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          backgroundColor: "color-mix(in srgb, var(--hero-background) 55%, transparent)",
-          backdropFilter: "blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
-        }}
-        aria-hidden="true"
       />
 
       {/* ========================================================= */}

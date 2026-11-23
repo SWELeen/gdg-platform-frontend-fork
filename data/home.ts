@@ -3,6 +3,7 @@ export const projects = [
     {
       id: "gdg-gaming-platform",
       img: "/images/GDG%20UJ%20Interactive%20Gaming%20Platform.png",
+      cardImage: "/images/games1.png",
       committeeColor: "var(--committee-web-development)",
       detailsImg: "/images/GDG-game-project.png",
       detailsImages: [
@@ -39,6 +40,7 @@ export const projects = [
     {
       id: "applicant-evaluation-system",
       img: "/images/Applicant%20Evaluation%20System.png",
+      cardImage: "/images/automatio.png",
       committeeColor: "var(--committee-automation)",
       detailsImages: ["/images/Applicant%20Evaluation%20System1.png"],
     },

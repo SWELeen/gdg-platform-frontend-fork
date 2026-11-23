@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { useTextDirection } from "@/i18n/useTextDirection";
 
 /* ============================================================
@@ -132,20 +131,6 @@ export default function ProjectCard({
   const projectDescription = t.has(descriptionKey) ? t(descriptionKey) : "";
   const projectCommittee = t.has(committeeKey) ? t(committeeKey) : "";
   const coverImage = project.cardImage ?? project.detailsImages?.[0] ?? project.detailsImg ?? project.img;
-  const [coverFrameSize, setCoverFrameSize] = useState({
-    width: CARD_W - 16,
-    height: 392 * 0.47,
-  });
-
-  const fitCoverFrame = (image: HTMLImageElement) => {
-    const maxWidth = CARD_W - 16;
-    const maxHeight = 392 * 0.47;
-    const scale = Math.min(maxWidth / image.naturalWidth, maxHeight / image.naturalHeight, 1);
-    setCoverFrameSize({
-      width: image.naturalWidth * scale,
-      height: image.naturalHeight * scale,
-    });
-  };
 
   // abs = بُعد الكرت عن المنتصف، side = جهته (-1 يسار، 1 يمين)
   const abs = Math.min(Math.abs(position), MAX_SIDE);
@@ -194,7 +179,7 @@ export default function ProjectCard({
         {/* تدرج داكن في أسفل الكرت عشان يوضح النص */}
         <div
           className="absolute left-1/2 top-9 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/35 bg-black/10 shadow-md"
-          style={{ width: coverFrameSize.width, height: coverFrameSize.height }}
+          style={{ width: CARD_W - 16, aspectRatio: "1396 / 817" }}
         >
           <Image
             src={coverImage}
@@ -202,8 +187,7 @@ export default function ProjectCard({
             fill
             sizes="280px"
             unoptimized={Boolean(project.cardImage)}
-            className="rounded-3xl object-contain object-center p-1"
-            onLoad={(event) => fitCoverFrame(event.currentTarget)}
+            className="rounded-2xl object-cover object-center"
           />
         </div>
 
