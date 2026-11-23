@@ -31,6 +31,8 @@ const isRegistrantFieldKey = (key: string): key is RegistrantProfileKey =>
 import {
   ArrowLeft,
   Calendar,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   MapPin,
   Search,
@@ -262,6 +264,7 @@ export function PREventsList() {
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [eventPage, setEventPage] = useState(1);
   const [createEventOpen, setCreateEventOpen] = useState(false);
   const [publishError, setPublishError] = useState("");
   const [draftPreview, setDraftPreview] = useState<{ id: string; data: EventPreviewData } | null>(null);
@@ -441,6 +444,12 @@ export function PREventsList() {
     const matchesStatus = filter === "all" || event.status.toLowerCase().replaceAll(" ", "-") === filter;
     return matchesQuery && matchesStatus;
   });
+  const eventPageSize = 3;
+  const eventPageCount = Math.max(1, Math.ceil(filteredEvents.length / eventPageSize));
+  const visibleEvents = filteredEvents.slice((eventPage - 1) * eventPageSize, eventPage * eventPageSize);
+  useEffect(() => {
+    setEventPage((page) => Math.min(page, eventPageCount));
+  }, [eventPageCount]);
 
   return (
     <div className="space-y-6">
@@ -467,7 +476,7 @@ export function PREventsList() {
           <input
             type="search"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => { setSearch(event.target.value); setEventPage(1); }}
             placeholder={t("registrations.searchEvents")}
             className="h-10 w-full rounded-xl border border-border bg-surface-muted/40 ps-9 pe-3 text-sm text-foreground outline-none focus:border-blue-500"
           />
@@ -478,9 +487,7 @@ export function PREventsList() {
               ? t("registrations.filters.allEvents")
               : option.value === "upcoming"
                 ? t("registrations.filters.upcoming")
-                : option.value === "completed"
-                  ? t("registrations.filters.completed")
-                  : t("registrations.filters.needsUpdate");
+                : t("registrations.filters.completed");
             const count = option.value === "all"
               ? availableEvents.length
               : availableEvents.filter((event) => event.status.toLowerCase().replaceAll(" ", "-") === option.value).length;
@@ -488,7 +495,7 @@ export function PREventsList() {
               <button
                 key={option.value}
                 type="button"
-                onClick={() => setFilter(option.value)}
+                onClick={() => { setFilter(option.value); setEventPage(1); }}
                 aria-pressed={filter === option.value}
                 className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${filter === option.value ? "border-blue-600 bg-blue-600 text-white" : "border-border bg-surface-muted/40 text-muted hover:border-blue-500/50 hover:text-foreground"}`}
               >
@@ -511,7 +518,7 @@ export function PREventsList() {
           <div className="rounded-2xl border border-border bg-surface p-8 text-center text-sm text-muted">{t("registrations.emptyFilter")}</div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredEvents.map((event) => (
+            {visibleEvents.map((event) => (
               <article key={event.id} className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl">
                 <Link href={`/dashboard/pr-dashboard/events/${event.id}`} className="relative block h-48 overflow-hidden bg-[image:var(--google-gradient)]">
                   {event.imageUrl && <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${JSON.stringify(event.imageUrl)})` }} />}
@@ -534,12 +541,23 @@ export function PREventsList() {
                   </div>
                   <div className="grid grid-cols-2 gap-2 border-t border-border pt-3">
                     {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(event)} disabled={loadingEditId === event.id} className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-surface-muted disabled:opacity-50" aria-label={t("eventManagement.edit")}><Pencil className="size-3.5" />{t("eventManagement.edit")}</button>}
-                    <Link href={`/dashboard/pr-dashboard/events/${event.id}`} className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><ClipboardList className="size-3.5" />{t("registrations.viewAllRegistrations")}</Link>
+                    <Link href={`/dashboard/pr-dashboard/events/${event.id}`} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-2.5 py-2 text-xs font-semibold leading-4 text-white transition hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"><ClipboardList className="size-4 shrink-0" /><span className="min-w-0 text-center">{t("registrations.viewAllRegistrations")}</span></Link>
                   </div>
                 </div>
               </article>
             ))}
           </div>
+        )}
+        {filteredEvents.length > eventPageSize && (
+          <nav className="mt-6 flex items-center justify-center gap-3" aria-label={t("eventManagement.pagination")}>
+            <button type="button" onClick={() => setEventPage((page) => Math.max(1, page - 1))} disabled={eventPage === 1} aria-label={t("eventManagement.previous")} className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground transition hover:border-emerald-600 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-40">
+              <ChevronLeft className="size-5 rtl:rotate-180" />
+            </button>
+            <span className="min-w-24 text-center text-xs font-medium text-muted">{t("eventManagement.pageLabel", { page: eventPage })} / {eventPageCount}</span>
+            <button type="button" onClick={() => setEventPage((page) => Math.min(eventPageCount, page + 1))} disabled={eventPage === eventPageCount} aria-label={t("eventManagement.next")} className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground transition hover:border-emerald-600 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-40">
+              <ChevronRight className="size-5 rtl:rotate-180" />
+            </button>
+          </nav>
         )}
       </div>
       <ConfirmModal isOpen={Boolean(draftToDelete)} onClose={() => setDraftToDelete(null)} onConfirm={() => { if (draftToDelete) removeDraft(draftToDelete.id); }} title={t("eventManagement.deleteDraft")} message={t("eventManagement.deleteDraftConfirm", { title: draftToDelete?.title ?? "" })} confirmText={t("eventManagement.deleteDraft")} cancelText={t("members.cancel")} danger />

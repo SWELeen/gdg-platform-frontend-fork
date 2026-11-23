@@ -2,7 +2,6 @@ export const prEventStatusFilterOptions = [
   { value: "all", label: "All events" },
   { value: "upcoming", label: "Upcoming" },
   { value: "completed", label: "Completed" },
-  { value: "needs-update", label: "Needs update" },
 ];
 
 export const prRegistrationStatusFilterOptions = [
