@@ -257,7 +257,7 @@ export function PROverviewRegistrations() {
 }
 
 export function PREventsList() {
-  const { events, canManageEvents, canCreateEvents, addEvent, updateEvent, publishDraft, loadEventDetails, deleteDraft, reloadDashboard } = useLeaderDashboard();
+  const { events, registrations, canManageEvents, canCreateEvents, addEvent, updateEvent, publishDraft, loadEventDetails, deleteDraft, reloadDashboard } = useLeaderDashboard();
   const router = useRouter();
   const t = useTranslations("dashboard.leader");
   const [search, setSearch] = useState("");
@@ -461,7 +461,7 @@ export function PREventsList() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2">{draftEvents.map((draft) => <div key={draft.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3"><div className="flex min-w-0 items-center gap-3">{draft.imageUrl ? <div aria-hidden="true" className="size-12 shrink-0 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${JSON.stringify(draft.imageUrl)})` }} /> : <div aria-hidden="true" className="size-12 shrink-0 rounded-lg bg-[image:var(--google-gradient)] opacity-70" />}<div className="min-w-0"><button type="button" onClick={() => openDraftPreview(draft.id)} title={t("eventManagement.previewDraft")} className="block max-w-full truncate text-start text-sm font-semibold text-foreground underline-offset-2 hover:text-blue-600 hover:underline">{draft.title}</button><span className="text-[11px] text-muted">{draft.date} · {draft.location}</span></div></div><div className="flex shrink-0 items-center gap-1.5">{(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(draft)} disabled={loadingEditId === draft.id} aria-label={t("eventManagement.edit")} title={t("eventManagement.edit")} className="rounded-lg p-1.5 text-muted transition hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-blue-950/30"><Pencil className="size-4" /></button>}<button type="button" onClick={() => setDraftToDelete({ id: draft.id, title: draft.title })} aria-label={t("eventManagement.deleteDraft")} title={t("eventManagement.deleteDraft")} className="rounded-lg p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"><Trash2 className="size-4" /></button><button type="button" onClick={() => publish(draft.id)} className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"><Send className="size-3" />{t("eventForm.publish")}</button></div></div>)}</div>
       </section>}
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-3 shadow-2xs sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 shadow-2xs">
         <div className="relative min-w-0 flex-1">
           <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
           <input
@@ -472,69 +472,73 @@ export function PREventsList() {
             className="h-10 w-full rounded-xl border border-border bg-surface-muted/40 ps-9 pe-3 text-sm text-foreground outline-none focus:border-blue-500"
           />
         </div>
-        <select
-          value={filter}
-          onChange={(event) => setFilter(event.target.value)}
-          className="h-10 rounded-xl border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-blue-500"
-          aria-label={t("registrations.filterEvents")}
-        >
-          {prEventStatusFilterOptions.map((option) => (
-            <option key={option.value} value={option.value}>{option.value === "all" ? t("registrations.filters.allEvents") : option.value === "upcoming" ? t("registrations.filters.upcoming") : option.value === "completed" ? t("registrations.filters.completed") : t("registrations.filters.needsUpdate")}</option>
-          ))}
-        </select>
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t("registrations.filterEvents")}>
+          {prEventStatusFilterOptions.map((option) => {
+            const label = option.value === "all"
+              ? t("registrations.filters.allEvents")
+              : option.value === "upcoming"
+                ? t("registrations.filters.upcoming")
+                : option.value === "completed"
+                  ? t("registrations.filters.completed")
+                  : t("registrations.filters.needsUpdate");
+            const count = option.value === "all"
+              ? availableEvents.length
+              : availableEvents.filter((event) => event.status.toLowerCase().replaceAll(" ", "-") === option.value).length;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setFilter(option.value)}
+                aria-pressed={filter === option.value}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${filter === option.value ? "border-blue-600 bg-blue-600 text-white" : "border-border bg-surface-muted/40 text-muted hover:border-blue-500/50 hover:text-foreground"}`}
+              >
+                {label}<span className={`rounded-full px-1.5 py-0.5 text-[10px] ${filter === option.value ? "bg-white/20 text-white" : "bg-surface text-muted"}`}>{count}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xs">
-        <div className="border-b border-border/80 p-5">
-          <h3 className="text-base font-bold text-foreground">{t("registrations.tableTitle")}</h3>
-          <p className="text-xs text-muted">{t("registrations.permissions")}</p>
+      <div>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-base font-bold text-foreground">{t("registrations.tableTitle")}</h3>
+            <p className="mt-1 text-xs text-muted">{t("registrations.permissions")}</p>
+          </div>
+          <span className="shrink-0 text-xs text-muted">{t("eventManagement.eventsCount", { count: filteredEvents.length })}</span>
         </div>
         {filteredEvents.length === 0 ? (
-          <p className="p-5 text-sm text-muted">{t("registrations.emptyFilter")}</p>
+          <div className="rounded-2xl border border-border bg-surface p-8 text-center text-sm text-muted">{t("registrations.emptyFilter")}</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1200px] table-fixed text-start text-xs">
-              <thead>
-                <tr className="border-b border-border bg-surface-muted/30 text-xs font-semibold uppercase tracking-wider text-muted">
-                  <th className="w-[20%] px-5 py-4 text-start">{t("registrations.event")}</th>
-                  <th className="w-[13%] px-4 py-4 text-start">{t("registrations.date")}</th>
-                  <th className="w-[16%] px-4 py-4 text-start">{t("registrations.location")}</th>
-                  <th className="w-[12%] px-4 py-4 text-start">{t("registrations.registrationStatus")}</th>
-                  <th className="w-[25%] px-4 py-4 text-start">{t("registrations.registrations")}</th>
-                  <th className="w-[14%] px-5 py-4 text-end">{t("registrations.action")}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {filteredEvents.map((event) => (
-                  <tr key={event.id} className="align-middle transition-colors hover:bg-surface-muted/30">
-                    <td className="px-5 py-5">
-                      <div className="flex items-center gap-3">{event.imageUrl ? <div aria-hidden="true" className="size-11 shrink-0 rounded-xl bg-cover bg-center" style={{ backgroundImage: `url(${JSON.stringify(event.imageUrl)})` }} /> : <div aria-hidden="true" className="size-11 shrink-0 rounded-xl bg-[image:var(--google-gradient)] opacity-70" />}<div className="min-w-0"><span className="line-clamp-2 font-semibold leading-5 text-foreground">{event.title}</span><span className="mt-1 block text-[11px] text-muted">{event.type}</span></div></div>
-                    </td>
-                    <td className="px-4 py-5 text-foreground/80"><span className="block font-medium">{event.date}</span><span className="mt-1 block text-muted">{event.time}</span></td>
-                    <td className="px-4 py-5 leading-5 text-foreground/80"><span className="line-clamp-2">{event.location}</span></td>
-                    <td className="px-4 py-5">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-muted px-2.5 py-1 text-[11px] font-medium text-muted">
-                        {t(`eventFilters.${event.status === "Needs Update" ? "needsUpdate" : event.status.toLowerCase()}`)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-5"><RegistrationCounts eventId={event.id} /></td>
-                    <td className="px-5 py-5 text-end">
-                      <div className="flex flex-col items-end gap-2">
-                        {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(event)} disabled={loadingEditId === event.id} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 font-semibold text-foreground transition hover:bg-surface-muted disabled:opacity-50" aria-label={t("eventManagement.edit")}>
-                          <Pencil className="size-3.5" /> {t("eventManagement.edit")}
-                        </button>}
-                        <Link
-                          href={`/dashboard/pr-dashboard/events/${event.id}`}
-                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-border px-3 py-2.5 text-center font-semibold leading-5 text-foreground transition hover:bg-surface-muted"
-                        >
-                          <ClipboardList className="size-3.5" /> {t("registrations.viewAllRegistrations")}
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredEvents.map((event) => (
+              <article key={event.id} className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl">
+                <Link href={`/dashboard/pr-dashboard/events/${event.id}`} className="relative block h-48 overflow-hidden bg-[image:var(--google-gradient)]">
+                  {event.imageUrl && <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${JSON.stringify(event.imageUrl)})` }} />}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-black/20" />
+                  <span className="absolute start-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
+                    <span className={`size-1.5 rounded-full ${event.status === "Upcoming" ? "bg-emerald-400" : event.status === "Completed" ? "bg-slate-300" : "bg-amber-400"}`} />
+                    {t(`eventFilters.${event.status === "Needs Update" ? "needsUpdate" : event.status.toLowerCase()}`)}
+                  </span>
+                  <span className="absolute end-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm"><Users className="size-3" />{registrations.filter((registration) => registration.eventId === event.id).length}</span>
+                  <span className="absolute inset-x-4 bottom-4 line-clamp-1 text-xs font-semibold text-white/90">{event.type}</span>
+                </Link>
+                <div className="space-y-4 p-4">
+                  <div className="min-h-16">
+                    <h4 className="line-clamp-2 text-base font-bold leading-6 text-foreground">{event.title}</h4>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
+                      <span className="inline-flex items-center gap-1.5"><Calendar className="size-3.5" />{event.date}</span>
+                      <span className="inline-flex items-center gap-1.5"><Clock className="size-3.5" />{event.time}</span>
+                    </div>
+                    <span className="mt-1.5 inline-flex max-w-full items-center gap-1.5 text-xs text-muted"><MapPin className="size-3.5 shrink-0" /><span className="truncate">{event.location}</span></span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-t border-border pt-3">
+                    {(canManageEvents || canCreateEvents) && <button type="button" onClick={() => openEdit(event)} disabled={loadingEditId === event.id} className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-surface-muted disabled:opacity-50" aria-label={t("eventManagement.edit")}><Pencil className="size-3.5" />{t("eventManagement.edit")}</button>}
+                    <Link href={`/dashboard/pr-dashboard/events/${event.id}`} className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"><ClipboardList className="size-3.5" />{t("registrations.viewAllRegistrations")}</Link>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         )}
       </div>
