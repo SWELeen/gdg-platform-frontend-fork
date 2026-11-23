@@ -497,7 +497,7 @@ export function PREventsList() {
                 type="button"
                 onClick={() => { setFilter(option.value); setEventPage(1); }}
                 aria-pressed={filter === option.value}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${filter === option.value ? "border-blue-600 bg-blue-600 text-white" : "border-border bg-surface-muted/40 text-muted hover:border-blue-500/50 hover:text-foreground"}`}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${filter === option.value ? "border-emerald-700 bg-emerald-700 text-white" : "border-border bg-surface-muted/40 text-muted hover:border-emerald-600/60 hover:text-emerald-700 dark:hover:text-emerald-400"}`}
               >
                 {label}<span className={`rounded-full px-1.5 py-0.5 text-[10px] ${filter === option.value ? "bg-white/20 text-white" : "bg-surface text-muted"}`}>{count}</span>
               </button>
