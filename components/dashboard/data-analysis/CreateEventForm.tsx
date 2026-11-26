@@ -422,7 +422,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       try {
         const url = new URL(whatsappGroupLink);
         valid = url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && !url.port &&
-          !url.username && !url.password && !url.search && !url.hash &&
+          !url.username && !url.password && (!url.search || /^\?[A-Za-z0-9._~!$&()*+,;=:@\/?%-]{1,400}$/.test(url.search)) && !url.hash &&
           /^\/[A-Za-z0-9_-]{8,128}\/?$/.test(url.pathname);
       } catch {
         valid = false;
