@@ -830,25 +830,23 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                 </div>
               </Field>
             </div>
-            {values.type === "Trip" && (
-              <Field name="whatsappGroupLink" label={tf("whatsappGroupLink")} error={errors.whatsappGroupLink}>
-                <div className="relative">
-                  <Link2 className={styles.iconInput} aria-hidden="true" />
-                  <input
-                    id={fieldId("whatsappGroupLink")}
-                    className={`${inputClass("whatsappGroupLink")} ps-9`}
-                    type="url"
-                    inputMode="url"
-                    dir="ltr"
-                    placeholder={tf("whatsappGroupLinkPlaceholder")}
-                    value={values.whatsappGroupLink}
-                    aria-invalid={Boolean(errors.whatsappGroupLink)}
-                    aria-describedby={describedBy("whatsappGroupLink")}
-                    onChange={(event) => setValue("whatsappGroupLink", event.target.value)}
-                  />
-                </div>
-              </Field>
-            )}
+            <Field name="whatsappGroupLink" label={tf("whatsappGroupLink")} error={errors.whatsappGroupLink}>
+              <div className="relative">
+                <Link2 className={styles.iconInput} aria-hidden="true" />
+                <input
+                  id={fieldId("whatsappGroupLink")}
+                  className={`${inputClass("whatsappGroupLink")} ps-9`}
+                  type="url"
+                  inputMode="url"
+                  dir="ltr"
+                  placeholder={tf("whatsappGroupLinkPlaceholder")}
+                  value={values.whatsappGroupLink}
+                  aria-invalid={Boolean(errors.whatsappGroupLink)}
+                  aria-describedby={describedBy("whatsappGroupLink")}
+                  onChange={(event) => setValue("whatsappGroupLink", event.target.value)}
+                />
+              </div>
+            </Field>
           </div>
 
           <div className={`${styles.colorGroup} border-s-gdg-green`}>

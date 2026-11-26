@@ -1157,7 +1157,7 @@
       }
     },
     "eventForm": {
-      "whatsappGroupLink": "رابط مجموعة واتساب للرحلة (اختياري)",
+      "whatsappGroupLink": "رابط دعوة مجموعة واتساب (اختياري)",
       "whatsappGroupLinkPlaceholder": "https://chat.whatsapp.com/...",
       "publishedStartsAt": "بداية الفعالية بتوقيت السعودية",
       "publishedEndsAt": "نهاية الفعالية بتوقيت السعودية",
