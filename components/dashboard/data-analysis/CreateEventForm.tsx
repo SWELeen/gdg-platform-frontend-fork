@@ -54,7 +54,9 @@ const styles = {
   primaryButton: "min-w-[120px] rounded-[10px] bg-gdg-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gdg-blue/90 max-sm:w-full",
 } as const;
 
-export type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated">;
+export type CreateEventInput = Omit<CommitteeEvent, "id" | "created" | "updated"> & {
+  whatsappGroupLink?: string;
+};
 
 type FieldName =
   | "title"
@@ -65,6 +67,7 @@ type FieldName =
   | "endTime"
   | "location"
   | "mapsLink"
+  | "whatsappGroupLink"
   | "capacity"
   | "registrationDeadline"
   | "image";
@@ -79,6 +82,7 @@ const fieldOrder: FieldName[] = [
   "endTime",
   "location",
   "mapsLink",
+  "whatsappGroupLink",
   "capacity",
   "registrationDeadline",
   "image",
@@ -97,6 +101,7 @@ interface FormValues {
   endTime: string;
   location: string;
   mapsLink: string;
+  whatsappGroupLink: string;
   capacity: string;
   registrationDeadline: string;
   requirements: string;
@@ -113,6 +118,7 @@ const emptyValues: FormValues = {
   endTime: "",
   location: "",
   mapsLink: "",
+  whatsappGroupLink: "",
   capacity: "",
   registrationDeadline: "",
   requirements: "",
@@ -178,6 +184,7 @@ function eventFormValues(details?: CommitteeEventDetails): FormValues {
     endTime: end.time,
     location: details.location ?? "",
     mapsLink: details.mapsLink ?? "",
+    whatsappGroupLink: details.whatsappGroupLink ?? "",
     capacity: String(details.capacity),
     registrationDeadline: (() => {
       const deadline = dateTimeInput(details.registrationDeadline);
@@ -407,6 +414,22 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       if (!valid) next.mapsLink = t("errors.mapsLinkInvalid");
     }
 
+    const whatsappGroupLink = current.whatsappGroupLink.trim();
+    if (whatsappGroupLink.length > 500) {
+      next.whatsappGroupLink = tf("errors.whatsappGroupLinkInvalid");
+    } else if (whatsappGroupLink) {
+      let valid = false;
+      try {
+        const url = new URL(whatsappGroupLink);
+        valid = url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && !url.port &&
+          !url.username && !url.password && !url.search && !url.hash &&
+          /^\/[A-Za-z0-9_-]{8,128}\/?$/.test(url.pathname);
+      } catch {
+        valid = false;
+      }
+      if (!valid) next.whatsappGroupLink = tf("errors.whatsappGroupLinkInvalid");
+    }
+
     if (!current.capacity.trim()) next.capacity = t("errors.capacityRequired");
     else {
       const capacity = Number(current.capacity);
@@ -572,6 +595,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       location: values.location.trim(),
       speakers: values.speakers.trim(),
       mapsLink: values.mapsLink.trim(),
+      whatsappGroupLink: values.whatsappGroupLink.trim() || undefined,
       capacity: Number(values.capacity),
       registrationDeadline: formatEventDate(values.registrationDeadline.slice(0, 10)),
       requirements: values.requirements.trim(),
@@ -806,6 +830,25 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
                 </div>
               </Field>
             </div>
+            {values.type === "Trip" && (
+              <Field name="whatsappGroupLink" label={tf("whatsappGroupLink")} error={errors.whatsappGroupLink}>
+                <div className="relative">
+                  <Link2 className={styles.iconInput} aria-hidden="true" />
+                  <input
+                    id={fieldId("whatsappGroupLink")}
+                    className={`${inputClass("whatsappGroupLink")} ps-9`}
+                    type="url"
+                    inputMode="url"
+                    dir="ltr"
+                    placeholder={tf("whatsappGroupLinkPlaceholder")}
+                    value={values.whatsappGroupLink}
+                    aria-invalid={Boolean(errors.whatsappGroupLink)}
+                    aria-describedby={describedBy("whatsappGroupLink")}
+                    onChange={(event) => setValue("whatsappGroupLink", event.target.value)}
+                  />
+                </div>
+              </Field>
+            )}
           </div>
 
           <div className={`${styles.colorGroup} border-s-gdg-green`}>

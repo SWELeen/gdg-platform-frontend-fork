@@ -368,6 +368,7 @@ export function PREventsList() {
       location: updates.location,
       capacity: updates.capacity,
       mapsLink: updates.mapsLink?.trim() || null,
+      whatsappGroupLink: updates.whatsappGroupLink?.trim() || null,
       speakers: updates.speakers ?? "",
       requirements: updates.requirements ?? "",
       imageUrl,

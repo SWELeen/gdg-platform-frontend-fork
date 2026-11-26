@@ -1157,6 +1157,8 @@
       }
     },
     "eventForm": {
+      "whatsappGroupLink": "رابط مجموعة واتساب للرحلة (اختياري)",
+      "whatsappGroupLinkPlaceholder": "https://chat.whatsapp.com/...",
       "publishedStartsAt": "بداية الفعالية بتوقيت السعودية",
       "publishedEndsAt": "نهاية الفعالية بتوقيت السعودية",
       "registrationClosesAt": "موعد إغلاق التسجيل (بتوقيت السعودية)",
@@ -1359,6 +1361,7 @@
         "endTimeRequired": "وقت نهاية الفعالية مطلوب.",
         "endAfterStart": "يجب أن تكون نهاية الفعالية بعد بدايتها.",
         "mapsLinkInvalid": "أدخل رابطًا صالحًا يبدأ بـ http:// أو https://.",
+        "whatsappGroupLinkInvalid": "أدخل رابط دعوة صالحًا من chat.whatsapp.com.",
         "capacityRequired": "السعة مطلوبة.",
         "deadlineRequired": "آخر موعد للتسجيل مطلوب.",
         "deadlinePast": "لا يمكن أن يكون آخر موعد للتسجيل في الماضي.",

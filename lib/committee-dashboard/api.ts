@@ -263,6 +263,7 @@ export async function createCommitteeEvent(
       ...schedule,
       location: event.location,
       ...(event.mapsLink ? { mapsLink: event.mapsLink } : {}),
+      ...(event.whatsappGroupLink ? { whatsappGroupLink: event.whatsappGroupLink } : {}),
       capacity: event.capacity,
       ...(event.imageUrl ? { imageUrl: event.imageUrl } : {}),
       ...(event.speakers ? { speakers: event.speakers } : {}),
@@ -302,6 +303,7 @@ export interface CommitteeEventDetails {
   registrationDeadline: string;
   location: string | null;
   mapsLink: string | null;
+  whatsappGroupLink?: string | null;
   capacity: number;
   speakers: string | null;
   requirements: string | null;
@@ -317,7 +319,7 @@ export function fetchCommitteeEvent(code: string, eventId: string) {
 export function updateCommitteeEvent(
   code: string,
   eventId: string,
-  updates: Partial<Pick<CommitteeEventDetails, "name" | "description" | "eventType" | "startsAt" | "endsAt" | "registrationDeadline" | "location" | "capacity" | "mapsLink" | "speakers" | "requirements" | "imageUrl">> & {
+  updates: Partial<Pick<CommitteeEventDetails, "name" | "description" | "eventType" | "startsAt" | "endsAt" | "registrationDeadline" | "location" | "capacity" | "mapsLink" | "whatsappGroupLink" | "speakers" | "requirements" | "imageUrl">> & {
     questions?: { text: string; type: "TEXT" | "RADIO" | "CHECKBOX"; required: boolean; options?: string[] }[];
   },
 ) {
