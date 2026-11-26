@@ -1177,7 +1177,7 @@
       "deadline": "Registration deadline",
       "speakers": "Speakers",
       "mapsLink": "Maps link",
-      "whatsappGroupLink": "Trip WhatsApp group link (optional)",
+      "whatsappGroupLink": "WhatsApp group invite link (optional)",
       "whatsappGroupLinkPlaceholder": "https://chat.whatsapp.com/...",
       "requirements": "Requirements",
       "imageUrl": "Event image URL",
