@@ -1298,6 +1298,7 @@ function CreateEventForm({ isModal = false, onClose, onCreate, onViewEvent, onUp
       {publishedEvent && (
         <EventPublishedModal
           eventTitle={publishedEvent.title}
+          isDemoMode={!API_ENABLED}
           onClose={() => onClose?.()}
           onViewEvent={() => {
             if (publishedEvent.id && onViewEvent) onViewEvent(publishedEvent.id);
