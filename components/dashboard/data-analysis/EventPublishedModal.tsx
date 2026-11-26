@@ -18,10 +18,12 @@ const confetti = [
 /** "Event Published Successfully" dialog (Create Event, screen 3). */
 export function EventPublishedModal({
   eventTitle,
+  isDemoMode,
   onViewEvent,
   onClose,
 }: {
   eventTitle: string;
+  isDemoMode: boolean;
   onViewEvent: () => void;
   onClose: () => void;
 }) {
@@ -83,7 +85,7 @@ export function EventPublishedModal({
           </h2>
           <div id="event-published-message" className="mt-2 space-y-2 text-sm leading-6 text-muted">
             <p>{t("message", { name: eventTitle })}</p>
-            <p className="text-xs">{t("demoNote")}</p>
+            {isDemoMode && <p className="text-xs">{t("demoNote")}</p>}
           </div>
 
           <button
