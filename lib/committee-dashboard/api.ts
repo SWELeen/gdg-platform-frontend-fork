@@ -251,7 +251,7 @@ const API_QUESTION_TYPES: Record<string, "TEXT" | "RADIO" | "CHECKBOX"> = {
 
 export async function createCommitteeEvent(
   code: string,
-  event: Omit<CommitteeEvent, "id" | "created" | "updated">,
+  event: Omit<CommitteeEvent, "id" | "created" | "updated"> & { whatsappGroupLink?: string },
   schedule: EventSchedule,
 ) {
   return apiRequest<{ id: string }>(`/committees/${encodeURIComponent(code)}/events`, {
