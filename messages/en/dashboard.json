@@ -1229,7 +1229,8 @@
         "dateRequired": "Date is required.",
         "dateFormat": "Please enter a descriptive date (e.g. Oct 28, 2026).",
         "timeRequired": "Time is required.",
-        "fixErrors": "Please correct all highlighted errors before saving."
+        "fixErrors": "Please correct all highlighted errors before saving.",
+        "whatsappGroupLinkInvalid": "Enter a valid WhatsApp group invite link from chat.whatsapp.com."
       }
     },
     "upcomingEvents": {
@@ -1361,7 +1362,6 @@
         "endTimeRequired": "Event end time is required.",
         "endAfterStart": "Event end must be after its start.",
         "mapsLinkInvalid": "Enter a valid link starting with http:// or https://.",
-        "whatsappGroupLinkInvalid": "Enter a valid WhatsApp group invite link from chat.whatsapp.com.",
         "capacityRequired": "Capacity is required.",
         "deadlineRequired": "Registration deadline is required.",
         "deadlinePast": "Registration deadline cannot be in the past.",

@@ -1229,7 +1229,8 @@
         "dateRequired": "تاريخ الفعالية مطلوب.",
         "dateFormat": "أدخل تاريخًا واضحًا (مثال: 28 أكتوبر 2026).",
         "timeRequired": "وقت الفعالية مطلوب.",
-        "fixErrors": "يرجى تصحيح الأخطاء المحددة قبل الحفظ."
+        "fixErrors": "يرجى تصحيح الأخطاء المحددة قبل الحفظ.",
+        "whatsappGroupLinkInvalid": "أدخل رابط دعوة صالحًا من chat.whatsapp.com."
       }
     },
     "upcomingEvents": {
@@ -1361,7 +1362,6 @@
         "endTimeRequired": "وقت نهاية الفعالية مطلوب.",
         "endAfterStart": "يجب أن تكون نهاية الفعالية بعد بدايتها.",
         "mapsLinkInvalid": "أدخل رابطًا صالحًا يبدأ بـ http:// أو https://.",
-        "whatsappGroupLinkInvalid": "أدخل رابط دعوة صالحًا من chat.whatsapp.com.",
         "capacityRequired": "السعة مطلوبة.",
         "deadlineRequired": "آخر موعد للتسجيل مطلوب.",
         "deadlinePast": "لا يمكن أن يكون آخر موعد للتسجيل في الماضي.",
